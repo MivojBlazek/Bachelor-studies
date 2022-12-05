@@ -140,8 +140,14 @@ struct cluster_t *resize_cluster(struct cluster_t *c, int new_cap)
 void append_cluster(struct cluster_t *c, struct obj_t obj)
 {
     // TODO
-    if(c->capacity  <= c->size)
-    	resize_cluster(c, (c->capacity + 1));
+    while(c->capacity  <= c->size)
+    {
+    	if (resize_cluster(c, (c->capacity + 1)) == NULL)
+        {
+            fprintf(stderr, "ERROROAORRIAORKOAR\n");
+            return;
+        }
+    }
     c->obj[c->size] = obj;
     c->size++;
 }
@@ -164,7 +170,9 @@ void merge_clusters(struct cluster_t *c1, struct cluster_t *c2)
     // TODO
     int size = c2->size;
     for(int i = 0; i < size; i++)
+    {
         append_cluster(c1, c2->obj[i]);
+    }
     sort_cluster(c1);
 }
 
@@ -183,7 +191,9 @@ int remove_cluster(struct cluster_t *carr, int narr, int idx)
     // TODO
     clear_cluster(&carr[idx]);
     for(int i = idx; i < narr - 1; i++)
+    {
 	    carr[i] = carr[i + 1];	
+    }
     return narr - 1;
 }
     
@@ -317,13 +327,14 @@ int load_clusters(char *filename, struct cluster_t **arr)
     int count_of_lines = atoi(str);
     struct cluster_t *array_c = malloc(count_of_lines * sizeof(struct cluster_t));
     for(int z = 0; z < count_of_lines; z++)
+    {
     	init_cluster(&array_c[z], 1);
+    }
     struct obj_t array_o[count_of_lines];
     int i = 0;
-    while (fscanf(fp, "%d  %f  %f", &array_o[i].id, &array_o[i].x, &array_o[i].y) != EOF &&
-    i < count_of_lines)
+    while ((i < count_of_lines) && (fscanf(fp, "%d  %f  %f", &array_o[i].id, &array_o[i].x, &array_o[i].y) != EOF))
     {
-	    if(array_o[i]. x > 1000)
+	    if(array_o[i].x > 1000)
 	        array_o[i].x = 1000;
 	    else if(array_o[i].x < 0)
 	        array_o[i].x = 0;
@@ -418,21 +429,13 @@ int main(int argc, char *argv[])
     }
     //pokud se nepodari nacist soubor -> vypis chybu a ukonci program
     if(number_of_rows == 0)
-    {	
-    	for(int i = 0; i < number_of_rows; i++)
-        {
-            clear_cluster(&clusters[i]);
-        }
+    {
 	    fprintf(stderr, "error: file not found\n");
 	    return 1;
     }
     //pokud neni na prvnim radku v souboru co ma byt -> vypis chybu a ukonci program
     if(number_of_rows == -1)
     {
-    	for(int i = 0; i < number_of_rows; i++)
-        {
-            clear_cluster(&clusters[i]);
-        }
 	    free(clusters);
 	    fprintf(stdout, "error: bad format of filename\n");
 	    return 1;
@@ -468,7 +471,9 @@ int main(int argc, char *argv[])
     print_clusters(clusters, number_of_rows);
     //vycisteni pameti
     for(int i = 0; i < number_of_rows; i++)
+    {
         clear_cluster(&clusters[i]);
+    }
     free(clusters);
     return 0;
 
