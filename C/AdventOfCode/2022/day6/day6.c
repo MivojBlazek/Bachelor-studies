@@ -2,23 +2,39 @@
 
 int main()
 {
-    char c[4];
+    char c[14];
     int count;
     FILE *input;
     input = fopen("day6.txt", "r");
-    
-    c[0] = fgetc(input);
-    c[1] = fgetc(input);
-    c[2] = fgetc(input);
-    for (count = 3; (c[3] = fgetc(input)) != EOF; count++)
+    int flag = 0;    
+
+    for (int i = 0; i < 13; i++)
     {
-        if (c[0] != c[1] && c[0] != c[2] && c[0] != c[3] && c[1] != c[2] && c[1] != c[3] && c[2] != c[3])
+        c[i] - fgetc(input);
+    }
+    
+    for (count = 13; (c[13] = fgetc(input)) != EOF; count++)
+    {
+        for (int i = 0; i < 13; i++)
+        {
+            for (int j = i + 1; j < 14; j++)
+            {
+                if (c[i] == c[j])
+                    flag++;
+            }
+        }
+        if (!flag)
             break;
-        c[0] = c[1];
-        c[1] = c[2];
-        c[2] = c[3];
+        else
+	    flag = 0;
+
+        for (int i = 0; i < 13; i++)
+        {
+            c[i] = c[i + 1];
+        }
     }
     count++;
+
     printf("Sequence ends on %d index\n", count);
     fclose(input);
     return 0;
