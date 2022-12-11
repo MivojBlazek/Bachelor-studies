@@ -1,68 +1,30 @@
 #include <stdio.h>
 #include <string.h>
 
-int line_new[110][110];
-
-int visible_from_left(char line[110], int size, int k, int trans)
+int visible_from_left(char line[110], int size, int tallest, int k)
 {
-    int flag = 0;
-    int pos;
-    int number = 0;
-    int tallest = -1;
-    for (int i = 0; i < size; i++)
+    int i;
+    for (i = size + 1; i < strlen(line); i++)
     {
-        if (line[i] > tallest)
+        if (line[i] >= tallest)
         {
-            tallest = line[i];
-            pos = i;
-            flag = 1;
+            return i - size;
         }
     }
-    
-    if (flag)
-    {
-        if (trans)
-            line_new[pos][k] -= 1;
-        else
-            line_new[k][pos] -= 1;
-        flag = 0;
-    }
-    
-    number++;
-    if (pos > 0)
-        number += visible_from_left(line, pos, k, trans);
-    return number;
+    return i - size - 1;
 }
 
-int visible_from_right(char line[110], int size, int k, int trans)
+int visible_from_right(char line[110], int size, int tallest, int k)
 {
-    int flag = 0;
-    int pos = size;
-    int number = 0;
-    int tallest = -1;
-    for (int i = strlen(line) - 1; i > size; i--)
+    int i;
+    for (i = size - 1; i > -1; i--)
     {
-        if (line[i] > tallest)
+        if (line[i] >= tallest)
         {
-            tallest = line[i];
-            pos = i;
-            flag = 1;
+            return size - i;
         }
     }
-
-    if (flag)
-    {
-        if (trans)
-            line_new[pos][k] -= 1;
-        else
-            line_new[k][pos] -= 1;
-        flag = 0;
-    }
-    
-    number++;
-    if (pos < strlen(line) - 1)
-        number += visible_from_right(line, pos, k, trans);
-    return number;
+    return size - i - 1;
 }
 
 
@@ -85,43 +47,8 @@ int main()
         
     }
 
-    int numberL = 0;
-    int numberR = 0;
-    int numberU = 0;
-    int numberD = 0;
-
-    int trans = 0;
-    for (int k = 0; k < line_cnt; k++)
-    {
-        //LEFT
-        numberL += visible_from_left(line[k], strlen(line[k]), k, trans);
-
-        //RIGHT
-        int flag = 0;
-        int tallest = -1;
-        int pos = strlen(line[k]) - 1;
-        for (int i = 0; i < strlen(line[k]); i++)
-        {
-            if (line[k][i] >= tallest)
-            {
-                tallest = line[k][i];
-                pos = i;
-                flag = 1;
-            }
-        }
-
-        if (flag)
-        {
-            if (trans)
-                line_new[pos][k] -= 1;
-            else
-                line_new[k][pos] -= 1;
-            flag = 0;
-        }
-
-        numberR++;
-        numberR += visible_from_right(line[k], pos, k, trans);
-    }
+    int number_of_visible = 1;
+    int max = 0;
 
     //transponovana matice
     for (int i = 0; i < line_cnt; i++)
@@ -132,53 +59,26 @@ int main()
         }
     }
 
-    trans = 1;
-    for (int k = 0; k < strlen(line[0]); k++)
-    {
-        //UP
-        numberU += visible_from_left(lineT[k], strlen(lineT[k]), k, trans);
-
-        //DOWN
-        int flag = 0;
-        int tallest = -1;
-        int pos = strlen(lineT[k]) - 1;
-        for (int i = 0; i < strlen(lineT[k]); i++)
-        {
-            if (lineT[k][i] >= tallest)
-            {
-                tallest = lineT[k][i];
-                pos = i;
-                flag = 1;
-            }
-        }
-
-        if (flag)
-        {
-            if (trans)
-                line_new[pos][k] -= 1;
-            else
-                line_new[k][pos] -= 1;
-            flag = 0;
-        }
-        numberD++;
-        numberD += visible_from_right(lineT[k], pos, k, trans);
-    }
-
-    int sum = 0;
     for (int i = 0; i < line_cnt; i++)
     {
-        for (int j = 0; j < strlen(line[0]); j++)
+        for (int j = 0; j < strlen(line[i]); j++)
         {
-            if (line_new[i][j] < 0)
-                line_new[i][j] += 1;
-            sum += line_new[i][j];
+            int tallest = line[i][j];
+            number_of_visible = 1;
+
+            number_of_visible *= visible_from_left(line[i], j, tallest, i);
+            number_of_visible *= visible_from_right(line[i], j, tallest, i);
+
+            number_of_visible *= visible_from_left(lineT[j], i, tallest, j);
+            number_of_visible *= visible_from_right(lineT[j], i, tallest, j);
+
+            if (number_of_visible > max)
+            {
+                max = number_of_visible;
+            }
         }
     }
-    
-    fprintf(stderr, "LEFT: %d\nRIGHT: %d\nUP: %d\nDOWN: %d\n", numberL, numberR, numberU, numberD);
-    fprintf(stderr, "SUM: %d\n", sum);
-
-    printf("Vysledek: %d\n", numberL + numberR + numberU + numberD + sum);
+    printf("Maximum visible distance is: %d\n", max);
 
     fclose(input);
     return 0;
