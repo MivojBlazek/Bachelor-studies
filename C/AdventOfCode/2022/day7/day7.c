@@ -44,7 +44,7 @@ char file_name[25];
 int main()
 {
     FILE *input;
-    input = fopen("day7.txt", "r");
+    input = fopen("day.txt", "r");
 
     struct dir *tree = malloc(100 * sizeof(struct dir));
     int pos = 0;
@@ -54,6 +54,18 @@ int main()
 
     while (fgets(line, 30, input) != NULL)
     {
+        if (line[strlen(line) - 1] == '\n')
+        {
+            line[strlen(line) - 1] = '\0';
+        }
+//!test
+fprintf(stderr, "'%s'\n", line);
+for (int l = 0; l < pos; l++)
+{
+    printf("\t");
+}
+fprintf(stderr, "%d. %s %d\n", pos, tree[pos].name, tree[pos].bytes);
+//!test
         //TODO not sure, jestli musim tuhle kontrolu delat a nekam ukladat aktualni slozku
         //kontrola, kde vlastne jsme (aktualni slozka)
         /*tree[pos][i];*/
@@ -67,8 +79,25 @@ int main()
                 if (line[5] == '.' && line[6] == '.')
                 {
                     //je to cd ..
-                    //TODO ulozit pocet bytu do diru, abych o to neprisel
+                    // // TODO ulozit pocet bytu do diru, abych o to neprisel
+                    long byty = 0;
+                    for (int i = 0; i < tree[pos].dir_size; i++)
+                    {
+                        byty += tree[pos].dirs[i].bytes;
+                    }
+                    for (int i = 0; i < tree[pos].file_size; i++)
+                    {
+                        byty += tree[pos].files[i].size;
+                    }
+                    tree[pos].bytes = byty;
+                    char *name = tree[pos].name;
                     pos--;
+                    for (int i = 0; i < tree[pos].dir_size; i++)
+                    {
+                        if (strstr(tree[pos].dirs[i].name, name) != NULL)
+                            tree[pos].dirs[i].bytes = byty;
+                    }
+
                     continue;
                 }
                 else
@@ -128,6 +157,13 @@ int main()
         }
     }
     //TODO nejaky konecny vypis a podminka
+//!test
+for (int l = 0; l < pos; l++)
+{
+    printf("\t");
+}
+fprintf(stderr, "%d. %s %d\n", pos, tree[pos].name, tree[pos].bytes);
+//!test
     fclose(input);
     return 0;
 }
