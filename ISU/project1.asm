@@ -1,4 +1,4 @@
-%include "rw32-2018.inc"
+%include "rw32-2022-mingw.inc"
 
 ; Cviceni c.2
 ; Vyzkousejte prelozit, spustit a zdebuggovat nasledujici kod.

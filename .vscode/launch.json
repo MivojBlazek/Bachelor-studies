@@ -26,6 +26,22 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "ASM Debug (launch)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}\\ISU\\build\\${fileBasenameNoExtension}.exe",
+            "preLaunchTask": "LD-link",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}\\ISU",
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "${workspaceFolder}\\ISU\\bin\\gdb\\bin\\gdb.exe",
+            "setupCommands": [ 
+                { "text": "set disassembly-flavor intel" },
+                { "text": "-enable-pretty-printing" }
+            ],
         }
     ]
 }

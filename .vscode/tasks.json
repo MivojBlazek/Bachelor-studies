@@ -42,6 +42,59 @@
                 "isDefault": true
             },
             "detail": "Úloha vygenerovaná ladicím programem"
+        },
+        {
+            "label": "NASM-Compile",
+            "command": "${workspaceFolder}\\ISU\\bin\\nasm.exe",
+            "args": [ 
+                "-felf32", 
+                "-F", "dwarf", 
+                "-g", 
+                "-i", "${workspaceFolder}",
+                "-o", "${workspaceFolder}\\ISU\\build\\${fileBasenameNoExtension}.obj",
+                "${file}" 
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}\\ISU"
+            },
+            "presentation": {
+                "focus": true,
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "panel": "shared",                
+            }
+        },
+        {
+            "label": "LD-link",
+            "command": "${workspaceFolder}\\ISU\\bin\\ld\\ld.exe",
+            "args": [                
+                "-g",
+                "-o", "${workspaceFolder}\\ISU\\build\\${fileBasenameNoExtension}.exe",
+                "-estart",
+                "${workspaceFolder}\\ISU\\build\\${fileBasenameNoExtension}.obj",
+                "${workspaceFolder}\\ISU\\bin\\ld\\libmsvcrt.a",
+                "${workspaceFolder}\\ISU\\bin\\ld\\libkernel32.a"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}\\ISU"
+            },
+            "dependsOn": [ "NASM-Compile" ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "error"
+                }
+            },
+            "presentation": {
+                "focus": true,
+                "panel": "shared",
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "close": false,
+            }
         }
     ],
     "version": "2.0.0"
