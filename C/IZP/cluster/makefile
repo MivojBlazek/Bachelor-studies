@@ -4,7 +4,7 @@ CFLAGSMATH=-lm
 NAME=cluster
 
 $(NAME): $(NAME).c
-	$(CC) $(CFLAGS) $(NAME).c -o $(NAME) -g $(CFLAGSMATH)
+	$(CC) $(CFLAGS) $(NAME).c -o $(NAME) $(CFLAGSMATH)
 
 clean:
 	rm -f $(NAME)
