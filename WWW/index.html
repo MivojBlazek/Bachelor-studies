@@ -14,9 +14,7 @@
         var lastScroll = false;
         window.addEventListener("load", () => {
             window.addEventListener("scroll", () => {
-                console.log(window.scrollY);
                 if(window.scrollY > 0) {
-                    console.log(document.documentElement.classList);
                     if(lastScroll === false) {
                         document.documentElement.classList.toggle("scrolled");
                         lastScroll = true;
@@ -119,7 +117,7 @@
                 <h2>Explore Top Destination</h2>
             </div>
             <img src="img/chilling.jpg" alt="">
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Omnis ut maiores excepturi culpa. Maxime nisi cupiditate libero eius unde vero veniam molestiae labore molestias, modi esse quaerat voluptatem fugit laborum.</p>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Omnis ut maiores excepturi culpa. Maxime nisi cupiditate libero eius unde vero veniam molestiae labore molestias, modi esse quaerat voluptatem fugit.</p>
         </section>
         <section id="services">
             <div class="heading">
@@ -284,6 +282,6 @@
             <span><a href="https://www.youtube.com/watch?v=uVWaPBlFXkA">ITW 2023</a></span>
         </div>
     </footer>
-    <a id="jesse" href="#"><i class="fa-solid fa-arrow-up"></i></a>
+    <a id="jesse" href="#" title="Yo bitch!"><i class="fa-solid fa-arrow-up"></i></a>
 </body>
 </html>

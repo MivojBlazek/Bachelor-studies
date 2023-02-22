@@ -6,3 +6,83 @@
  * Nezapomente pridat strucne hromadne komentare pro pravidla jednotlivych sekci
  * a pro netrivialni useky kodu.
  */
+
+
+/** General properties **/
+
+/* ! 1-... Still dont know how */
+html{
+    font-family: Poppins;
+    font-size: 16px;
+    line-height: 1.5;
+}
+body{
+    text-align: center;
+    margin: 10px;
+}
+section{
+    margin-top: 60px;
+    margin-bottom: 80px;
+}
+.logo{
+    font-family: Bebas Neue;
+}
+.contacts{ /* ? Really contacts */
+    font-family: Font Awesome 6 Free;
+}
+.networks{ /* ? Really networks */
+    font-family: Font Awesome 6 Brands;
+}
+h2{
+    font-size: 2rem;
+    letter-spacing: 0.4rem;
+}
+h3{ /* TODO 5-2-2 */
+    font-size: 1.3rem;
+}
+/* ! 6-... Colors */
+/* ! 7, 8, 9 Difficulty level senior programmer */
+
+
+/** Specific properties **/
+
+#header{
+    min-height: 400px;
+}
+#header-menu{
+    max-width: 1000px;
+    margin-top: 10px;
+}
+#header-menu .logo{ /* ? 1-2-3 Nav */
+    line-height: 80px;
+}
+#header-menu .contacts{
+    margin: 10px;
+}
+#header-menu .contacts i{ /* ? 1-2-4-2 IDTS */
+    margin-right: 0.25rem;
+}
+#header-menu a{ /* ? 1-2-5-1 Imo ikony */
+    margin: 10px;
+    word-spacing: 10px;
+}
+#header-menu .logo{ /* Druhe logo v CSS */
+    font-size: 32px;
+    margin-left: 40px;
+}
+nav li{
+    font-size: 14px;
+    letter-spacing: 0.05rem;
+    line-height: 34px; /* 10px + 14px + 10px */
+    margin-right: 40px;
+}
+#header-title{
+    height: 80%;
+    min-height: 400px;
+    font-size: 52px;
+    margin-bottom: 100px;
+    margin-right: 50px;
+}
+#header-title span:last-child{ /* ? 1-3 Not sure */
+    font-size: 24px;
+}
