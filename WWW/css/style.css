@@ -76,7 +76,7 @@ nav li{
     line-height: 34px; /* 10px + 14px + 10px */
     margin-right: 40px;
 }
-#header-title{
+#header-title{ /* ? 1-3-3 Implicitni okraje */
     height: 80%;
     min-height: 400px;
     font-size: 52px;
@@ -86,3 +86,70 @@ nav li{
 #header-title span:last-child{ /* ? 1-3 Not sure */
     font-size: 24px;
 }
+#header-form{ /* ? 1-4-3+ Mezery a dal */
+    font-size: 14px;
+    margin: 15px;
+    gap: 10px;
+}
+#about{ /* ? 2-2 Text */
+    width: 60%;
+}
+#about img{ /* ? 2-1-2 Padding */
+    width: 40%;
+    padding: 20px;
+}
+#services{
+    min-width: 250px;
+    column-gap: 20px;
+}
+#services img{
+    height: 300px;
+}
+/* ! 4-1 switching of images */
+#tours .section-item{
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+#tours img{
+    width: 40%;
+    margin: 20px;
+}
+/* ! 4-5 icons */
+#price .section-content{
+    height: 600px;
+}
+#price .section-content .section-item{
+    padding: 10px;
+}
+/* ! 5-3+ Not done */
+#clients .section-item{
+    margin-top: 40px;
+    margin-bottom: 40px;
+    max-height: (768px + ((1200px - 768px) / 2)); /* ? Not sure */
+}
+#clients img{
+    height: 200px;
+}
+/* ! 6-4+ Not sure */
+#footer h2{
+    letter-spacing: 0.2rem;
+}
+#summary{
+    max-width: 30%;
+}
+#links{
+    max-width: 20%;
+}
+#contact{
+    max-width: 50%;
+}
+#license{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#jesse{
+    margin-right: 20px;
+    margin-bottom: 10px;
+    padding: 15px 20px; /* ? 8-3 Not sure */
+}
+/* ! 9 Co je jako #heisenberg? */
