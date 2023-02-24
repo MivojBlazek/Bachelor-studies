@@ -12,32 +12,36 @@
 
 /* ! 1-... Still dont know how */
 html{
-    font-family: Poppins;
+    font-family: "Poppins", "sans-serif";
+}
+p{
     font-size: 16px;
     line-height: 1.5;
 }
 body{
-    text-align: center;
-    margin: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 section{
     margin-top: 60px;
     margin-bottom: 80px;
 }
 .logo{
-    font-family: Bebas Neue;
+    font-family: "Bebas Neue", "sans-serif";
 }
-.contacts{ /* ? Really contacts */
-    font-family: Font Awesome 6 Free;
+.contacts i{ /* Really contacts *//* its */
+    font-family: "Font Awesome 6 Free";
 }
-.networks{ /* ? Really networks */
-    font-family: Font Awesome 6 Brands;
+.networks i{ /* Really networks *//* its */
+    font-family: "Font Awesome 6 Brands";
+}
+.heading span{
+    letter-spacing: 0.4rem;
 }
 h2{
     font-size: 2rem;
-    letter-spacing: 0.4rem;
 }
-h3{ /* TODO 5-2-2 */
+h3{ /* 5-2-2 *//* its mby */
     font-size: 1.3rem;
 }
 /* ! 6-... Colors */
@@ -48,22 +52,25 @@ h3{ /* TODO 5-2-2 */
 
 #header{
     min-height: 400px;
+    /*background-image: url("../img/header.jpg");*/ /* ! pro jednoduchost vypnuto */
 }
 #header-menu{
     max-width: 1000px;
     margin-top: 10px;
-}
-#header-menu .logo{ /* ? 1-2-3 Nav */
     line-height: 80px;
+}
+#header-menu *{ /* TODO position of 1. and 2. line */
+    display: inline;
 }
 #header-menu .contacts{
     margin: 10px;
 }
-#header-menu .contacts i{ /* ? 1-2-4-2 IDTS */
+#header-menu .contacts i{ /* 1-2-4-2 IDTS */
     margin-right: 0.25rem;
+    margin-left: 0.25rem;
 }
-#header-menu a{ /* ? 1-2-5-1 Imo ikony */
-    margin: 10px;
+#header-menu i{
+    margin: 5px; /* mby 10px*/
     word-spacing: 10px;
 }
 #header-menu .logo{ /* Druhe logo v CSS */
@@ -72,40 +79,58 @@ h3{ /* TODO 5-2-2 */
 }
 nav li{
     font-size: 14px;
-    letter-spacing: 0.05rem;
-    line-height: 34px; /* 10px + 14px + 10px */
+    letter-spacing: 0.05em;
+    margin-left: 10px; /* mby 20px*/
+    margin-right: 10px; /* mby 20px*/
+}
+nav{
     margin-right: 40px;
 }
-#header-title{ /* ? 1-3-3 Implicitni okraje */
+#header-title p{ /* 1-3-3 Implicitni okraje */
     height: 80%;
     min-height: 400px;
     font-size: 52px;
     margin-bottom: 100px;
     margin-right: 50px;
+    text-align: right;
 }
-#header-title span:last-child{ /* ? 1-3 Not sure */
+#header-title span:last-child{
     font-size: 24px;
+    display: block;
 }
-#header-form{ /* ? 1-4-3+ Mezery a dal */
-    font-size: 14px;
+#header-form{
     margin: 15px;
-    gap: 10px;
 }
-#about{ /* ? 2-2 Text */
+#header-form select, #header-form input{
+    font-size: 14px;
+    width: 150px; /* ! Flexibilne vyplni dostupne misto*/
+    min-width: 125px;
+    padding: 10px;
+    border-radius: 4px;
+}
+#header-form input[type="date"]{
+    min-width: 150px;
+}
+#about p{
     width: 60%;
+    display: inline;
 }
-#about img{ /* ? 2-1-2 Padding */
+#about img{
     width: 40%;
     padding: 20px;
 }
-#services{
+#services .section-item{
     min-width: 250px;
+}
+#services .section-content{
+    display: flex;
     column-gap: 20px;
 }
 #services img{
     height: 300px;
+    width: 100%;
+    object-fit: cover;
 }
-/* ! 4-1 switching of images */
 #tours .section-item{
     margin-top: 40px;
     margin-bottom: 20px;
@@ -113,15 +138,39 @@ nav li{
 #tours img{
     width: 40%;
     margin: 20px;
+    float: right;
 }
-/* ! 4-5 icons */
+#tour2 img{
+    float: left;
+}
+.tour-stars::before{
+    font-family: "Font Awesome 6 Free";
+    content: "\f005  ";
+}
+.tour-duration::before{
+    font-family: "Font Awesome 6 Free";
+    content: "| \f073  ";
+}
+.tour-price::before{
+    font-family: "Font Awesome 6 Brands";
+    content: "| \f15a  ";
+}
 #price .section-content{
     height: 600px;
 }
-#price .section-content .section-item{
+#price .section-item{
     padding: 10px;
 }
-/* ! 5-3+ Not done */
+#price ul{
+    list-style: none;
+}
+#price li::before{
+    font-family: "Font Awesome 6 Free";
+    content: "\f3a5  ";
+    font-size: 15px;
+}
+/* ! 5-4+ Not done */
+/* TODO Zde jsem skoncil */
 #clients .section-item{
     margin-top: 40px;
     margin-bottom: 40px;
@@ -152,4 +201,14 @@ nav li{
     margin-bottom: 10px;
     padding: 15px 20px; /* ? 8-3 Not sure */
 }
-/* ! 9 Co je jako #heisenberg? */
+/* ! Pro jednoduchost vypnuto */
+/*
+#heisenberg{ /* ? 9+ Not sure * /
+    width: 300px;
+    height: 120px;
+}
+#heisenberg img{
+    width: 80%;
+    border-radius: 20px;
+}
+*/
