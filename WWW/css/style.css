@@ -103,6 +103,13 @@ img:hover{
     float: left;
     border: 1px solid;
 }
+#header-menu .logo::first-letter{
+    color: #cc3636;
+}
+#header-menu .logo *{
+    color: black;
+    text-decoration: none;
+}
 #header-menu nav{
     order: 4;
     width: 500px;
@@ -123,7 +130,7 @@ img:hover{
     margin: 5px; /* mby 10px*/
     word-spacing: 10px;
 }
-#header-menu .logo{ /* Druhe logo v CSS */
+#header-menu .logo{
     font-size: 32px;
     margin-left: 40px;
 }
