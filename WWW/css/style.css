@@ -76,22 +76,50 @@ img{
     /*background-image: url("../img/header.jpg");*/ /* ! pro jednoduchost vypnuto */
 }
 #header-menu{
-    max-width: 10000px; /* Pro test 1000px */
+    max-width: 1000px;
     margin-top: 10px;
     line-height: 80px;
     border: 1px solid;
-    display: block; /* Pro test flex */
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 80px;
 }
 #header-menu .contacts{
     order: 1;
     float: left;
     border: 1px solid;
+    width: fit-content;
+    display: flex;
+    padding: 0px;
+}
+#header-menu .contacts span:first-of-type{
+    order: 2;
+    border: 1px dashed black;
+}
+#header-menu .contacts span:last-of-type{
+    order: 1;
 }
 #header-menu .networks{
     order: 2;
     float: right;
     border: 1px solid;
+    width: fit-content;
+}
+#header-menu .contacts span *{
+    color: black;
+    text-decoration: none;
+    transition: 0.5s ease;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#header-menu .contacts i{
+    color: #cc3636;
+    padding-left: 5px;
+}
+#header-menu .contacts span:hover *{
+    color: #cc3636;
 }
 #header-menu .logo{
     order: 3;
