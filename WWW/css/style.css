@@ -296,7 +296,7 @@ nav li{
     background-image: url("../img/crystal-ship.svg");
     background-repeat: no-repeat;
     background-position: 10px 30px;
-    background-size: 700px;
+    background-size: 60%;
 }
 #tours .section-item{
     padding-top: 40px;
@@ -308,7 +308,9 @@ nav li{
 }
 #tours img{
     width: 40%;
-    margin: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
     float: right;
     transition: 0.5s ease;
 }
@@ -606,6 +608,7 @@ footer:hover #summary h2::first-letter{
 }
 #contact form input{
     height: 30px;
+    width: 70%;
 }
 #contact form input[type="submit"]{
     color: white;
