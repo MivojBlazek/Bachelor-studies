@@ -18,7 +18,6 @@ Gray,  light gray,  almost white,        red,     pink
 
 /** General properties **/
 
-/* ! 1-... Still dont know how */
 html{
     font-family: "Poppins", "sans-serif";
 }
@@ -71,48 +70,52 @@ img{
 
 /** Specific properties **/
 
-#header{
+header{
     min-height: 400px;
     /*background-image: url("../img/header.jpg");*/ /* ! pro jednoduchost vypnuto */
 }
 #header-menu{
+    margin: auto;
     max-width: 1000px;
     margin-top: 10px;
     line-height: 80px;
-    border: 1px solid;
-    display: grid;
-    grid-template-columns: auto auto;
-    column-gap: 80px;
-}
-#header-menu .contacts{
-    order: 1;
-    float: left;
-    border: 1px solid;
-    width: fit-content;
     display: flex;
-    padding: 0px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    line-height: normal;
+}
+#header-menu .contacts{ /* TODO napad: "grid-column: 2 / 4" */
+    order: 1;
+    padding: 2px;
+    display: flex;
 }
 #header-menu .contacts span:first-of-type{
     order: 2;
-    border: 1px dashed black;
 }
 #header-menu .contacts span:last-of-type{
     order: 1;
 }
 #header-menu .networks{
     order: 2;
-    float: right;
-    border: 1px solid;
-    width: fit-content;
+    text-align: right;
+    flex: 40%;
+    height: fit-content;
+    margin: 10px;
+}
+#header-menu .networks *{
+    text-decoration: none;
+    color: #363535;
+    font-size: large;
+    margin: 1px;
+    transition: 0.5s ease;
+}
+#header-menu .networks span:hover i{
+    color: #cc3636;
 }
 #header-menu .contacts span *{
     color: black;
     text-decoration: none;
     transition: 0.5s ease;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    margin-top: 0px;
-    margin-bottom: 0px;
 }
 #header-menu .contacts i{
     color: #cc3636;
@@ -123,9 +126,13 @@ img{
 }
 #header-menu .logo{
     order: 3;
-    width: 210px;
-    float: left;
-    border: 1px solid;
+    border-top: 1px solid #ffd0d0;
+    border-left: 1px solid #ffd0d0;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    z-index: 5;
+    box-shadow: 1px 3px 3px white;
+    background-color: white;
 }
 #header-menu .logo::first-letter{
     color: #cc3636;
@@ -147,9 +154,24 @@ img{
 }
 #header-menu nav{
     order: 4;
-    width: 500px;
-    float: right;
-    border: 1px solid;
+    text-align: right;
+    border-top: 1px solid #ffd0d0;
+    border-right: 1px solid #ffd0d0;
+    padding: 25px 40px 20px 0px; /* ! Still not done, sometimes 2 lines */
+    box-shadow: -1px 3px 3px white;
+    background-color: white;
+    z-index: 4;
+    flex: 50%;
+}
+#header-menu nav *{
+    text-decoration: none;
+    color: #888888;
+    transition: 0.2s ease;
+}
+#header-menu nav li:hover *{
+    text-decoration: underline;
+    text-underline-offset: 12px;
+    color: black;
 }
 #header-menu *{
     display: inline;
@@ -167,22 +189,17 @@ img{
 }
 #header-menu .logo{
     font-size: 32px;
-    margin-left: 40px;
-}
-nav{
-    margin-right: 40px;
-    border: 1px solid;
+    padding-left: 40px;
 }
 nav > ul > li{
     display: flex;
-    border: 1px solid orange;
+    /*border: 1px solid orange;*/ /* ! Debug */
 }
 nav li{
     font-size: 14px;
     letter-spacing: 0.05em;
     margin-left: 10px;
     margin-right: 10px;
-    border: 1px solid;
 }
 #tours-button ul{
     display: none;
@@ -197,17 +214,26 @@ nav li{
     width: 50px;
     height: 55px;
 }
-#header-title p{ /* 1-3-3 Implicitni okraje */
+#header-title{ /* 1-3-3 Implicitni okraje */
     height: 80%;
     min-height: 400px;
-    font-size: 52px;
+    z-index: 1;
+    background-image: url("../img/header.jpg");
+    background-position: center;
+    box-shadow: inset 0 0 5px 4px white;
+    opacity: 0.8;
+    display: grid; /* ! TOHLE JE UJETY */
+}
+#header-title p{
+    color: white;
+    padding-top: 11%;
     padding-bottom: 100px;
     padding-right: 50px;
+    margin-bottom: 0px;
+    text-shadow: 0 0 15px white;
     text-transform: capitalize;
     text-align: right;
-    /*background-image: url("../img/header.jpg");*/
-    /*color: white;
-    text-shadow: 0 0 3px white;*//* ! Pro jednoduchost vypnuto*/
+    font-size: 52px;
 }
 #header-title span:last-child{
     font-size: 24px;
@@ -218,14 +244,15 @@ nav li{
 #header-form{
     background-color: white;
     text-align: center;
-    margin: auto;
+    margin: 0 auto;
+    max-width: 1000px;
     padding: 15px;
-    box-shadow: 0 3px 3px #ffd0d0;
-    max-width: 1200px;
+    box-shadow: 0 1px 8px #ffd0d0;
+    background-color: white;
 }
 #header-form select, #header-form input{
     font-size: 14px;
-    width: 150px; /* ! Flexibilne vyplni dostupne misto*/
+    width: 150px; /* ! Flexibilne vyplni dostupne misto */
     min-width: 125px;
     padding: 10px;
     border: 1px solid #e8e7e7;
@@ -390,6 +417,11 @@ nav li{
 #price .section-item:hover ul li::before{
     background-image: url("../img/crystal-blue.svg");
 }
+#price .section-item:hover span{
+    display: inline;
+    float: right;
+    color: blue;
+}
 #price .section-content{
     height: 600px;
     position: relative;
@@ -399,6 +431,7 @@ nav li{
     content: "";
     background-image: url("../img/huel.jpg");
     background-repeat: no-repeat;
+    background-position: center;
     transform: scaleX(-1);
     background-size: cover;
     position: absolute;
@@ -411,11 +444,11 @@ nav li{
 }
 #price .section-item{ 
     display: inline-block;
-    padding: 10px;
+    padding: 9px;
     position: relative;
 }
 #price .section-item *{
-    margin: 5px;
+    margin: 3px;
 }
 #price .section-item:first-child{
     position: absolute;
@@ -454,6 +487,13 @@ nav li{
     background-image: url("../img/crystal.svg");
     background-repeat: no-repeat;
     margin-right: 5px;
+}
+#price h3{
+    width: fit-content;
+    display: inline;
+}
+#price .section-item span{
+    display: none;
 }
 #clients .section-item{
     margin-top: 40px;
@@ -671,19 +711,42 @@ footer:hover #summary h2::first-letter{
     padding: 15px 20px;
     color: #cc3636;
     transition: 0.5s ease;
+    z-index: 10;
+    cursor: pointer;
 }
 #jesse:hover{
     background-color: #cc3636;
     color: white;
 }
 /* ! Pro jednoduchost vypnuto */
-/*
-#heisenberg{ /* ? 9+ Not sure * /
+
+#heisenberg{ /* ! HIDDEN */
+    visibility: hidden;
+    top: 4%;
+    position: fixed;
+    right: 100%;
+    left: calc(50% - 150px);
     width: 300px;
     height: 120px;
+    border-radius: 20px;
+    border: 1px solid white;
+    background-color: blue;
+    box-shadow: 0 0 20px blue;
+    z-index: 69;
+    display: flex;
 }
 #heisenberg img{
-    width: 80%;
-    border-radius: 20px;
+    padding: 10px;
+    opacity: 1;
+    height: 80%;
 }
-*/
+#heisenberg div{
+    margin: auto 0;
+}
+#heisenberg div span{
+    color: white;
+    display: block;
+}
+#heisenberg div span:first-of-type{
+    text-transform: uppercase;
+}
