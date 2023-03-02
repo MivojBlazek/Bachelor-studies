@@ -7,9 +7,6 @@
  * a pro netrivialni useky kodu.
  */
 
-
-/** General properties **/
-
 html{
     font-family: "Poppins", "sans-serif";
 }
@@ -68,10 +65,6 @@ h3{
 img{
     opacity: 0.8;
 }
-
-
-/** Specific properties **/
-
 header{
     min-height: 400px;
 }
