@@ -31,7 +31,9 @@ body{
     min-width: 768px;
     max-width: 1200px;
     margin: 0 auto;
-    display: inline;
+    display: inline; /* ! problem with inline */
+    /*background-color: aqua;*/ /* ? white space removing test */
+    /*border: 3px solid red;*/ /* ? white space removing test */
 }
 header{
     min-width: 768px;
@@ -285,7 +287,6 @@ nav li{
     color: white;
 }
 #about{
-    /*padding-top: 0px;*/
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -339,6 +340,8 @@ nav li{
 }
 #services{
     background-color: #e8e7e7;
+    padding-top: 60px;
+    padding-bottom: 60px;
 }
 #services .section-content{
     margin: 0 auto;
@@ -377,6 +380,7 @@ nav li{
     background-repeat: no-repeat;
     background-position: 20px 30px;
     background-size: 40%;
+    padding-top: 60px;
 }
 #tours .section-content{
     margin: 0 auto;
@@ -782,4 +786,3 @@ footer:hover #summary h2::first-letter{
 #heisenberg div span:first-of-type{
     text-transform: uppercase;
 }
-/* ! Bily radek pod celou strankou */
