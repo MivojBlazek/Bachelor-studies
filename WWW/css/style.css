@@ -8,14 +8,6 @@
  */
 
 
-/*
-Colors
-
-#363535, #888888, #e8e7e7, black, white, #cc3636, #ffd0d0, blue
-Gray,  light gray,  almost white,        red,     pink   
-*/
-
-
 /** General properties **/
 
 html{
@@ -30,12 +22,6 @@ body{
     padding-right: 10px;
     min-width: 768px;
     max-width: 1200px;
-    margin: 0 auto;
-    display: block; /* ! problem with inline */
-    /*background-color: aqua;*/ /* ? white space removing test */
-    /*border: 3px solid red;*/ /* ? white space removing test */
-}
-header, main{ /* ? How it works for footer? */
     display: inline;
 }
 header{
@@ -92,6 +78,7 @@ header{
 #header-menu{
     margin: auto;
     max-width: 1030px;
+    min-width: 768px;
     margin-top: 10px;
     line-height: 80px;
     display: flex;
@@ -183,9 +170,14 @@ header{
     color: #888888;
     transition: 0.2s ease;
 }
-#header-menu nav li:hover *{
+#header-menu nav li:hover{
     text-decoration: underline;
     text-underline-offset: 12px;
+}
+#header-menu nav li:not([id]):hover *{
+    color: black;
+}
+#header-menu nav li[id]:hover a[onClick]{
     color: black;
 }
 #header-menu *{
@@ -199,16 +191,15 @@ header{
     margin-left: 0.25rem;
 }
 #header-menu i{
-    margin: 5px; /* mby 10px*/
+    margin: 5px;
     word-spacing: 10px;
 }
 #header-menu .logo{
     font-size: 32px;
     padding-left: 40px;
 }
-nav > ul > li{
+nav > ul{
     display: flex;
-    /*border: 1px solid orange;*/ /* ! Debug */
 }
 nav li{
     font-size: 14px;
@@ -217,19 +208,30 @@ nav li{
     margin-right: 10px;
 }
 #tours-button ul{
+    order: 7;
     display: none;
-}
-#tours-button:hover ul{
-    display: grid;
-    position: absolute;
-    margin: 0 auto;
-    right: 208px;
+    background-color: white;
+    box-shadow: 0 0 5px 5px white;
+    padding: 0px;
 }
 #tours-button ul li{
+    display: list-item;
+    padding: 10px 10px 10px 0px;
     width: 50px;
-    height: 55px;
+    height: fit-content;
+    list-style-type: ">";
+    color: #cc3636;
+    text-align: center;
 }
-#header-title{ /* 1-3-3 Implicitni okraje */
+#tours-button.open ul{
+    display: block;
+    padding: 2px;
+    position: absolute;
+    margin: 0 auto;
+    top: 150px;
+    left: calc(50% + 260px);
+}
+#header-title{
     height: 80%;
     min-height: 480px;
     background-image: url("../img/header.jpg");
@@ -269,14 +271,15 @@ nav li{
     text-align: center;
     margin: 0 auto;
     max-width: 1000px;
+    min-width: 738px;
     padding: 15px;
     box-shadow: 0 1px 8px #ffd0d0;
     position: relative;
-
 }
 #header-form select, #header-form input{
     font-size: 14px;
-    width: 150px; /* ! Flexibilne vyplni dostupne misto */
+    width: 150px;
+    flex: 0 0 20%;
     min-width: 125px;
     padding: 10px;
     border: 1px solid #e8e7e7;
@@ -298,7 +301,7 @@ nav li{
     background-image: url("../img/meth.svg");
     background-repeat: no-repeat;
     background-position: 100% 140px;
-    background-size: calc(33% + 270px); /* +- 650px */
+    background-size: calc(33% + 270px);
 }
 #about:hover img{
     transform: scale(1.05);
@@ -321,7 +324,6 @@ nav li{
     flex: 0 0 10%;
     transition: 0.5s ease;
     order: 1;
-    /*z-index: 1;*/ /* ! Box is not behind image */
 }
 #about div{
     width: calc(60% - 2 * 20px);
@@ -354,19 +356,13 @@ nav li{
     flex-wrap: wrap;
     flex-direction: row;
     height: fit-content;
-    /*max-height: 700px;*/ /* 1100px */
-    border: 1px solid orange;
     justify-content: center;
 }
-#services .section-item{ /* ! ZKONTROLOVAT */
-    /*width: 50%;*/ /* ? mby 46% */
+#services .section-item{
     min-width: 23%;
     max-width: 46%;
-    width: calc((70rem - 100%) * 1000); /* ! ZKONTROLOVAT */
-    /*flex: 1 1 23%;*/
-    /*min-width: 250px;*/
+    width: calc((70rem - 100%) * 1000);
     padding: 10px;
-    border: 1px solid;
 }
 #services .section-item h3{
     text-align: center;
@@ -401,6 +397,8 @@ nav li{
     padding-top: 40px;
     padding-bottom: 20px;
     text-align: justify;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 #tours h3, #tours h3 + div{
     text-align: right;
@@ -451,7 +449,7 @@ nav li{
     text-underline-offset: 6px;
 }
 #price .section-content:hover{
-    opacity: 0.8; /* ? Nouzove reseni */
+    opacity: 0.8;
     transform: scale(1.05);
 }
 #price .section-item:hover h3{
@@ -546,7 +544,7 @@ nav li{
     margin-right: auto;
     display: flex;
     transition: 0.5s ease;
-    max-width: 984px; /* (768 + ((1200 - 768) / 2)) */
+    max-width: calc(768px + ((1200px - 768px) / 2));
 }
 #clients img{
     height: 200px;
@@ -751,6 +749,7 @@ footer:hover #summary h2::first-letter{
     color: #cc3636;
 }
 #jesse{
+    visibility: hidden;
     position: fixed;
     float: right;
     right: 20px;
@@ -766,9 +765,12 @@ footer:hover #summary h2::first-letter{
     background-color: #cc3636;
     color: white;
 }
-#heisenberg{ /* ! HIDDEN */
+html.scrolled #jesse{
+    visibility: visible;
+}
+#heisenberg{
     visibility: hidden;
-    top: 4%;
+    top: 8%;
     position: fixed;
     right: 100%;
     left: calc(50% - 150px);
@@ -780,6 +782,8 @@ footer:hover #summary h2::first-letter{
     box-shadow: 0 0 20px blue;
     z-index: 69;
     display: flex;
+    opacity: 0;
+    transition: all 0.5s ease;
 }
 #heisenberg img{
     padding: 10px;
@@ -796,4 +800,8 @@ footer:hover #summary h2::first-letter{
 #heisenberg div span:first-of-type{
     text-transform: uppercase;
 }
-/* ! tours mozna text margin ze stran */
+#heisenberg.open{
+    visibility: visible;
+    transform: translateY(-50px);
+    opacity: 1;
+}
