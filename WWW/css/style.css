@@ -285,6 +285,9 @@ nav li{
     background-color: #cc3636;
     color: white;
 }
+#header-form input[name="checkin"]:valid + input[name="checkout"]:valid + input[name="persons"]:valid ~ input[type="submit"]{
+    background-color: blue;
+}
 #about{
     display: flex;
     flex-wrap: wrap;
@@ -724,6 +727,9 @@ footer:hover #summary h2::first-letter{
     width: 70px;
     position: relative;
     right: 6px;
+}
+#contact form input[type="email"]:valid ~ input[type="submit"]{
+    background-color: blue;
 }
 #license{
     padding-top: 20px;
