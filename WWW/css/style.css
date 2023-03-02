@@ -31,9 +31,12 @@ body{
     min-width: 768px;
     max-width: 1200px;
     margin: 0 auto;
-    display: inline; /* ! problem with inline */
+    display: block; /* ! problem with inline */
     /*background-color: aqua;*/ /* ? white space removing test */
     /*border: 3px solid red;*/ /* ? white space removing test */
+}
+header, main{ /* ? How it works for footer? */
+    display: inline;
 }
 header{
     min-width: 768px;
@@ -349,12 +352,19 @@ nav li{
     min-width: 768px;
     display: flex;
     flex-wrap: wrap;
-    flex-direction: column;
-    max-height: 700px; /* 1100px */
+    flex-direction: row;
+    height: fit-content;
+    /*max-height: 700px;*/ /* 1100px */
+    border: 1px solid orange;
+    justify-content: center;
 }
-#services .section-item{
-    width: 23%; /* ? mby 46% */
-    min-width: 250px;
+#services .section-item{ /* ! ZKONTROLOVAT */
+    /*width: 50%;*/ /* ? mby 46% */
+    min-width: 23%;
+    max-width: 46%;
+    width: calc((70rem - 100%) * 1000); /* ! ZKONTROLOVAT */
+    /*flex: 1 1 23%;*/
+    /*min-width: 250px;*/
     padding: 10px;
     border: 1px solid;
 }
@@ -786,3 +796,4 @@ footer:hover #summary h2::first-letter{
 #heisenberg div span:first-of-type{
     text-transform: uppercase;
 }
+/* ! tours mozna text margin ze stran */
