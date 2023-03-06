@@ -13,9 +13,9 @@ function openFile () {
 	EDIT_DATE="`date +%Y-%m-%d_%H-%M-%S`"
 	if [ -z "$g_var" ]
 	then
-		echo "$EDIT_FILE:$g:$DIR:$EDIT_DATE" >> /home/"$USER"/.mole/list
+		echo "$EDIT_FILE:$g:$DIR:$EDIT_DATE" >> ~/.mole/list # /home/"$USER"/.mole/list
 	else
-		echo "$EDIT_FILE::$DIR:$EDIT_DATE" >> /home/"$USER"/.mole/list
+		echo "$EDIT_FILE::$DIR:$EDIT_DATE" >> ~/.mole/list # /home/"$USER"/.mole/list
 	fi
 	$EDITOR -o "$FILE" # Not everytime it must be 'vi'
 	return 0
@@ -47,7 +47,7 @@ function dateCmp () {
 
 if [ -z $1 ]
 then
-	echo "only mole" # pry se muze pozit ':' a nebude to delat nic
+	: # pry se muze pozit ':' a nebude to delat nic
 elif [ $1 = "list" ]
 then
 	echo "$1 is 'list'"
@@ -55,7 +55,7 @@ then
 	shift 1
 	if [ -z $1 ]
 	then
-		echo "prazdny list"
+		: # echo "prazdny list"
 	elif [ $1 = "-m" ]
 	then
 		shift 1
@@ -96,7 +96,7 @@ Arguments:
 		[-b DATE] Records of edited files after this date will not be considered (DATE format is YYYY-MM-DD)\n"
 		exit 0;;
         m)      m="true"
-		FILE="`awk -F: '{print $1}' .mole/list | tr -c '[:alnum:]' '[\n*]' | sort | uniq -c | sort -nr | head  -1 | awk '{print $2}'`";; # WORKS but only still 'mole -m'
+		FILE="`awk -F: '{print $1}' ~/.mole/list | tr -c '[:alnum:]' '[\n*]' | sort | uniq -c | sort -nr | head  -1 | awk '{print $2}'`";; # WORKS but only still 'mole -m'
         g)	g="$OPTARG";;
 	b)	DATE_B="$OPTARG";;
 	a)	DATE_A="$OPTARG";;
@@ -114,12 +114,12 @@ then
 	then
 		if [ $m = "false" ]
 		then
-			FILE="`awk -F: '{print $1}' .mole/list | awk 'END{print}'`"
+			FILE="`awk -F: '{print $1}' ~/.mole/list | awk 'END{print}'`"
 		fi
 		if [ $list = "true" ]
 		then
 			# samotny list -> zobraz vse
-			sort .mole/list | awk -F: '{print $1, $2}' | awk '!seen[$0]++' | awk '$1!=p{if(p)print s; p=$1; s=$0; next}{sub(p,x); s=s $0} END{print s}' | awk '{for(i=j=2; i < NF; i=i+1) {$j = $i","; j++} NF=j}1' | column -t
+			sort ~/.mole/list | awk -F: '{print $1, $2}' | awk '!seen[$0]++' | awk '$1!=p{if(p)print s; p=$1; s=$0; next}{sub(p,x); s=s $0} END{print s}' | awk '{for(i=j=2; i < NF; i=i+1) {$j = $i","; j++} NF=j}1' | column -t
 			#sort .mole/list | awk -F: 'BEGIN{OFS=": "} {print $1, $2}' | column -t
 			exit 0
 		fi
@@ -129,13 +129,13 @@ then
 		shift 1
 		if [[ ( -z $1 ) && ( $m = "false" ) ]] # -m tady nebude fungovat
 		then
-			FILE="`awk -F: '{print $1}' .mole/list | awk 'END{print}'`"
+			FILE="`awk -F: '{print $1}' ~/.mole/list | awk 'END{print}'`"
 		fi
 	fi
 else
 	nr=0
 	sum_new_lines=1
-	echo ";;;;;;;;;;" >> /home/"$USER"/.mole/list
+	echo ";;;;;;;;;;" >> ~/.mole/list # /home/"$USER"/.mole/list
 	while read line
 	do
 		if [ $line = ";;;;;;;;;;" ]
@@ -151,19 +151,19 @@ else
 			(( sum_new_lines++ ))
 			if [ -z $g ]
 			then
-				echo "$line" >> /home/"$USER"/.mole/list
+				echo "$line" >> ~/.mole/list # /home/"$USER"/.mole/list
 			else
 				g_var=1
-				echo "$line" | awk -v gv="$g" -F: '{if($2 == gv) {print}}' >> /home/"$USER"/.mole/list
+				echo "$line" | awk -v gv="$g" -F: '{if($2 == gv) {print}}' >> ~/.mole/list # /home/"$USER"/.mole/list
 			fi
 		fi
-	done < /home/"$USER"/.mole/list
+	done < ~/.mole/list # /home/"$USER"/.mole/list
 
 	if [[ ( -z $1 ) && ( $list = "false" ) ]]
 	then
 		if [ $m = "false" ]
 		then
-			FILE="`awk '/;;;;;;;;;;/{flag=1;next}flag' .mole/list | awk -F: '{print $1}' .mole/list | awk 'END{print}'`"
+			FILE="`awk '/;;;;;;;;;;/{flag=1;next}flag' ~/.mole/list | awk -F: '{print $1}' ~/.mole/list | awk 'END{print}'`" # proc tu je awk ~/.mole/list
 		fi
 	elif [[ ( -d $1 ) && ( $list = "false" ) ]]
 	then
@@ -171,7 +171,7 @@ else
 		shift 1
 		if [[ ( -z $1 ) && ( $m = "false" ) ]] # -m tady nebude fungovat
 		then
-			FILE="`awk '/;;;;;;;;;;/{flag=1;next}flag' .mole/list | awk -F: '{print $1}' .mole/list | awk 'END{print}'`"
+			FILE="`awk '/;;;;;;;;;;/{flag=1;next}flag' ~/.mole/list | awk -F: '{print $1}' ~/.mole/list | awk 'END{print}'`" # proc tu je awk ~/.mole/list
 		fi
 	fi
 	
@@ -179,13 +179,13 @@ else
 	if [ $list = "true" ]
 	then
 		#uzivatel zadal list a '-a' || '-b'
-		awk '/;;;;;;;;;;/{flag=1;next}flag' .mole/list | sort | awk -F: '{print $1, $2}' | awk '!seen[$0]++' | awk '$1!=p{if(p)print s; p=$1; s=$0; next}{sub(p,x); s=s $0} END{print s}' | awk '{for(i=j=2; i < NF; i=i+1) {$j = $i","; j++} NF=j}1' | column -t
+		awk '/;;;;;;;;;;/{flag=1;next}flag' ~/.mole/list | sort | awk -F: '{print $1, $2}' | awk '!seen[$0]++' | awk '$1!=p{if(p)print s; p=$1; s=$0; next}{sub(p,x); s=s $0} END{print s}' | awk '{for(i=j=2; i < NF; i=i+1) {$j = $i","; j++} NF=j}1' | column -t
 	fi
 
 
 	# vymyzani zbytecneho obsahu v souboru
 	(( nr++ ))
-	echo "$(sed "$nr,$ d" .mole/list)" > /home/"$USER"/.mole/list
+	echo "$(sed "$nr,$ d" ~/.mole/list)" > ~/.mole/list # /home/"$USER"/.mole/list
 fi
 
 
