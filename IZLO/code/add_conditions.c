@@ -2,7 +2,7 @@
 #include "cnf.h"
 
 //
-// LOGIN: <ZDE VLOZTE SVUJ LOGIN>
+// LOGIN: xblaze38
 //
 
 // Tato funkce je prikladem pouziti funkci create_new_clause, add_literal_to_clause a add_clause_to_formula
@@ -35,6 +35,11 @@ void each_subject_enrolled_at_least_once(CNF *formula, unsigned num_of_subjects,
     assert(num_of_semesters > 0);
 
     // ZDE PRIDAT KOD
+    for (int i = 0; i < num_of_subjects; i++)
+    {
+        // pro kazdy predmet zjisti, jestli tam je
+        
+    }
 }
 
 // Tato funkce by mela do formule pridat klauzule predstavujici podminku b)
