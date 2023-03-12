@@ -4,6 +4,9 @@
         "stdlib.h": "c",
         "stdio.h": "c",
         "cstdlib": "c",
-        "cctype": "c"
+        "cctype": "c",
+        "stdbool.h": "c",
+        "assert.h": "c",
+        "cnf.h": "c"
     }
 }
