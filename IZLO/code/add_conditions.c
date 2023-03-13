@@ -69,6 +69,20 @@ void each_subject_enrolled_at_most_once(CNF *formula, unsigned num_of_subjects, 
         }
         add_clause_to_formula(clause, formula);
     }
+
+    for (unsigned subject_i = 0; subject_i < num_of_subjects; subject_i++)
+    {
+        for (unsigned semester_j = 0; semester_j < num_of_semesters; semester_j++)
+        {
+            for (unsigned semester_k = semester_j + 1; semester_k < num_of_semesters; semester_k++)
+            {
+                Clause *clause = create_new_clause(num_of_subjects, num_of_semesters);
+                add_literal_to_clause(clause, false, subject_i, semester_j);
+                add_literal_to_clause(clause, false, subject_i, semester_k);
+                add_clause_to_formula(clause, formula);
+            }
+        }
+    }
 }
 
 
@@ -86,39 +100,27 @@ void add_prerequisities_to_formula(CNF *formula, Prerequisity* prerequisities, u
         // prerequisities[i].earlier_subject je predmet, ktery by si mel student zapsat v nekterem semestru pred predmetem prerequisities[i].later_subject
 
         // ZDE PRIDAT KOD
-        for (unsigned semester_i = 0; semester_i < num_of_semesters; semester_i++)
+        Clause *clause2 = create_new_clause(num_of_subjects, num_of_semesters);
+        add_literal_to_clause(clause2, false, prerequisities[i].earlier_subject, num_of_semesters - 1);
+        add_clause_to_formula(clause2, formula);
+
+        Clause *clause3 = create_new_clause(num_of_subjects, num_of_semesters);
+        add_literal_to_clause(clause3, false, prerequisities[i].later_subject, 0);
+        add_clause_to_formula(clause3, formula);
+
+        for (unsigned semester_i = 0, semester_j = 1; semester_j < num_of_semesters; semester_i++, semester_j++)
         {
             Clause *clause = create_new_clause(num_of_subjects, num_of_semesters);
             add_literal_to_clause(clause, false, prerequisities[i].earlier_subject, semester_i); //NAND
             add_literal_to_clause(clause, false, prerequisities[i].later_subject, semester_i);
             add_clause_to_formula(clause, formula);
 
-            for (unsigned semester_j = 0; semester_j < num_of_semesters; semester_j++)
+            if (semester_i < semester_j)
             {
-                if (semester_i >= semester_j) //ve vsech spatnych pripadech (>=)
-                {
-                    Clause *clause2 = create_new_clause(num_of_subjects, num_of_semesters);
-                    add_literal_to_clause(clause2, false, prerequisities[i].earlier_subject, semester_i);
-                    add_literal_to_clause(clause2, true, prerequisities[i].later_subject, semester_i);
-                    add_clause_to_formula(clause2, formula);
-                    
-                    Clause *clause3 = create_new_clause(num_of_subjects, num_of_semesters);
-                    add_literal_to_clause(clause3, true, prerequisities[i].earlier_subject, semester_j);
-                    add_literal_to_clause(clause3, false, prerequisities[i].later_subject, semester_j);
-                    add_clause_to_formula(clause3, formula);
-                }
-                else //ve vsech dobrych pripadech (<)
-                {
-                    /*Clause *clause2 = create_new_clause(num_of_subjects, num_of_semesters);
-                    add_literal_to_clause(clause2, true, prerequisities[i].earlier_subject, semester_i);
-                    add_literal_to_clause(clause2, false, prerequisities[i].later_subject, semester_i);
-                    add_clause_to_formula(clause2, formula);
-                    
-                    Clause *clause3 = create_new_clause(num_of_subjects, num_of_semesters);
-                    add_literal_to_clause(clause3, false, prerequisities[i].earlier_subject, semester_j);
-                    add_literal_to_clause(clause3, true, prerequisities[i].later_subject, semester_j);
-                    add_clause_to_formula(clause3, formula);*/
-                }
+                Clause *clause2 = create_new_clause(num_of_subjects, num_of_semesters);
+                add_literal_to_clause(clause2, false, prerequisities[i].earlier_subject, semester_i);
+                add_literal_to_clause(clause2, true, prerequisities[i].later_subject, semester_j);
+                add_clause_to_formula(clause2, formula);
             }
         }
     }
