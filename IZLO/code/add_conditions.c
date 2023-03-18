@@ -94,7 +94,7 @@ void add_prerequisities_to_formula(CNF *formula, Prerequisity* prerequisities, u
         add_literal_to_clause(clause, false, prerequisities[i].earlier_subject, num_of_semesters - 1);
         add_clause_to_formula(clause, formula);
 
-        Clause *clause2 = create_new_clause(num_of_subjects, num_of_semesters); //!nemusi tam byt
+        Clause *clause2 = create_new_clause(num_of_subjects, num_of_semesters);
         add_literal_to_clause(clause2, false, prerequisities[i].later_subject, 0);
         add_clause_to_formula(clause2, formula);
 
