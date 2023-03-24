@@ -7,6 +7,8 @@
  * a pro netrivialni useky kodu.
  */
 
+
+/* General properties */
 html{
     font-family: "Poppins", "sans-serif";
 }
@@ -65,6 +67,8 @@ img{
 header{
     min-height: 400px;
 }
+
+/* Header menu - top part of header with navigation */
 #header-menu{
     margin: auto;
     max-width: 1030px;
@@ -223,6 +227,8 @@ nav li{
     top: 43px;
     left: -10px;
 }
+
+/* Header title - middle part of header */
 #header-title{
     height: 80%;
     min-height: 480px;
@@ -256,6 +262,8 @@ nav li{
     text-shadow: 0 0 3px #cc3636;
     display: block;
 }
+
+/* Header form - bottom part of header */
 #header-form{
     z-index: 5;
     background-color: white;
@@ -290,6 +298,8 @@ nav li{
 #header-form input[name="checkin"]:valid + input[name="checkout"]:valid + input[name="persons"]:valid ~ input[type="submit"]{
     background-color: blue;
 }
+
+/* Section about - image in front of text frame */
 #about{
     display: grid;
     grid-template-columns: 35fr 60fr;
@@ -346,6 +356,8 @@ nav li{
     grid-row-end: 4;
     padding-left: 41%;
 }
+
+/* Section services - 4 columns layout change to 2 columns layout */
 #services{
     background-color: #e8e7e7;
     padding-top: 60px;
@@ -384,6 +396,8 @@ nav li{
     text-decoration: underline #cc3636;
     text-underline-offset: 6px;
 }
+
+/* Section tours - 3 blocks of text */
 #tours{
     background-image: url("../img/crystal-ship.svg");
     background-repeat: no-repeat;
@@ -451,6 +465,8 @@ nav li{
     text-decoration: underline #cc3636;
     text-underline-offset: 6px;
 }
+
+/* Section price - image with 3 text bubbles */
 #price .section-content:hover{
     opacity: 0.8;
     transform: scale(1.05);
@@ -540,6 +556,8 @@ nav li{
 #price .section-item span{
     display: none;
 }
+
+/* Section clients - 2 comments */
 #clients .section-item{
     margin-top: 40px;
     margin-bottom: 40px;
@@ -635,6 +653,8 @@ nav li{
     background-color: #cc3636;
     color: #cc3636;
 }
+
+/* Footer - 3 columns and 1 row after that */
 footer{
     background-color: #363535;
     color: white;
@@ -760,6 +780,8 @@ footer:hover #summary h2::first-letter{
 #license span:last-of-type:hover *{
     color: #cc3636;
 }
+
+/* Jesse */
 #jesse{
     visibility: hidden;
     position: fixed;
@@ -780,6 +802,8 @@ footer:hover #summary h2::first-letter{
 html.scrolled #jesse{
     visibility: visible;
 }
+
+/* Heisenberg */
 #heisenberg{
     visibility: hidden;
     top: 8%;
