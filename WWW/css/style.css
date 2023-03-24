@@ -15,11 +15,8 @@ p{
     line-height: 1.5;
 }
 body{
-    padding-left: 10px;
-    padding-right: 10px;
+    margin: 0 auto;
     min-width: 768px;
-    max-width: 1200px;
-    display: inline;
 }
 header{
     min-width: 768px;
@@ -234,7 +231,6 @@ nav li{
     box-shadow: inset 0 0 5px 4px white;
     margin-left: 10px;
     margin-right: 10px;
-    opacity: 0.8;
     z-index: 1;
     margin-top: -40px;
     margin-bottom: -40px;
@@ -269,10 +265,14 @@ nav li{
     box-shadow: 0 1px 8px #ffd0d0;
     position: relative;
 }
+#header-form form{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
 #header-form select, #header-form input{
     font-size: 14px;
-    width: 150px;
-    flex: 0 0 20%;
+    flex: 20%;
     min-width: 125px;
     padding: 10px;
     border: 1px solid #e8e7e7;
@@ -541,6 +541,8 @@ nav li{
     display: flex;
     transition: 0.5s ease;
     max-width: calc(768px + ((1200px - 768px) / 2));
+    padding-left: 20px;
+    padding-right: 20px;
 }
 #clients img{
     height: 200px;
@@ -649,7 +651,7 @@ footer > div:first-of-type section{
     padding-top: 50px;
 }
 #summary{
-    flex-basis: 30%;
+    flex-basis: 40%;
     padding-right: 10%;
 }
 #summary .networks{
@@ -717,7 +719,7 @@ footer:hover #summary h2::first-letter{
 }
 #contact form input{
     height: 30px;
-    width: 70%;
+    width: 65%;
 }
 #contact form input[type="submit"]{
     color: white;
