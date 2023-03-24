@@ -197,6 +197,9 @@ nav li{
     margin-left: 10px;
     margin-right: 10px;
 }
+#tours-button{
+    position: relative;
+}
 #tours-button ul{
     order: 7;
     display: none;
@@ -217,9 +220,8 @@ nav li{
     display: block;
     padding: 2px;
     position: absolute;
-    margin: 0 auto;
-    top: 150px;
-    left: calc(50% + 260px);
+    top: 43px;
+    left: -10px;
 }
 #header-title{
     height: 80%;
@@ -289,15 +291,13 @@ nav li{
     background-color: blue;
 }
 #about{
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    column-count: 2;
-    max-height: 720px;
+    display: grid;
+    grid-template-columns: 35fr 60fr;
+    grid-template-rows: auto auto auto auto;
     background-image: url("../img/meth.svg");
     background-repeat: no-repeat;
-    background-position: 100% 140px;
-    background-size: calc(33% + 270px);
+    background-position: 100% 40%;
+    background-size: calc(300px + 40%);
 }
 #about:hover img{
     transform: scale(1.05);
@@ -314,30 +314,37 @@ nav li{
     border-top: none;
 }
 #about img{
-    width: 40%;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 5;
+    width: 100%;
     padding: 20px;
     border-radius: 30px;
-    flex: 0 0 10%;
     transition: 0.5s ease;
-    order: 1;
 }
 #about div{
-    width: calc(60% - 2 * 20px);
     text-align: left;
-    margin-top: 20%;
-    order: 2;
     height: 80px;
     padding-top: 20px;
     margin-bottom: 0px;
     background-color: #e8e7e7;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    padding-left: 41%;
 }
 #about p{
-    width: calc(60% - 2 * 20px);
     margin-top: 0px;
     height: 130px;
     padding-bottom: 20px;
     background-color: #e8e7e7;
-    order: 3;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    padding-left: 41%;
 }
 #services{
     background-color: #e8e7e7;
@@ -441,7 +448,7 @@ nav li{
     opacity: 1;
 }
 #tours .section-item:hover h3{
-    text-decoration: underline black;
+    text-decoration: underline #cc3636;
     text-underline-offset: 6px;
 }
 #price .section-content:hover{
@@ -539,13 +546,16 @@ nav li{
     margin-left: auto;
     margin-right: auto;
     display: flex;
-    transition: 0.5s ease;
     max-width: calc(768px + ((1200px - 768px) / 2));
     padding-left: 20px;
     padding-right: 20px;
 }
 #clients img{
     height: 200px;
+    transition: 0.5s ease;
+}
+#clients blockquote, #clients blockquote::after, #clients blockquote::before{
+    transition: 0.5s ease;
 }
 #clients .section-content .section-item:first-of-type img{
     border-radius: 90px 50px;
@@ -599,8 +609,9 @@ nav li{
     background-color: #e8e7e7;
     border-radius: 150px 20px / 23px;
 }
-#clients .section-item:hover{
+#clients .section-item:hover img{
     transform: scale(1.05);
+    opacity: 1;
 }
 #clients .section-item:first-of-type:hover img{
     box-shadow: 0 0 7px 7px #cc3636;
