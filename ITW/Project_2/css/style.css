@@ -9,6 +9,7 @@
 /** General properties **/
 html{
     font-family: "sans-serif";
+    scroll-behavior: smooth;
 }
 p{
     font-size: 16px;
@@ -17,11 +18,9 @@ p{
 h2{
     margin-top: 0px;
     font-size: 2rem;
-    text-transform: capitalize;
 }
 h3{
     font-size: 1.2rem;
-    text-transform: capitalize;
 }
 a{
     color: black;
@@ -33,11 +32,14 @@ a:hover{
     text-decoration: underline;
     text-underline-offset: 4px;
 }
+section, footer{
+    padding-top: 100px;
+}
 
 /** Specific properties **/
 body{
     margin: 0 10px;
-    min-width: 700px;
+    min-width: 736px; /*? Why it's 736px instead of calc(768px - (2 * 10px)) */
 }
 header{
     display: flex;
@@ -45,16 +47,23 @@ header{
     flex-wrap: nowrap;
     position: fixed;
     margin-left: -10px;
-    width: calc(100%);
-    min-width: 700px;
+    width: 100%;
+    min-width: 768px;
+    z-index: 99;
     background-color: darkgray;
 }
 #logo{
+    font-size: 30px;
     display: block;
     flex: 1 1 20%;
-    padding: 30px 20px;
+    padding: 20px 20px;
+}
+#logo a:hover{
+    text-decoration: none;
+    color: black;
 }
 #navigation{
+    font-size: large;
     flex: 1 1 80%;
     display: flex;
     flex-direction: row;
@@ -70,6 +79,70 @@ header{
     list-style: none;
     padding: 30px 20px;
 }
-section, footer{
-    padding-top: 100px;
+#header{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    row-gap: 10px;
+    column-gap: 10px;
+}
+#header .name{
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    text-align: right;
+    transition: all 0.5s ease;
+}
+#header .surname{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    transition: all 0.5s ease;
+}
+#header p{
+    display: inline;
+    font-size: 110px;
+    line-height: 1;
+    transition: all 0.25s ease;
+}
+#header div:hover{
+    transform: scale(1.2);
+}
+#header .M:hover{
+    color: red;
+}
+#header .I:hover{
+    color: green;
+}
+#header .C:hover{
+    color: blue;
+}
+#header .H:hover{
+    color: yellow;
+}
+#header .A:hover{
+    color: magenta;
+}
+#header .L:hover{
+    color: cyan;
+}
+#header .BB:hover{
+    color: red;
+}
+#header .LL:hover{
+    color: green;
+}
+#header .AA:hover{
+    color: blue;
+}
+#header .ZZ:hover{
+    color: yellow;
+}
+#header .EE:hover{
+    color: magenta;
+}
+#header .KK:hover{
+    color: cyan;
 }
