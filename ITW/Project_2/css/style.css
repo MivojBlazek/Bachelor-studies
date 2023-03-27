@@ -79,70 +79,32 @@ header{
     list-style: none;
     padding: 30px 20px;
 }
-#header{
+#header .name{
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: 1fr 1fr 1fr 1fr;
     row-gap: 10px;
     column-gap: 10px;
 }
-#header .name{
+#header p:first-of-type{
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 2;
     grid-row-end: 3;
+    font-size: 110px;
+    line-height: 1;
     text-align: right;
     transition: all 0.5s ease;
 }
-#header .surname{
+#header p:last-of-type{
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 3;
     grid-row-end: 4;
-    transition: all 0.5s ease;
-}
-#header p{
-    display: inline;
     font-size: 110px;
     line-height: 1;
-    transition: all 0.25s ease;
+    transition: all 0.5s ease;
 }
-#header div:hover{
+#header p:hover{
     transform: scale(1.2);
-}
-#header .M:hover{
-    color: red;
-}
-#header .I:hover{
-    color: green;
-}
-#header .C:hover{
-    color: blue;
-}
-#header .H:hover{
-    color: yellow;
-}
-#header .A:hover{
-    color: magenta;
-}
-#header .L:hover{
-    color: cyan;
-}
-#header .BB:hover{
-    color: red;
-}
-#header .LL:hover{
-    color: green;
-}
-#header .AA:hover{
-    color: blue;
-}
-#header .ZZ:hover{
-    color: yellow;
-}
-#header .EE:hover{
-    color: magenta;
-}
-#header .KK:hover{
-    color: cyan;
 }
