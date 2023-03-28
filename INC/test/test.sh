@@ -1,7 +1,7 @@
 # test.sh: Main project testing script
 # Author(s): Lukas Kekely (ikekely@fit.vutbr.cz)
 
-LOGIN=xlogin00
+LOGIN=xblaze38
 
 WORK_DIR=work
 LOG_DIR=$WORK_DIR/log
