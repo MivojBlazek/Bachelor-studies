@@ -81,22 +81,26 @@ header{
 }
 #header .name{
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr;
     row-gap: 10px;
     column-gap: 10px;
 }
 #header p:first-of-type{
+    margin: 0px;
+    width: fit-content;
+    margin-left: auto;
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 2;
     grid-row-end: 3;
     font-size: 110px;
     line-height: 1;
-    text-align: right;
     transition: all 0.5s ease;
 }
 #header p:last-of-type{
+    margin: 0px;
+    width: fit-content;
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 3;
