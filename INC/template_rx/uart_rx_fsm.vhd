@@ -40,7 +40,7 @@ begin
                         state <= START_BIT;
                     end if;
                 when START_BIT =>
-                    if (CNT_OF_CLK = "10110") then --!22 misto 24 -> prechod do stavu cteni dat
+                    if (CNT_OF_CLK = "10110") then --!22 misto 24 (dochazi k posunu za posledni bity, takze ubereme na zacatku) -> prechod do stavu cteni dat
                         state <= DATA_BITS;
                     end if;
                 when DATA_BITS =>
