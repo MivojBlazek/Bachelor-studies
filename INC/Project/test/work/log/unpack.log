@@ -2,5 +2,5 @@ Archive xblaze38.zip found, unpacking:
 Archive:  xblaze38.zip
   inflating: work/uart_rx.vhd        
   inflating: work/uart_rx_fsm.vhd    
- extracting: work/zprava.pdf         
+  inflating: work/zprava.pdf         
 Missing files:
