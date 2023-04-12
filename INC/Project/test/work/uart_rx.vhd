@@ -1,5 +1,5 @@
 -- uart_rx.vhd: UART controller - receiving (RX) side
--- Author(s): Michal Blažek (xblaze38)
+-- Author(s): Matěj Lepeška (xlepes00)
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -22,48 +22,41 @@ end entity;
 
 -- Architecture implementation (INSERT YOUR IMPLEMENTATION HERE)
 architecture behavioral of UART_RX is
-signal CNT_OF_CLK : std_logic_vector(4 downto 0);
-signal CNT_OF_BITS : std_logic_vector(3 downto 0);
-signal RX_EN : std_logic;
-signal CNT_EN : std_logic;
-signal DOUT_VALID : std_logic;
+    signal count : std_logic_vector(4 downto 0) ;
+    signal data_count : std_logic_vector(3 downto 0);
+    signal start : std_logic;
+    signal data_start : std_logic;
 begin
+    
+    
 
-    -- Instance of RX FSM
-    fsm: entity work.UART_RX_FSM
-    port map (
-        CLK => CLK,
-        RST => RST,
-        DIN => DIN,
-        CNT_OF_CLK => CNT_OF_CLK,
-        CNT_OF_BITS => CNT_OF_BITS,
-        RX_EN => RX_EN,
-        CNT_EN => CNT_EN,
-        DOUT_VALID => DOUT_VALID
-    );
-
-    process (CLK)
+    process(CLK)
     begin
-        if (CLK'event and CLK = '1') then --rising hrana
-            if (DOUT_VALID = '1') then
-                DOUT_VLD <= '1';
+        if rising_edge(CLK) then
+            if start = '1' then
+                if count = "10111" then
+                    data_count <= data_count + 1;
+                    DOUT(0) <= DIN;
+                    count <= "00000";
+                else   
+                    count <= count + 1;
+                end if;
+                
             else
-                DOUT_VLD <= '0';
+                count <= "00000";
+                data_count <= "0000";
+                DOUT <= (others => '0');
             end if;
-
-            if (CNT_EN = '1') then --je povoleno citat
-                CNT_OF_CLK <= CNT_OF_CLK + 1;
-            else
-                CNT_OF_CLK <= "00000";
-                CNT_OF_BITS <= "0000";
-            end if;
-
-            if (RX_EN = '1') then --je povoleno prijimani
-                if (CNT_OF_CLK(4) = '1') then --citani prekrocilo 16 -> smazat, vytisknout a prejit o bit
-                    CNT_OF_CLK <= "00000";
-                    case CNT_OF_BITS is --urceni bitu, kam se maji zapsat informace
-                        when "0000" =>
-                            DOUT(0) <= DIN;
+            if data_start = '1' then
+                if data_count = "1000" then
+                    data_count <= "0000";
+                else
+                    
+                end if;
+                if count = "01111" then
+                    count <= "00000";
+                    case data_count is
+                        when "0000" =>   
                         when "0001" =>
                             DOUT(1) <= DIN;
                         when "0010" =>
@@ -79,16 +72,30 @@ begin
                         when "0111" =>
                             DOUT(7) <= DIN;
                         when others =>
-                            null;
+                            
                     end case;
-                    CNT_OF_BITS <= CNT_OF_BITS + 1; --prechod na dalsi bit dat
+                    data_count <= data_count + 1;
                 end if;
+            else    
+            
             end if;
+            
         end if;
     end process;
-
-
-    --DOUT <= (others => '0');
-    --DOUT_VLD <= '0';
+    
+    -- Instance of RX FSM
+    fsm: entity work.UART_RX_FSM
+    port map (
+        CLK => CLK,
+        RST => RST,
+        DIN => DIN,
+        COUNT => count,
+        DATA_COUNT => data_count,
+        START => start,
+        DATA_START => data_start,
+        D_VLD => DOUT_VLD
+    );
+                      
+    
 
 end architecture;

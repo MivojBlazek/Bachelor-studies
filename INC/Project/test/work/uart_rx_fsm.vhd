@@ -1,5 +1,5 @@
 -- uart_rx_fsm.vhd: UART controller - finite state machine controlling RX side
--- Author(s): Michal Blažek (xblaze38)
+-- Author(s): Matěj Lepeška (xlepes00)
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -11,49 +11,76 @@ entity UART_RX_FSM is
     port(
        CLK : in std_logic;
        RST : in std_logic;
+       COUNT : in std_logic_vector(4 downto 0);
+       DATA_COUNT : in std_logic_vector(3 downto 0);
        DIN : in std_logic;
-       CNT_OF_CLK : in std_logic_vector(4 downto 0);
-       CNT_OF_BITS : in std_logic_vector(3 downto 0);
-       RX_EN : out std_logic;
-       CNT_EN : out std_logic;
-       DOUT_VALID : out std_logic
+       START : out std_logic;
+       DATA_START : out std_logic;
+       D_VLD : out std_logic
     );
 end entity;
 
 
 
 architecture behavioral of UART_RX_FSM is
-type STATES is (IDLE, START_BIT, DATA_BITS, STOP_BIT);
-signal state : STATES := IDLE; --puvodni stav
+    type rx_state is (WAIT_START, WAIT_FIRST_DBIT, DATA_END, STOP_BIT, D_VALID);
+    signal state : rx_state;
+    signal next_state : rx_state;
 begin
-    RX_EN <= '1' when (state = DATA_BITS) else '0';
-    CNT_EN <= '1' when (state = START_BIT or state = DATA_BITS) else '0';
-    DOUT_VALID <= '1' when (state = STOP_BIT) else '0';
-    process (CLK, RST)
+    
+    process (CLK)
     begin
-        if (RST = '1') then --reset -> do puvodniho stavu
-            state <= IDLE;
-        elsif (CLK'event and CLK = '1') then --rising hrana
-            case state is
-                when IDLE =>
-                    if (DIN = '0') then --prechod do stavu START
-                        state <= START_BIT;
-                    end if;
-                when START_BIT =>
-                    if (CNT_OF_CLK = "10110") then --!22 misto 24 (dochazi k posunu za posledni bity, takze ubereme na zacatku) -> prechod do stavu cteni dat
-                        state <= DATA_BITS;
-                    end if;
-                when DATA_BITS =>
-                    if (CNT_OF_BITS = "1000") then --8 -> prechod do stavu STOP
-                        state <= STOP_BIT;
-                    end if;
-                when STOP_BIT =>
-                    if (DIN = '1') then --prechod zpet do stavu IDLE
-                        state <= IDLE;
-                    end if;
-                when others =>
-                    state <= IDLE; --pri jinem stavu hod idle
-            end case;
+        if rising_edge(CLK) then
+            if RST = '1' then
+                state <= WAIT_START;
+            else
+                state <= next_state;
+            end if;
         end if;
     end process;
+    process (state, DIN, COUNT, DATA_COUNT)
+    begin
+        next_state <= state;
+        case state is  
+            when WAIT_START =>
+                if DIN = '0' then
+                    next_state <= WAIT_FIRST_DBIT;
+                end if;
+            when WAIT_FIRST_DBIT => 
+                if COUNT = "10111" then
+                    next_state <= DATA_END;
+                end if;
+            when DATA_END =>
+                if DATA_COUNT = "1000" then
+                    next_state <= STOP_BIT;
+                end if;
+            when STOP_BIT =>
+                if COUNT = "01111" then
+                    next_state <= D_VALID;
+                end if;
+            when D_VALID =>
+                next_state <= WAIT_START;
+        end case;
+    end process;
+
+    process (state)
+    begin
+        START <= '0';
+        DATA_START <= '0';
+        D_VLD <= '0';
+        case state is
+            when WAIT_FIRST_DBIT =>
+                START <= '1';
+            when DATA_END =>
+                START <= '1';
+                DATA_START <= '1';
+            when STOP_BIT =>
+                START <= '1';
+            when D_VALID =>
+                START <= '1';
+                D_VLD <= '1';
+            when others =>
+        end case;
+    end process;
+
 end architecture;
