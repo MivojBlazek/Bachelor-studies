@@ -7,6 +7,9 @@
         "cctype": "c",
         "stdbool.h": "c",
         "assert.h": "c",
-        "cnf.h": "c"
+        "cnf.h": "c",
+        "limits": "c",
+        "*.tcc": "c",
+        "type_traits": "c"
     }
 }

@@ -5,11 +5,82 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <signal.h>
+#include <semaphore.h>
+#include <sys/wait.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <limits.h>
+#include <sys/mman.h>
+#include <time.h>
+
+FILE *file;
+sem_t *mutex;
+unsigned int operation_num = 1;
+int service_num;
+unsigned int NZ, NU, TZ, TU, F;
 
 
-int main(int argc, char **argv)
+void zakaznik(int id)
 {
-    int NZ, NU, TZ, TU, F;
+    fprintf(stdout, "%d: Z %d: started\n", operation_num, id);
+    unsigned int uTZ = TZ * 1000;
+    srand(time(0));
+    sleep(rand() % (uTZ + 1)); //random number from 0 to uTZ
+
+    if (post_open())
+    {
+        srand(time(0));
+        service_num = (rand() % 3) + 1; //! sdilena promenna stejne jako operation_num
+        fprintf(stdout, "%d: Z %d: entering office for a service %d\n", operation_num, id, service_num);
+        //zaradit do fronty service_num a pockat na urednika
+        fprintf(stdout, "%d: Z %d: called by office worker\n", operation_num, id);
+        
+        srand(time(0));
+        unsigned int waiting = (rand() % 11) * 1000; //random number from 0 to 10
+        sleep(waiting);
+    }
+    fprintf(stdout, "%d: Z %d: going home\n", operation_num, id);
+}
+
+
+void urednik(int id)
+{
+    fprintf(stdout, "%d: U %d: started\n", operation_num, id);
+    while(1)
+    {
+        if (zakaznik_ve_fronte())
+        {
+            //bude se obsluhovat
+            fprintf(stdout, "%d: U %d: serving a service of type %d\n", operation_num, id, service_num);
+            srand(time(0));
+            unsigned int waiting = (rand() % 11) * 1000; //random number from 0 to 10
+            sleep(waiting);
+            fprintf(stdout, "%d: U %d: service finished\n", operation_num, id);
+            continue;
+        }
+        if (post_open() && !zakaznik_ve_fronte())
+        {
+            //urednik si bere prestavku
+            fprintf(stdout, "%d: U %d: taking break\n", operation_num, id);
+            srand(time(0));
+            unsigned uTU = TU * 1000;
+            sleep(rand() % (uTU + 1)); //random number from 0 to uTU
+            fprintf(stdout, "%d: U %d: break finished\n", operation_num, id);
+            continue;
+        }
+        if (!post_open() && !zakaznik_ve_fronte())
+        {
+            //urednik jde domu
+            break;
+        }
+    }
+    fprintf(stdout, "%d: U %d: going home\n", operation_num, id);
+}
+
+
+int main(int argc, char *argv[])
+{
+    setbuf(file, NULL);
 
 
     if (argc != 6)
@@ -61,6 +132,56 @@ int main(int argc, char **argv)
         }       
     }
     
+    mutex = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    munmap(mutex, sizeof(sem_t));
+
+    sem_init(mutex, 1, 0); //semaphore init
+    sem_destroy(mutex); //semaphore destroy
+
+
+
+    //main process
+    for (int i = 1; i <= NZ; i++)
+    {
+        pid_t id = fork();
+        if (id == -1)
+        {
+            fprintf(stderr, "Error with making child process!\n");
+            return 1;
+        }
+        else if (id == 0)
+        {
+            zakaznik(i);
+            exit(0);
+        }
+    }
+    for (int i = 1; i <= NU; i++)
+    {
+        pid_t id = fork();
+        if (id == -1)
+        {
+            fprintf(stderr, "Error with making child process!\n");
+            return 1;
+        }
+        if (id == 0)
+        {
+            urednik(i);
+            exit(0);
+        }
+    }
+
+    unsigned int uF = F * 1000; //milisecs to microsecs
+    srand(time(0));
+    sleep((rand() % (uF - uF / 2 + 1)) + uF / 2); //random number from uF / 2 to uF
+
+    fprintf(stdout, "%d: closing\n", operation_num);
+
+
+
+
+    while(wait(NULL) > 0);
+
+    //cisteni cleanup
 
     return 0;
 }
