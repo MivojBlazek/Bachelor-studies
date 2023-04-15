@@ -14,7 +14,7 @@
 #include <time.h>
 
 FILE *file;
-sem_t *mutex;
+sem_t *mutex, *zakaznik_sem, *urednik_sem;
 unsigned int *operation_num, *service_num;
 unsigned int NZ, NU, TZ, TU, F;
 
@@ -29,13 +29,6 @@ void zakaznik(int id)
     if (post_open())
     {
         srand(time(0));
-
-        service_num = mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
-        if (service_num == MAP_FAILED)
-        {
-            fprintf(stderr, "Error, mmap failed!\n");
-            return 1;
-        }
         *service_num = (rand() % 3) + 1;
 
         fprintf(stdout, "%d: Z %d: entering office for a service %d\n", *operation_num++, id, *service_num);
@@ -48,6 +41,7 @@ void zakaznik(int id)
         sleep(waiting);
     }
     fprintf(stdout, "%d: Z %d: going home\n", *operation_num++, id);
+    exit(0);
 }
 
 
@@ -83,6 +77,7 @@ void urednik(int id)
         }
     }
     fprintf(stdout, "%d: U %d: going home\n", *operation_num++, id);
+    exit(0);
 }
 
 
@@ -96,6 +91,17 @@ int main(int argc, char *argv[])
         return 1;
     }
     *operation_num = 1;
+
+    
+    service_num = mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    if (service_num == MAP_FAILED)
+    {
+        fprintf(stderr, "Error, mmap failed!\n");
+        return 1;
+    }
+
+
+
 
     if (argc != 6)
     {
@@ -148,26 +154,48 @@ int main(int argc, char *argv[])
     
 
 
+    int is_err = 0;
 
-//TODO hrani si s mmap a sem
+    //sdileni semaphoru
     mutex = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
     if (mutex == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
         return 1;
     }
-    munmap(mutex, sizeof(sem_t)); //? -1 pri erroru
+    zakaznik_sem = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    if (zakaznik_sem == MAP_FAILED)
+    {
+        fprintf(stderr, "Error, mmap failed!\n");
+        return 1;
+    }
+    urednik_sem = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    if (urednik_sem == MAP_FAILED)
+    {
+        fprintf(stderr, "Error, mmap failed!\n");
+        return 1;
+    }
 
-    int is_err = sem_init(mutex, 1, 0); //semaphore init
+
+    //semaphore init
+    is_err = sem_init(mutex, 1, 1);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
         return 1;
     }
-
-    sem_destroy(mutex); //semaphore destroy //? -1 pri erroru
-//TODO hrani si s mmap a sem
-
+    is_err = sem_init(zakaznik_sem, 1, 0);
+    if (is_err == -1)
+    {
+        fprintf(stderr, "Error, sem_init failed!\n");
+        return 1;
+    }
+    is_err = sem_init(urednik_sem, 1, NU);
+    if (is_err == -1)
+    {
+        fprintf(stderr, "Error, sem_init failed!\n");
+        return 1;
+    }
 
 
 
@@ -184,7 +212,6 @@ int main(int argc, char *argv[])
         else if (id == 0)
         {
             zakaznik(i);
-            exit(0);
         }
     }
     for (unsigned int i = 1; i <= NU; i++)
@@ -198,7 +225,6 @@ int main(int argc, char *argv[])
         else if (id == 0)
         {
             urednik(i);
-            exit(0);
         }
     }
 
@@ -214,6 +240,13 @@ int main(int argc, char *argv[])
     while(wait(NULL) > 0);
 
     //cisteni cleanup
+    sem_destroy(mutex); //? -1 pri erroru
+    sem_destroy(zakaznik_sem);
+    sem_destroy(urednik_sem);
+
+    munmap(mutex, sizeof(sem_t)); //? -1 pri erroru
+    munmap(operation_num, sizeof(unsigned int));
+    munmap(service_num, sizeof(unsigned int));
 
     exit(0);
     return 0;
