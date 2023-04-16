@@ -1,52 +1,52 @@
 /* 
 *
-*   Stylesheet for portfolio website
+*   Stylesheet for website in project 2
 *   login: xblaze38
 *
 */
 
 
 /** General properties **/
+*{
+    box-sizing: border-box;
+}
 html{
-    font-family: "sans-serif";
+    font-family: sans-serif;
     scroll-behavior: smooth;
 }
-p{
-    font-size: 16px;
-    line-height: 1.5;
+body{
+    margin: 0px;
 }
-h2{
-    margin-top: 0px;
-    font-size: 2rem;
+section{
+    padding-top: 80px;
 }
-h3{
-    font-size: 1.2rem;
+section .heading{
+    width: fit-content;
 }
-a{
-    color: black;
-    text-decoration: none;
-    transition: all 0.3s ease;
+section h2{
+    text-transform: uppercase;
 }
-a:hover{
-    color: red;
-    text-decoration: underline;
-    text-underline-offset: 4px;
+section h2:last-of-type{
+    display: none;
 }
-section, footer{
-    padding-top: 100px;
+section h2:first-of-type{
+    display: block;
+}
+section .heading:hover h2:first-of-type{
+    display: none;
+}
+section .heading:hover h2:last-of-type{
+    display: block;
 }
 
+
+
 /** Specific properties **/
-body{
-    margin: 0 10px;
-    min-width: 736px; /*? Why it's 736px instead of calc(768px - (2 * 10px)) */
-}
 header{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     position: fixed;
-    margin-left: -10px;
     width: 100%;
     min-width: 768px;
     z-index: 99;
@@ -58,9 +58,17 @@ header{
     flex: 1 1 20%;
     padding: 20px 20px;
 }
-#logo a:hover{
-    text-decoration: none;
-    color: black;
+#logo a:first-of-type{
+    display: block;
+}
+#logo a:last-of-type{
+    display: none;
+}
+#logo:hover a:first-of-type{
+    display: none;
+}
+#logo:hover a:last-of-type{
+    display: block;
 }
 #navigation{
     font-size: large;
@@ -79,36 +87,28 @@ header{
     list-style: none;
     padding: 30px 20px;
 }
-#header .name{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    row-gap: 10px;
-    column-gap: 10px;
+
+
+
+#header p::after{
+    content: "";
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url("../img/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.5;
+    z-index: -1;
 }
-#header p:first-of-type{
-    margin: 0px;
+#header > p{
+    font-size: 7rem;
     width: fit-content;
-    margin-left: auto;
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    font-size: 110px;
-    line-height: 1;
-    transition: all 0.5s ease;
+    margin: auto;
+    padding-top: 40vh;
+    margin-bottom: 30vh;
 }
-#header p:last-of-type{
-    margin: 0px;
-    width: fit-content;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 3;
-    grid-row-end: 4;
-    font-size: 110px;
-    line-height: 1;
-    transition: all 0.5s ease;
-}
-#header p:hover{
-    transform: scale(1.2);
-}
+
+
