@@ -7,23 +7,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Groot</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script>
+        function menu(){
+            document.getElementById("menu").classList.toggle("active");
+        }
+    </script>
 </head>
 <body>
     <header>
         <div id="logo">
             <a href="#">Groot</a>
         </div>
+        <div id="menu">
+            <img onclick="menu()" src="../img/menu.png" alt="menu">
+        </div>
         <nav>
             <ul id="navigation">
-                <li><a href="#about">About</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#movies">Movies</a></li>
-                <li><a href="#contact_section">Contact</a></li>
+                <li><a onclick="menu()" href="#about">About</a></li>
+                <li><a onclick="menu()" href="#gallery">Gallery</a></li>
+                <li><a onclick="menu()" href="#movies">Movies</a></li>
+                <li><a onclick="menu()" href="#contact_section">Contact</a></li>
             </ul>
         </nav>
-        <div id="menu">
-            <img src="../img/menu.png" alt="menu">
-        </div>
+        
     </header>
     <main>
         <section id="header">
