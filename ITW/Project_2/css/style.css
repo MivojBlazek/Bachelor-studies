@@ -59,7 +59,6 @@ header{
     flex-wrap: nowrap;
     position: fixed;
     width: 100%;
-    min-width: 768px;
     margin: 0 auto;
     justify-content: center;
     background-color: #473228;
@@ -134,7 +133,6 @@ header a:hover{
     flex-direction: row;
     flex-wrap: wrap;
     max-width: 1200px;
-    min-width: 768px;
     margin: 0 auto;
 }
 #about .content div{
@@ -182,7 +180,6 @@ header a:hover{
     column-gap: 50px;
     row-gap: 50px;
     max-width: 1200px;
-    min-width: 768px;
     margin: 0 auto;
 }
 #gallery img:hover{
@@ -199,14 +196,11 @@ header a:hover{
     flex-direction: row;
     flex-wrap: nowrap;
     max-width: 1200px;
-    min-width: 768px;
     justify-content: center;
-    column-gap: 10px;
+    column-gap: 30px;
 }
 #movies .content > div{
     width: 200px;
-    margin-left: 2%;
-    margin-right: 2%;
 }
 #movies .content img{
     width: 200px;
@@ -225,7 +219,6 @@ header a:hover{
 footer{
     background-color: #473228;
     color: white;
-    min-width: 768px;
 }
 footer h2, footer h3{
     letter-spacing: 0.2rem;
@@ -308,4 +301,41 @@ footer > div:first-of-type section{
 }
 #license span:last-of-type{
     float: right;
+}
+#menu img{
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    #movies .content{
+        flex-direction: column;
+        row-gap: 50px;
+    }
+    #movies .content > div{
+        margin: 0 auto;
+    }
+    footer div:first-of-type{
+        flex-direction: column;
+    }
+    footer div:first-of-type p{
+        max-width: 700px;
+    }
+    #header div p:first-of-type{
+        display: none;
+    }
+    #gallery .content{
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+    #gallery .content img{
+        margin: 0 auto;
+    }
+    header nav{
+        display: none;
+    }
+    #menu img{
+        display: block;
+        margin: 10px 30px 0 0;
+        width: 60px;
+    }
 }
