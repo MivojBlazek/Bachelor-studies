@@ -191,7 +191,21 @@ header a:hover{
     transform: scale(1.2);
     opacity: 1;
 }
-
+#movies .content{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    max-width: 1200px;
+    min-width: 768px;
+    justify-content: center;
+    column-gap: 10px;
+}
+#movies .content > div{
+    width: 200px;
+}
+#movies .content p:last-of-type{
+    opacity: 0.4;
+}
 
 
 
