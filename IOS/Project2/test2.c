@@ -16,13 +16,13 @@ struct barbershop {
     sem_t barbers;
     sem_t mutex;
     int num_waiting;
+    int cut_choice;
 };
 
-int cut_choice;
+
 
 int main() {
     
-    cut_choice = *((int *) mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0));
 
     // Allocate shared memory for the barbershop data
     struct barbershop *shop = mmap(NULL, sizeof(struct barbershop), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
@@ -40,13 +40,13 @@ int main() {
             while (1) {
                 sem_wait(&shop->customers);
                 sem_wait(&shop->mutex);
-                // cut_choice = *((int *) mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0));
                 shop->num_waiting--;
                 sem_post(&shop->barbers);
                 sem_post(&shop->mutex);
-                printf("Barber is cutting hair according to cut %d.\n", cut_choice);
-                srand(time(NULL));
-                sleep((rand() % 5 + 1) / 10); // Simulate haircut time
+                printf("Barber %d is cutting hair according to cut %d.\n", i, shop->cut_choice);
+                //srand(time(NULL));
+                //sleep((rand() % 5 + 1) / 10); // Simulate haircut time
+                sleep(0.5);
             }
         } else if (pid < 0) {
             fprintf(stderr, "Failed to fork barber process %d.\n", i);
@@ -59,18 +59,18 @@ int main() {
         pid_t customer_pid = fork();
         if (customer_pid == 0) {
             srand(time(NULL) + i * 777);
-            cut_choice = (rand() % 3) + 1; // Randomly choose a haircut option between 1 and 3
-            printf("Customer %d arrived at the barbershop and chose haircut %d.\n", i, cut_choice);
+            shop->cut_choice = (rand() % 3) + 1; // Randomly choose a haircut option between 1 and 3
+            printf("Customer %d arrived at the barbershop and chose haircut %d.\n", i, shop->cut_choice);
             sem_wait(&shop->mutex);
             if (shop->num_waiting < NUM_CHAIRS) {
                 shop->num_waiting++;
                 sem_post(&shop->customers);
                 sem_post(&shop->mutex);
                 sem_wait(&shop->barbers);
-                //memcpy(mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0), &cut_choice, sizeof(int));
                 printf("Customer %d is getting a haircut.\n", i);
-                srand(time(NULL));
-                sleep((rand() % 5 + 1) / 10); // Simulate haircut time
+                //srand(time(NULL));
+                //sleep((rand() % 5 + 1) / 10); // Simulate haircut time
+                sleep(0.5);
                 printf("Customer %d is done with the haircut.\n", i);
             } else {
                 sem_post(&shop->mutex);
