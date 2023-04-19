@@ -19,6 +19,21 @@ unsigned int *operation_num, *service_num;
 unsigned int NZ, NU, TZ, TU, F;
 
 
+
+int zakaznik_ve_fronte()
+{
+    return 1;
+}
+int post_open()
+{
+    return 1;
+}
+
+
+
+
+
+
 void zakaznik(int id)
 {
     fprintf(stdout, "%d: Z %d: started\n", *operation_num++, id);
@@ -83,8 +98,9 @@ void urednik(int id)
 
 int main(int argc, char *argv[])
 {
-    setbuf(file, NULL);
-    operation_num = mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    //TODO fopen a fclose file imo
+    setbuf(stdout, NULL); //TODO file misto stdout
+    operation_num = mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (operation_num == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
@@ -93,7 +109,7 @@ int main(int argc, char *argv[])
     *operation_num = 1;
 
     
-    service_num = mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    service_num = mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (service_num == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
@@ -157,19 +173,19 @@ int main(int argc, char *argv[])
     int is_err = 0;
 
     //sdileni semaphoru
-    mutex = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    mutex = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (mutex == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
         return 1;
     }
-    zakaznik_sem = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    zakaznik_sem = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (zakaznik_sem == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
         return 1;
     }
-    urednik_sem = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    urednik_sem = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (urednik_sem == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
