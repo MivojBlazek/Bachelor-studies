@@ -11,5 +11,6 @@
         "limits": "c",
         "*.tcc": "c",
         "type_traits": "c"
-    }
+    },
+    "C_Cpp.default.cStandard": ""
 }

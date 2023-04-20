@@ -13,78 +13,133 @@
 #include <sys/mman.h>
 #include <time.h>
 
+struct Post{
+    sem_t mutex;
+    sem_t zakaznik_sem;
+    sem_t urednik_sem;
+    unsigned int operation_num;
+    unsigned int service_num[3];
+};
+
+
+
 FILE *file;
-sem_t *mutex, *zakaznik_sem, *urednik_sem;
-unsigned int *operation_num, *service_num;
+//sem_t *mutex, *zakaznik_sem, *urednik_sem;
+//unsigned int *operation_num, *service_num;
 unsigned int NZ, NU, TZ, TU, F;
 
 
-void zakaznik(int id)
+
+/*int zakaznik_ve_fronte()
 {
-    fprintf(stdout, "%d: Z %d: started\n", *operation_num++, id);
+    return 1;
+}*/
+int post_open()
+{
+    return 1;
+}
+
+
+
+
+
+void zakaznik(int id, struct Post *post_office)
+{
+    fprintf(stdout, "%d: Z %d: started\n", post_office->operation_num++, id);
     unsigned int uTZ = TZ * 1000;
     srand(time(0));
     sleep(rand() % (uTZ + 1)); //random number from 0 to uTZ
 
     if (post_open())
     {
-        srand(time(0));
-        *service_num = (rand() % 3) + 1;
+        srand(time(0) + id * 777);
+        unsigned int service = rand() % 3;
+        post_office->service_num[service]++;
 
-        fprintf(stdout, "%d: Z %d: entering office for a service %d\n", *operation_num++, id, *service_num);
-        //TODO zaradit do fronty service_num a pockat na urednika
+        fprintf(stdout, "%d: Z %d: entering office for a service %d\n", post_office->operation_num++, id, service + 1);
+        
+        sem_wait(&post_office->urednik_sem);
 
-        fprintf(stdout, "%d: Z %d: called by office worker\n", *operation_num++, id);
+        fprintf(stdout, "%d: Z %d: called by office worker\n", post_office->operation_num++, id);
         
         srand(time(0));
         unsigned int waiting = (rand() % 11) * 1000; //random number from 0 to 10
         sleep(waiting);
     }
-    fprintf(stdout, "%d: Z %d: going home\n", *operation_num++, id);
+    fprintf(stdout, "%d: Z %d: going home\n", post_office->operation_num++, id);
     exit(0);
 }
 
 
-void urednik(int id)
+void urednik(int id, struct Post *post_office)
 {
-    fprintf(stdout, "%d: U %d: started\n", *operation_num++, id);
+    fprintf(stdout, "%d: U %d: started\n", post_office->operation_num++, id);
     while(1)
     {
-        if (zakaznik_ve_fronte())
+        if (post_office->service_num[0] || post_office->service_num[1] || post_office->service_num[2])
         {
             //bude se obsluhovat
-            fprintf(stdout, "%d: U %d: serving a service of type %d\n", *operation_num++, id, *service_num);
+            sem_post(&post_office->urednik_sem);
+            unsigned int service;
+            if (post_office->service_num[0])
+            {
+                service = 0;
+            }
+            else if (post_office->service_num[1])
+            {
+                service = 1;
+            }
+            else
+            {
+                service = 2;
+            }
+            post_office->service_num[service]--;
+            
+            fprintf(stdout, "%d: U %d: serving a service of type %d\n", post_office->operation_num++, id, service + 1);
             srand(time(0));
             unsigned int waiting = (rand() % 11) * 1000; //random number from 0 to 10
             sleep(waiting);
-            fprintf(stdout, "%d: U %d: service finished\n", *operation_num++, id);
+            fprintf(stdout, "%d: U %d: service finished\n", post_office->operation_num++, id);
             continue;
         }
-        if (post_open() && !zakaznik_ve_fronte())
+        else if (post_open())
         {
             //urednik si bere prestavku
-            fprintf(stdout, "%d: U %d: taking break\n", *operation_num++, id);
+            fprintf(stdout, "%d: U %d: taking break\n", post_office->operation_num++, id);
             srand(time(0));
             unsigned uTU = TU * 1000;
             sleep(rand() % (uTU + 1)); //random number from 0 to uTU
-            fprintf(stdout, "%d: U %d: break finished\n", *operation_num++, id);
+            fprintf(stdout, "%d: U %d: break finished\n", post_office->operation_num++, id);
             continue;
         }
-        if (!post_open() && !zakaznik_ve_fronte())
+        else //post_not_open()
         {
             //urednik jde domu
             break;
         }
     }
-    fprintf(stdout, "%d: U %d: going home\n", *operation_num++, id);
+    fprintf(stdout, "%d: U %d: going home\n", post_office->operation_num++, id);
     exit(0);
 }
 
 
 int main(int argc, char *argv[])
 {
-    setbuf(file, NULL);
-    operation_num = mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    struct Post *post_office = mmap(NULL, sizeof(struct Post), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    if (post_office == MAP_FAILED)
+    {
+        fprintf(stderr, "Error, mmap failed!\n");
+        return 1;
+    }
+    post_office->operation_num = 1;
+    post_office->service_num[0] = 0;
+    post_office->service_num[1] = 0;
+    post_office->service_num[2] = 0;
+
+
+    //TODO fopen a fclose file imo
+    setbuf(stdout, NULL); //TODO file misto stdout
+    /*operation_num = mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (operation_num == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
@@ -93,12 +148,12 @@ int main(int argc, char *argv[])
     *operation_num = 1;
 
     
-    service_num = mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    service_num = mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (service_num == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
         return 1;
-    }
+    }*/
 
 
 
@@ -154,43 +209,64 @@ int main(int argc, char *argv[])
     
 
 
-    int is_err = 0;
 
     //sdileni semaphoru
-    mutex = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    /*mutex = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (mutex == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
         return 1;
     }
-    zakaznik_sem = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    zakaznik_sem = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (zakaznik_sem == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
         return 1;
     }
-    urednik_sem = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED, -1, 0);
+    urednik_sem = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (urednik_sem == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
         return 1;
-    }
+    }*/
 
 
     //semaphore init
-    is_err = sem_init(mutex, 1, 1);
+    int is_err = 0;
+    //is_err = sem_init(mutex, 1, 1);
+    is_err = sem_init((&post_office->mutex), 1, 1);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
         return 1;
     }
-    is_err = sem_init(zakaznik_sem, 1, 0);
+    //is_err = sem_init(zakaznik_sem, 1, 0);
+    is_err = sem_init(&post_office->zakaznik_sem, 1, 0);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
         return 1;
     }
-    is_err = sem_init(urednik_sem, 1, NU);
+    /*is_err = sem_init(&post_office->zakaznik_sem[0], 1, 0);
+    if (is_err == -1)
+    {
+        fprintf(stderr, "Error, sem_init failed!\n");
+        return 1;
+    }
+    is_err = sem_init(&post_office->zakaznik_sem[1], 1, 0);
+    if (is_err == -1)
+    {
+        fprintf(stderr, "Error, sem_init failed!\n");
+        return 1;
+    }
+    is_err = sem_init(&post_office->zakaznik_sem[2], 1, 0);
+    if (is_err == -1)
+    {
+        fprintf(stderr, "Error, sem_init failed!\n");
+        return 1;
+    }*/
+    //is_err = sem_init(urednik_sem, 1, NU);
+    is_err = sem_init(&post_office->urednik_sem, 1, NU);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
@@ -211,7 +287,7 @@ int main(int argc, char *argv[])
         }
         else if (id == 0)
         {
-            zakaznik(i);
+            zakaznik(i, post_office);
         }
     }
     for (unsigned int i = 1; i <= NU; i++)
@@ -224,7 +300,7 @@ int main(int argc, char *argv[])
         }
         else if (id == 0)
         {
-            urednik(i);
+            urednik(i, post_office);
         }
     }
 
@@ -232,7 +308,7 @@ int main(int argc, char *argv[])
     srand(time(0));
     sleep((rand() % (uF - uF / 2 + 1)) + uF / 2); //random number from uF / 2 to uF
 
-    fprintf(stdout, "%d: closing\n", *operation_num++);
+    fprintf(stdout, "%d: closing\n", post_office->operation_num++);
 
 
 
@@ -240,13 +316,17 @@ int main(int argc, char *argv[])
     while(wait(NULL) > 0);
 
     //cisteni cleanup
-    sem_destroy(mutex); //? -1 pri erroru
-    sem_destroy(zakaznik_sem);
-    sem_destroy(urednik_sem);
+    sem_destroy(&post_office->mutex); //? -1 pri erroru
+    sem_destroy(&post_office->zakaznik_sem);
+    /*sem_destroy(&post_office->zakaznik_sem[0]);
+    sem_destroy(&post_office->zakaznik_sem[1]);
+    sem_destroy(&post_office->zakaznik_sem[2]);*/
+    sem_destroy(&post_office->urednik_sem);
 
-    munmap(mutex, sizeof(sem_t)); //? -1 pri erroru
+    /*munmap(mutex, sizeof(sem_t)); //? -1 pri erroru
     munmap(operation_num, sizeof(unsigned int));
-    munmap(service_num, sizeof(unsigned int));
+    munmap(service_num, sizeof(unsigned int));*/
+    munmap(post_office, sizeof(struct Post));
 
     exit(0);
     return 0;
