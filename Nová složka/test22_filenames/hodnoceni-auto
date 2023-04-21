@@ -1,0 +1,59 @@
+0:test22_filenames: prace s neobvyklymi nazvy souboru
+# ./mole _ <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ' ' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole # <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole @ <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole '$' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole '&' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole '$' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole '*' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole '(' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,0,0,0,1,0; ocekavan errcode=0,0,0,0,0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,9 +1,8 @@
+#   -spusten editor s: /.sanitized./_ (hash da427fd)
+#   -spusten editor s: /.sanitized./  (hash da427fd)
+#   -spusten editor s: /.sanitized./# (hash da427fd)
+#   -spusten editor s: /.sanitized./@ (hash da427fd)
+#   -spusten editor s: /.sanitized./$ (hash da427fd)
+#   -spusten editor s: /.sanitized./& (hash da427fd)
+#   -spusten editor s: /.sanitized./$ (hash da427fd)
+#   -spusten editor s: /.sanitized./* (hash da427fd)
+#   -spusten editor s: /.sanitized./( (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./_ (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./_ (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./# (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./@ (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./$ (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./& (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./$ (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./( (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,23 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +./mole: 91: [:  : unexpected operator
+#   +./mole: 94: [:  : unexpected operator
+#   +./mole: 105: [:  : unexpected operator
+#   +./mole: 191: [:  : unexpected operator
+#   +./mole: 236: [:  : unexpected operator
+#   +./mole: 398: [:  : unexpected operator
+#   +There is no file to select!
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.

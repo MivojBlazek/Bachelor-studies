@@ -1,0 +1,2 @@
+./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -a 2023-03 <stdin >>stdout 2>>stderr; echo $? >>errcode

@@ -1,0 +1,44 @@
+0:test16_lastfile_g: otevreni naposledy editovaneho souboru s filtrem -g
+# ./mole -g group ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group2 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,7 +1,7 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./README.md (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,14 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.

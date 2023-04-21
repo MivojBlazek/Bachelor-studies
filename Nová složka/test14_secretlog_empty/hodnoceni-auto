@@ -1,0 +1,47 @@
+0:test14_secretlog_empty: vytvoreni tajneho logu pro prazdny a neexistujici adresar
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir2/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole secret-log empty/ nonexistent_dir/ <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,0,0,0,1; ocekavan errcode=0,0,0,0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,7 +1,7 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,15 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +There is no file to select!

@@ -1,0 +1,4 @@
+./mole -g group ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -g group2 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode

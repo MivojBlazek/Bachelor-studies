@@ -1,0 +1,3 @@
+awk: run time error: negative value assigned to NF
+	FILENAME="-" FNR=1 NR=1
+All edited files with these filters were probably deleted!

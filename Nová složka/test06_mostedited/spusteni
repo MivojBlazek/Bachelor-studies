@@ -1,0 +1,4 @@
+./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -m <stdin >>stdout 2>>stderr; echo $? >>errcode

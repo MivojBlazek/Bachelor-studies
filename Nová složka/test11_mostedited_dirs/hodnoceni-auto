@@ -1,0 +1,50 @@
+0:test11_mostedited_dirs: otevreni nejcasteji editovaneho souboru ve vnorenem adresari
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir2/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -m dir1 <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,0,0,0,3; ocekavan errcode=0,0,0,0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,8 +1,7 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,17 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +awk: run time error: negative value assigned to NF
+#   +	FILENAME="-" FNR=1 NR=1
+#   +All edited files with these filters were probably deleted!

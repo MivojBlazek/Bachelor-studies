@@ -1,0 +1,9 @@
+./mole _ <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole ' ' <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole # <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole @ <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole '$' <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole '&' <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole '$' <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole '*' <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole '(' <stdin >>stdout 2>>stderr; echo $? >>errcode

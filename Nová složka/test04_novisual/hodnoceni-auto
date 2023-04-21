@@ -1,0 +1,15 @@
+0:test04_novisual: EDITOR i VISUAL nenastaven
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,2 +1,2 @@
+#    Zde editor vi. Presmerovavam...
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,2 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.

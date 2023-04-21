@@ -1,0 +1,5 @@
+./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -a 2023-03-27 <stdin >>stdout 2>>stderr; echo $? >>errcode

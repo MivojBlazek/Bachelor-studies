@@ -1,0 +1,1 @@
+strace -f -o mole.trace -e trace=open,creat ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode

@@ -1,0 +1,53 @@
+0:test13_secretlog_dirs: vytvoreni tajneho logu pro dva vybrane adresare
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir2/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole secret-log dir2/ ./ <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,0,0,0,1; ocekavan errcode=0,0,0,0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,7 +1,7 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,15 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +There is no file to select!
+# diff -u secretlog.ref secretlog
+#   --- secretlog.ref
+#   +++ secretlog
+#   @@ -1,2 +0,0 @@
+#   -/.sanitized./dir2/hello.c;2023-03-26_13-11-40
+#   -/.sanitized./greeting.c;2023-03-26_13-06-40;2023-03-26_13-31-40;2023-03-26_13-40-00

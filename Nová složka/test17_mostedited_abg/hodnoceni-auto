@@ -1,0 +1,74 @@
+0:test17_mostedited_abg: otevreni nejcasteji editovaneho souboru s filtry -a, -b a -g
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group2 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -m -g group1 -a 2023-03-27 -b 2023-03-29 <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,13 +1,13 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./README.md (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./README.md (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,26 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.

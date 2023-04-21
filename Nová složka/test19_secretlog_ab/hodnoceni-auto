@@ -1,0 +1,70 @@
+0:test19_secretlog_ab: vytvoreni tajneho logu s filtry -a a -b
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -a 2023-03-27 -b 2023-03-29 secret-log <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,10 +1,11 @@
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./README.md (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./README.md (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,22 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+# diff -u secretlog.ref secretlog
+#   --- secretlog.ref
+#   +++ secretlog
+#   @@ -1,3 +0,0 @@
+#   -/.sanitized./ahoj.c;2023-03-28_13-20-00
+#   -/.sanitized./hello.c;2023-03-28_13-40-00;2023-03-28_14-00-00;2023-03-28_14-20-00
+#   -/.sanitized./README.md;2023-03-28_12-40-00;2023-03-28_13-00-00

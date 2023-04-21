@@ -1,0 +1,13 @@
+./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -g group2 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -g group1 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -g group2 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+./mole -g group1,group2 -a 2023-03-27 -b 2023-03-29 list <stdin >>stdout 2>>stderr; echo $? >>errcode

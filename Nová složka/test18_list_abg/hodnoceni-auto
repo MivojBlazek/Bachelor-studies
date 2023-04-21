@@ -1,0 +1,74 @@
+0:test18_list_abg: seznam editovanych souboru s filtry -a, -b a -g
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group2 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group2 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1,group2 -a 2023-03-27 -b 2023-03-29 list <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,0,0,0,0,0,0,0,0,1; ocekavan errcode=0,0,0,0,0,0,0,0,0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,14 +1,12 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -ahoj.c:    group1
+#   -README.md: group1,group2
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./README.md (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./README.md (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,25 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +There is no file to select!

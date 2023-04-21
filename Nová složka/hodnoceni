@@ -1,0 +1,582 @@
+2:celkem bodu za projekt
+#-- automaticke hodnoceni -----------------------------
+0:ok: docasne soubory:
+0.6:ok: reakce na nenastavene MOLE_RC
+0:test03_visual: EDITOR nenastaven, VISUAL nastaven
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1 +1 @@
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,2 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+0:test04_novisual: EDITOR i VISUAL nenastaven
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,2 +1,2 @@
+#    Zde editor vi. Presmerovavam...
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,2 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+0:test05_lastfile: otevreni naposledy editovaneho souboru
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,3 +1,3 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,6 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+0:test06_mostedited: otevreni nejcasteji editovaneho souboru (-m)
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -m <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,4 +1,4 @@
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,8 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+# Vypis byl zkracen, cely text viz test06_mostedited/hodnoceni-auto
+0:test07_list: seznam editovanych souboru v aktualnim adresari
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole list <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,6 +1,6 @@
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -ahoj.c:    -
+#   -hello.c:   -
+#   -README.md: -
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./README.md (vice souboru)
+#   +README.md  -
+#   +ahoj.c     -
+#   +hello.c    -
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,6 @@
+# Vypis byl zkracen, cely text viz test07_list/hodnoceni-auto
+0:test08_secretlog: vytvoreni tajneho logu
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole secret-log <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,1; ocekavan errcode=0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,4 +1,4 @@
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./README.md (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,9 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+# Vypis byl zkracen, cely text viz test08_secretlog/hodnoceni-auto
+0.7:ok: editace v prazdnem adresari
+0:test10_lastfile_dirs: otevreni naposledy editovaneho souboru ve vnorenem adresari
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir2/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1 <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,3; ocekavan errcode=0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,4 +1,3 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,9 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+# Vypis byl zkracen, cely text viz test10_lastfile_dirs/hodnoceni-auto
+0:test11_mostedited_dirs: otevreni nejcasteji editovaneho souboru ve vnorenem adresari
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir2/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -m dir1 <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,0,0,0,3; ocekavan errcode=0,0,0,0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,8 +1,7 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# Vypis byl zkracen, cely text viz test11_mostedited_dirs/hodnoceni-auto
+0:test12_list_dirs: seznam editovanych souboru ve zvolenem adresari
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir2/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole list dir1 <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,9 +1,8 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -ahoj.c:  -
+#   -hello.c: -
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# Vypis byl zkracen, cely text viz test12_list_dirs/hodnoceni-auto
+0:test13_secretlog_dirs: vytvoreni tajneho logu pro dva vybrane adresare
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir2/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole secret-log dir2/ ./ <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,0,0,0,1; ocekavan errcode=0,0,0,0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,7 +1,7 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+# Vypis byl zkracen, cely text viz test13_secretlog_dirs/hodnoceni-auto
+0:test14_secretlog_empty: vytvoreni tajneho logu pro prazdny a neexistujici adresar
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir2/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir1/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole secret-log empty/ nonexistent_dir/ <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,0,0,0,1; ocekavan errcode=0,0,0,0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,7 +1,7 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+# Vypis byl zkracen, cely text viz test14_secretlog_empty/hodnoceni-auto
+0:test15_file_groups: otevreni souboru s nastavenim skupiny
+# ./mole -g group ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group2 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,4 +1,4 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,8 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+# Vypis byl zkracen, cely text viz test15_file_groups/hodnoceni-auto
+0:test16_lastfile_g: otevreni naposledy editovaneho souboru s filtrem -g
+# ./mole -g group ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group2 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,7 +1,7 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./README.md (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+# Vypis byl zkracen, cely text viz test16_lastfile_g/hodnoceni-auto
+0:test17_mostedited_abg: otevreni nejcasteji editovaneho souboru s filtry -a, -b a -g
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group2 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -m -g group1 -a 2023-03-27 -b 2023-03-29 <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,13 +1,13 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+# Vypis byl zkracen, cely text viz test17_mostedited_abg/hodnoceni-auto
+0:test18_list_abg: seznam editovanych souboru s filtry -a, -b a -g
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group2 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group2 README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1,group2 -a 2023-03-27 -b 2023-03-29 list <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,0,0,0,0,0,0,0,0,1; ocekavan errcode=0,0,0,0,0,0,0,0,0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,14 +1,12 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+# Vypis byl zkracen, cely text viz test18_list_abg/hodnoceni-auto
+0:test19_secretlog_ab: vytvoreni tajneho logu s filtry -a a -b
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -a 2023-03-27 -b 2023-03-29 secret-log <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,10 +1,11 @@
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+# Vypis byl zkracen, cely text viz test19_secretlog_ab/hodnoceni-auto
+0:test20_nofile_a: pokus o otevreni souboru v obdobi bez zaznamu (neni chybny navratovy kod)
+0:test21_invdate: nespravny format data u filtru -a (neni chybny navratovy kod)
+0:test22_filenames: prace s neobvyklymi nazvy souboru
+# ./mole _ <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ' ' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole # <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole @ <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole '$' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole '&' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole '$' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole '*' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole '(' <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,0,0,0,1,0; ocekavan errcode=0,0,0,0,0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,9 +1,8 @@
+#   -spusten editor s: /.sanitized./_ (hash da427fd)
+#   -spusten editor s: /.sanitized./  (hash da427fd)
+#   -spusten editor s: /.sanitized./# (hash da427fd)
+#   -spusten editor s: /.sanitized./@ (hash da427fd)
+#   -spusten editor s: /.sanitized./$ (hash da427fd)
+#   -spusten editor s: /.sanitized./& (hash da427fd)
+#   -spusten editor s: /.sanitized./$ (hash da427fd)
+#   -spusten editor s: /.sanitized./* (hash da427fd)
+#   -spusten editor s: /.sanitized./( (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./_ (vice souboru)
+# Vypis byl zkracen, cely text viz test22_filenames/hodnoceni-auto
+0:test23_molercnowr: reakce na v dobe spusteni nezapisovatelne MOLE_RC (neni chybny navratovy kod)
+0:test24_realpath: rozhodovani relativni na realnou cestu
+# ./mole dir1/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir2/ <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,3; ocekavan errcode=0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,2 +1 @@
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,5 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +awk: run time error: negative value assigned to NF
+#   +	FILENAME="-" FNR=1 NR=1
+#   +All edited files with these filters were probably deleted!
+0:test25_badsymlinks: realna cesta (vedle cyklickych symlinku)
+# ./mole dir1/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir2/ <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,3; ocekavan errcode=0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,2 +1 @@
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,5 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +awk: run time error: negative value assigned to NF
+#   +	FILENAME="-" FNR=1 NR=1
+#   +All edited files with these filters were probably deleted!
+0:test26_return_fromeditor: navratova hodnota z editoru
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1 +1,2 @@
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +Error with editor!
+0.4:ok: pokus o editaci posledniho souboru s prazdnym MOLE_RC
+0:test28_deleted_last: neuvazuje smazany soubor (posledni)
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,4 +1,4 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,8 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+# Vypis byl zkracen, cely text viz test28_deleted_last/hodnoceni-auto
+0:test29_deleted_mostedited: neuvazuje smazany soubor (nejcastejsi)
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -m <stdin >>stdout 2>>stderr; echo $? >>errcode
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,7 +1,7 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+# Vypis byl zkracen, cely text viz test29_deleted_mostedited/hodnoceni-auto
+0:test30_lastfile_r: bonus: otevreni naposledy editovaneho souboru s -r
+# ./mole dir1/ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole dir2/hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -r . <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,1; ocekavan errcode=0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,4 +1,3 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,7 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+# Vypis byl zkracen, cely text viz test30_lastfile_r/hodnoceni-auto
+0:test31_list_d: bonus: seznam editovanych souboru bez skupiny
+# ./mole -g group ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group1 greeting.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -g group2 ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole -d list <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,1; ocekavan errcode=0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,5 +1,4 @@
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./greeting.c (hash 1bcbc11)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -hello.c: -
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./greeting.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,9 @@
+#   +basename: invalid option -- 'o'
+# Vypis byl zkracen, cely text viz test31_list_d/hodnoceni-auto
+#------------------------------------------------------
+1.7:celkove score (max pro hodnoceni 15)
+2:celkem bodu za projekt

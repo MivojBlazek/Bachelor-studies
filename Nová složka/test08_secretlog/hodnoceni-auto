@@ -1,0 +1,39 @@
+0:test08_secretlog: vytvoreni tajneho logu
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole ahoj.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole hello.c <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole README.md <stdin >>stdout 2>>stderr; echo $? >>errcode
+# ./mole secret-log <stdin >>stdout 2>>stderr; echo $? >>errcode
+# errcode=0,0,0,0,1; ocekavan errcode=0,0,0,0,0
+# diff -u stdout.ref stdout
+#   --- stdout.ref
+#   +++ stdout
+#   @@ -1,4 +1,4 @@
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./ahoj.c (hash 8c686a5)
+#   -spusten editor s: /.sanitized./hello.c (hash da427fd)
+#   -spusten editor s: /.sanitized./README.md (hash 750dc10)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./ahoj.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./hello.c (vice souboru)
+#   +spusten editor s: /.sanitized./ /.sanitized./README.md (vice souboru)
+# diff -u stderr.ref stderr
+#   --- stderr.ref
+#   +++ stderr
+#   @@ -0,0 +1,9 @@
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +basename: invalid option -- 'o'
+#   +Try 'basename --help' for more information.
+#   +There is no file to select!
+# diff -u secretlog.ref secretlog
+#   --- secretlog.ref
+#   +++ secretlog
+#   @@ -1,3 +0,0 @@
+#   -/.sanitized./ahoj.c;2023-03-26_13-06-40
+#   -/.sanitized./hello.c;2023-03-26_13-00-00;2023-03-26_13-11-40
+#   -/.sanitized./README.md;2023-03-26_13-26-40
