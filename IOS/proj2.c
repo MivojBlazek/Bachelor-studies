@@ -12,7 +12,6 @@
 #include <limits.h>
 #include <sys/mman.h>
 #include <time.h>
-#include <ctype.h>
 
 struct Post{
     sem_t mutex;
@@ -27,6 +26,7 @@ struct Post{
 
 FILE *file;
 unsigned int NZ, NU, TZ, TU, F;
+
 
 
 
@@ -143,24 +143,6 @@ int main(int argc, char *argv[])
     
     for (int i = 1; i < 6; i++)
     {
-        int j = 0;
-        if (argv[i][0] == '-')
-        {
-            fprintf(stderr, "Incomaptible arguments!\n");
-            return 1;
-        }
-        for (j = 0; argv[i][j] != '\0'; j++)
-        {
-            if (!isdigit(argv[i][j]))
-            {
-                fprintf(stderr, "Incomaptible arguments!\n");
-                return 1;
-            }
-        }
-
-
-
-
         int tmp = atoi(argv[i]);
         if (tmp < 0)
         {
@@ -174,11 +156,6 @@ int main(int argc, char *argv[])
                 break;
             case 2:
                 NU = tmp;
-                if (NU == 0)
-                {
-                    fprintf(stderr, "Zero officers!\n");
-                    return 1;
-                }
                 break;
             case 3:
                 TZ = tmp;
