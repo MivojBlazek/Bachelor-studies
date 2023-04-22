@@ -12,5 +12,6 @@
         "*.tcc": "c",
         "type_traits": "c"
     },
-    "C_Cpp.default.cStandard": ""
+    "C_Cpp.default.cStandard": "",
+    "cmake.configureOnOpen": false
 }
