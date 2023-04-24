@@ -16,8 +16,8 @@
 
 struct Post{
     sem_t mutex;
-    sem_t zakaznik_sem;
-    sem_t urednik_sem;
+    sem_t urednik_sem_done[3]; //? not sure
+    sem_t urednik_sem[3];
     unsigned int operation_num;
     unsigned int service_num[3];
     unsigned int post_open;
@@ -37,8 +37,9 @@ void zakaznik(int id, struct Post *post_office)
     sem_post(&post_office->mutex);
 
     unsigned int uTZ = TZ * 1000;
-    srand(time(0));
+    srand(time(0) + id * 666);
     usleep(rand() % (uTZ + 1)); //random number from 0 to uTZ
+
 
     if (post_office->post_open)
     {
@@ -46,13 +47,12 @@ void zakaznik(int id, struct Post *post_office)
         srand(time(0) + id * 777);
         unsigned int service = rand() % 3;
 
-        
         sem_wait(&post_office->mutex);
         post_office->service_num[service]++;
         fprintf(file, "%d: Z %d: entering office for a service %d\n", post_office->operation_num++, id, service + 1);
         sem_post(&post_office->mutex);
         
-        sem_wait(&post_office->urednik_sem);
+        sem_wait(&post_office->urednik_sem[service]);
 
         sem_wait(&post_office->mutex);
         fprintf(file, "%d: Z %d: called by office worker\n", post_office->operation_num++, id);
@@ -61,6 +61,8 @@ void zakaznik(int id, struct Post *post_office)
         srand(time(0));
         unsigned int waiting = rand() % 11; //random number from 0 to 10
         usleep(waiting);
+
+        sem_wait(&post_office->urednik_sem_done[service]); //? not sure
     }
     sem_wait(&post_office->mutex);
     fprintf(file, "%d: Z %d: going home\n", post_office->operation_num++, id);
@@ -79,8 +81,6 @@ void urednik(int id, struct Post *post_office)
         if (post_office->service_num[0] || post_office->service_num[1] || post_office->service_num[2])
         {
             //ceka zakaznik -> bude se obsluhovat
-            sem_post(&post_office->urednik_sem);
-
             sem_wait(&post_office->mutex);
             unsigned int service;
             if (post_office->service_num[0])
@@ -95,6 +95,7 @@ void urednik(int id, struct Post *post_office)
             {
                 service = 2;
             }
+            sem_post(&post_office->urednik_sem[service]);
             post_office->service_num[service]--;
             fprintf(file, "%d: U %d: serving a service of type %d\n", post_office->operation_num++, id, service + 1);
             sem_post(&post_office->mutex);
@@ -102,6 +103,8 @@ void urednik(int id, struct Post *post_office)
             srand(time(0));
             unsigned int waiting = rand() % 11; //random number from 0 to 10
             usleep(waiting);
+
+            sem_post(&post_office->urednik_sem_done[service]); //? not sure
 
             sem_wait(&post_office->mutex);
             fprintf(file, "%d: U %d: service finished\n", post_office->operation_num++, id);
@@ -242,13 +245,44 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Error, sem_init failed!\n");
         return 1;
     }
-    is_err = sem_init(&post_office->zakaznik_sem, 1, 0);
+    /*is_err = sem_init(&post_office->zakaznik_sem, 1, 0);
+    if (is_err == -1)
+    {
+        fprintf(stderr, "Error, sem_init failed!\n");
+        return 1;
+    }*/
+    is_err = sem_init(&post_office->urednik_sem[0], 1, NU);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
         return 1;
     }
-    is_err = sem_init(&post_office->urednik_sem, 1, NU);
+    is_err = sem_init(&post_office->urednik_sem[1], 1, NU);
+    if (is_err == -1)
+    {
+        fprintf(stderr, "Error, sem_init failed!\n");
+        return 1;
+    }
+    is_err = sem_init(&post_office->urednik_sem[2], 1, NU);
+    if (is_err == -1)
+    {
+        fprintf(stderr, "Error, sem_init failed!\n");
+        return 1;
+    }
+
+    is_err = sem_init(&post_office->urednik_sem_done[0], 1, NU); //? not sure
+    if (is_err == -1)
+    {
+        fprintf(stderr, "Error, sem_init failed!\n");
+        return 1;
+    }
+    is_err = sem_init(&post_office->urednik_sem_done[1], 1, NU); //? not sure
+    if (is_err == -1)
+    {
+        fprintf(stderr, "Error, sem_init failed!\n");
+        return 1;
+    }
+    is_err = sem_init(&post_office->urednik_sem_done[2], 1, NU); //? not sure
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
@@ -299,8 +333,14 @@ int main(int argc, char *argv[])
 
     //cleaning
     sem_destroy(&post_office->mutex);
-    sem_destroy(&post_office->zakaznik_sem);
-    sem_destroy(&post_office->urednik_sem);
+    //sem_destroy(&post_office->zakaznik_sem);
+    sem_destroy(&post_office->urednik_sem[0]);
+    sem_destroy(&post_office->urednik_sem[1]);
+    sem_destroy(&post_office->urednik_sem[2]);
+    
+    sem_destroy(&post_office->urednik_sem_done[0]); //? not sure
+    sem_destroy(&post_office->urednik_sem_done[1]); //? not sure
+    sem_destroy(&post_office->urednik_sem_done[2]); //? not sure
 
     munmap(post_office, sizeof(struct Post));
 
