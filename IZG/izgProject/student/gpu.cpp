@@ -7,6 +7,20 @@
 
 #include <student/gpu.hpp>
 
+void draw(GPUMemory &mem, DrawCommand cmd){
+  Program prg = mem.programs[cmd.programID];
+
+  for (uint32_t i = 0; i < cmd.nofVertices; i++)
+  {
+    InVertex inVertex;
+    OutVertex outVertex;
+    //TODO computeVertexID (inVertex, cmd.vao, every vertex v in cmd.nofVertices)
+    //TODO readAttributes
+    ShaderInterface si;
+    prg.vertexShader(outVertex, inVertex, si);
+  }
+}
+
 void clear(GPUMemory &mem, ClearCommand cmd){
   if(cmd.clearColor)
   {
@@ -51,7 +65,7 @@ void gpu_execute(GPUMemory&mem,CommandBuffer &cb){
     }
     else if (cb.commands[i].type == CommandType::DRAW)
     {
-      //TODO kresleni mozna
+      draw(mem, cb.commands[i].data.drawCommand);
     }
   }
 }
