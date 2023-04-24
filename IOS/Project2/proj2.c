@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
 
     //semaphore init
     int is_err = 0;
-    is_err = sem_init((&post_office->mutex), 1, 1);
+    is_err = sem_init(&post_office->mutex, 1, 1);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
@@ -270,19 +270,19 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    is_err = sem_init(&post_office->urednik_sem_done[0], 1, NU); //? not sure
+    is_err = sem_init(&post_office->urednik_sem_done[0], 1, 0); //? not sure
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
         return 1;
     }
-    is_err = sem_init(&post_office->urednik_sem_done[1], 1, NU); //? not sure
+    is_err = sem_init(&post_office->urednik_sem_done[1], 1, 0); //? not sure
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
         return 1;
     }
-    is_err = sem_init(&post_office->urednik_sem_done[2], 1, NU); //? not sure
+    is_err = sem_init(&post_office->urednik_sem_done[2], 1, 0); //? not sure
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
