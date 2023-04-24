@@ -1,3 +1,10 @@
+/*
+*
+* login: xblaze38
+* last change: 24.4.2023
+*
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/unistd.h>

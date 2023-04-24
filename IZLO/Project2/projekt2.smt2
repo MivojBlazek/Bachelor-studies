@@ -47,8 +47,18 @@
 (assert (and (>= m1 n1 0) (>= m2 n2 0) (>= m3 n3 0) (>= m4 n4 0) (>= m5 n5 0)))
 
 (assert (= best (+ (* k1 n1) (* k2 n2) (* k3 n3) (* k4 n4) (* k5 n5))))
-;(assert (exists (best)) (forall (best)) (>= best best))
-(assert (>= best 34))
+
+(assert
+    (forall ((nx1 Int) (nx2 Int) (nx3 Int) (nx4 Int) (nx5 Int))
+        (=>
+            (and ;splneni predchozich podminek
+                (>= m1 nx1 0) (>= m2 nx2 0) (>= m3 nx3 0) (>= m4 nx4 0) (>= m5 nx5 0)
+                (<= (+ (* c1 nx1) (* c2 nx2) (* c3 nx3) (* c4 nx4) (* c5 nx5)) max_cena)
+            )
+            (<= (+ (* k1 nx1) (* k2 nx2) (* k3 nx3) (* k4 nx4) (* k5 nx5)) best)
+        )
+    )
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;; END OF SOLUTION ;;;;;;;;;;;
