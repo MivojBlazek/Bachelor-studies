@@ -4,7 +4,7 @@
  *
  * @author Tomáš Milet, imilet@fit.vutbr.cz
  */
-#include <stdio.h> //! POUZE PRO TEST
+
 #include <student/gpu.hpp>
 
 void clear(GPUMemory &mem, ClearCommand cmd){
@@ -15,18 +15,22 @@ void clear(GPUMemory &mem, ClearCommand cmd){
     float blue = cmd.color.b;
     float alpha = cmd.color.a;
     
-    mem.framebuffer.color[0] = (uint8_t) (red * 255.f);
-    mem.framebuffer.color[1] = (uint8_t) (green * 255.f);
-    mem.framebuffer.color[2] = (uint8_t) (blue * 255.f);
-    mem.framebuffer.color[3] = (uint8_t) (alpha * 255.f);
-    
-    fprintf(stderr, "red: %f\nmem: %d\n", red, mem.framebuffer.color[0]); //! DEBUG
+    for (uint32_t x = 0; x < mem.framebuffer.width * mem.framebuffer.height * 4; x += 4)
+    {
+      mem.framebuffer.color[x] = (uint8_t) (red * 255.f);
+      mem.framebuffer.color[x + 1] = (uint8_t) (green * 255.f);
+      mem.framebuffer.color[x + 2] = (uint8_t) (blue * 255.f);
+      mem.framebuffer.color[x + 3] = (uint8_t) (alpha * 255.f);
+    }
   }
   if(cmd.clearDepth)
   {
     float depth = cmd.depth;
-    mem.framebuffer.depth[0] = depth; //? not sure [0]
-    //TODO vycisti Depth
+
+    for (uint32_t x = 0; x < mem.framebuffer.width * mem.framebuffer.height; x++)
+    {
+      mem.framebuffer.depth[x] = depth;
+    }
   }
 }
 
@@ -47,7 +51,7 @@ void gpu_execute(GPUMemory&mem,CommandBuffer &cb){
     }
     else if (cb.commands[i].type == CommandType::DRAW)
     {
-      //TODO kresleni
+      //TODO kresleni mozna
     }
   }
 }
