@@ -32,41 +32,56 @@ unsigned int NZ, NU, TZ, TU, F;
 
 void zakaznik(int id, struct Post *post_office)
 {
+    sem_wait(&post_office->mutex);
     fprintf(file, "%d: Z %d: started\n", post_office->operation_num++, id);
+    sem_post(&post_office->mutex);
+
     unsigned int uTZ = TZ * 1000;
     srand(time(0));
     usleep(rand() % (uTZ + 1)); //random number from 0 to uTZ
 
     if (post_office->post_open)
     {
+        //post is open
         srand(time(0) + id * 777);
         unsigned int service = rand() % 3;
-        post_office->service_num[service]++;
 
+        
+        sem_wait(&post_office->mutex);
+        post_office->service_num[service]++;
         fprintf(file, "%d: Z %d: entering office for a service %d\n", post_office->operation_num++, id, service + 1);
+        sem_post(&post_office->mutex);
         
         sem_wait(&post_office->urednik_sem);
 
+        sem_wait(&post_office->mutex);
         fprintf(file, "%d: Z %d: called by office worker\n", post_office->operation_num++, id);
-        
+        sem_post(&post_office->mutex);
+
         srand(time(0));
-        unsigned int waiting = (rand() % 11) * 1000; //random number from 0 to 10
+        unsigned int waiting = rand() % 11; //random number from 0 to 10
         usleep(waiting);
     }
+    sem_wait(&post_office->mutex);
     fprintf(file, "%d: Z %d: going home\n", post_office->operation_num++, id);
+    sem_post(&post_office->mutex);
     exit(0);
 }
 
 
 void urednik(int id, struct Post *post_office)
 {
+    sem_wait(&post_office->mutex);
     fprintf(file, "%d: U %d: started\n", post_office->operation_num++, id);
+    sem_post(&post_office->mutex);
     while(1)
     {
         if (post_office->service_num[0] || post_office->service_num[1] || post_office->service_num[2])
         {
-            //bude se obsluhovat
+            //ceka zakaznik -> bude se obsluhovat
             sem_post(&post_office->urednik_sem);
+
+            sem_wait(&post_office->mutex);
             unsigned int service;
             if (post_office->service_num[0])
             {
@@ -81,22 +96,32 @@ void urednik(int id, struct Post *post_office)
                 service = 2;
             }
             post_office->service_num[service]--;
-            
             fprintf(file, "%d: U %d: serving a service of type %d\n", post_office->operation_num++, id, service + 1);
+            sem_post(&post_office->mutex);
+
             srand(time(0));
-            unsigned int waiting = (rand() % 11) * 1000; //random number from 0 to 10
+            unsigned int waiting = rand() % 11; //random number from 0 to 10
             usleep(waiting);
+
+            sem_wait(&post_office->mutex);
             fprintf(file, "%d: U %d: service finished\n", post_office->operation_num++, id);
+            sem_post(&post_office->mutex);
             continue;
         }
         else if (post_office->post_open)
         {
             //urednik si bere prestavku
+            sem_wait(&post_office->mutex);
             fprintf(file, "%d: U %d: taking break\n", post_office->operation_num++, id);
+            sem_post(&post_office->mutex);
+
             srand(time(0));
             unsigned int uTU = TU * 1000;
             usleep(rand() % (uTU + 1)); //random number from 0 to uTU
+
+            sem_wait(&post_office->mutex);
             fprintf(file, "%d: U %d: break finished\n", post_office->operation_num++, id);
+            sem_post(&post_office->mutex);
             continue;
         }
         else //post not open
@@ -105,7 +130,9 @@ void urednik(int id, struct Post *post_office)
             break;
         }
     }
+    sem_wait(&post_office->mutex);
     fprintf(file, "%d: U %d: going home\n", post_office->operation_num++, id);
+    sem_post(&post_office->mutex);
     exit(0);
 }
 
@@ -135,6 +162,8 @@ int main(int argc, char *argv[])
     setbuf(file, NULL);
 
 
+
+    //program arguments
     if (argc != 6)
     {
         fprintf(stderr, "Incomaptible arguments!\n");
@@ -158,9 +187,6 @@ int main(int argc, char *argv[])
             }
         }
 
-
-
-
         int tmp = atoi(argv[i]);
         if (tmp < 0)
         {
@@ -176,7 +202,7 @@ int main(int argc, char *argv[])
                 NU = tmp;
                 if (NU == 0)
                 {
-                    fprintf(stderr, "Zero officers!\n");
+                    fprintf(stderr, "Incomaptible arguments!\n");
                     return 1;
                 }
                 break;
@@ -208,8 +234,6 @@ int main(int argc, char *argv[])
     }
     
 
-
-
     //semaphore init
     int is_err = 0;
     is_err = sem_init((&post_office->mutex), 1, 1);
@@ -230,8 +254,6 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Error, sem_init failed!\n");
         return 1;
     }
-
-
 
 
     //main process
@@ -266,20 +288,21 @@ int main(int argc, char *argv[])
     srand(time(0));
     usleep((rand() % (uF - uF / 2 + 1)) + uF / 2); //random number from uF / 2 to uF
 
+    sem_wait(&post_office->mutex);
     fprintf(file, "%d: closing\n", post_office->operation_num++);
     post_office->post_open = 0;
-
-
+    sem_post(&post_office->mutex);
 
 
     while(wait(NULL) > 0);
 
-    //cisteni cleanup
-    sem_destroy(&post_office->mutex); //? -1 pri erroru
+
+    //cleaning
+    sem_destroy(&post_office->mutex);
     sem_destroy(&post_office->zakaznik_sem);
     sem_destroy(&post_office->urednik_sem);
 
-    munmap(post_office, sizeof(struct Post)); //? -1 pri erroru
+    munmap(post_office, sizeof(struct Post));
 
     fclose(file);
     exit(0);
