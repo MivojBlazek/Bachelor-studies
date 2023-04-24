@@ -16,8 +16,8 @@
 
 struct Post{
     sem_t mutex;
-    sem_t urednik_sem_done[3]; //? not sure
     sem_t urednik_sem[3];
+    sem_t urednik_sem_done[3]; //? not sure
     unsigned int operation_num;
     unsigned int service_num[3];
     unsigned int post_open;
@@ -245,12 +245,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Error, sem_init failed!\n");
         return 1;
     }
-    /*is_err = sem_init(&post_office->zakaznik_sem, 1, 0);
-    if (is_err == -1)
-    {
-        fprintf(stderr, "Error, sem_init failed!\n");
-        return 1;
-    }*/
+
     is_err = sem_init(&post_office->urednik_sem[0], 1, NU);
     if (is_err == -1)
     {
@@ -333,7 +328,7 @@ int main(int argc, char *argv[])
 
     //cleaning
     sem_destroy(&post_office->mutex);
-    //sem_destroy(&post_office->zakaznik_sem);
+    
     sem_destroy(&post_office->urednik_sem[0]);
     sem_destroy(&post_office->urednik_sem[1]);
     sem_destroy(&post_office->urednik_sem[2]);

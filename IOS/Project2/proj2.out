@@ -5,15 +5,19 @@
 5: U 1: taking break
 6: U 2: started
 7: U 2: taking break
-8: Z 1: entering office for a service 2
-9: Z 1: called by office worker
-10: closing
-11: U 1: break finished
-12: U 1: serving a service of type 2
-13: U 2: break finished
-14: U 1: service finished
-15: Z 1: going home
-16: U 2: going home
-17: U 1: going home
-18: Z 2: going home
-19: Z 3: going home
+8: U 1: break finished
+9: U 1: taking break
+10: U 2: break finished
+11: U 2: taking break
+12: Z 3: entering office for a service 3
+13: Z 3: called by office worker
+14: closing
+15: U 2: break finished
+16: U 2: serving a service of type 3
+17: U 1: break finished
+18: U 1: going home
+19: U 2: service finished
+20: U 2: going home
+21: Z 3: going home
+22: Z 2: going home
+23: Z 1: going home
