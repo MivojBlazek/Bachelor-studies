@@ -49,15 +49,22 @@ void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
     si.textures = mem.textures;
 
     //TODO (tests 7-9)
-    if (cmd.vao.vertexAttrib[0].type != AttributeType::EMPTY)
+    
+    for (uint8_t j = 0; j < maxAttributes; j++)
     {
-      //TODO data copy with size vertex attribut from buffer to offset with stride (krok)
-      //TODO velikosti jsou v bytech
-      //TODO atributy by mely byt cteny z adresy: buf_ptr + offset + stride * gl_VertexID
-      uint64_t vaOffset = cmd.vao.vertexAttrib[0].offset;
-      int32_t vaBuffer = cmd.vao.vertexAttrib[0].bufferID;
-      uint64_t vaStride = cmd.vao.vertexAttrib[0].stride;
-      AttributeType vaType = cmd.vao.vertexAttrib[0].type;
+      if (cmd.vao.vertexAttrib[j].type != AttributeType::EMPTY)
+      {
+        //TODO data copy with size vertex attribut from buffer with offset and with stride
+        //TODO velikosti jsou v bytech
+        //TODO atributy by mely byt cteny z adresy: buf_ptr + offset + stride * gl_VertexID
+        uint64_t vaOffset = cmd.vao.vertexAttrib[j].offset; //? mozna nepotrebuju
+        int32_t vaBuffer = cmd.vao.vertexAttrib[j].bufferID; //? mozna nepotrebuju
+        uint64_t vaStride = cmd.vao.vertexAttrib[j].stride; //? mozna nepotrebuju
+        AttributeType vaType = cmd.vao.vertexAttrib[j].type; //? mozna nepotrebuju
+        
+        VertexAttrib vAttrib = cmd.vao.vertexAttrib[j];
+        //inVertex.attributes[j] = vAttrib;
+      }
     }
 
     prg.vertexShader(outVertex, inVertex, si);
