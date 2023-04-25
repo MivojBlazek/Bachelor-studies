@@ -7,16 +7,59 @@
 
 #include <student/gpu.hpp>
 
-void draw(GPUMemory &mem, DrawCommand cmd){
+void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
   Program prg = mem.programs[cmd.programID];
 
   for (uint32_t i = 0; i < cmd.nofVertices; i++)
   {
     InVertex inVertex;
     OutVertex outVertex;
-    //TODO computeVertexID (inVertex, cmd.vao, every vertex v in cmd.nofVertices)
-    //TODO readAttributes
+    inVertex.gl_DrawID = nofDraws;
+
+    if (cmd.vao.indexBufferID < 0)
+    {
+      // neni zapnuty indexovani (test 4)
+      inVertex.gl_VertexID = i;
+    }
+    else
+    {
+      // je zapnuty indexovani (test 5)
+      int32_t bufferID = cmd.vao.indexBufferID;
+      void const *indexBuffer = mem.buffers[bufferID].data;
+      
+      if (cmd.vao.indexType == IndexType::UINT8)
+      {
+        uint8_t *ind = (uint8_t *) ((uint64_t *)indexBuffer + cmd.vao.indexOffset);
+        inVertex.gl_VertexID = ind[i];
+      }
+      else if (cmd.vao.indexType == IndexType::UINT16)
+      {
+        uint16_t *ind = (uint16_t *) ((uint64_t *)indexBuffer + cmd.vao.indexOffset);
+        inVertex.gl_VertexID = ind[i];
+      }
+      else // (cmd.vao.indexType == IndexType::UINT32)
+      {
+        uint32_t *ind = (uint32_t *) ((uint64_t *)indexBuffer + cmd.vao.indexOffset);
+        inVertex.gl_VertexID = ind[i];
+      }
+    }
+
     ShaderInterface si;
+    si.uniforms = mem.uniforms;
+    si.textures = mem.textures;
+
+    //TODO (tests 7-9)
+    if (cmd.vao.vertexAttrib[0].type != AttributeType::EMPTY)
+    {
+      //TODO data copy with size vertex attribut from buffer to offset with stride (krok)
+      //TODO velikosti jsou v bytech
+      //TODO atributy by mely byt cteny z adresy: buf_ptr + offset + stride * gl_VertexID
+      uint64_t vaOffset = cmd.vao.vertexAttrib[0].offset;
+      int32_t vaBuffer = cmd.vao.vertexAttrib[0].bufferID;
+      uint64_t vaStride = cmd.vao.vertexAttrib[0].stride;
+      AttributeType vaType = cmd.vao.vertexAttrib[0].type;
+    }
+
     prg.vertexShader(outVertex, inVertex, si);
   }
 }
@@ -57,6 +100,7 @@ void gpu_execute(GPUMemory&mem,CommandBuffer &cb){
   /// mem obsahuje paměť grafické karty.
   /// cb obsahuje command buffer pro zpracování.
   /// Bližší informace jsou uvedeny na hlavní stránce dokumentace.
+  uint32_t nofDraws = 0;
   for (uint32_t i = 0; i < cb.nofCommands; i++)
   {
     if (cb.commands[i].type == CommandType::CLEAR)
@@ -65,7 +109,7 @@ void gpu_execute(GPUMemory&mem,CommandBuffer &cb){
     }
     else if (cb.commands[i].type == CommandType::DRAW)
     {
-      draw(mem, cb.commands[i].data.drawCommand);
+      draw(mem, cb.commands[i].data.drawCommand, nofDraws++);
     }
   }
 }
