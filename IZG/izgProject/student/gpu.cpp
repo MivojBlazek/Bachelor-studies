@@ -16,30 +16,31 @@ void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
     OutVertex outVertex;
     inVertex.gl_DrawID = nofDraws;
 
+    /* Computing vertexID */
     if (cmd.vao.indexBufferID < 0)
     {
-      // neni zapnuty indexovani (test 4)
+      // neni zapnuty indexovani
       inVertex.gl_VertexID = i;
     }
     else
     {
-      // je zapnuty indexovani (test 5)
+      // je zapnuty indexovani
       int32_t bufferID = cmd.vao.indexBufferID;
       void const *indexBuffer = mem.buffers[bufferID].data;
       
       if (cmd.vao.indexType == IndexType::UINT8)
       {
-        uint8_t *ind = (uint8_t *) ((uint64_t *)indexBuffer + cmd.vao.indexOffset);
+        uint8_t *ind = (uint8_t *) ((uint8_t *)indexBuffer + cmd.vao.indexOffset);
         inVertex.gl_VertexID = ind[i];
       }
       else if (cmd.vao.indexType == IndexType::UINT16)
       {
-        uint16_t *ind = (uint16_t *) ((uint64_t *)indexBuffer + cmd.vao.indexOffset);
+        uint16_t *ind = (uint16_t *) ((uint8_t *)indexBuffer + cmd.vao.indexOffset);
         inVertex.gl_VertexID = ind[i];
       }
       else // (cmd.vao.indexType == IndexType::UINT32)
       {
-        uint32_t *ind = (uint32_t *) ((uint64_t *)indexBuffer + cmd.vao.indexOffset);
+        uint32_t *ind = (uint32_t *) ((uint8_t *)indexBuffer + cmd.vao.indexOffset);
         inVertex.gl_VertexID = ind[i];
       }
     }
@@ -48,25 +49,44 @@ void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
     si.uniforms = mem.uniforms;
     si.textures = mem.textures;
 
-    //TODO (tests 7-9)
-    
+
+    /* Reading vertex attributes */
     for (uint8_t j = 0; j < maxAttributes; j++)
     {
-      if (cmd.vao.vertexAttrib[j].type != AttributeType::EMPTY)
+      AttributeType vaType = cmd.vao.vertexAttrib[j].type;
+      if (vaType != AttributeType::EMPTY)
       {
-        //TODO data copy with size vertex attribut from buffer with offset and with stride
-        //TODO velikosti jsou v bytech
-        //TODO atributy by mely byt cteny z adresy: buf_ptr + offset + stride * gl_VertexID
-        uint64_t vaOffset = cmd.vao.vertexAttrib[j].offset; //? mozna nepotrebuju
-        int32_t vaBuffer = cmd.vao.vertexAttrib[j].bufferID; //? mozna nepotrebuju
-        uint64_t vaStride = cmd.vao.vertexAttrib[j].stride; //? mozna nepotrebuju
-        AttributeType vaType = cmd.vao.vertexAttrib[j].type; //? mozna nepotrebuju
-        
-        VertexAttrib vAttrib = cmd.vao.vertexAttrib[j];
-        //inVertex.attributes[j] = vAttrib;
+        int32_t vaBuffer = cmd.vao.vertexAttrib[j].bufferID;
+        uint64_t vaOffset = cmd.vao.vertexAttrib[j].offset;
+        uint64_t vaStride = cmd.vao.vertexAttrib[j].stride;
+        void const *vertexBuffer = mem.buffers[vaBuffer].data;
+
+        if (vaType == AttributeType::FLOAT)
+        {
+          float *vAttrib = (float *) ((uint8_t *)vertexBuffer + vaOffset + vaStride * inVertex.gl_VertexID);
+          inVertex.attributes[j].v1 = *vAttrib;
+        }
+        else if (vaType == AttributeType::VEC2)
+        {
+          glm::vec2 *vAttrib = (glm::vec2 *) ((uint8_t *)vertexBuffer + vaOffset + vaStride * inVertex.gl_VertexID);
+          inVertex.attributes[j].v2 = *vAttrib;
+        }
+        else if (vaType == AttributeType::VEC3)
+        {
+          glm::vec3 *vAttrib = (glm::vec3 *) ((uint8_t *)vertexBuffer + vaOffset + vaStride * inVertex.gl_VertexID);
+          inVertex.attributes[j].v3 = *vAttrib;
+        }
+        else if (vaType == AttributeType::VEC4)
+        {
+          glm::vec4 *vAttrib = (glm::vec4 *) ((uint8_t *)vertexBuffer + vaOffset + vaStride * inVertex.gl_VertexID);
+          inVertex.attributes[j].v4 = *vAttrib;
+        }
+        else // (vaType == AttributeType::UINT/UVEC2/UVEC3/UVEC4)
+        {
+          //TODO dodelat asi
+        }
       }
     }
-
     prg.vertexShader(outVertex, inVertex, si);
   }
 }
