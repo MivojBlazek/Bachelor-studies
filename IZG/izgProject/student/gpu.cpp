@@ -7,6 +7,27 @@
 
 #include <student/gpu.hpp>
 
+
+struct Triangle{
+  OutVertex points[3];
+};
+
+
+void loadVertex(InVertex inVertex, VertexArray const &vao, uint32_t tId_i){
+  //TODO
+}
+
+
+void loadTriangle(Triangle &triangle, Program const &prg, VertexArray const &vao, uint32_t tId, ShaderInterface si){
+  for(uint32_t i = 0; i < tId; i++) // smyčka přes vrcholy trojúhelníku
+  {
+    InVertex inVertex;
+    loadVertex(inVertex, vao, tId+i);
+    prg.vertexShader(triangle.points[i], inVertex, si);
+  }
+}
+
+
 void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
   Program prg = mem.programs[cmd.programID];
 
@@ -88,8 +109,18 @@ void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
       }
     }
     prg.vertexShader(outVertex, inVertex, si);
+
+    if (cmd.backfaceCulling)
+    {
+      
+    }
+    else
+    {
+      
+    }
   }
 }
+
 
 void clear(GPUMemory &mem, ClearCommand cmd){
   if(cmd.clearColor)
@@ -117,6 +148,7 @@ void clear(GPUMemory &mem, ClearCommand cmd){
     }
   }
 }
+
 
 //! [gpu_execute]
 void gpu_execute(GPUMemory&mem,CommandBuffer &cb){
