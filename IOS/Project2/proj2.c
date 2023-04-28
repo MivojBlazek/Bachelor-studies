@@ -1,7 +1,7 @@
 /*
 *
 * login: xblaze38
-* last change: 24.4.2023
+* last change: 28.4.2023
 *
 */
 
@@ -31,10 +31,70 @@ struct Post{
 };
 
 
-
 FILE *file;
 unsigned int NZ, NU, TZ, TU, F;
 
+
+void all_sem_open(struct Post *post_office)
+{
+    sem_post(&post_office->mutex);
+    sem_post(&post_office->urednik_sem[0]);
+    sem_post(&post_office->urednik_sem[1]);
+    sem_post(&post_office->urednik_sem[2]);
+    sem_post(&post_office->urednik_sem_done[0]);
+    sem_post(&post_office->urednik_sem_done[1]);
+    sem_post(&post_office->urednik_sem_done[2]);
+}
+
+
+void sem_clean(struct Post *post_office, int init_success)
+{
+    switch (init_success)
+    {
+        case 7:
+            sem_destroy(&post_office->urednik_sem_done[2]);
+            sem_destroy(&post_office->urednik_sem_done[1]);
+            sem_destroy(&post_office->urednik_sem_done[0]);
+            sem_destroy(&post_office->urednik_sem[2]);
+            sem_destroy(&post_office->urednik_sem[1]);
+            sem_destroy(&post_office->urednik_sem[0]);
+            sem_destroy(&post_office->mutex);
+            break;
+        case 6:
+            sem_destroy(&post_office->urednik_sem_done[1]);
+            sem_destroy(&post_office->urednik_sem_done[0]);
+            sem_destroy(&post_office->urednik_sem[2]);
+            sem_destroy(&post_office->urednik_sem[1]);
+            sem_destroy(&post_office->urednik_sem[0]);
+            sem_destroy(&post_office->mutex);
+            break;
+        case 5:
+            sem_destroy(&post_office->urednik_sem_done[0]);
+            sem_destroy(&post_office->urednik_sem[2]);
+            sem_destroy(&post_office->urednik_sem[1]);
+            sem_destroy(&post_office->urednik_sem[0]);
+            sem_destroy(&post_office->mutex);
+            break;
+        case 4:
+            sem_destroy(&post_office->urednik_sem[2]);
+            sem_destroy(&post_office->urednik_sem[1]);
+            sem_destroy(&post_office->urednik_sem[0]);
+            sem_destroy(&post_office->mutex);
+            break;
+        case 3:
+            sem_destroy(&post_office->urednik_sem[1]);
+            sem_destroy(&post_office->urednik_sem[0]);
+            sem_destroy(&post_office->mutex);
+            break;
+        case 2:
+            sem_destroy(&post_office->urednik_sem[0]);
+            sem_destroy(&post_office->mutex);
+            break;
+        case 1:
+            sem_destroy(&post_office->mutex);
+            break;
+    } 
+}
 
 
 void zakaznik(int id, struct Post *post_office)
@@ -160,6 +220,7 @@ int main(int argc, char *argv[])
     if (post_office == MAP_FAILED)
     {
         fprintf(stderr, "Error, mmap failed!\n");
+        fclose(file);
         return 1;
     }
     post_office->operation_num = 1;
@@ -172,27 +233,25 @@ int main(int argc, char *argv[])
     setbuf(file, NULL);
 
 
-
     //program arguments
     if (argc != 6)
     {
         fprintf(stderr, "Incomaptible arguments!\n");
+        munmap(post_office, sizeof(struct Post));
+        fclose(file);
         return 1;
     }
     
     for (int i = 1; i < 6; i++)
     {
         int j = 0;
-        if (argv[i][0] == '-')
-        {
-            fprintf(stderr, "Incomaptible arguments!\n");
-            return 1;
-        }
         for (j = 0; argv[i][j] != '\0'; j++)
         {
             if (!isdigit(argv[i][j]))
             {
                 fprintf(stderr, "Incomaptible arguments!\n");
+                munmap(post_office, sizeof(struct Post));
+                fclose(file);
                 return 1;
             }
         }
@@ -201,6 +260,8 @@ int main(int argc, char *argv[])
         if (tmp < 0)
         {
             fprintf(stderr, "Incomaptible arguments!\n");
+            munmap(post_office, sizeof(struct Post));
+            fclose(file);
             return 1;
         }
         switch (i)
@@ -213,6 +274,8 @@ int main(int argc, char *argv[])
                 if (NU == 0)
                 {
                     fprintf(stderr, "Incomaptible arguments!\n");
+                    munmap(post_office, sizeof(struct Post));
+                    fclose(file);
                     return 1;
                 }
                 break;
@@ -221,6 +284,8 @@ int main(int argc, char *argv[])
                 if (TZ > 10000)
                 {
                     fprintf(stderr, "Incomaptible arguments!\n");
+                    munmap(post_office, sizeof(struct Post));
+                    fclose(file);
                     return 1;
                 }
                 break;
@@ -229,6 +294,8 @@ int main(int argc, char *argv[])
                 if (TU > 100)
                 {
                     fprintf(stderr, "Incomaptible arguments!\n");
+                    munmap(post_office, sizeof(struct Post));
+                    fclose(file);
                     return 1;
                 }
                 break;
@@ -237,6 +304,8 @@ int main(int argc, char *argv[])
                 if (F > 10000)
                 {
                     fprintf(stderr, "Incomaptible arguments!\n");
+                    munmap(post_office, sizeof(struct Post));
+                    fclose(file);
                     return 1;
                 }
                 break;
@@ -246,50 +315,79 @@ int main(int argc, char *argv[])
 
     //semaphore init
     int is_err = 0;
+    int init_success = 0;
     is_err = sem_init(&post_office->mutex, 1, 1);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
+        sem_clean(post_office, init_success);
+        munmap(post_office, sizeof(struct Post));
+        fclose(file);
         return 1;
     }
+    init_success++;
 
     is_err = sem_init(&post_office->urednik_sem[0], 1, NU);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
+        sem_clean(post_office, init_success);
+        munmap(post_office, sizeof(struct Post));
+        fclose(file);
         return 1;
     }
+    init_success++;
     is_err = sem_init(&post_office->urednik_sem[1], 1, NU);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
+        sem_clean(post_office, init_success);
+        munmap(post_office, sizeof(struct Post));
+        fclose(file);
         return 1;
     }
+    init_success++;
     is_err = sem_init(&post_office->urednik_sem[2], 1, NU);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
+        sem_clean(post_office, init_success);
+        munmap(post_office, sizeof(struct Post));
+        fclose(file);
         return 1;
     }
+    init_success++;
 
-    is_err = sem_init(&post_office->urednik_sem_done[0], 1, 0); //? not sure
+    is_err = sem_init(&post_office->urednik_sem_done[0], 1, 0);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
+        sem_clean(post_office, init_success);
+        munmap(post_office, sizeof(struct Post));
+        fclose(file);
         return 1;
     }
-    is_err = sem_init(&post_office->urednik_sem_done[1], 1, 0); //? not sure
+    init_success++;
+    is_err = sem_init(&post_office->urednik_sem_done[1], 1, 0);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
+        sem_clean(post_office, init_success);
+        munmap(post_office, sizeof(struct Post));
+        fclose(file);
         return 1;
     }
-    is_err = sem_init(&post_office->urednik_sem_done[2], 1, 0); //? not sure
+    init_success++;
+    is_err = sem_init(&post_office->urednik_sem_done[2], 1, 0);
     if (is_err == -1)
     {
         fprintf(stderr, "Error, sem_init failed!\n");
+        sem_clean(post_office, init_success);
+        munmap(post_office, sizeof(struct Post));
+        fclose(file);
         return 1;
     }
+    init_success++;
 
 
     //main process
@@ -299,6 +397,14 @@ int main(int argc, char *argv[])
         if (id == -1)
         {
             fprintf(stderr, "Error with making child process!\n");
+            for (unsigned int j = 0; j < i; j++) //wait until all processes finish
+            {
+                all_sem_open(post_office);
+            }
+            while(wait(NULL) > 0);
+            sem_clean(post_office, init_success);
+            munmap(post_office, sizeof(struct Post));
+            fclose(file);
             return 1;
         }
         else if (id == 0)
@@ -312,6 +418,14 @@ int main(int argc, char *argv[])
         if (id == -1)
         {
             fprintf(stderr, "Error with making child process!\n");
+            for (unsigned int j = 0; j < (NZ + i); j++) //wait until all processes finish
+            {
+                all_sem_open(post_office);
+            }
+            while(wait(NULL) > 0);
+            sem_clean(post_office, init_success);
+            munmap(post_office, sizeof(struct Post));
+            fclose(file);
             return 1;
         }
         else if (id == 0)
@@ -334,15 +448,7 @@ int main(int argc, char *argv[])
 
 
     //cleaning
-    sem_destroy(&post_office->mutex);
-    
-    sem_destroy(&post_office->urednik_sem[0]);
-    sem_destroy(&post_office->urednik_sem[1]);
-    sem_destroy(&post_office->urednik_sem[2]);
-    
-    sem_destroy(&post_office->urednik_sem_done[0]); //? not sure
-    sem_destroy(&post_office->urednik_sem_done[1]); //? not sure
-    sem_destroy(&post_office->urednik_sem_done[2]); //? not sure
+    sem_clean(post_office, init_success);
 
     munmap(post_office, sizeof(struct Post));
 
