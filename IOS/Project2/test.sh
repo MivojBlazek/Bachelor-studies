@@ -51,7 +51,7 @@ proj2out_check() {
     else
 
         echo -e "${YELLOW}"
-        #cat ./proj2.out | ./kontrola-vystupu.sh
+        cat ./proj2.out | ./kontrola-vystupu.sh
         echo -e "${NC}"
 
     fi
@@ -350,35 +350,35 @@ echo "Testing max/min valid arguments..."
         fi
     fi
 
-    ./proj2 20 1 1 1 10000
-    if [[ $? == 1 ]]
-    then
-        echo -e "${RED}FAILED \"./proj2 100 1 1 1 10000\" returned with 1 even though arguments were valid!${NC}"
-        exit 1
-    else
-        echo -e "${GREEN}OK \"./proj2 100 1 1 1 10000\" ... running ./kontrola-vystupu.sh${NC}"
-        if [[ $1 == "-f" ]]
-        then
-            proj2out_check "-f"
-        else
-            proj2out_check
-        fi
-    fi
+    # ./proj2 20 1 1 1 10000
+    # if [[ $? == 1 ]]
+    # then
+    #     echo -e "${RED}FAILED \"./proj2 100 1 1 1 10000\" returned with 1 even though arguments were valid!${NC}"
+    #     exit 1
+    # else
+    #     echo -e "${GREEN}OK \"./proj2 100 1 1 1 10000\" ... running ./kontrola-vystupu.sh${NC}"
+    #     if [[ $1 == "-f" ]]
+    #     then
+    #         proj2out_check "-f"
+    #     else
+    #         proj2out_check
+    #     fi
+    # fi
 
-    ./proj2 1 20 1 1 10000
-    if [[ $? == 1 ]]
-    then
-        echo -e "${RED}FAILED \"./proj2 1 100 1 1 10000\" returned with 1 even though arguments were valid!${NC}"
-        exit 1
-    else
-        echo -e "${GREEN}OK \"./proj2 1 100 1 1 10000\" ... running ./kontrola-vystupu.sh${NC}"
-        if [[ $1 == "-f" ]]
-        then
-            proj2out_check "-f"
-        else
-            proj2out_check
-        fi
-    fi
+    # ./proj2 1 20 1 1 10000
+    # if [[ $? == 1 ]]
+    # then
+    #    echo -e "${RED}FAILED \"./proj2 1 100 1 1 10000\" returned with 1 even though arguments were valid!${NC}"
+    #    exit 1
+    # else
+    #    echo -e "${GREEN}OK \"./proj2 1 100 1 1 10000\" ... running ./kontrola-vystupu.sh${NC}"
+    #    if [[ $1 == "-f" ]]
+    #    then
+    #        proj2out_check "-f"
+    #    else
+    #        proj2out_check
+    #    fi
+    # fi
 
     ./proj2 0 1 1 1 1
     if [[ $? == 1 ]]

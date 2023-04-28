@@ -1,0 +1,137 @@
+1: Z 1: started
+2: Z 2: started
+3: Z 3: started
+4: Z 5: started
+5: Z 4: started
+6: Z 7: started
+7: Z 8: started
+8: Z 9: started
+9: Z 6: started
+10: Z 10: started
+11: Z 14: started
+12: Z 12: started
+13: Z 16: started
+14: Z 17: started
+15: Z 18: started
+16: Z 13: started
+17: U 2: started
+18: U 3: started
+19: U 3: taking break
+20: U 1: started
+21: U 2: taking break
+22: U 5: started
+23: U 5: taking break
+24: U 4: started
+25: U 7: started
+26: U 7: taking break
+27: U 8: started
+28: U 8: taking break
+29: U 9: started
+30: U 10: started
+31: U 10: taking break
+32: Z 15: started
+33: U 12: started
+34: U 13: started
+35: U 13: taking break
+36: U 14: started
+37: U 14: taking break
+38: U 15: started
+39: U 15: taking break
+40: U 16: started
+41: Z 11: started
+42: U 18: started
+43: U 18: taking break
+44: U 11: started
+45: U 11: taking break
+46: U 6: started
+47: U 22: started
+48: U 23: started
+49: U 24: started
+50: U 24: taking break
+51: U 19: started
+52: U 19: taking break
+53: U 1: taking break
+54: U 17: started
+55: U 17: taking break
+56: U 21: started
+57: U 21: taking break
+58: U 22: taking break
+59: U 12: taking break
+60: U 23: taking break
+61: U 16: taking break
+62: U 4: taking break
+63: U 25: started
+64: U 25: taking break
+65: U 20: started
+66: U 20: taking break
+67: U 9: taking break
+68: U 6: taking break
+69: closing
+70: Z 8: going home
+71: Z 9: going home
+72: Z 14: going home
+73: Z 6: going home
+74: Z 15: going home
+75: Z 17: going home
+76: Z 11: going home
+77: Z 5: going home
+78: U 3: break finished
+79: U 3: going home
+80: U 2: break finished
+81: U 2: going home
+82: U 5: break finished
+83: U 5: going home
+84: U 7: break finished
+85: U 7: going home
+86: Z 4: going home
+87: U 8: break finished
+88: U 8: going home
+89: U 10: break finished
+90: U 10: going home
+91: U 13: break finished
+92: U 13: going home
+93: U 14: break finished
+94: U 14: going home
+95: U 15: break finished
+96: U 15: going home
+97: U 18: break finished
+98: U 18: going home
+99: U 11: break finished
+100: U 11: going home
+101: U 24: break finished
+102: U 24: going home
+103: U 19: break finished
+104: U 17: break finished
+105: U 17: going home
+106: U 19: going home
+107: U 1: break finished
+108: U 1: going home
+109: U 21: break finished
+110: U 21: going home
+111: U 22: break finished
+112: U 22: going home
+113: U 16: break finished
+114: U 16: going home
+115: U 4: break finished
+116: U 4: going home
+117: U 12: break finished
+118: U 12: going home
+119: U 25: break finished
+120: U 25: going home
+121: U 23: break finished
+122: U 23: going home
+123: U 9: break finished
+124: U 20: break finished
+125: U 6: break finished
+126: U 6: going home
+127: U 9: going home
+128: U 20: going home
+129: Z 10: going home
+130: Z 7: going home
+131: Z 16: going home
+132: Z 2: going home
+133: Z 3: going home
+134: Z 1: going home
+135: Z 12: going home
+136: Z 18: going home
+137: Z 13: going home

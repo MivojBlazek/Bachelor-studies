@@ -24,7 +24,7 @@
 struct Post{
     sem_t mutex;
     sem_t urednik_sem[3];
-    sem_t urednik_sem_done[3]; //? not sure
+    sem_t urednik_sem_done[3];
     unsigned int operation_num;
     unsigned int service_num[3];
     unsigned int post_open;
@@ -108,13 +108,14 @@ void zakaznik(int id, struct Post *post_office)
     usleep(rand() % (uTZ + 1)); //random number from 0 to uTZ
 
 
+    sem_wait(&post_office->mutex);
     if (post_office->post_open)
     {
         //post is open
         srand(time(0) + id * 777);
         unsigned int service = rand() % 3;
 
-        sem_wait(&post_office->mutex);
+        //!sem_wait(&post_office->mutex);
         post_office->service_num[service]++;
         fprintf(file, "%d: Z %d: entering office for a service %d\n", post_office->operation_num++, id, service + 1);
         sem_post(&post_office->mutex);
@@ -129,11 +130,18 @@ void zakaznik(int id, struct Post *post_office)
         unsigned int waiting = rand() % 11; //random number from 0 to 10
         usleep(waiting);
 
-        sem_wait(&post_office->urednik_sem_done[service]); //? not sure
+        sem_wait(&post_office->urednik_sem_done[service]);
+
+        sem_wait(&post_office->mutex);
+        fprintf(file, "%d: Z %d: going home\n", post_office->operation_num++, id);
+        sem_post(&post_office->mutex);
     }
-    sem_wait(&post_office->mutex);
-    fprintf(file, "%d: Z %d: going home\n", post_office->operation_num++, id);
-    sem_post(&post_office->mutex);
+    else
+    {
+        //post is not open
+        fprintf(file, "%d: Z %d: going home\n", post_office->operation_num++, id);
+        sem_post(&post_office->mutex);
+    }
     exit(0);
 }
 
@@ -145,10 +153,10 @@ void urednik(int id, struct Post *post_office)
     sem_post(&post_office->mutex);
     while(1)
     {
+        sem_wait(&post_office->mutex);
         if (post_office->service_num[0] || post_office->service_num[1] || post_office->service_num[2])
         {
             //ceka zakaznik -> bude se obsluhovat
-            sem_wait(&post_office->mutex);
             unsigned int service;
             if (post_office->service_num[0])
             {
@@ -171,7 +179,7 @@ void urednik(int id, struct Post *post_office)
             unsigned int waiting = rand() % 11; //random number from 0 to 10
             usleep(waiting);
 
-            sem_post(&post_office->urednik_sem_done[service]); //? not sure
+            sem_post(&post_office->urednik_sem_done[service]);
 
             sem_wait(&post_office->mutex);
             fprintf(file, "%d: U %d: service finished\n", post_office->operation_num++, id);
@@ -181,7 +189,6 @@ void urednik(int id, struct Post *post_office)
         else if (post_office->post_open)
         {
             //urednik si bere prestavku
-            sem_wait(&post_office->mutex);
             fprintf(file, "%d: U %d: taking break\n", post_office->operation_num++, id);
             sem_post(&post_office->mutex);
 
@@ -197,6 +204,7 @@ void urednik(int id, struct Post *post_office)
         else //post not open
         {
             //urednik jde domu
+            sem_post(&post_office->mutex);
             break;
         }
     }

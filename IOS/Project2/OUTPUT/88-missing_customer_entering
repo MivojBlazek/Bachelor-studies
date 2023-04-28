@@ -1,0 +1,335 @@
+1: Z 1: started
+2: Z 3: started
+3: Z 4: started
+4: Z 2: started
+5: Z 7: started
+6: Z 5: started
+7: Z 9: started
+8: Z 6: started
+9: Z 11: started
+10: Z 12: started
+11: Z 13: started
+12: Z 14: started
+13: Z 10: started
+14: Z 8: started
+15: Z 17: started
+16: Z 18: started
+17: U 1: started
+18: U 1: taking break
+19: Z 16: started
+20: U 4: started
+21: U 4: taking break
+22: U 3: started
+23: U 3: taking break
+24: U 2: started
+25: U 2: taking break
+26: U 9: started
+27: U 10: started
+28: U 8: started
+29: U 12: started
+30: U 8: taking break
+31: U 12: taking break
+32: U 13: started
+33: U 7: started
+34: U 15: started
+35: U 10: taking break
+36: U 5: started
+37: U 5: taking break
+38: U 6: started
+39: U 6: taking break
+40: U 13: taking break
+41: U 11: started
+42: U 11: taking break
+43: U 9: taking break
+44: U 15: taking break
+45: Z 15: started
+46: U 7: taking break
+47: U 14: started
+48: U 14: taking break
+49: U 1: break finished
+50: U 1: taking break
+51: U 4: break finished
+52: U 4: taking break
+53: U 3: break finished
+54: U 3: taking break
+55: U 2: break finished
+56: U 2: taking break
+57: U 8: break finished
+58: U 8: taking break
+59: U 12: break finished
+60: U 12: taking break
+61: U 10: break finished
+62: U 10: taking break
+63: U 5: break finished
+64: U 5: taking break
+65: U 6: break finished
+66: U 6: taking break
+67: U 13: break finished
+68: U 13: taking break
+69: U 11: break finished
+70: U 11: taking break
+71: U 9: break finished
+72: U 9: taking break
+73: U 15: break finished
+74: U 15: taking break
+75: U 7: break finished
+76: U 7: taking break
+77: U 14: break finished
+78: U 14: taking break
+79: U 1: break finished
+80: U 1: taking break
+81: U 4: break finished
+82: U 3: break finished
+83: U 3: taking break
+84: U 4: taking break
+85: U 2: break finished
+86: U 2: taking break
+87: U 8: break finished
+88: U 8: taking break
+89: U 12: break finished
+90: U 12: taking break
+91: U 5: break finished
+92: U 5: taking break
+93: U 10: break finished
+94: U 10: taking break
+95: U 6: break finished
+96: U 6: taking break
+97: U 9: break finished
+98: U 9: taking break
+99: U 13: break finished
+100: U 13: taking break
+101: U 11: break finished
+102: U 11: taking break
+103: U 7: break finished
+104: U 7: taking break
+105: U 15: break finished
+106: U 15: taking break
+107: U 14: break finished
+108: U 14: taking break
+109: U 1: break finished
+110: U 1: taking break
+111: U 3: break finished
+112: U 3: taking break
+113: U 4: break finished
+114: U 4: taking break
+115: U 2: break finished
+116: U 2: taking break
+117: U 8: break finished
+118: U 8: taking break
+119: U 12: break finished
+120: U 12: taking break
+121: U 5: break finished
+122: U 5: taking break
+123: U 10: break finished
+124: U 10: taking break
+125: U 6: break finished
+126: U 6: taking break
+127: U 13: break finished
+128: U 9: break finished
+129: U 9: taking break
+130: U 11: break finished
+131: U 11: taking break
+132: U 13: taking break
+133: U 7: break finished
+134: U 7: taking break
+135: U 15: break finished
+136: U 15: taking break
+137: U 14: break finished
+138: U 14: taking break
+139: U 1: break finished
+140: U 1: taking break
+141: U 3: break finished
+142: U 3: taking break
+143: U 2: break finished
+144: U 2: taking break
+145: U 4: break finished
+146: U 4: taking break
+147: U 8: break finished
+148: U 8: taking break
+149: U 12: break finished
+150: U 12: taking break
+151: U 5: break finished
+152: U 5: taking break
+153: U 10: break finished
+154: U 10: taking break
+155: U 6: break finished
+156: U 6: taking break
+157: U 11: break finished
+158: U 11: taking break
+159: U 13: break finished
+160: U 13: taking break
+161: U 9: break finished
+162: U 9: taking break
+163: U 7: break finished
+164: U 7: taking break
+165: U 15: break finished
+166: U 15: taking break
+167: U 14: break finished
+168: U 14: taking break
+169: U 1: break finished
+170: U 1: taking break
+171: U 3: break finished
+172: U 3: taking break
+173: U 2: break finished
+174: U 2: taking break
+175: U 4: break finished
+176: U 4: taking break
+177: U 8: break finished
+178: U 8: taking break
+179: U 12: break finished
+180: U 12: taking break
+181: U 5: break finished
+182: U 5: taking break
+183: U 10: break finished
+184: U 10: taking break
+185: U 6: break finished
+186: U 6: taking break
+187: U 9: break finished
+188: U 13: break finished
+189: U 11: break finished
+190: U 7: break finished
+191: U 9: taking break
+192: U 7: taking break
+193: U 13: taking break
+194: U 15: break finished
+195: U 15: taking break
+196: U 11: taking break
+197: U 14: break finished
+198: U 14: taking break
+199: U 1: break finished
+200: U 1: taking break
+201: U 3: break finished
+202: U 4: break finished
+203: U 2: break finished
+204: U 3: taking break
+205: U 2: taking break
+206: U 4: taking break
+207: U 8: break finished
+208: U 8: taking break
+209: U 12: break finished
+210: U 12: taking break
+211: U 5: break finished
+212: U 5: taking break
+213: U 10: break finished
+214: U 10: taking break
+215: U 6: break finished
+216: U 6: taking break
+217: U 9: break finished
+218: U 9: taking break
+219: U 7: break finished
+220: U 7: taking break
+221: U 15: break finished
+222: U 11: break finished
+223: U 11: taking break
+224: U 13: break finished
+225: U 13: taking break
+226: U 15: taking break
+227: U 14: break finished
+228: U 14: taking break
+229: U 1: break finished
+230: U 1: taking break
+231: U 3: break finished
+232: U 3: taking break
+233: U 2: break finished
+234: U 2: taking break
+235: U 4: break finished
+236: U 4: taking break
+237: U 8: break finished
+238: U 8: taking break
+239: U 12: break finished
+240: U 12: taking break
+241: U 5: break finished
+242: U 5: taking break
+243: U 10: break finished
+244: U 10: taking break
+245: U 6: break finished
+246: U 6: taking break
+247: U 9: break finished
+248: U 9: taking break
+249: U 13: break finished
+250: U 13: taking break
+251: U 11: break finished
+252: U 7: break finished
+253: U 11: taking break
+254: U 15: break finished
+255: U 15: taking break
+256: U 14: break finished
+257: U 14: taking break
+258: U 1: break finished
+259: U 1: taking break
+260: U 7: taking break
+261: U 3: break finished
+262: U 3: taking break
+263: U 2: break finished
+264: U 2: taking break
+265: U 4: break finished
+266: U 4: taking break
+267: U 8: break finished
+268: U 8: taking break
+269: U 12: break finished
+270: U 12: taking break
+271: U 5: break finished
+272: U 5: taking break
+273: U 10: break finished
+274: U 10: taking break
+275: U 6: break finished
+276: U 6: taking break
+277: U 9: break finished
+278: U 9: taking break
+279: U 13: break finished
+280: U 13: taking break
+281: U 11: break finished
+282: U 11: taking break
+283: U 14: break finished
+284: U 14: taking break
+285: U 15: break finished
+286: U 15: taking break
+287: U 1: break finished
+288: closing
+289: U 1: going home
+290: U 7: break finished
+291: U 7: going home
+292: U 3: break finished
+293: U 3: going home
+294: U 2: break finished
+295: U 4: break finished
+296: U 4: going home
+297: U 2: going home
+298: U 8: break finished
+299: U 8: going home
+300: U 12: break finished
+301: U 12: going home
+302: U 5: break finished
+303: U 5: going home
+304: U 6: break finished
+305: U 6: going home
+306: U 10: break finished
+307: U 10: going home
+308: U 9: break finished
+309: U 9: going home
+310: U 13: break finished
+311: U 13: going home
+312: U 11: break finished
+313: U 11: going home
+314: U 14: break finished
+315: U 14: going home
+316: U 15: break finished
+317: U 15: going home
+318: Z 4: going home
+319: Z 3: going home
+320: Z 15: going home
+321: Z 8: going home
+322: Z 18: going home
+323: Z 16: going home
+324: Z 17: going home
+325: Z 6: going home
+326: Z 10: going home
+327: Z 14: going home
+328: Z 7: going home
+329: Z 2: going home
+330: Z 13: going home
+331: Z 12: going home
+332: Z 5: going home
+333: Z 1: going home
+334: Z 11: going home
+335: Z 9: going home
