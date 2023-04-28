@@ -115,7 +115,6 @@ void zakaznik(int id, struct Post *post_office)
         srand(time(0) + id * 777);
         unsigned int service = rand() % 3;
 
-        //!sem_wait(&post_office->mutex);
         post_office->service_num[service]++;
         fprintf(file, "%d: Z %d: entering office for a service %d\n", post_office->operation_num++, id, service + 1);
         sem_post(&post_office->mutex);
