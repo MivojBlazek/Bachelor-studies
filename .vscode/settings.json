@@ -26,7 +26,8 @@
         "stop_token": "cpp",
         "streambuf": "cpp",
         "regex": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "proj2.h": "c"
     },
     "C_Cpp.default.cStandard": "",
     "cmake.configureOnOpen": false

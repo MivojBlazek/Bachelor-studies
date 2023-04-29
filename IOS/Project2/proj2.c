@@ -1,34 +1,11 @@
 /*
 *
 * login: xblaze38
-* last change: 28.4.2023
+* last change: 29.4.2023
 *
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <signal.h>
-#include <semaphore.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <limits.h>
-#include <sys/mman.h>
-#include <time.h>
-#include <ctype.h>
-
-struct Post{
-    sem_t mutex;
-    sem_t urednik_sem[3];
-    sem_t urednik_sem_done[3];
-    unsigned int operation_num;
-    unsigned int service_num[3];
-    unsigned int post_open;
-};
+#include "proj2.h"
 
 
 FILE *file;
@@ -460,6 +437,5 @@ int main(int argc, char *argv[])
     munmap(post_office, sizeof(struct Post));
 
     fclose(file);
-    exit(0);
     return 0;
 }
