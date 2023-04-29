@@ -6,30 +6,122 @@
  */
 
 #include <student/gpu.hpp>
-
+#include <stdio.h> //! test
 
 struct Triangle{
   OutVertex points[3];
 };
 
 
-void loadVertex(InVertex inVertex, VertexArray const &vao, uint32_t tId_i){
-  //TODO
+float max(float a, float b, float c){
+  float max = a;
+  if (b > max)
+  {
+    max = b;
+  }
+  if (c > max)
+  {
+    max = c;
+  }
+  return max;
 }
 
 
-void loadTriangle(Triangle &triangle, Program const &prg, VertexArray const &vao, uint32_t tId, ShaderInterface si){
-  for(uint32_t i = 0; i < tId; i++) // smyčka přes vrcholy trojúhelníku
+float min(float a, float b, float c){
+  float min = a;
+  if (b < min)
   {
-    InVertex inVertex;
-    loadVertex(inVertex, vao, tId+i);
-    prg.vertexShader(triangle.points[i], inVertex, si);
+    min = b;
+  }
+  if (c < min)
+  {
+    min = c;
+  }
+  return min;
+}
+
+//asi zbytecna funkce
+float area(float x1, float y1, float x2, float y2, float x3, float y3)
+{
+  return abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
+}
+
+
+void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg, DrawCommand cmd, ShaderInterface si){
+  glm::vec3 point[3];
+  for (uint32_t i = 0; i < 3; i++)
+  {
+    /* Perspektivni deleni */
+    point[i].x = triangle.points[i].gl_Position.x / triangle.points[i].gl_Position.w;
+    point[i].y = triangle.points[i].gl_Position.y / triangle.points[i].gl_Position.w;
+    point[i].z = triangle.points[i].gl_Position.z / triangle.points[i].gl_Position.w;
+    
+    /* View-port transformace */
+    point[i].x = (point[i].x + 1) * (framebuffer.width / 2);
+    point[i].y = (point[i].y + 1) * (framebuffer.height / 2);
+    point[i].x = round(point[i].x); //? not sure
+    point[i].y = round(point[i].y); //? not sure
+    point[i].z = round(point[i].z); //? not sure
+    //fprintf(stderr, "\n-------------\n%f, %f, %f\n", point[i].x, point[i].y, point[i].z); //! test
+  }
+
+
+  uint32_t min_x = (uint32_t) min(point[0].x, point[1].x, point[2].x);
+  uint32_t max_x = (uint32_t) max(point[0].x, point[1].x, point[2].x);
+  uint32_t min_y = (uint32_t) min(point[0].y, point[1].y, point[2].y);
+  uint32_t max_y = (uint32_t) max(point[0].y, point[1].y, point[2].y);
+  if ((max_x - min_x) > framebuffer.width)
+  {
+    min_x = 0;
+    max_x = framebuffer.width;
+  }
+  if ((max_y - min_y) > framebuffer.height)
+  {
+    min_y = 0;
+    max_y = framebuffer.height;
+  }
+  //fprintf(stderr, "\n----min max-----\n%d, %d, %d, %d\n", min_x, max_x, min_y, max_y); //! test
+
+  int flag = 0;
+  if (cmd.backfaceCulling)
+  {
+    //zahodit, kdyz je trojuhelnik clockwise
+    float area = (point[1].x - point[0].x) * (point[2].y - point[0].y) - (point[2].x - point[0].x) * (point[1].y - point[0].y);
+    if (area < 0)
+    {
+      flag = 1;
+    }
+  }
+
+  for (uint32_t x = min_x; x <= max_x; x++)
+  {
+    for (uint32_t y = min_y; y <= max_y; y++)
+    {
+      // float A = area(point[0].x, point[0].y, point[1].x, point[1].y, point[2].x, point[2].y);
+      // float A1 = area(x, y, point[1].x, point[1].y, point[2].x, point[2].y);
+      // float A2 = area(point[0].x, point[0].y, x, y, point[2].x, point[2].y);
+      // float A3 = area(point[0].x, point[0].y, point[1].x, point[1].y, x, y);
+      // v tomto pripade je navic i area()
+
+      float u = ((point[1].y - point[2].y) * (x - point[2].x) + (point[2].x - point[1].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
+      float v = ((point[2].y - point[0].y) * (x - point[2].x) + (point[0].x - point[2].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
+      float w = 1 - u - v;
+      
+      // if (A == A1 + A2 + A3)
+      if (u >= 0 && v >= 0 && w >= 0 && !flag)
+      {
+        InFragment inFragment;
+        OutFragment outFragment;
+        prg.fragmentShader(outFragment, inFragment, si);
+      }
+    }
   }
 }
 
 
 void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
   Program prg = mem.programs[cmd.programID];
+  Triangle triangle;
 
   for (uint32_t i = 0; i < cmd.nofVertices; i++)
   {
@@ -109,14 +201,11 @@ void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
       }
     }
     prg.vertexShader(outVertex, inVertex, si);
-
-    if (cmd.backfaceCulling)
+    
+    triangle.points[i % 3] = outVertex; //! problem u vice draw commandu imo (not sure jestli " % 3" to fixne)
+    if (i % 3 == 2)
     {
-      
-    }
-    else
-    {
-      
+      rasterize(mem.framebuffer, triangle, prg, cmd, si);
     }
   }
 }
