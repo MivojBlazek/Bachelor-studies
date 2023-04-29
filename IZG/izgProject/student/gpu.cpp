@@ -49,12 +49,17 @@ float area(float x1, float y1, float x2, float y2, float x3, float y3)
 
 void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg, DrawCommand cmd, ShaderInterface si){
   glm::vec3 point[3];
+  glm::vec3 point2[3];
   for (uint32_t i = 0; i < 3; i++)
   {
     /* Perspektivni deleni */
     point[i].x = triangle.points[i].gl_Position.x / triangle.points[i].gl_Position.w;
     point[i].y = triangle.points[i].gl_Position.y / triangle.points[i].gl_Position.w;
     point[i].z = triangle.points[i].gl_Position.z / triangle.points[i].gl_Position.w;
+
+    point2[i].x = triangle.points[i].gl_Position.x / triangle.points[i].gl_Position.w;
+    point2[i].y = triangle.points[i].gl_Position.y / triangle.points[i].gl_Position.w;
+    point2[i].z = triangle.points[i].gl_Position.z / triangle.points[i].gl_Position.w;
     
     /* View-port transformace */
     point[i].x = (point[i].x + 1) * (framebuffer.width / 2);
@@ -108,11 +113,7 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
 
         inFragment.gl_FragCoord.x = (float)((float)x + 0.5);
         inFragment.gl_FragCoord.y = (float)((float)y + 0.5);
-        //fprintf(stderr, "\n-------\n%f, %f\n", inFragment.gl_FragCoord.x, inFragment.gl_FragCoord.y); //! test
         
-        if (inFragment.gl_FragCoord.x == 1.5 && inFragment.gl_FragCoord.y < 11) //! test
-          fprintf(stderr, "\nooooooooooooooo\n%f, %f, %f\n", u, v, w); //! test
-
         /*float A = area(triangle.points[0].gl_Position.x, triangle.points[0].gl_Position.y, triangle.points[1].gl_Position.x, triangle.points[1].gl_Position.y, triangle.points[2].gl_Position.x, triangle.points[2].gl_Position.y);
         float A0 = area(x, y, triangle.points[1].gl_Position.x, triangle.points[1].gl_Position.y, triangle.points[2].gl_Position.x, triangle.points[2].gl_Position.y);
         float A1 = area(triangle.points[0].gl_Position.x, triangle.points[0].gl_Position.y, x, y, triangle.points[2].gl_Position.x, triangle.points[2].gl_Position.y);
@@ -121,7 +122,7 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         float lambda1 = A1 / A;
         float lambda2 = A2 / A;*/
 
-        inFragment.gl_FragCoord.z = (point[0].z * u + point[1].z * v + point[2].z * w) * 0.9;
+        inFragment.gl_FragCoord.z = (point2[0].z * u + point2[1].z * v + point2[2].z * w);
         
         prg.fragmentShader(outFragment, inFragment, si);
       }
