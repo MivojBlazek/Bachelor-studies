@@ -163,6 +163,16 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         }
 
         prg.fragmentShader(outFragment, inFragment, si);
+
+        
+        // PFO
+        // depth test
+        float depth = outFragment.gl_FragColor.z;
+        if (framebuffer.depth[x + y] > depth) //? not sure s x * y
+        {
+          framebuffer.depth[x + y] = depth; //? not sure s x * y
+          framebuffer.color = (uint8_t *)((uint8_t)outFragment.gl_FragColor.x); //! PSEUDOKOD
+        }
       }
     }
   }
