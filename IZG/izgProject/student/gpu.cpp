@@ -102,28 +102,66 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
   {
     for (uint32_t y = min_y; y <= max_y; y++)
     {
-      float u = ((point[1].y - point[2].y) * (x - point[2].x) + (point[2].x - point[1].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
-      float v = ((point[2].y - point[0].y) * (x - point[2].x) + (point[0].x - point[2].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
-      float w = 1 - u - v;
+      float l0 = ((point[1].y - point[2].y) * (x - point[2].x) + (point[2].x - point[1].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
+      float l1 = ((point[2].y - point[0].y) * (x - point[2].x) + (point[0].x - point[2].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
+      float l2 = 1 - l0 - l1;
       
-      if (u > 0 && v > 0 && w >= 0 && !flag) //? >= >=
+      if (l0 > 0 && l1 >= 0 && l2 >= 0 && !flag) //? >= >=
       {
         InFragment inFragment;
         OutFragment outFragment;
 
         inFragment.gl_FragCoord.x = (float)((float)x + 0.5);
         inFragment.gl_FragCoord.y = (float)((float)y + 0.5);
-        
-        /*float A = area(triangle.points[0].gl_Position.x, triangle.points[0].gl_Position.y, triangle.points[1].gl_Position.x, triangle.points[1].gl_Position.y, triangle.points[2].gl_Position.x, triangle.points[2].gl_Position.y);
-        float A0 = area(x, y, triangle.points[1].gl_Position.x, triangle.points[1].gl_Position.y, triangle.points[2].gl_Position.x, triangle.points[2].gl_Position.y);
-        float A1 = area(triangle.points[0].gl_Position.x, triangle.points[0].gl_Position.y, x, y, triangle.points[2].gl_Position.x, triangle.points[2].gl_Position.y);
-        float A2 = area(triangle.points[0].gl_Position.x, triangle.points[0].gl_Position.y, triangle.points[1].gl_Position.x, triangle.points[1].gl_Position.y, x, y);
-        float lambda0 = A0 / A;
-        float lambda1 = A1 / A;
-        float lambda2 = A2 / A;*/
 
-        inFragment.gl_FragCoord.z = (point2[0].z * u + point2[1].z * v + point2[2].z * w);
-        
+        inFragment.gl_FragCoord.z = (point2[0].z * l0 + point2[1].z * l1 + point2[2].z * l2);
+      
+
+        //for interpolate color of pixel we use center of it
+        float l0 = ((point[1].y - point[2].y) * (inFragment.gl_FragCoord.x - point[2].x) + (point[2].x - point[1].x) * (inFragment.gl_FragCoord.y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
+        float l1 = ((point[2].y - point[0].y) * (inFragment.gl_FragCoord.x - point[2].x) + (point[0].x - point[2].x) * (inFragment.gl_FragCoord.y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
+        float l2 = 1 - l0 - l1;
+
+        float h0 = triangle.points[0].gl_Position.w;
+        float h1 = triangle.points[1].gl_Position.w;
+        float h2 = triangle.points[2].gl_Position.w;
+
+        float s = l0 / h0 + l1 / h1 + l2 / h2;
+        //fprintf(stderr, "\n--- %f ----\n", s); //! test
+
+        float new_l0 = l0 / (h0 * s);
+        float new_l1 = l1 / (h1 * s);
+        float new_l2 = l2 / (h2 * s);
+        //fprintf(stderr, "\n-------\n%f, %f, %f\n", new_l0, new_l1, new_l2); //! test
+
+        AttributeType frType = prg.vs2fs[0];
+        if (frType != AttributeType::EMPTY)
+        {
+          if (frType == AttributeType::FLOAT)
+          {
+            //TODO
+          }
+          else if (frType == AttributeType::VEC2)
+          {
+            //TODO
+          }
+          else if (frType == AttributeType::VEC3)
+          {
+            glm::vec3 vAttrib1 = triangle.points[0].attributes[0].v3;
+            glm::vec3 vAttrib2 = triangle.points[1].attributes[0].v3;
+            glm::vec3 vAttrib3 = triangle.points[2].attributes[0].v3;
+            inFragment.attributes[0].v3 = vAttrib1 * new_l0 + vAttrib2 * new_l1 + vAttrib3 * new_l2;
+          }
+          else if (frType == AttributeType::VEC4)
+          {
+            //TODO
+          }
+          else // (frType == AttributeType::UINT/UVEC2/UVEC3/UVEC4)
+          {
+            //TODO
+          }
+        }
+
         prg.fragmentShader(outFragment, inFragment, si);
       }
     }
@@ -208,7 +246,7 @@ void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
         }
         else // (vaType == AttributeType::UINT/UVEC2/UVEC3/UVEC4)
         {
-          //TODO dodelat asi
+          //TODO
         }
       }
     }
