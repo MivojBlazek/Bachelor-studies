@@ -73,12 +73,12 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
   if ((max_x - min_x) > framebuffer.width)
   {
     min_x = 0;
-    max_x = framebuffer.width;
+    max_x = framebuffer.width - 1;
   }
   if ((max_y - min_y) > framebuffer.height)
   {
     min_y = 0;
-    max_y = framebuffer.height;
+    max_y = framebuffer.height - 1;
   }
   //fprintf(stderr, "\n----min max-----\n%d, %d, %d, %d\n", min_x, max_x, min_y, max_y); //! test
 
@@ -97,21 +97,32 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
   {
     for (uint32_t y = min_y; y <= max_y; y++)
     {
-      // float A = area(point[0].x, point[0].y, point[1].x, point[1].y, point[2].x, point[2].y);
-      // float A1 = area(x, y, point[1].x, point[1].y, point[2].x, point[2].y);
-      // float A2 = area(point[0].x, point[0].y, x, y, point[2].x, point[2].y);
-      // float A3 = area(point[0].x, point[0].y, point[1].x, point[1].y, x, y);
-      // v tomto pripade je navic i area()
-
       float u = ((point[1].y - point[2].y) * (x - point[2].x) + (point[2].x - point[1].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
       float v = ((point[2].y - point[0].y) * (x - point[2].x) + (point[0].x - point[2].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
       float w = 1 - u - v;
       
-      // if (A == A1 + A2 + A3)
-      if (u >= 0 && v >= 0 && w >= 0 && !flag)
+      if (u > 0 && v > 0 && w >= 0 && !flag) //? >= >=
       {
         InFragment inFragment;
         OutFragment outFragment;
+
+        inFragment.gl_FragCoord.x = (float)((float)x + 0.5);
+        inFragment.gl_FragCoord.y = (float)((float)y + 0.5);
+        //fprintf(stderr, "\n-------\n%f, %f\n", inFragment.gl_FragCoord.x, inFragment.gl_FragCoord.y); //! test
+        
+        if (inFragment.gl_FragCoord.x == 1.5 && inFragment.gl_FragCoord.y < 11) //! test
+          fprintf(stderr, "\nooooooooooooooo\n%f, %f, %f\n", u, v, w); //! test
+
+        /*float A = area(triangle.points[0].gl_Position.x, triangle.points[0].gl_Position.y, triangle.points[1].gl_Position.x, triangle.points[1].gl_Position.y, triangle.points[2].gl_Position.x, triangle.points[2].gl_Position.y);
+        float A0 = area(x, y, triangle.points[1].gl_Position.x, triangle.points[1].gl_Position.y, triangle.points[2].gl_Position.x, triangle.points[2].gl_Position.y);
+        float A1 = area(triangle.points[0].gl_Position.x, triangle.points[0].gl_Position.y, x, y, triangle.points[2].gl_Position.x, triangle.points[2].gl_Position.y);
+        float A2 = area(triangle.points[0].gl_Position.x, triangle.points[0].gl_Position.y, triangle.points[1].gl_Position.x, triangle.points[1].gl_Position.y, x, y);
+        float lambda0 = A0 / A;
+        float lambda1 = A1 / A;
+        float lambda2 = A2 / A;*/
+
+        inFragment.gl_FragCoord.z = (point[0].z * u + point[1].z * v + point[2].z * w) * 0.9;
+        
         prg.fragmentShader(outFragment, inFragment, si);
       }
     }
