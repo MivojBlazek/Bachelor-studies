@@ -98,9 +98,9 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
     }
   }
 
-  for (uint32_t x = min_x; x <= max_x; x++)
+  for (uint32_t y = min_y; y <= max_y; y++)
   {
-    for (uint32_t y = min_y; y <= max_y; y++)
+    for (uint32_t x = min_x; x <= max_x; x++)
     {
       float l0 = ((point[1].y - point[2].y) * (x - point[2].x) + (point[2].x - point[1].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
       float l1 = ((point[2].y - point[0].y) * (x - point[2].x) + (point[0].x - point[2].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
@@ -168,13 +168,14 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         // PFO
         // depth test
         float depth = inFragment.gl_FragCoord.z;
-        if (framebuffer.depth[(uint8_t)(inFragment.gl_FragCoord.x * inFragment.gl_FragCoord.y + inFragment.gl_FragCoord.x)] > depth) //? pixel incrementation incorrect
+        if (framebuffer.depth[y * framebuffer.width + x] > depth) //? pixel incrementation incorrect
         {
-          framebuffer.depth[(uint8_t)(inFragment.gl_FragCoord.x * inFragment.gl_FragCoord.y + inFragment.gl_FragCoord.x)] = depth;
+
+          framebuffer.depth[y * framebuffer.width + x] = depth;
           
-          framebuffer.color[(uint8_t)((inFragment.gl_FragCoord.x * inFragment.gl_FragCoord.y + inFragment.gl_FragCoord.x))] = (uint8_t)(outFragment.gl_FragColor.x * 255.f);
-          framebuffer.color[(uint8_t)((inFragment.gl_FragCoord.x * inFragment.gl_FragCoord.y + inFragment.gl_FragCoord.x) + 1)] = (uint8_t)(outFragment.gl_FragColor.y * 255.f);
-          framebuffer.color[(uint8_t)((inFragment.gl_FragCoord.x * inFragment.gl_FragCoord.y + inFragment.gl_FragCoord.x) + 2)] = (uint8_t)(outFragment.gl_FragColor.z * 255.f);
+          framebuffer.color[(y * framebuffer.width + x) * 4] = (uint8_t)(outFragment.gl_FragColor.x * 255.f);
+          framebuffer.color[(y * framebuffer.width + x) * 4 + 1] = (uint8_t)(outFragment.gl_FragColor.y * 255.f);
+          framebuffer.color[(y * framebuffer.width + x) * 4 + 2] = (uint8_t)(outFragment.gl_FragColor.z * 255.f);
         }
       }
     }
