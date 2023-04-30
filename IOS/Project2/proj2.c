@@ -118,6 +118,7 @@ void zakaznik(int id, struct Post *post_office)
         fprintf(file, "%d: Z %d: going home\n", post_office->operation_num++, id);
         sem_post(&post_office->mutex);
     }
+    fclose(file);
     exit(0);
 }
 
@@ -187,6 +188,7 @@ void urednik(int id, struct Post *post_office)
     sem_wait(&post_office->mutex);
     fprintf(file, "%d: U %d: going home\n", post_office->operation_num++, id);
     sem_post(&post_office->mutex);
+    fclose(file);
     exit(0);
 }
 

@@ -1,0 +1,93 @@
+1: Z 1: started
+2: U 1: started
+3: U 2: started
+4: U 2: taking break
+5: U 1: taking break
+6: U 3: started
+7: U 4: started
+8: U 5: started
+9: U 5: taking break
+10: U 6: started
+11: U 6: taking break
+12: U 3: taking break
+13: Z 2: started
+14: U 7: started
+15: U 7: taking break
+16: U 4: taking break
+17: U 8: started
+18: U 8: taking break
+19: U 9: started
+20: U 9: taking break
+21: U 10: started
+22: U 10: taking break
+23: U 11: started
+24: U 11: taking break
+25: U 12: started
+26: U 12: taking break
+27: U 13: started
+28: U 13: taking break
+29: U 14: started
+30: U 16: started
+31: U 15: started
+32: U 18: started
+33: U 18: taking break
+34: U 17: started
+35: U 21: started
+36: U 21: taking break
+37: U 16: taking break
+38: U 19: started
+39: U 19: taking break
+40: U 20: started
+41: U 20: taking break
+42: U 15: taking break
+43: U 22: started
+44: U 22: taking break
+45: U 17: taking break
+46: U 14: taking break
+47: closing
+48: U 2: break finished
+49: U 2: going home
+50: U 1: break finished
+51: U 1: going home
+52: U 5: break finished
+53: U 5: going home
+54: U 6: break finished
+55: U 6: going home
+56: U 3: break finished
+57: U 3: going home
+58: U 7: break finished
+59: U 7: going home
+60: U 4: break finished
+61: U 8: break finished
+62: Z 2: going home
+63: U 8: going home
+64: U 9: break finished
+65: U 9: going home
+66: U 4: going home
+67: U 10: break finished
+68: U 10: going home
+69: U 11: break finished
+70: U 11: going home
+71: U 12: break finished
+72: U 12: going home
+73: U 13: break finished
+74: U 13: going home
+75: U 18: break finished
+76: U 18: going home
+77: U 21: break finished
+78: U 21: going home
+79: U 16: break finished
+80: U 16: going home
+81: U 19: break finished
+82: U 19: going home
+83: U 20: break finished
+84: U 20: going home
+85: U 15: break finished
+86: U 15: going home
+87: U 17: break finished
+88: U 17: going home
+89: U 14: break finished
+90: U 14: going home
+91: U 22: break finished
+92: U 22: going home
+93: Z 1: going home
