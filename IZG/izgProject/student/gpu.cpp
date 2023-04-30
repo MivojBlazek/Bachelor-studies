@@ -167,11 +167,14 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         
         // PFO
         // depth test
-        float depth = outFragment.gl_FragColor.z;
-        if (framebuffer.depth[x + y] > depth) //? not sure s x * y
+        float depth = inFragment.gl_FragCoord.z;
+        if (framebuffer.depth[(uint8_t)(inFragment.gl_FragCoord.x * inFragment.gl_FragCoord.y + inFragment.gl_FragCoord.x)] > depth) //? pixel incrementation incorrect
         {
-          framebuffer.depth[x + y] = depth; //? not sure s x * y
-          framebuffer.color = (uint8_t *)((uint8_t)outFragment.gl_FragColor.x); //! PSEUDOKOD
+          framebuffer.depth[(uint8_t)(inFragment.gl_FragCoord.x * inFragment.gl_FragCoord.y + inFragment.gl_FragCoord.x)] = depth;
+          
+          framebuffer.color[(uint8_t)((inFragment.gl_FragCoord.x * inFragment.gl_FragCoord.y + inFragment.gl_FragCoord.x))] = (uint8_t)(outFragment.gl_FragColor.x * 255.f);
+          framebuffer.color[(uint8_t)((inFragment.gl_FragCoord.x * inFragment.gl_FragCoord.y + inFragment.gl_FragCoord.x) + 1)] = (uint8_t)(outFragment.gl_FragColor.y * 255.f);
+          framebuffer.color[(uint8_t)((inFragment.gl_FragCoord.x * inFragment.gl_FragCoord.y + inFragment.gl_FragCoord.x) + 2)] = (uint8_t)(outFragment.gl_FragColor.z * 255.f);
         }
       }
     }
