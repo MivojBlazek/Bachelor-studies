@@ -168,14 +168,26 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         // PFO
         // depth test
         float depth = inFragment.gl_FragCoord.z;
-        if (framebuffer.depth[y * framebuffer.width + x] > depth) //? pixel incrementation incorrect
-        {
 
-          framebuffer.depth[y * framebuffer.width + x] = depth;
-          
-          framebuffer.color[(y * framebuffer.width + x) * 4] = (uint8_t)(outFragment.gl_FragColor.x * 255.f);
-          framebuffer.color[(y * framebuffer.width + x) * 4 + 1] = (uint8_t)(outFragment.gl_FragColor.y * 255.f);
-          framebuffer.color[(y * framebuffer.width + x) * 4 + 2] = (uint8_t)(outFragment.gl_FragColor.z * 255.f);
+        //blending
+        float alpha = outFragment.gl_FragColor.a;
+        
+        uint32_t inc = y * framebuffer.width + x;
+        if (framebuffer.depth[inc] > depth)
+        {
+          framebuffer.depth[inc] = depth;
+
+          framebuffer.color[inc * 4] = (uint8_t)(outFragment.gl_FragColor.r * 255.f);
+          framebuffer.color[inc * 4 + 1] = (uint8_t)(outFragment.gl_FragColor.g * 255.f);
+          framebuffer.color[inc * 4 + 2] = (uint8_t)(outFragment.gl_FragColor.b * 255.f);
+
+          //! Test 18 not working
+          //! Test 19 not working
+          // fprintf(stderr, "\n----------\n%f\n", alpha);
+
+          // framebuffer.color[inc * 4] = ((framebuffer.color[inc * 4] / 255.f) * (1 - alpha) + outFragment.gl_FragColor.r * alpha) * 255.f;
+          // framebuffer.color[inc * 4 + 1] = ((framebuffer.color[inc * 4 + 1] / 255.f) * (1 - alpha) + outFragment.gl_FragColor.g * alpha) * 255.f;
+          // framebuffer.color[inc * 4 + 2] = ((framebuffer.color[inc * 4 + 2] / 255.f) * (1 - alpha) + outFragment.gl_FragColor.b * alpha) * 255.f;
         }
       }
     }
