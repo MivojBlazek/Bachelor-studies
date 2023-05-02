@@ -117,7 +117,7 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         inFragment.gl_FragCoord.z = (point2[0].z * l0 + point2[1].z * l1 + point2[2].z * l2);
       
 
-        //for interpolate color of pixel we use center of it
+        //for interpolate color of pixel we use center of it //? why float pred tim?
         float l0 = ((point[1].y - point[2].y) * (inFragment.gl_FragCoord.x - point[2].x) + (point[2].x - point[1].x) * (inFragment.gl_FragCoord.y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
         float l1 = ((point[2].y - point[0].y) * (inFragment.gl_FragCoord.x - point[2].x) + (point[0].x - point[2].x) * (inFragment.gl_FragCoord.y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
         float l2 = 1 - l0 - l1;
@@ -134,31 +134,34 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         float new_l2 = l2 / (h2 * s);
         //fprintf(stderr, "\n-------\n%f, %f, %f\n", new_l0, new_l1, new_l2); //! test
 
-        AttributeType frType = prg.vs2fs[0];
-        if (frType != AttributeType::EMPTY)
+        for (uint32_t i = 0; i < 4; i++) //? not sure
         {
-          if (frType == AttributeType::FLOAT)
+          AttributeType frType = prg.vs2fs[i];
+          if (frType != AttributeType::EMPTY)
           {
-            //TODO
-          }
-          else if (frType == AttributeType::VEC2)
-          {
-            //TODO
-          }
-          else if (frType == AttributeType::VEC3)
-          {
-            glm::vec3 vAttrib1 = triangle.points[0].attributes[0].v3;
-            glm::vec3 vAttrib2 = triangle.points[1].attributes[0].v3;
-            glm::vec3 vAttrib3 = triangle.points[2].attributes[0].v3;
-            inFragment.attributes[0].v3 = vAttrib1 * new_l0 + vAttrib2 * new_l1 + vAttrib3 * new_l2;
-          }
-          else if (frType == AttributeType::VEC4)
-          {
-            //TODO
-          }
-          else // (frType == AttributeType::UINT/UVEC2/UVEC3/UVEC4)
-          {
-            //TODO
+            if (frType == AttributeType::FLOAT)
+            {
+              //TODO
+            }
+            else if (frType == AttributeType::VEC2)
+            {
+              //TODO
+            }
+            else if (frType == AttributeType::VEC3)
+            {
+              glm::vec3 vAttrib1 = triangle.points[0].attributes[i].v3;
+              glm::vec3 vAttrib2 = triangle.points[1].attributes[i].v3;
+              glm::vec3 vAttrib3 = triangle.points[2].attributes[i].v3;
+              inFragment.attributes[i].v3 = vAttrib1 * new_l0 + vAttrib2 * new_l1 + vAttrib3 * new_l2;
+            }
+            else if (frType == AttributeType::VEC4)
+            {
+              //TODO
+            }
+            else // (frType == AttributeType::UINT/UVEC2/UVEC3/UVEC4)
+            {
+              //TODO
+            }
           }
         }
 
