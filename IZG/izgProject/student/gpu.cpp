@@ -64,9 +64,9 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
     /* View-port transformace */
     point[i].x = (point[i].x + 1) * (framebuffer.width / 2);
     point[i].y = (point[i].y + 1) * (framebuffer.height / 2);
-    point[i].x = round(point[i].x); //? not sure
-    point[i].y = round(point[i].y); //? not sure
-    point[i].z = round(point[i].z); //? not sure
+    //point[i].x = round(point[i].x); //? not sure
+    //point[i].y = round(point[i].y); //? not sure
+    //point[i].z = round(point[i].z); //? not sure
     //fprintf(stderr, "\n-------------\n%f, %f, %f\n", point[i].x, point[i].y, point[i].z); //! test
   }
 
@@ -106,21 +106,21 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
       float l1 = ((point[2].y - point[0].y) * (x - point[2].x) + (point[0].x - point[2].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
       float l2 = 1 - l0 - l1;
       
-      if (l0 > 0 && l1 >= 0 && l2 >= 0 && !flag) //? >= >=
+      if (l0 > 0 && l1 >= 0 && l2 >= 0 && !flag) //? >= >= >=
       {
         InFragment inFragment;
         OutFragment outFragment;
 
-        inFragment.gl_FragCoord.x = (float)((float)x + 0.5);
-        inFragment.gl_FragCoord.y = (float)((float)y + 0.5);
+        inFragment.gl_FragCoord.x = (float)(x + 0.5);
+        inFragment.gl_FragCoord.y = (float)(y + 0.5);
 
         inFragment.gl_FragCoord.z = (point2[0].z * l0 + point2[1].z * l1 + point2[2].z * l2);
       
 
-        //for interpolate color of pixel we use center of it //? why float pred tim?
-        float l0 = ((point[1].y - point[2].y) * (inFragment.gl_FragCoord.x - point[2].x) + (point[2].x - point[1].x) * (inFragment.gl_FragCoord.y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
-        float l1 = ((point[2].y - point[0].y) * (inFragment.gl_FragCoord.x - point[2].x) + (point[0].x - point[2].x) * (inFragment.gl_FragCoord.y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
-        float l2 = 1 - l0 - l1;
+        //for interpolate color of pixel we use center of it
+        l0 = ((point[1].y - point[2].y) * (inFragment.gl_FragCoord.x - point[2].x) + (point[2].x - point[1].x) * (inFragment.gl_FragCoord.y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
+        l1 = ((point[2].y - point[0].y) * (inFragment.gl_FragCoord.x - point[2].x) + (point[0].x - point[2].x) * (inFragment.gl_FragCoord.y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
+        l2 = 1 - l0 - l1;
 
         float h0 = triangle.points[0].gl_Position.w;
         float h1 = triangle.points[1].gl_Position.w;
@@ -134,9 +134,9 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         float new_l2 = l2 / (h2 * s);
         //fprintf(stderr, "\n-------\n%f, %f, %f\n", new_l0, new_l1, new_l2); //! test
 
-        for (uint32_t i = 0; i < 4; i++) //? not sure
+        for (uint32_t j = 0; j < 4; j++) //? not sure
         {
-          AttributeType frType = prg.vs2fs[i];
+          AttributeType frType = prg.vs2fs[j];
           if (frType != AttributeType::EMPTY)
           {
             if (frType == AttributeType::FLOAT)
@@ -149,10 +149,10 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
             }
             else if (frType == AttributeType::VEC3)
             {
-              glm::vec3 vAttrib1 = triangle.points[0].attributes[i].v3;
-              glm::vec3 vAttrib2 = triangle.points[1].attributes[i].v3;
-              glm::vec3 vAttrib3 = triangle.points[2].attributes[i].v3;
-              inFragment.attributes[i].v3 = vAttrib1 * new_l0 + vAttrib2 * new_l1 + vAttrib3 * new_l2;
+              glm::vec3 vAttrib1 = triangle.points[0].attributes[j].v3;
+              glm::vec3 vAttrib2 = triangle.points[1].attributes[j].v3;
+              glm::vec3 vAttrib3 = triangle.points[2].attributes[j].v3;
+              inFragment.attributes[j].v3 = vAttrib1 * new_l0 + vAttrib2 * new_l1 + vAttrib3 * new_l2;
             }
             else if (frType == AttributeType::VEC4)
             {
@@ -175,18 +175,20 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         //blending
         float alpha = outFragment.gl_FragColor.a;
         
-        uint32_t inc = y * framebuffer.width + x;
-        if (framebuffer.depth[inc] > depth)
+        uint32_t inc = (y * framebuffer.width + x) * 4;
+        if ((inc / 4) < 20)
+          fprintf(stderr, "\n---------\n%d: %f, %f\n", inc / 4, framebuffer.depth[inc / 4], depth);
+        if (framebuffer.depth[inc / 4] > depth)
         {
-          framebuffer.depth[inc] = depth;
+          framebuffer.depth[inc / 4] = depth;
 
-          framebuffer.color[inc * 4] = (uint8_t)(outFragment.gl_FragColor.r * 255.f);
-          framebuffer.color[inc * 4 + 1] = (uint8_t)(outFragment.gl_FragColor.g * 255.f);
-          framebuffer.color[inc * 4 + 2] = (uint8_t)(outFragment.gl_FragColor.b * 255.f);
+          framebuffer.color[inc] = (uint8_t)(outFragment.gl_FragColor.r * 255.f);
+          framebuffer.color[inc + 1] = (uint8_t)(outFragment.gl_FragColor.g * 255.f);
+          framebuffer.color[inc + 2] = (uint8_t)(outFragment.gl_FragColor.b * 255.f);
 
           //! Test 18 not working
           //! Test 19 not working
-          // fprintf(stderr, "\n----------\n%f\n", alpha);
+          //fprintf(stderr, "\n----------\n%d\n", inc);
 
           // framebuffer.color[inc * 4] = ((framebuffer.color[inc * 4] / 255.f) * (1 - alpha) + outFragment.gl_FragColor.r * alpha) * 255.f;
           // framebuffer.color[inc * 4 + 1] = ((framebuffer.color[inc * 4 + 1] / 255.f) * (1 - alpha) + outFragment.gl_FragColor.g * alpha) * 255.f;
