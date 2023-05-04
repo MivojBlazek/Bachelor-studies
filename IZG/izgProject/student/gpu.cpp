@@ -170,14 +170,14 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         
         // PFO
         // depth test
-        float depth = inFragment.gl_FragCoord.z;
+        float depth = inFragment.gl_FragCoord.z; //! + 1.0 zpusovi nejaky clipping asi
 
         //blending
         float alpha = outFragment.gl_FragColor.a;
         
         uint32_t inc = (y * framebuffer.width + x) * 4;
-        if ((inc / 4) < 20)
-          fprintf(stderr, "\n---------\n%d: %f, %f\n", inc / 4, framebuffer.depth[inc / 4], depth);
+        //if ((inc / 4) < 20)
+        //  fprintf(stderr, "\n---------\n%d: %f, %f\n", inc / 4, framebuffer.depth[inc / 4], depth);
         if (framebuffer.depth[inc / 4] > depth)
         {
           framebuffer.depth[inc / 4] = depth;
@@ -187,7 +187,7 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
           framebuffer.color[inc + 2] = (uint8_t)(outFragment.gl_FragColor.b * 255.f);
 
           //! Test 18 not working
-          //! Test 19 not working
+          //! Test 19... not working
           //fprintf(stderr, "\n----------\n%d\n", inc);
 
           // framebuffer.color[inc * 4] = ((framebuffer.color[inc * 4] / 255.f) * (1 - alpha) + outFragment.gl_FragColor.r * alpha) * 255.f;
