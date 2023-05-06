@@ -9,6 +9,69 @@
 
 ///\endcond
 
+void addDrawCommand(CommandBuffer &cb, Mesh const &mesh)
+{
+  if (mesh.diffuseTexture >= 0)
+  {
+    //TODO textures read_texture()...
+  }
+
+  cb.commands[cb.nofCommands].type = CommandType::DRAW;
+  if (mesh.doubleSided)
+  {
+    cb.commands[cb.nofCommands].data.drawCommand.backfaceCulling = false;
+  }
+  else
+  {
+    cb.commands[cb.nofCommands].data.drawCommand.backfaceCulling = true;
+  }
+  cb.commands[cb.nofCommands].data.drawCommand.nofVertices = mesh.nofIndices;
+  cb.commands[cb.nofCommands].data.drawCommand.programID = 0;
+
+  cb.commands[cb.nofCommands].data.drawCommand.vao.indexBufferID = mesh.indexBufferID;
+  cb.commands[cb.nofCommands].data.drawCommand.vao.indexOffset = mesh.indexOffset;
+  cb.commands[cb.nofCommands].data.drawCommand.vao.indexType = mesh.indexType;
+
+  cb.commands[cb.nofCommands].data.drawCommand.vao.vertexAttrib[0] = mesh.position;
+  cb.commands[cb.nofCommands].data.drawCommand.vao.vertexAttrib[1] = mesh.normal;
+  cb.commands[cb.nofCommands].data.drawCommand.vao.vertexAttrib[2] = mesh.texCoord;
+  cb.nofCommands++;
+}
+
+glm::mat4 combineMatrix(glm::mat4 const &m1, glm::mat4 const &m2)
+{
+  return m1 * m2;
+}
+
+void prepareNode(GPUMemory &mem, CommandBuffer &cb, Node const &node, Model const &model, glm::mat4 &prubeznaMatice, uint32_t drawID)
+{
+  if (node.mesh >= 0)
+  {
+    Mesh const &mesh = model.meshes[node.mesh];
+    addDrawCommand(cb, mesh);
+    drawID++;
+
+    glm::mat4 inverseModelMatrix = glm::inverse(node.modelMatrix);
+
+    // test 36
+    // uniforms
+    mem.uniforms[10 + (drawID - 1) * 5].m4 = node.modelMatrix;
+    mem.uniforms[10 + (drawID - 1) * 5 + 1].m4 = inverseModelMatrix;
+    mem.uniforms[10 + (drawID - 1) * 5 + 2].v4 = mesh.diffuseColor;
+    mem.uniforms[10 + (drawID - 1) * 5 + 3].i1 = mesh.diffuseTexture;
+    mem.uniforms[10 + (drawID - 1) * 5 + 4].v1 = mesh.doubleSided;
+
+    
+    prubeznaMatice = combineMatrix(prubeznaMatice, node.modelMatrix);
+  }
+
+  // rekurzivni zkoumani potomku
+  for(size_t i = 0; i < node.children.size(); i++)
+  {
+    prepareNode(mem, cb, node.children[i], model, prubeznaMatice, drawID);
+  }
+}
+
 /**
  * @brief This function prepares model into memory and creates command buffer
  *
@@ -25,6 +88,50 @@ void prepareModel(GPUMemory&mem,CommandBuffer&commandBuffer,Model const&model){
   /// Vaším úkolem je správně projít model a vložit vykreslovací příkazy do commandBufferu.
   /// Zároveň musíte vložit do paměti textury, buffery a uniformní proměnné, které buffer command buffer využívat.
   /// Bližší informace jsou uvedeny na hlavní stránce dokumentace a v testech.
+  
+
+  commandBuffer.commands[0].type = CommandType::CLEAR;
+  commandBuffer.commands[0].data.clearCommand.clearColor = true;
+  commandBuffer.commands[0].data.clearCommand.color = glm::vec4(0.1,0.15,0.1,1);
+  commandBuffer.commands[0].data.clearCommand.clearDepth = true;
+  commandBuffer.commands[0].data.clearCommand.depth = 10e10f;
+  commandBuffer.nofCommands = 1;
+  
+  glm::mat4 matrix = glm::mat4(1.f); // jednotkova matice
+  uint32_t drawID = 0;
+
+  size_t nofRoots = model.roots.size();
+  for (size_t i = 0; i < nofRoots; i++)
+  {
+    prepareNode(mem, commandBuffer, model.roots[i], model, matrix, drawID);
+  }
+
+  // test 32
+  mem.programs[0].vertexShader = drawModel_vertexShader;
+  mem.programs[0].fragmentShader = drawModel_fragmentShader;
+
+  // test 33
+  mem.programs[0].vs2fs[0] = AttributeType::VEC3; //position
+  mem.programs[0].vs2fs[1] = AttributeType::VEC3; //normal
+  mem.programs[0].vs2fs[2] = AttributeType::VEC2; //texCoord
+  mem.programs[0].vs2fs[3] = AttributeType::UINT; //drawID
+
+  // test 34
+  for (uint32_t i = 0; i < model.buffers.size(); i++)
+  {
+    mem.buffers[i].data = model.buffers[i].data;
+    mem.buffers[i].size = model.buffers[i].size;
+  }
+  
+  // test 35
+  for (uint32_t i = 0; i < model.textures.size(); i++)
+  {
+    mem.textures[i].channels = model.textures[i].channels;
+    mem.textures[i].data = model.textures[i].data;
+    mem.textures[i].height = model.textures[i].height;
+    mem.textures[i].width = model.textures[i].width;
+  }
+
 }
 //! [drawModel]
 

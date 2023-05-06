@@ -323,6 +323,7 @@ void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
     triangle.points[i % 3] = outVertex; //? problem u vice draw commandu imo (not sure jestli " % 3" to fixne)
     if (i % 3 == 2)
     {
+      //TODO imo tady bude clipping a posle resterize() neco jineho
       rasterize(mem.framebuffer, triangle, prg, cmd, si);
     }
   }
