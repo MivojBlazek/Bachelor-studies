@@ -64,25 +64,28 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
     /* View-port transformace */
     point[i].x = (point[i].x + 1) * (framebuffer.width / 2);
     point[i].y = (point[i].y + 1) * (framebuffer.height / 2);
-    //point[i].x = round(point[i].x); //? not sure
-    //point[i].y = round(point[i].y); //? not sure
-    //point[i].z = round(point[i].z); //? not sure
     //fprintf(stderr, "\n-------------\n%f, %f, %f\n", point[i].x, point[i].y, point[i].z); //! test
   }
 
 
-  uint32_t min_x = (uint32_t) min(point[0].x, point[1].x, point[2].x);
-  uint32_t max_x = (uint32_t) max(point[0].x, point[1].x, point[2].x);
-  uint32_t min_y = (uint32_t) min(point[0].y, point[1].y, point[2].y);
-  uint32_t max_y = (uint32_t) max(point[0].y, point[1].y, point[2].y);
-  if ((max_x - min_x) > framebuffer.width)
+  int32_t min_x = (int32_t) min(point[0].x, point[1].x, point[2].x);
+  int32_t max_x = (int32_t) max(point[0].x, point[1].x, point[2].x);
+  int32_t min_y = (int32_t) min(point[0].y, point[1].y, point[2].y);
+  int32_t max_y = (int32_t) max(point[0].y, point[1].y, point[2].y);
+  if (min_x < 0)
   {
     min_x = 0;
+  }
+  if (max_x >= framebuffer.width)
+  {
     max_x = framebuffer.width - 1;
   }
-  if ((max_y - min_y) > framebuffer.height)
+  if (min_y < 0)
   {
     min_y = 0;
+  }
+  if (max_y >= framebuffer.height)
+  {
     max_y = framebuffer.height - 1;
   }
   //fprintf(stderr, "\n----min max-----\n%d, %d, %d, %d\n", min_x, max_x, min_y, max_y); //! test
@@ -92,7 +95,7 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
   {
     //zahodit, kdyz je trojuhelnik clockwise
     float area = (point[1].x - point[0].x) * (point[2].y - point[0].y) - (point[2].x - point[0].x) * (point[1].y - point[0].y);
-    if (area < 0)
+    if (area < 0.0f)
     {
       flag = 1;
     }
@@ -102,17 +105,25 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
   {
     for (uint32_t x = min_x; x <= max_x; x++)
     {
-      float l0 = ((point[1].y - point[2].y) * (x - point[2].x) + (point[2].x - point[1].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
-      float l1 = ((point[2].y - point[0].y) * (x - point[2].x) + (point[0].x - point[2].x) * (y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
-      float l2 = 1 - l0 - l1;
+      float l0 = ((point[1].y - point[2].y) * ((float)x - point[2].x) + (point[2].x - point[1].x) * ((float)y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
+      float l1 = ((point[2].y - point[0].y) * ((float)x - point[2].x) + (point[0].x - point[2].x) * ((float)y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
+      float l2 = 1.0f - l0 - l1;
+      float l22 = l2;
+      if (l22 > -0.000001f) // obcas nevykreslil na 0. radku nektere pixely (kvuli -0,00...01 nesplnilo podminku)
+        l22 = abs(l22);
       
-      if (l0 > 0 && l1 >= 0 && l2 >= 0 && !flag) //? >= >= >=
+      //if (y == min_y && x < min_x + 20) //! test
+      //  fprintf(stderr, "\n--- %d -- %d ----\n%.10f, %.10f, %.10f\n", y, x, l0, l1, l2);
+
+      if (l0 > 0.0f && l1 >= 0.0f && l22 >= 0.0f && !flag) //? >= >= >=
       {
+        //if (y == min_y && x < min_x + 20) //! test
+        //  fprintf(stderr, "TRUE\n");
         InFragment inFragment;
         OutFragment outFragment;
 
-        inFragment.gl_FragCoord.x = (float)(x + 0.5);
-        inFragment.gl_FragCoord.y = (float)(y + 0.5);
+        inFragment.gl_FragCoord.x = (float)x + 0.5;
+        inFragment.gl_FragCoord.y = (float)y + 0.5;
 
         inFragment.gl_FragCoord.z = (point2[0].z * l0 + point2[1].z * l1 + point2[2].z * l2);
       
@@ -120,7 +131,7 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         //for interpolate color of pixel we use center of it
         l0 = ((point[1].y - point[2].y) * (inFragment.gl_FragCoord.x - point[2].x) + (point[2].x - point[1].x) * (inFragment.gl_FragCoord.y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
         l1 = ((point[2].y - point[0].y) * (inFragment.gl_FragCoord.x - point[2].x) + (point[0].x - point[2].x) * (inFragment.gl_FragCoord.y - point[2].y)) / ((point[1].y - point[2].y) * (point[0].x - point[2].x) + (point[2].x - point[1].x) * (point[0].y - point[2].y));
-        l2 = 1 - l0 - l1;
+        l2 = 1.0f - l0 - l1;
 
         float h0 = triangle.points[0].gl_Position.w;
         float h1 = triangle.points[1].gl_Position.w;
@@ -134,18 +145,24 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         float new_l2 = l2 / (h2 * s);
         //fprintf(stderr, "\n-------\n%f, %f, %f\n", new_l0, new_l1, new_l2); //! test
 
-        for (uint32_t j = 0; j < 4; j++) //? not sure
+        for (uint32_t j = 0; j < maxAttributes; j++)
         {
           AttributeType frType = prg.vs2fs[j];
           if (frType != AttributeType::EMPTY)
           {
             if (frType == AttributeType::FLOAT)
             {
-              //TODO
+              float vAttrib1 = triangle.points[0].attributes[j].v1;
+              float vAttrib2 = triangle.points[1].attributes[j].v1;
+              float vAttrib3 = triangle.points[2].attributes[j].v1;
+              inFragment.attributes[j].v1 = vAttrib1 * new_l0 + vAttrib2 * new_l1 + vAttrib3 * new_l2;
             }
             else if (frType == AttributeType::VEC2)
             {
-              //TODO
+              glm::vec2 vAttrib1 = triangle.points[0].attributes[j].v2;
+              glm::vec2 vAttrib2 = triangle.points[1].attributes[j].v2;
+              glm::vec2 vAttrib3 = triangle.points[2].attributes[j].v2;
+              inFragment.attributes[j].v2 = vAttrib1 * new_l0 + vAttrib2 * new_l1 + vAttrib3 * new_l2;
             }
             else if (frType == AttributeType::VEC3)
             {
@@ -156,11 +173,14 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
             }
             else if (frType == AttributeType::VEC4)
             {
-              //TODO
+              glm::vec4 vAttrib1 = triangle.points[0].attributes[j].v4;
+              glm::vec4 vAttrib2 = triangle.points[1].attributes[j].v4;
+              glm::vec4 vAttrib3 = triangle.points[2].attributes[j].v4;
+              inFragment.attributes[j].v4 = vAttrib1 * new_l0 + vAttrib2 * new_l1 + vAttrib3 * new_l2;
             }
             else // (frType == AttributeType::UINT/UVEC2/UVEC3/UVEC4)
             {
-              //TODO
+              inFragment.attributes[j] = triangle.points[0].attributes[j];
             }
           }
         }
@@ -170,23 +190,22 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         
         // PFO
         // depth test
-        float depth = inFragment.gl_FragCoord.z; //! + 1.0 zpusovi nejaky clipping asi
+        float depth = inFragment.gl_FragCoord.z;
 
         //blending
         float alpha = outFragment.gl_FragColor.a;
         
-        uint32_t inc = (y * framebuffer.width + x) * 4;
-        //if ((inc / 4) < 20)
-        //  fprintf(stderr, "\n---------\n%d: %f, %f\n", inc / 4, framebuffer.depth[inc / 4], depth);
-        if (framebuffer.depth[inc / 4] > depth)
+        uint32_t inc = y * framebuffer.width + x;
+        //if (inc < 30) //! test
+        //  fprintf(stderr, "\n--- %d -- %d ----\n%d: %f, %f\n", y, x, inc, framebuffer.depth[inc], depth);
+        if (framebuffer.depth[inc] > depth)
         {
-          framebuffer.depth[inc / 4] = depth;
+          framebuffer.depth[inc] = depth;
 
-          framebuffer.color[inc] = (uint8_t)(outFragment.gl_FragColor.r * 255.f);
-          framebuffer.color[inc + 1] = (uint8_t)(outFragment.gl_FragColor.g * 255.f);
-          framebuffer.color[inc + 2] = (uint8_t)(outFragment.gl_FragColor.b * 255.f);
+          framebuffer.color[inc * 4] = (uint8_t)(outFragment.gl_FragColor.r * 255.f);
+          framebuffer.color[inc * 4 + 1] = (uint8_t)(outFragment.gl_FragColor.g * 255.f);
+          framebuffer.color[inc * 4 + 2] = (uint8_t)(outFragment.gl_FragColor.b * 255.f);
 
-          //! Test 18 not working
           //! Test 19... not working
           //fprintf(stderr, "\n----------\n%d\n", inc);
 
@@ -275,15 +294,31 @@ void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
           glm::vec4 *vAttrib = (glm::vec4 *) ((uint8_t *)vertexBuffer + vaOffset + vaStride * inVertex.gl_VertexID);
           inVertex.attributes[j].v4 = *vAttrib;
         }
-        else // (vaType == AttributeType::UINT/UVEC2/UVEC3/UVEC4)
+        else if (vaType == AttributeType::UINT)
         {
-          //TODO
+          uint32_t *vAttrib = (uint32_t *) ((uint8_t *)vertexBuffer + vaOffset + vaStride * inVertex.gl_VertexID);
+          inVertex.attributes[j].u1 = *vAttrib;
+        }
+        else if (vaType == AttributeType::UVEC2)
+        {
+          glm::uvec2 *vAttrib = (glm::uvec2 *) ((uint8_t *)vertexBuffer + vaOffset + vaStride * inVertex.gl_VertexID);
+          inVertex.attributes[j].u2 = *vAttrib;
+        }
+        else if (vaType == AttributeType::UVEC3)
+        {
+          glm::uvec3 *vAttrib = (glm::uvec3 *) ((uint8_t *)vertexBuffer + vaOffset + vaStride * inVertex.gl_VertexID);
+          inVertex.attributes[j].u3 = *vAttrib;
+        }
+        else // (vaType == AttributeType::UVEC4)
+        {
+          glm::uvec4 *vAttrib = (glm::uvec4 *) ((uint8_t *)vertexBuffer + vaOffset + vaStride * inVertex.gl_VertexID);
+          inVertex.attributes[j].u4 = *vAttrib;
         }
       }
     }
     prg.vertexShader(outVertex, inVertex, si);
     
-    triangle.points[i % 3] = outVertex; //! problem u vice draw commandu imo (not sure jestli " % 3" to fixne)
+    triangle.points[i % 3] = outVertex; //? problem u vice draw commandu imo (not sure jestli " % 3" to fixne)
     if (i % 3 == 2)
     {
       rasterize(mem.framebuffer, triangle, prg, cmd, si);
