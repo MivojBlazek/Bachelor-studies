@@ -40,12 +40,6 @@ float min(float a, float b, float c){
   return min;
 }
 
-//asi zbytecna funkce
-float area(float x1, float y1, float x2, float y2, float x3, float y3)
-{
-  return abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
-}
-
 
 void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg, DrawCommand cmd, ShaderInterface si){
   glm::vec3 point[3];
@@ -320,11 +314,88 @@ void draw(GPUMemory &mem, DrawCommand cmd, uint32_t nofDraws){
     }
     prg.vertexShader(outVertex, inVertex, si);
     
-    triangle.points[i % 3] = outVertex; //? problem u vice draw commandu imo (not sure jestli " % 3" to fixne)
+    triangle.points[i % 3] = outVertex;
     if (i % 3 == 2)
     {
-      //TODO imo tady bude clipping a posle resterize() neco jineho
-      rasterize(mem.framebuffer, triangle, prg, cmd, si);
+      /* CLIPPING */
+      bool isPointBehind[3] = {false, false, false};
+      uint32_t pointsBehind = 0;
+      for (uint32_t vec = 0; vec < 3; vec++)
+      {
+        if (-triangle.points[vec].gl_Position.w > triangle.points[vec].gl_Position.z)
+        {
+          isPointBehind[vec] = true;
+          pointsBehind++;
+        }
+      }
+
+      switch (pointsBehind)
+      {
+        case 0:
+          // rasterize everything
+          rasterize(mem.framebuffer, triangle, prg, cmd, si);
+          break;
+        
+        case 1:
+          // rasterize two new triangles (2 points are on near plane)
+          {
+            uint32_t vecOut;
+            for (uint32_t vec = 0; vec < 3; vec++)
+            {
+              if (isPointBehind[vec])
+              {
+                vecOut = vec; // only 1 point is outside
+              }
+            }
+
+            glm::vec4 newPos2[2];
+            uint32_t vecsIn[2];
+            uint32_t nextV = 0;
+            for (uint32_t vec = 0; vec < 3; vec++) // computing new position of points (now I have 4 points)
+            {
+              if (!isPointBehind[vec])
+              {
+                float t = (-triangle.points[vec].gl_Position.w - triangle.points[vec].gl_Position.z) / (triangle.points[vecOut].gl_Position.w - triangle.points[vec].gl_Position.w + triangle.points[vecOut].gl_Position.z - triangle.points[vec].gl_Position.z);
+                newPos2[nextV] = triangle.points[vec].gl_Position + t * (triangle.points[vecOut].gl_Position - triangle.points[vec].gl_Position);
+                vecsIn[nextV] = vec;
+                nextV++;
+              }
+            }
+            triangle.points[vecOut].gl_Position = newPos2[0];
+            rasterize(mem.framebuffer, triangle, prg, cmd, si);
+
+            triangle.points[vecsIn[0]].gl_Position = newPos2[1];
+            rasterize(mem.framebuffer, triangle, prg, cmd, si);
+          }
+          break;
+        
+        case 2:
+          // rasterize new triangle (1 point is on near plane)
+          uint32_t vecIn;
+          for (uint32_t vec = 0; vec < 3; vec++)
+          {
+            if (!isPointBehind[vec])
+            {
+              vecIn = vec; // only 1 point is inside
+            }
+          }
+
+          for (uint32_t vec = 0; vec < 3; vec++)
+          {
+            if (isPointBehind[vec])
+            {
+              float t = (-triangle.points[vecIn].gl_Position.w - triangle.points[vecIn].gl_Position.z) / (triangle.points[vec].gl_Position.w - triangle.points[vecIn].gl_Position.w + triangle.points[vec].gl_Position.z - triangle.points[vecIn].gl_Position.z);
+              glm::vec4 newPos = triangle.points[vecIn].gl_Position + t * (triangle.points[vec].gl_Position - triangle.points[vecIn].gl_Position);
+              triangle.points[vec].gl_Position = newPos;
+            }
+          }
+          rasterize(mem.framebuffer, triangle, prg, cmd, si);
+          break;
+        
+        case 3:
+          // dont rasterize
+          break;
+      }
     }
   }
 }
