@@ -150,6 +150,18 @@ void drawModel_vertexShader(OutVertex&outVertex,InVertex const&inVertex,ShaderIn
   /// \todo Tato funkce reprezentujte vertex shader.<br>
   /// Vaším úkolem je správně trasnformovat vrcholy modelu.
   /// Bližší informace jsou uvedeny na hlavní stránce dokumentace.
+  uint32_t drawID = inVertex.gl_DrawID;
+
+  glm::mat4 viewProjMat = si.uniforms[0].m4;
+  glm::mat4 modelMat = si.uniforms[10 + drawID * 5].m4;
+  glm::mat4 invModelMat = si.uniforms[10 + drawID * 5 + 1].m4;
+  glm::mat4 clipSpaceMat = combineMatrix(viewProjMat, modelMat);
+
+  outVertex.gl_Position = clipSpaceMat * (glm::vec4(inVertex.attributes[0].v3, 1.0f));
+  outVertex.attributes[0].v3 = glm::vec3(modelMat * (glm::vec4(inVertex.attributes[0].v3, 1.0f)));
+  outVertex.attributes[1].v3 = glm::vec3(invModelMat * (glm::vec4(inVertex.attributes[1].v3, 0.0f)));
+  outVertex.attributes[2].v2 = inVertex.attributes[2].v2;
+  outVertex.attributes[3].u1 = drawID;
 }
 //! [drawModel_vs]
 
@@ -168,6 +180,43 @@ void drawModel_fragmentShader(OutFragment&outFragment,InFragment const&inFragmen
   /// \todo Tato funkce reprezentujte fragment shader.<br>
   /// Vaším úkolem je správně obarvit fragmenty a osvětlit je pomocí lambertova osvětlovacího modelu.
   /// Bližší informace jsou uvedeny na hlavní stránce dokumentace.
+  uint32_t drawID = inFragment.attributes[3].u1;
+
+  glm::vec3 pos = inFragment.attributes[0].v3; 
+  glm::vec3 normal = inFragment.attributes[1].v3;
+  glm::vec3 light_pos = si.uniforms[1].v3;
+  glm::vec3 cam_pos = si.uniforms[2].v3;
+
+  int32_t texNum = si.uniforms[10 + drawID * 5 + 3].i1;
+
+  glm::vec2 texCoord = inFragment.attributes[2].v2;
+
+  float doubleSided = si.uniforms[10 + drawID * 5 + 4].v1;
+
+  if (doubleSided > 0.0f)
+  {
+    normal *= glm::sign(glm::dot(cam_pos - pos, normal));
+  }
+
+  glm::vec4 dColor;
+  if (texNum >= 0)
+  {
+    dColor = read_texture(si.textures[texNum], texCoord);  //? read_texture(texs[textureID],coord);
+  }
+  else
+  {
+    dColor = si.uniforms[10 + drawID * 5 + 2].v4;
+  }
+
+  glm::vec3 lightVec = light_pos - pos;
+
+  float const aF = 0.2f;
+  float dF = glm::clamp(glm::dot(glm::normalize(lightVec), glm::normalize(normal)), 0.f, 1.f);
+
+  glm::vec3 aL = glm::vec3(dColor) * aF;
+  glm::vec3 dL = glm::vec3(dColor) * dF;
+
+  outFragment.gl_FragColor = glm::vec4(aL + dL, dColor.a);
 }
 //! [drawModel_fs]
 
