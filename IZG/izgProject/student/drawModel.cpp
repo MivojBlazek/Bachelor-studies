@@ -6,7 +6,7 @@
  */
 #include <student/drawModel.hpp>
 #include <student/gpu.hpp>
-
+#include <stdio.h> //! test
 ///\endcond
 
 void addDrawCommand(CommandBuffer &cb, Mesh const &mesh)
@@ -43,7 +43,7 @@ glm::mat4 combineMatrix(glm::mat4 const &m1, glm::mat4 const &m2)
   return m1 * m2;
 }
 
-void prepareNode(GPUMemory &mem, CommandBuffer &cb, Node const &node, Model const &model, glm::mat4 &prubeznaMatice, uint32_t drawID)
+uint32_t prepareNode(GPUMemory &mem, CommandBuffer &cb, Node const &node, Model const &model, glm::mat4 prubeznaMatice, uint32_t drawID)
 {
   if (node.mesh >= 0)
   {
@@ -51,25 +51,25 @@ void prepareNode(GPUMemory &mem, CommandBuffer &cb, Node const &node, Model cons
     addDrawCommand(cb, mesh);
     drawID++;
 
-    glm::mat4 inverseModelMatrix = glm::inverse(node.modelMatrix);
+    prubeznaMatice = combineMatrix(prubeznaMatice, node.modelMatrix);
+    glm::mat4 inverseModelMatrix = glm::transpose(glm::inverse(prubeznaMatice));
 
     // test 36
     // uniforms
-    mem.uniforms[10 + (drawID - 1) * 5].m4 = node.modelMatrix;
+    mem.uniforms[10 + (drawID - 1) * 5].m4 = prubeznaMatice;
     mem.uniforms[10 + (drawID - 1) * 5 + 1].m4 = inverseModelMatrix;
     mem.uniforms[10 + (drawID - 1) * 5 + 2].v4 = mesh.diffuseColor;
     mem.uniforms[10 + (drawID - 1) * 5 + 3].i1 = mesh.diffuseTexture;
     mem.uniforms[10 + (drawID - 1) * 5 + 4].v1 = mesh.doubleSided;
-
     
-    prubeznaMatice = combineMatrix(prubeznaMatice, node.modelMatrix);
   }
 
   // rekurzivni zkoumani potomku
   for(size_t i = 0; i < node.children.size(); i++)
   {
-    prepareNode(mem, cb, node.children[i], model, prubeznaMatice, drawID);
+    drawID = prepareNode(mem, cb, node.children[i], model, prubeznaMatice, drawID);
   }
+  return drawID;
 }
 
 /**
@@ -103,14 +103,14 @@ void prepareModel(GPUMemory&mem,CommandBuffer&commandBuffer,Model const&model){
   size_t nofRoots = model.roots.size();
   for (size_t i = 0; i < nofRoots; i++)
   {
-    prepareNode(mem, commandBuffer, model.roots[i], model, matrix, drawID);
+    drawID = prepareNode(mem, commandBuffer, model.roots[i], model, matrix, drawID);
   }
 
   // test 32
   mem.programs[0].vertexShader = drawModel_vertexShader;
   mem.programs[0].fragmentShader = drawModel_fragmentShader;
 
-  // test 33
+  // test 33 //? not sure, imo to musi byt nejak precteny, ale to nejde
   mem.programs[0].vs2fs[0] = AttributeType::VEC3; //position
   mem.programs[0].vs2fs[1] = AttributeType::VEC3; //normal
   mem.programs[0].vs2fs[2] = AttributeType::VEC2; //texCoord
