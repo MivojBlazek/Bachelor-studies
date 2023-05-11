@@ -6,7 +6,6 @@
  */
 
 #include <student/gpu.hpp>
-#include <stdio.h> //! test
 
 struct Triangle{
   OutVertex points[3];
@@ -58,7 +57,6 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
     /* View-port transformace */
     point[i].x = (point[i].x + 1) * (framebuffer.width / 2);
     point[i].y = (point[i].y + 1) * (framebuffer.height / 2);
-    //fprintf(stderr, "\n-------------\n%f, %f, %f\n", point[i].x, point[i].y, point[i].z); //! test
   }
 
 
@@ -82,7 +80,6 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
   {
     max_y = framebuffer.height - 1;
   }
-  //fprintf(stderr, "\n----min max-----\n%d, %d, %d, %d\n", min_x, max_x, min_y, max_y); //! test
 
   int flag = 0;
   if (cmd.backfaceCulling)
@@ -108,13 +105,9 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         l22 = abs(l22);
       }
       
-      //if (y == min_y && x < min_x + 20) //! test
-      //  fprintf(stderr, "\n--- %d -- %d ----\n%.10f, %.10f, %.10f\n", y, x, l0, l1, l2);
 
       if (l0 > 0.0f && l1 >= 0.0f && l22 >= 0.0f && !flag) //? >= >= >=
       {
-        //if (y == min_y && x < min_x + 20) //! test
-        //  fprintf(stderr, "TRUE\n");
         InFragment inFragment;
         OutFragment outFragment;
 
@@ -134,12 +127,10 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         float h2 = triangle.points[2].gl_Position.w;
 
         float s = l0 / h0 + l1 / h1 + l2 / h2;
-        //fprintf(stderr, "\n--- %f ----\n", s); //! test
 
         float new_l0 = l0 / (h0 * s);
         float new_l1 = l1 / (h1 * s);
         float new_l2 = l2 / (h2 * s);
-        //fprintf(stderr, "\n-------\n%f, %f, %f\n", new_l0, new_l1, new_l2); //! test
 
         for (uint32_t j = 0; j < maxAttributes; j++)
         {
@@ -192,18 +183,13 @@ void rasterize(Frame &framebuffer, Triangle const &triangle, Program const &prg,
         float alpha = outFragment.gl_FragColor.a;
         
         uint32_t inc = y * framebuffer.width + x;
-        //if (inc < 30) //! test
-        //  fprintf(stderr, "\n--- %d -- %d ----\n%d: %f, %f\n", y, x, inc, framebuffer.depth[inc], depth);
+
         if (framebuffer.depth[inc] > depth)
         {
           if (alpha > 0.5f)
           {
             framebuffer.depth[inc] = depth;
           }
-
-          // framebuffer.color[inc * 4] = (uint8_t)(outFragment.gl_FragColor.r * 255.f); //! test 18
-          // framebuffer.color[inc * 4 + 1] = (uint8_t)(outFragment.gl_FragColor.g * 255.f); //!
-          // framebuffer.color[inc * 4 + 2] = (uint8_t)(outFragment.gl_FragColor.b * 255.f); //!
 
           framebuffer.color[inc * 4] = (((framebuffer.color[inc * 4] + 0.0001f) / 255.f) * (1 - alpha) + outFragment.gl_FragColor.r * alpha) * 255.f; // + 0.0001f je tam kvuli zaokrouhlovani
           framebuffer.color[inc * 4 + 1] = (((framebuffer.color[inc * 4 + 1] + 0.0001f) / 255.f) * (1 - alpha) + outFragment.gl_FragColor.g * alpha) * 255.f;

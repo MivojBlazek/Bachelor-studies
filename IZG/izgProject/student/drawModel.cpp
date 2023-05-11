@@ -6,16 +6,11 @@
  */
 #include <student/drawModel.hpp>
 #include <student/gpu.hpp>
-#include <stdio.h> //! test
+
 ///\endcond
 
 void addDrawCommand(CommandBuffer &cb, Mesh const &mesh)
 {
-  if (mesh.diffuseTexture >= 0)
-  {
-    //TODO textures read_texture()...
-  }
-
   cb.commands[cb.nofCommands].type = CommandType::DRAW;
   if (mesh.doubleSided)
   {
@@ -110,7 +105,7 @@ void prepareModel(GPUMemory&mem,CommandBuffer&commandBuffer,Model const&model){
   mem.programs[0].vertexShader = drawModel_vertexShader;
   mem.programs[0].fragmentShader = drawModel_fragmentShader;
 
-  // test 33 //? not sure, imo to musi byt nejak precteny, ale to nejde
+  // test 33
   mem.programs[0].vs2fs[0] = AttributeType::VEC3; //position
   mem.programs[0].vs2fs[1] = AttributeType::VEC3; //normal
   mem.programs[0].vs2fs[2] = AttributeType::VEC2; //texCoord
@@ -201,7 +196,7 @@ void drawModel_fragmentShader(OutFragment&outFragment,InFragment const&inFragmen
   glm::vec4 dColor;
   if (texNum >= 0)
   {
-    dColor = read_texture(si.textures[texNum], texCoord);  //? read_texture(texs[textureID],coord);
+    dColor = read_texture(si.textures[texNum], texCoord);
   }
   else
   {
