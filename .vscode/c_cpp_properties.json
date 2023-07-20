@@ -11,10 +11,10 @@
                 "_UNICODE"
             ],
             "windowsSdkVersion": "10.0.19041.0",
-            "cStandard": "gnu99", //c17
+            "cStandard": "gnu99",
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-gcc-x64",
-            "compilerPath": "C:/MinGW/bin/gcc.exe" //windows
+            "compilerPath": "C:/MinGW/bin/gcc.exe"
         },
         {
             "name": "WSL",
@@ -27,10 +27,10 @@
                 "_UNICODE"
             ],
             "windowsSdkVersion": "10.0.19041.0",
-            "cStandard": "gnu99", //c17
+            "cStandard": "gnu99",
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-gcc-x64",
-            "compilerPath": "/usr/bin/gcc" //wsl
+            "compilerPath": "/usr/bin/gcc"
         },
         {
             "name": "Linux",
@@ -43,10 +43,10 @@
                 "_UNICODE"
             ],
             "windowsSdkVersion": "10.0.19041.0",
-            "cStandard": "gnu99", //c17
+            "cStandard": "gnu99",
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-gcc-x64",
-            "compilerPath": "/usr/bin/gcc" //linux
+            "compilerPath": "/usr/bin/gcc"
         }
     ],
     "version": 4
