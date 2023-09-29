@@ -74,7 +74,8 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "c202.h": "c"
     },
     "C_Cpp.default.cStandard": "",
     "cmake.configureOnOpen": false,
