@@ -54,7 +54,23 @@ bool solved;
  * @param postfixExpressionLength Ukazatel na aktuální délku výsledného postfixového výrazu
  */
 void untilLeftPar( Stack *stack, char *postfixExpression, unsigned *postfixExpressionLength ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	//! solved = false; /* V případě řešení, smažte tento řádek! */
+/*
+	*postfixExpressionLength = 0;
+	for (unsigned i = 0; i <= stack->topIndex; i++)
+	{
+		postfixExpression[i] = stack->array[i];
+		*postfixExpressionLength = i;
+	}
+*/
+	char tmp;
+	*postfixExpressionLength = 0;
+	while(!Stack_IsEmpty(stack))
+	{
+		Stack_Top(stack, &tmp); //take every single item from stack and save it to 'tmp'
+		Stack_Pop(stack);
+		postfixExpression[*postfixExpressionLength++] = tmp; //make array from 'tmp' items
+	}
 }
 
 /**
@@ -74,7 +90,8 @@ void untilLeftPar( Stack *stack, char *postfixExpression, unsigned *postfixExpre
  * @param postfixExpressionLength Ukazatel na aktuální délku výsledného postfixového výrazu
  */
 void doOperation( Stack *stack, char c, char *postfixExpression, unsigned *postfixExpressionLength ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	//! solved = false; /* V případě řešení, smažte tento řádek! */
+	postfixExpression[*postfixExpressionLength];
 }
 
 /**
@@ -143,7 +160,19 @@ char *infix2postfix( const char *infixExpression ) {
  * @param value hodnota k vložení na zásobník
  */
 void expr_value_push( Stack *stack, int value ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	//! solved = false; /* V případě řešení, smažte tento řádek! */
+/*
+	char value_converted[4]; //! Probably delete
+	value_converted[0] = value % 256; //LSB
+	value_converted[1] = (value % 65536) * 256; //65536 = 256^2
+	value_converted[2] = (value % 16777216) * 256; //16777216 = 256^3
+	value_converted[3] = value / 16777216; //MSB
+*/
+	char *value_converted = (char *)(&value);
+	for (int i = 3; i >= 0; i--) //store all 4 bytes to stack starting with LSB and ending with MSB, so MSB will be on top
+	{
+		Stack_Push(stack, value_converted[i]);
+	}
 }
 
 /**
@@ -159,8 +188,13 @@ void expr_value_push( Stack *stack, int value ) {
  *   výsledné celočíselné hodnoty z vrcholu zásobníku
  */
 void expr_value_pop( Stack *stack, int *value ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	//! solved = false; /* V případě řešení, smažte tento řádek! */
 	*value = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		Stack_Top(stack, (char *)(value + i)); //save to value and its i-th byte
+		Stack_Pop(stack);
+	}
 }
 
 
