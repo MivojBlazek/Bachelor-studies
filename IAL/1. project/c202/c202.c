@@ -72,7 +72,16 @@ void Stack_Error( int error_code ) {
  * @param stack Ukazatel na strukturu zásobníku
  */
 void Stack_Init( Stack *stack ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	if (!stack)
+	{
+		Stack_Error(SERR_INIT);
+	}
+	stack->topIndex = -1;
+	stack->array = malloc(sizeof(char) * STACK_SIZE); //init stack for STACK_SIZE chars
+	if (!stack->array)
+	{
+		Stack_Error(SERR_INIT);
+	}
 }
 
 /**
@@ -85,7 +94,7 @@ void Stack_Init( Stack *stack ) {
  * @returns true v případě, že je zásobník prázdný, jinak false
  */
 bool Stack_IsEmpty( const Stack *stack ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	return stack->topIndex == -1 ? true : false; //no item in stack -> -1 topIndex
 }
 
 /**
@@ -101,7 +110,7 @@ bool Stack_IsEmpty( const Stack *stack ) {
  * @returns true v případě, že je zásobník plný, jinak false
  */
 bool Stack_IsFull( const Stack *stack ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	return stack->topIndex == STACK_SIZE - 1 ? true : false; //full stack -> 20 items indexed from 0 to 19
 }
 
 /**
@@ -117,7 +126,11 @@ bool Stack_IsFull( const Stack *stack ) {
  * @param dataPtr Ukazatel na cílovou proměnnou
  */
 void Stack_Top( const Stack *stack, char *dataPtr ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	if (Stack_IsEmpty(stack))
+	{
+		Stack_Error(SERR_TOP);
+	}
+	*dataPtr = stack->array[stack->topIndex]; //copy char from stack on topIndex to *dataPtr
 }
 
 
@@ -134,7 +147,13 @@ void Stack_Top( const Stack *stack, char *dataPtr ) {
  * @param stack Ukazatel na inicializovanou strukturu zásobníku
  */
 void Stack_Pop( Stack *stack ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	if (Stack_IsEmpty(stack))
+	{
+		//printf("WARNING: Cannot pop stack because stack is empty.");
+		return;
+	}
+	stack->array[stack->topIndex] = '\0'; //make topIndex empty ('\0') and lower topIndex by 1 (deleted item)
+	stack->topIndex--;
 }
 
 
@@ -149,7 +168,11 @@ void Stack_Pop( Stack *stack ) {
  * @param data Znak k vložení
  */
 void Stack_Push( Stack *stack, char data ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	if (Stack_IsFull(stack))
+	{
+		Stack_Error(SERR_PUSH);
+	}
+	stack->array[++stack->topIndex] = data; //increase number of items in stack and push value from 'data' on the top of stack
 }
 
 
@@ -160,7 +183,12 @@ void Stack_Push( Stack *stack, char data ) {
  * @param stack Ukazatel na inicializovanou strukturu zásobníku
  */
 void Stack_Dispose( Stack *stack ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	for (int i = stack->topIndex; i >= 0; i--) //empty all values from stack with function Stack_Pop()
+	{
+		Stack_Pop(stack);
+	}
+	free(stack->array); //free memory allocated by malloc and set array to NULL
+	stack->array = NULL;
 }
 
 /* Konec c202.c */
