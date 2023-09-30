@@ -54,23 +54,20 @@ bool solved;
  * @param postfixExpressionLength Ukazatel na aktuální délku výsledného postfixového výrazu
  */
 void untilLeftPar( Stack *stack, char *postfixExpression, unsigned *postfixExpressionLength ) {
-	//! solved = false; /* V případě řešení, smažte tento řádek! */
-/*
-	*postfixExpressionLength = 0;
-	for (unsigned i = 0; i <= stack->topIndex; i++)
-	{
-		postfixExpression[i] = stack->array[i];
-		*postfixExpressionLength = i;
-	}
-*/
-	char tmp;
+	solved = false; /* V případě řešení, smažte tento řádek! */
+	//TODO
+	/*char tmp;
 	*postfixExpressionLength = 0;
 	while(!Stack_IsEmpty(stack))
 	{
 		Stack_Top(stack, &tmp); //take every single item from stack and save it to 'tmp'
 		Stack_Pop(stack);
 		postfixExpression[*postfixExpressionLength++] = tmp; //make array from 'tmp' items
-	}
+		if (tmp == '(') //after left bracket stop loading
+		{
+			return;
+		}
+	}*/
 }
 
 /**
@@ -90,8 +87,8 @@ void untilLeftPar( Stack *stack, char *postfixExpression, unsigned *postfixExpre
  * @param postfixExpressionLength Ukazatel na aktuální délku výsledného postfixového výrazu
  */
 void doOperation( Stack *stack, char c, char *postfixExpression, unsigned *postfixExpressionLength ) {
-	//! solved = false; /* V případě řešení, smažte tento řádek! */
-	postfixExpression[*postfixExpressionLength];
+	solved = false; /* V případě řešení, smažte tento řádek! */
+	//TODO
 }
 
 /**
@@ -143,8 +140,73 @@ void doOperation( Stack *stack, char c, char *postfixExpression, unsigned *postf
  * @returns znakový řetězec obsahující výsledný postfixový výraz
  */
 char *infix2postfix( const char *infixExpression ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
-	return NULL;
+	//! solved = false; /* V případě řešení, smažte tento řádek! */
+	//! return NULL;
+	Stack stack;
+	Stack_Init(&stack); //init of new stack
+
+	unsigned pos = 0;
+	char *postfixExpression = malloc(sizeof(char) * MAX_LEN); //allocate memory for postfix result
+	if (postfixExpression == NULL)
+	{
+		return NULL; //error with malloc
+	}
+
+	for (unsigned i = 0; i < MAX_LEN && infixExpression[i] != '\0'; i++)
+	{
+		char tmp;
+		switch (infixExpression[i])
+		{
+			case '(':
+				Stack_Push(&stack, '(');
+				break;
+
+			case ')': //TODO use function
+				Stack_Top(&stack, &tmp);
+				Stack_Pop(&stack);
+				while (tmp != '(')
+				{
+					postfixExpression[pos++] = tmp;
+					Stack_Top(&stack, &tmp);
+					Stack_Pop(&stack);
+				}
+				break;
+
+			case '+':
+			case '-':
+			case '*':
+			case '/': //TODO use function
+				Stack_Top(&stack, &tmp);
+				while (!Stack_IsEmpty(&stack) && tmp != '(')
+				{
+					Stack_Top(&stack, &tmp);
+					if ((tmp == '+' || tmp == '-') && (infixExpression[i] == '*' || infixExpression[i] == '/'))
+					{
+						break; //push on the stack because we have higher priority operator then top of the stack
+					}
+					postfixExpression[pos++] = tmp; //same or higher priority operator on stack -> delete, write to postfix and repeat (while)
+					Stack_Pop(&stack);
+				}
+				Stack_Push(&stack, infixExpression[i]);
+				break;
+
+			case '=':
+				while (!Stack_IsEmpty(&stack)) //write from stack to postfix string char by char
+				{
+					Stack_Top(&stack, &tmp);
+					Stack_Pop(&stack);
+					postfixExpression[pos++] = tmp;
+				}
+				postfixExpression[pos++] = '=';
+				break;
+
+			default: //operand
+				postfixExpression[pos++] = infixExpression[i];
+				break;
+		}
+	}
+	postfixExpression[pos++] = '\0';
+	return postfixExpression;
 }
 
 

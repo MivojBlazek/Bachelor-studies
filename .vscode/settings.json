@@ -75,7 +75,8 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "variant": "cpp",
-        "c202.h": "c"
+        "c202.h": "c",
+        "c202-test-utils.h": "c"
     },
     "C_Cpp.default.cStandard": "",
     "cmake.configureOnOpen": false,
