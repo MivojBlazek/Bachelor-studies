@@ -54,20 +54,16 @@ bool solved;
  * @param postfixExpressionLength Ukazatel na aktuální délku výsledného postfixového výrazu
  */
 void untilLeftPar( Stack *stack, char *postfixExpression, unsigned *postfixExpressionLength ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
-	//TODO
-	/*char tmp;
-	*postfixExpressionLength = 0;
-	while(!Stack_IsEmpty(stack))
+	//! solved = false; /* V případě řešení, smažte tento řádek! */
+	char tmp;
+	Stack_Top(stack, &tmp);
+	Stack_Pop(stack);
+	while (tmp != '(') //after left bracket stop loading
 	{
-		Stack_Top(stack, &tmp); //take every single item from stack and save it to 'tmp'
+		postfixExpression[(*postfixExpressionLength)++] = tmp; //save items from stack to postfix string
+		Stack_Top(stack, &tmp); //take another item from stack and save it to tmp until left bracket
 		Stack_Pop(stack);
-		postfixExpression[*postfixExpressionLength++] = tmp; //make array from 'tmp' items
-		if (tmp == '(') //after left bracket stop loading
-		{
-			return;
-		}
-	}*/
+	}
 }
 
 /**
@@ -87,8 +83,23 @@ void untilLeftPar( Stack *stack, char *postfixExpression, unsigned *postfixExpre
  * @param postfixExpressionLength Ukazatel na aktuální délku výsledného postfixového výrazu
  */
 void doOperation( Stack *stack, char c, char *postfixExpression, unsigned *postfixExpressionLength ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
-	//TODO
+	//! solved = false; /* V případě řešení, smažte tento řádek! */
+	char tmp;
+	if (!Stack_IsEmpty(stack))
+	{
+		Stack_Top(stack, &tmp);
+	}
+	while (!Stack_IsEmpty(stack) && tmp != '(')
+	{
+		Stack_Top(stack, &tmp);
+		if ((tmp == '+' || tmp == '-') && (c == '*' || c == '/'))
+		{
+			break; //push on the stack because we have higher priority operator then top of the stack
+		}
+		postfixExpression[(*postfixExpressionLength)++] = tmp; //same or higher priority operator on stack -> delete, write to postfix and repeat (while)
+		Stack_Pop(stack);
+	}
+	Stack_Push(stack, c);
 }
 
 /**
@@ -161,33 +172,15 @@ char *infix2postfix( const char *infixExpression ) {
 				Stack_Push(&stack, '(');
 				break;
 
-			case ')': //TODO use function
-				Stack_Top(&stack, &tmp);
-				Stack_Pop(&stack);
-				while (tmp != '(')
-				{
-					postfixExpression[pos++] = tmp;
-					Stack_Top(&stack, &tmp);
-					Stack_Pop(&stack);
-				}
+			case ')':
+				untilLeftPar(&stack, postfixExpression, &pos);
 				break;
 
 			case '+':
 			case '-':
 			case '*':
-			case '/': //TODO use function
-				Stack_Top(&stack, &tmp);
-				while (!Stack_IsEmpty(&stack) && tmp != '(')
-				{
-					Stack_Top(&stack, &tmp);
-					if ((tmp == '+' || tmp == '-') && (infixExpression[i] == '*' || infixExpression[i] == '/'))
-					{
-						break; //push on the stack because we have higher priority operator then top of the stack
-					}
-					postfixExpression[pos++] = tmp; //same or higher priority operator on stack -> delete, write to postfix and repeat (while)
-					Stack_Pop(&stack);
-				}
-				Stack_Push(&stack, infixExpression[i]);
+			case '/':
+				doOperation(&stack, infixExpression[i], postfixExpression, &pos);
 				break;
 
 			case '=':
@@ -254,6 +247,7 @@ void expr_value_pop( Stack *stack, int *value ) {
 	*value = 0;
 	for (int i = 0; i < 4; i++)
 	{
+		fprintf(stderr, "here2\n"); //!on the 4th it drops
 		Stack_Top(stack, (char *)(value + i)); //save to value and its i-th byte
 		Stack_Pop(stack);
 	}
@@ -283,7 +277,19 @@ void expr_value_pop( Stack *stack, int *value ) {
  * @return výsledek vyhodnocení daného výrazu na základě poskytnutých hodnot proměnných
  */
 bool eval( const char *infixExpression, VariableValue variableValues[], int variableValueCount, int *value ) {
-	solved = false; /* V případě řešení, smažte tento řádek! */
+	//! solved = false; /* V případě řešení, smažte tento řádek! */
+	//! return NULL;
+	Stack stack;
+	Stack_Init(&stack); //init of new stack
+
+	int test_value= 0;
+
+	fprintf(stderr, "here\n");
+	expr_value_push(&stack, 10);
+	fprintf(stderr, "here\n");
+	expr_value_pop(&stack, &test_value);
+
+	fprintf(stderr, "***%d***\n", test_value);
 	return NULL;
 }
 
