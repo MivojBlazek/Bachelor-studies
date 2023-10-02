@@ -244,11 +244,11 @@ void expr_value_push( Stack *stack, int value ) {
  */
 void expr_value_pop( Stack *stack, int *value ) {
 	//! solved = false; /* V případě řešení, smažte tento řádek! */
-	*value = 0;
+	//! *value = 0;
 	for (int i = 0; i < 4; i++)
 	{
-		fprintf(stderr, "here2\n"); //!on the 4th it drops
-		Stack_Top(stack, (char *)(value + i)); //save to value and its i-th byte
+//		fprintf(stderr, "here2\n"); //!on the 4th it drops
+		Stack_Top(stack, (char *)((char *)value + i)); //save to value and its i-th byte
 		Stack_Pop(stack);
 	}
 }
@@ -281,16 +281,57 @@ bool eval( const char *infixExpression, VariableValue variableValues[], int vari
 	//! return NULL;
 	Stack stack;
 	Stack_Init(&stack); //init of new stack
-
-	int test_value= 0;
-
-	fprintf(stderr, "here\n");
-	expr_value_push(&stack, 10);
-	fprintf(stderr, "here\n");
-	expr_value_pop(&stack, &test_value);
-
-	fprintf(stderr, "***%d***\n", test_value);
-	return NULL;
+	
+	int val1, val2;
+	char *postfix = infix2postfix(infixExpression);
+	for (int i = 0; postfix[i] != '='; i++)
+	{
+		switch (postfix[i])
+		{
+			case '+':
+				expr_value_pop(&stack, &val2);
+				expr_value_pop(&stack, &val1);
+				expr_value_push(&stack, val1 + val2);
+				break;
+			case '-':
+				expr_value_pop(&stack, &val2);
+				expr_value_pop(&stack, &val1);
+				expr_value_push(&stack, val1 - val2);
+				break;
+			case '*':
+				expr_value_pop(&stack, &val2);
+				expr_value_pop(&stack, &val1);
+				expr_value_push(&stack, val1 * val2);
+				break;
+			case '/':
+				expr_value_pop(&stack, &val2);
+				expr_value_pop(&stack, &val1);
+				expr_value_push(&stack, val1 / val2);
+				break;
+			default:
+				for (int j = 0; j < variableValueCount; j++)
+				{
+					if (variableValues[j].name == postfix[i])
+					{
+						expr_value_push(&stack, variableValues[j].value);
+						break;
+					}
+				}
+				break;
+		}
+	}
+	expr_value_pop(&stack, value);
+//	int test_value = 0;
+//	fprintf(stderr, "here\n");
+//	expr_value_push(&stack, 2000000000);
+//	fprintf(stderr, "here\n");
+//	for (int i = 0; i < 4; i++)
+//	{
+//		fprintf(stderr, "*******%d\n", (int)stack.array[i]);
+//	}
+//	expr_value_pop(&stack, &test_value);
+//	fprintf(stderr, "***%d***\n", test_value);
+	return *value;
 }
 
 /* Konec c204.c */
