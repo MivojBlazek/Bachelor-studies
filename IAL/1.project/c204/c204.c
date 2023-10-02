@@ -199,6 +199,7 @@ char *infix2postfix( const char *infixExpression ) {
 		}
 	}
 	postfixExpression[pos++] = '\0';
+	Stack_Dispose(&stack);
 	return postfixExpression;
 }
 
@@ -216,13 +217,6 @@ char *infix2postfix( const char *infixExpression ) {
  */
 void expr_value_push( Stack *stack, int value ) {
 	//! solved = false; /* V případě řešení, smažte tento řádek! */
-/*
-	char value_converted[4]; //! Probably delete
-	value_converted[0] = value % 256; //LSB
-	value_converted[1] = (value % 65536) * 256; //65536 = 256^2
-	value_converted[2] = (value % 16777216) * 256; //16777216 = 256^3
-	value_converted[3] = value / 16777216; //MSB
-*/
 	char *value_converted = (char *)(&value);
 	for (int i = 3; i >= 0; i--) //store all 4 bytes to stack starting with LSB and ending with MSB, so MSB will be on top
 	{
@@ -247,7 +241,6 @@ void expr_value_pop( Stack *stack, int *value ) {
 	//! *value = 0;
 	for (int i = 0; i < 4; i++)
 	{
-//		fprintf(stderr, "here2\n"); //!on the 4th it drops
 		Stack_Top(stack, (char *)((char *)value + i)); //save to value and its i-th byte
 		Stack_Pop(stack);
 	}
@@ -321,16 +314,8 @@ bool eval( const char *infixExpression, VariableValue variableValues[], int vari
 		}
 	}
 	expr_value_pop(&stack, value);
-//	int test_value = 0;
-//	fprintf(stderr, "here\n");
-//	expr_value_push(&stack, 2000000000);
-//	fprintf(stderr, "here\n");
-//	for (int i = 0; i < 4; i++)
-//	{
-//		fprintf(stderr, "*******%d\n", (int)stack.array[i]);
-//	}
-//	expr_value_pop(&stack, &test_value);
-//	fprintf(stderr, "***%d***\n", test_value);
+	Stack_Dispose(&stack); //cleaning memory
+	free(postfix);
 	return *value;
 }
 
