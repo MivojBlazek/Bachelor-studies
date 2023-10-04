@@ -75,6 +75,7 @@ void Stack_Init( Stack *stack ) {
 	if (!stack)
 	{
 		Stack_Error(SERR_INIT);
+		return;
 	}
 	stack->topIndex = -1;
 	stack->array = malloc(sizeof(char) * STACK_SIZE); //init stack for STACK_SIZE chars
@@ -129,6 +130,7 @@ void Stack_Top( const Stack *stack, char *dataPtr ) {
 	if (Stack_IsEmpty(stack))
 	{
 		Stack_Error(SERR_TOP);
+		return;
 	}
 	*dataPtr = stack->array[stack->topIndex]; //copy char from stack on topIndex to *dataPtr
 }
@@ -152,8 +154,7 @@ void Stack_Pop( Stack *stack ) {
 		//printf("WARNING: Cannot pop stack because stack is empty.");
 		return;
 	}
-	stack->array[stack->topIndex] = '\0'; //make topIndex empty ('\0') and lower topIndex by 1 (deleted item)
-	stack->topIndex--;
+	stack->array[stack->topIndex--] = '\0'; //make topIndex empty ('\0') and lower topIndex by 1 (deleted item)
 }
 
 
@@ -171,6 +172,7 @@ void Stack_Push( Stack *stack, char data ) {
 	if (Stack_IsFull(stack))
 	{
 		Stack_Error(SERR_PUSH);
+		return;
 	}
 	stack->array[++stack->topIndex] = data; //increase number of items in stack and push value from 'data' on the top of stack
 }
