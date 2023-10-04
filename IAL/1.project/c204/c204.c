@@ -54,7 +54,6 @@ bool solved;
  * @param postfixExpressionLength Ukazatel na aktuální délku výsledného postfixového výrazu
  */
 void untilLeftPar( Stack *stack, char *postfixExpression, unsigned *postfixExpressionLength ) {
-	//! solved = false; /* V případě řešení, smažte tento řádek! */
 	char tmp;
 	Stack_Top(stack, &tmp);
 	Stack_Pop(stack);
@@ -83,7 +82,6 @@ void untilLeftPar( Stack *stack, char *postfixExpression, unsigned *postfixExpre
  * @param postfixExpressionLength Ukazatel na aktuální délku výsledného postfixového výrazu
  */
 void doOperation( Stack *stack, char c, char *postfixExpression, unsigned *postfixExpressionLength ) {
-	//! solved = false; /* V případě řešení, smažte tento řádek! */
 	char tmp;
 	if (!Stack_IsEmpty(stack))
 	{
@@ -151,8 +149,6 @@ void doOperation( Stack *stack, char c, char *postfixExpression, unsigned *postf
  * @returns znakový řetězec obsahující výsledný postfixový výraz
  */
 char *infix2postfix( const char *infixExpression ) {
-	//! solved = false; /* V případě řešení, smažte tento řádek! */
-	//! return NULL;
 	Stack stack;
 	Stack_Init(&stack); //init of new stack
 
@@ -216,9 +212,8 @@ char *infix2postfix( const char *infixExpression ) {
  * @param value hodnota k vložení na zásobník
  */
 void expr_value_push( Stack *stack, int value ) {
-	//! solved = false; /* V případě řešení, smažte tento řádek! */
-	char *value_converted = (char *)(&value);
-	for (int i = 3; i >= 0; i--) //store all 4 bytes to stack starting with LSB and ending with MSB, so MSB will be on top
+	char *value_converted = (char *)(&value); //save int value to char *
+	for (int i = (sizeof(int)/sizeof(char)) - 1; i >= 0; i--) //store all 4 bytes to stack starting with LSB and ending with MSB, so MSB will be on top
 	{
 		Stack_Push(stack, value_converted[i]);
 	}
@@ -237,9 +232,7 @@ void expr_value_push( Stack *stack, int value ) {
  *   výsledné celočíselné hodnoty z vrcholu zásobníku
  */
 void expr_value_pop( Stack *stack, int *value ) {
-	//! solved = false; /* V případě řešení, smažte tento řádek! */
-	//! *value = 0;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < (int)(sizeof(int)/sizeof(char)); i++)
 	{
 		Stack_Top(stack, (char *)((char *)value + i)); //save to value and its i-th byte
 		Stack_Pop(stack);
@@ -270,14 +263,13 @@ void expr_value_pop( Stack *stack, int *value ) {
  * @return výsledek vyhodnocení daného výrazu na základě poskytnutých hodnot proměnných
  */
 bool eval( const char *infixExpression, VariableValue variableValues[], int variableValueCount, int *value ) {
-	//! solved = false; /* V případě řešení, smažte tento řádek! */
-	//! return NULL;
 	Stack stack;
 	Stack_Init(&stack); //init of new stack
 	
 	int val1, val2;
 	char *postfix = infix2postfix(infixExpression);
-	for (int i = 0; postfix[i] != '='; i++)
+	fprintf(stderr, ":%s:\n", postfix); //! DEBUG
+	for (int i = 0; postfix[i] != '='; i++) //take every char in postfix and calculate step by step to result
 	{
 		switch (postfix[i])
 		{
@@ -286,28 +278,39 @@ bool eval( const char *infixExpression, VariableValue variableValues[], int vari
 				expr_value_pop(&stack, &val1);
 				expr_value_push(&stack, val1 + val2);
 				break;
+
 			case '-':
 				expr_value_pop(&stack, &val2);
 				expr_value_pop(&stack, &val1);
 				expr_value_push(&stack, val1 - val2);
 				break;
+
 			case '*':
 				expr_value_pop(&stack, &val2);
 				expr_value_pop(&stack, &val1);
 				expr_value_push(&stack, val1 * val2);
 				break;
+
 			case '/':
 				expr_value_pop(&stack, &val2);
 				expr_value_pop(&stack, &val1);
 				expr_value_push(&stack, val1 / val2);
 				break;
+
 			default:
-				for (int j = 0; j < variableValueCount; j++)
+				if (postfix[i] >= '0' && postfix[i] <= '9') //numbers save to stack
 				{
-					if (variableValues[j].name == postfix[i])
+					expr_value_push(&stack, postfix[i] - '0');
+				}
+				else
+				{
+					for (int j = 0; j < variableValueCount; j++) //for variables find its value and save it to stack
 					{
-						expr_value_push(&stack, variableValues[j].value);
-						break;
+						if (variableValues[j].name == postfix[i])
+						{
+							expr_value_push(&stack, variableValues[j].value);
+							break;
+						}
 					}
 				}
 				break;
