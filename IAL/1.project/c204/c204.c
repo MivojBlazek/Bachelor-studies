@@ -89,13 +89,16 @@ void doOperation( Stack *stack, char c, char *postfixExpression, unsigned *postf
 	}
 	while (!Stack_IsEmpty(stack) && tmp != '(')
 	{
-		Stack_Top(stack, &tmp);
 		if ((tmp == '+' || tmp == '-') && (c == '*' || c == '/'))
 		{
 			break; //push on the stack because we have higher priority operator then top of the stack
 		}
 		postfixExpression[(*postfixExpressionLength)++] = tmp; //same or higher priority operator on stack -> delete, write to postfix and repeat (while)
 		Stack_Pop(stack);
+		if (!Stack_IsEmpty(stack)) //read next item from stack
+		{
+			Stack_Top(stack, &tmp);
+		}
 	}
 	Stack_Push(stack, c);
 }
@@ -268,7 +271,6 @@ bool eval( const char *infixExpression, VariableValue variableValues[], int vari
 	
 	int val1, val2;
 	char *postfix = infix2postfix(infixExpression);
-	fprintf(stderr, ":%s:\n", postfix); //! DEBUG
 	for (int i = 0; postfix[i] != '='; i++) //take every char in postfix and calculate step by step to result
 	{
 		switch (postfix[i])
@@ -294,6 +296,10 @@ bool eval( const char *infixExpression, VariableValue variableValues[], int vari
 			case '/':
 				expr_value_pop(&stack, &val2);
 				expr_value_pop(&stack, &val1);
+				if (val2 == 0)
+				{
+					return false;
+				}
 				expr_value_push(&stack, val1 / val2);
 				break;
 
@@ -319,7 +325,7 @@ bool eval( const char *infixExpression, VariableValue variableValues[], int vari
 	expr_value_pop(&stack, value);
 	Stack_Dispose(&stack); //cleaning memory
 	free(postfix);
-	return *value;
+	return true;
 }
 
 /* Konec c204.c */
