@@ -95,12 +95,12 @@ void DLL_Dispose( DLList *list ) {
 	list->activeElement = NULL;
 	while (list->firstElement != NULL)
 	{
-		DLLElementPtr tmpElem = list->firstElement->nextElement;
+		DLLElementPtr tmpElem = list->firstElement->nextElement; //save second element, free first and make the saved one first (shift by 1 element)
 		free(list->firstElement);
 		list->firstElement = tmpElem;
 		if (list->firstElement == NULL)
 		{
-			list->lastElement = NULL;
+			list->lastElement = NULL; //all elements are cleared
 		}
 		else
 		{
@@ -118,7 +118,7 @@ void DLL_Dispose( DLList *list ) {
  * @param data Hodnota k vložení na začátek seznamu
  */
 void DLL_InsertFirst( DLList *list, int data ) {
-	DLLElementPtr newElem = malloc(sizeof(struct DLLElement));
+	DLLElementPtr newElem = malloc(sizeof(struct DLLElement)); //malloc space for new element
 	if (newElem == NULL)
 	{
 		DLL_Error();
@@ -126,7 +126,7 @@ void DLL_InsertFirst( DLList *list, int data ) {
 	}
 	newElem->data = data;
 	newElem->previousElement = NULL;
-	newElem->nextElement = list->firstElement;
+	newElem->nextElement = list->firstElement; //save new element before the first one and set pointers between elements
 	if (list->firstElement == NULL)
 	{
 		list->lastElement = newElem;
@@ -135,7 +135,7 @@ void DLL_InsertFirst( DLList *list, int data ) {
 	{
 		newElem->nextElement->previousElement = newElem;
 	}
-	list->firstElement = newElem;
+	list->firstElement = newElem; //make our new element the first in list
 }
 
 /**
@@ -147,7 +147,7 @@ void DLL_InsertFirst( DLList *list, int data ) {
  * @param data Hodnota k vložení na konec seznamu
  */
 void DLL_InsertLast( DLList *list, int data ) {
-	DLLElementPtr newElem = malloc(sizeof(struct DLLElement));
+	DLLElementPtr newElem = malloc(sizeof(struct DLLElement)); //malloc space for new element
 	if (newElem == NULL)
 	{
 		DLL_Error();
@@ -155,7 +155,7 @@ void DLL_InsertLast( DLList *list, int data ) {
 	}
 	newElem->data = data;
 	newElem->nextElement = NULL;
-	newElem->previousElement = list->lastElement;
+	newElem->previousElement = list->lastElement; //save new element after the last one and set pointers between elements
 	if (list->lastElement == NULL)
 	{
 		list->firstElement = newElem;
@@ -164,7 +164,7 @@ void DLL_InsertLast( DLList *list, int data ) {
 	{
 		newElem->previousElement->nextElement = newElem;
 	}
-	list->lastElement = newElem;
+	list->lastElement = newElem; //make our new element last in list
 }
 
 /**
@@ -200,10 +200,9 @@ void DLL_GetFirst( DLList *list, int *dataPtr ) {
 	if (list->firstElement == NULL)
 	{
 		DLL_Error();
-		*dataPtr = 0;
 		return;
 	}
-	*dataPtr = list->firstElement->data;
+	*dataPtr = list->firstElement->data; //take data from first element in list
 }
 
 /**
@@ -217,10 +216,9 @@ void DLL_GetLast( DLList *list, int *dataPtr ) {
 	if (list->lastElement == NULL)
 	{
 		DLL_Error();
-		*dataPtr = 0;
 		return;
 	}
-	*dataPtr = list->lastElement->data;
+	*dataPtr = list->lastElement->data; //take data from last element in list
 }
 
 /**
@@ -239,16 +237,16 @@ void DLL_DeleteFirst( DLList *list ) {
 	{
 		list->activeElement = NULL;
 	}
-	DLLElementPtr tmpElem = list->firstElement->nextElement;
+	DLLElementPtr tmpElem = list->firstElement->nextElement; //temporarily save second element and free the first one
 	free(list->firstElement);
-	list->firstElement = tmpElem;
+	list->firstElement = tmpElem; //save the tmpElem as first in list and set pointers
 	if (list->firstElement == NULL)
 	{
 		list->lastElement = NULL;
 	}
 	else
 	{
-		list->firstElement->previousElement = NULL; //? mby diky tomuto nemusim mit nasledujici if
+		list->firstElement->previousElement = NULL;
 	}
 }
 
@@ -268,16 +266,16 @@ void DLL_DeleteLast( DLList *list ) {
 	{
 		list->activeElement = NULL;
 	}
-	DLLElementPtr tmpElem = list->lastElement->previousElement;
+	DLLElementPtr tmpElem = list->lastElement->previousElement;//temporarily save second element from end and free the last one
 	free(list->lastElement);
-	list->lastElement = tmpElem;
+	list->lastElement = tmpElem; //save the tmpElem as last one in list and set pointers
 	if (list->lastElement == NULL)
 	{
 		list->firstElement = NULL;
 	}
 	else
 	{
-		list->lastElement->nextElement = NULL; //? mby diky tomuto nemusim mit nasledujici if
+		list->lastElement->nextElement = NULL;
 	}
 }
 
@@ -291,7 +289,7 @@ void DLL_DeleteLast( DLList *list ) {
 void DLL_DeleteAfter( DLList *list ) {
 	if (list->activeElement != NULL && list->activeElement != list->lastElement)
 	{
-		DLLElementPtr tmpElem = list->activeElement->nextElement;
+		DLLElementPtr tmpElem = list->activeElement->nextElement; //temporarily save element after active and shift right part of list, so we have new list without tmpElem and tmpElem
 		list->activeElement->nextElement = tmpElem->nextElement;
 		if (tmpElem->nextElement != NULL)
 		{
@@ -301,7 +299,7 @@ void DLL_DeleteAfter( DLList *list ) {
 		{
 			list->lastElement = list->activeElement;
 		}
-		free(tmpElem);
+		free(tmpElem); //free deleted element
 	}
 }
 
@@ -315,7 +313,7 @@ void DLL_DeleteAfter( DLList *list ) {
 void DLL_DeleteBefore( DLList *list ) {
 	if (list->activeElement != NULL && list->activeElement != list->firstElement)
 	{
-		DLLElementPtr tmpElem = list->activeElement->previousElement;
+		DLLElementPtr tmpElem = list->activeElement->previousElement; //temporarily save element before active and left right part of list, so we have new list without tmpElem and tmpElem
 		list->activeElement->previousElement = tmpElem->previousElement;
 		if (tmpElem->previousElement != NULL)
 		{
@@ -325,7 +323,7 @@ void DLL_DeleteBefore( DLList *list ) {
 		{
 			list->firstElement = list->activeElement;
 		}
-		free(tmpElem);
+		free(tmpElem); //free deleted element
 	}
 }
 
@@ -341,16 +339,16 @@ void DLL_DeleteBefore( DLList *list ) {
 void DLL_InsertAfter( DLList *list, int data ) {
 	if (list->activeElement != NULL)
 	{
-		DLLElementPtr tmpElem = list->activeElement->nextElement;
+		DLLElementPtr tmpElem = list->activeElement->nextElement; //save element after active and malloc a new one instead of it
 		list->activeElement->nextElement = malloc(sizeof(struct DLLElement));
 		if (list->activeElement->nextElement == NULL)
 		{
 			DLL_Error();
 			return;
 		}
-		list->activeElement->nextElement->nextElement = tmpElem;
+		list->activeElement->nextElement->nextElement = tmpElem; //then put these 2 lists together and set pointers between them
 		list->activeElement->nextElement->previousElement = list->activeElement;
-		list->activeElement->nextElement->data = data;
+		list->activeElement->nextElement->data = data; //of course save data value to new element
 		if (tmpElem != NULL)
 		{
 			tmpElem->previousElement = list->activeElement->nextElement;
@@ -374,16 +372,16 @@ void DLL_InsertAfter( DLList *list, int data ) {
 void DLL_InsertBefore( DLList *list, int data ) {
 	if (list->activeElement != NULL)
 	{
-		DLLElementPtr tmpElem = list->activeElement->previousElement;
+		DLLElementPtr tmpElem = list->activeElement->previousElement; //save element before active and malloc a new one instead of it
 		list->activeElement->previousElement = malloc(sizeof(struct DLLElement));
 		if (list->activeElement->previousElement == NULL)
 		{
 			DLL_Error();
 			return;
 		}
-		list->activeElement->previousElement->previousElement = tmpElem;
+		list->activeElement->previousElement->previousElement = tmpElem; //then put these 2 lists together and set pointers between them
 		list->activeElement->previousElement->nextElement = list->activeElement;
-		list->activeElement->previousElement->data = data;
+		list->activeElement->previousElement->data = data; //of course save data value to new element
 		if (tmpElem != NULL)
 		{
 			tmpElem->nextElement = list->activeElement->previousElement;
@@ -406,10 +404,9 @@ void DLL_GetValue( DLList *list, int *dataPtr ) {
 	if (list->activeElement == NULL)
 	{
 		DLL_Error();
-		*dataPtr = 0;
 		return;
 	}
-	*dataPtr = list->activeElement->data;
+	*dataPtr = list->activeElement->data; //save active elements data to dataPtr
 }
 
 /**
@@ -440,7 +437,7 @@ void DLL_Next( DLList *list ) {
 	}
 	else
 	{
-		list->activeElement = NULL;
+		list->activeElement = NULL; //if last element was active -> nothing is active
 	}
 }
 
@@ -459,7 +456,7 @@ void DLL_Previous( DLList *list ) {
 	}
 	else
 	{
-		list->activeElement = NULL;
+		list->activeElement = NULL; //if first element was active -> nothing is active
 	}
 }
 
