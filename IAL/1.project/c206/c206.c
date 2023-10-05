@@ -200,6 +200,7 @@ void DLL_GetFirst( DLList *list, int *dataPtr ) {
 	if (list->firstElement == NULL)
 	{
 		DLL_Error();
+		*dataPtr = 0;
 		return;
 	}
 	*dataPtr = list->firstElement->data;
@@ -216,6 +217,7 @@ void DLL_GetLast( DLList *list, int *dataPtr ) {
 	if (list->lastElement == NULL)
 	{
 		DLL_Error();
+		*dataPtr = 0;
 		return;
 	}
 	*dataPtr = list->lastElement->data;
@@ -404,6 +406,7 @@ void DLL_GetValue( DLList *list, int *dataPtr ) {
 	if (list->activeElement == NULL)
 	{
 		DLL_Error();
+		*dataPtr = 0;
 		return;
 	}
 	*dataPtr = list->activeElement->data;
