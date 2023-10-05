@@ -118,7 +118,7 @@ void DLL_Dispose( DLList *list ) {
  * @param data Hodnota k vložení na začátek seznamu
  */
 void DLL_InsertFirst( DLList *list, int data ) {
-	DLLElementPtr newElem = malloc(sizeof(DLLElementPtr));
+	DLLElementPtr newElem = malloc(sizeof(struct DLLElement));
 	if (newElem == NULL)
 	{
 		DLL_Error();
@@ -147,15 +147,15 @@ void DLL_InsertFirst( DLList *list, int data ) {
  * @param data Hodnota k vložení na konec seznamu
  */
 void DLL_InsertLast( DLList *list, int data ) {
-	DLLElementPtr newElem = malloc(sizeof(DLLElementPtr));
+	DLLElementPtr newElem = malloc(sizeof(struct DLLElement));
 	if (newElem == NULL)
 	{
 		DLL_Error();
-		return; //? mby nemusi byt
+		return;
 	}
 	newElem->data = data;
-	newElem->previousElement = list->lastElement;
 	newElem->nextElement = NULL;
+	newElem->previousElement = list->lastElement;
 	if (list->lastElement == NULL)
 	{
 		list->firstElement = newElem;
@@ -342,7 +342,7 @@ void DLL_InsertAfter( DLList *list, int data ) {
 	if (list->activeElement != NULL)
 	{
 		DLLElementPtr tmpElem = list->activeElement->nextElement;
-		list->activeElement->nextElement = malloc(sizeof(DLLElementPtr));
+		list->activeElement->nextElement = malloc(sizeof(struct DLLElement));
 		if (list->activeElement->nextElement == NULL)
 		{
 			DLL_Error();
@@ -375,7 +375,7 @@ void DLL_InsertBefore( DLList *list, int data ) {
 	if (list->activeElement != NULL)
 	{
 		DLLElementPtr tmpElem = list->activeElement->previousElement;
-		list->activeElement->previousElement = malloc(sizeof(DLLElementPtr));
+		list->activeElement->previousElement = malloc(sizeof(struct DLLElement));
 		if (list->activeElement->previousElement == NULL)
 		{
 			DLL_Error();
