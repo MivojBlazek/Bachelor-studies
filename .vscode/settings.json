@@ -81,5 +81,6 @@
     },
     "C_Cpp.default.cStandard": "",
     "cmake.configureOnOpen": false,
-    "C_Cpp.default.compilerPath": "/usr/bin/gcc"
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+    "files.autoSave": "afterDelay"
 }
