@@ -117,7 +117,7 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
   else
   {
     bst_replace_by_rightmost(target, &(*tree)->right);
-    if ((*tree)->right->key == 0)
+    if ((*tree)->right->key == 0) //! nelze, co kdyz ma leveho syna
       {
         free((*tree)->right);
         (*tree)->right = NULL;
