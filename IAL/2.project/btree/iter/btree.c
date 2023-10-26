@@ -132,12 +132,29 @@ void bst_insert(bst_node_t **tree, char key, int value) {
  * Funkci implementujte iterativně bez použití vlastních pomocných funkcí.
  */
 void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
-  target = *tree;
-  while (target != NULL)
+  bst_node_t *tmp = *tree;
+  bst_node_t *beforeTmp = target;
+  while (tmp != NULL)
   {
-    if (target->right != NULL)
+    if (tmp->right != NULL)
     {
-      target = target->right;
+      beforeTmp = tmp;
+      tmp = tmp->right;
+    }
+    else
+    {
+      if (tmp->left == NULL)
+      {
+        target->key = tmp->key;
+        target->value = tmp->value;
+        free(tmp);
+        tmp = NULL;
+        beforeTmp->right = NULL;
+      }
+      else
+      {
+        //TODO
+      }
     }
   }
 }
@@ -202,6 +219,7 @@ void bst_delete(bst_node_t **tree, char key) {
       }
       else
       {
+        beforeTmp = tmp;
         if (tmp->left == NULL)
         {
           tmp = tmp->right;
@@ -232,7 +250,7 @@ void bst_delete(bst_node_t **tree, char key) {
  * vlastních pomocných funkcí.
  */
 void bst_dispose(bst_node_t **tree) {
-  for (int i = 1; i < 25; i++)
+  for (int i = 1; i < 256; i++)
   {
     bst_delete(tree, (char)i); //! nejak podle klice mazat
   }
