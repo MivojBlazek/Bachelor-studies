@@ -34,7 +34,7 @@ ENDTEST
 TEST(test_tree_search_empty, "Search in an empty tree (A)")
 bst_init(&test_tree);
 int result;
-fprintf(stderr, "%d %d\n", bst_search(test_tree, 'A', &result), result);
+bst_search(test_tree, 'A', &result);
 ENDTEST
 
 TEST(test_tree_insert_root, "Insert an item (H,1)")
@@ -47,7 +47,7 @@ TEST(test_tree_search_root, "Search in a single node tree (H)")
 bst_init(&test_tree);
 bst_insert(&test_tree, 'H', 1);
 int result;
-fprintf(stderr, "%d %d\n", bst_search(test_tree, 'H', &result), result);
+bst_search(test_tree, 'H', &result);
 bst_print_tree(test_tree);
 ENDTEST
 
@@ -69,7 +69,7 @@ TEST(test_tree_search, "Search for an item deeper in the tree (A)")
 bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
 int result;
-fprintf(stderr, "%d %d\n", bst_search(test_tree, 'A', &result), result);
+bst_search(test_tree, 'A', &result);
 bst_print_tree(test_tree);
 ENDTEST
 
@@ -77,7 +77,7 @@ TEST(test_tree_search_missing, "Search for a missing key (X)")
 bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
 int result;
-fprintf(stderr, "%d %d\n", bst_search(test_tree, 'X', &result), result);
+bst_search(test_tree, 'X', &result);
 bst_print_tree(test_tree);
 ENDTEST
 
