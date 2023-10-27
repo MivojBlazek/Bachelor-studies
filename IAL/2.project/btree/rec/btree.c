@@ -117,11 +117,12 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
   else
   {
     bst_replace_by_rightmost(target, &(*tree)->right);
-    if ((*tree)->right->key == 0) //! nelze, co kdyz ma leveho syna
-      {
-        free((*tree)->right);
-        (*tree)->right = NULL;
-      }
+    if ((*tree)->right->key == 0)
+    {
+      bst_node_t *tmp = (*tree)->right->left;
+      free((*tree)->right);
+      (*tree)->right = tmp;
+    }
   }
 }
 
@@ -176,6 +177,12 @@ void bst_delete(bst_node_t **tree, char key) {
       else if ((*tree)->left != NULL && (*tree)->right != NULL)
       {
         bst_replace_by_rightmost(*tree, &(*tree)->left);
+        if ((*tree)->left->key == 0)
+        {
+          bst_node_t *tmp = (*tree)->left->left;
+          free((*tree)->left);
+          (*tree)->left = tmp;
+        }
       }
       else
       {

@@ -33,8 +33,9 @@ ENDTEST
 
 TEST(test_tree_search_empty, "Search in an empty tree (A)")
 bst_init(&test_tree);
-int result;
+int result = -1234;
 bst_search(test_tree, 'A', &result);
+printf("Result: %d\n", result);
 ENDTEST
 
 TEST(test_tree_insert_root, "Insert an item (H,1)")
@@ -48,6 +49,7 @@ bst_init(&test_tree);
 bst_insert(&test_tree, 'H', 1);
 int result;
 bst_search(test_tree, 'H', &result);
+printf("Result: %d\n", result);
 bst_print_tree(test_tree);
 ENDTEST
 
@@ -70,14 +72,16 @@ bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
 int result;
 bst_search(test_tree, 'A', &result);
+    printf("Result: %d\n", result);
 bst_print_tree(test_tree);
 ENDTEST
 
 TEST(test_tree_search_missing, "Search for a missing key (X)")
 bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
-int result;
+int result = -1234;
 bst_search(test_tree, 'X', &result);
+printf("Result: %d\n", result);
 bst_print_tree(test_tree);
 ENDTEST
 
@@ -138,6 +142,19 @@ bst_delete(&test_tree, 'H');
 bst_print_tree(test_tree);
 ENDTEST
 
+TEST(test_tree_delete_both_subtrees_parent,
+     "Delete a node with both subtrees while moving a parent (F, H)")
+bst_init(&test_tree);
+bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
+bst_insert_many(&test_tree, additional_keys, additional_values,
+                additional_data_count);
+bst_delete(&test_tree, 'G');
+bst_print_tree(test_tree);
+bst_delete(&test_tree, 'H');
+bst_print_tree(test_tree);
+bst_dispose(&test_tree);
+ENDTEST
+
 TEST(test_tree_dispose_filled, "Dispose the whole tree")
 bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
@@ -148,44 +165,203 @@ ENDTEST
 
 TEST(test_tree_preorder, "Traverse the tree using preorder")
 bst_init(&test_tree);
-bst_insert_many(&test_tree, traversal_keys, traversal_values, traversal_data_count);
+bst_insert_many(&test_tree, traversal_keys, traversal_values,
+                traversal_data_count);
 bst_preorder(test_tree, test_items);
+printf("\n");
 bst_print_tree(test_tree);
 bst_print_items(test_items);
 ENDTEST
 
 TEST(test_tree_inorder, "Traverse the tree using inorder")
 bst_init(&test_tree);
-bst_insert_many(&test_tree, traversal_keys, traversal_values, traversal_data_count);
+bst_insert_many(&test_tree, traversal_keys, traversal_values,
+                traversal_data_count);
 bst_inorder(test_tree, test_items);
+printf("\n");
 bst_print_tree(test_tree);
 bst_print_items(test_items);
 ENDTEST
 
 TEST(test_tree_postorder, "Traverse the tree using postorder")
 bst_init(&test_tree);
-bst_insert_many(&test_tree, traversal_keys, traversal_values, traversal_data_count);
+bst_insert_many(&test_tree, traversal_keys, traversal_values,
+                traversal_data_count);
 bst_postorder(test_tree, test_items);
+printf("\n");
 bst_print_tree(test_tree);
 bst_print_items(test_items);
 ENDTEST
 
-#ifdef EXA
-
-TEST(test_letter_count, "Count letters");
-bst_init(&test_tree);
-letter_count(&test_tree, "abBcCc_ 123 *");
-bst_print_tree(test_tree);
+// DELETION TESTS
+TEST(test_delete1, "Delete H in H")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
 ENDTEST
 
-TEST(test_balance, "Count letters and balance");
-bst_init(&test_tree);
-letter_count(&test_tree, "abBcCc_ 123 *");
-bst_balance(&test_tree);
-bst_print_tree(test_tree);
+TEST(test_delete2, "Delete H in HA")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
 ENDTEST
 
-#endif // EXA
+TEST(test_delete2a, "Delete A in HA")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'A');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete3, "Delete H in HZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete3a, "Delete Z in HZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'Z');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete4, "Delete H in HAZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete5, "Delete H in HAC")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'C', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete6, "Delete H in HCAB")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'C', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_insert(&test_tree, 'B', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete6a, "Delete A in HCAB")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'C', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_insert(&test_tree, 'B', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'A');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete6b, "Delete B in HCAB")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'C', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_insert(&test_tree, 'B', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'B');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete7, "Delete H in HJT")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_insert(&test_tree, 'T', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete7a, "Delete J in HJT")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_insert(&test_tree, 'T', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'J');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete8, "Delete H in HJZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete8a, "Delete J in HJZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'J');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete9, "Delete H in HJTZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_insert(&test_tree, 'T', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete9a, "Delete J in HJTZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_insert(&test_tree, 'T', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'J');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete10, "Delete H in HCD")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'C', 20);
+    bst_insert(&test_tree, 'D', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
 
 int main(int argc, char *argv[]) {
   init_test();
@@ -203,15 +379,28 @@ int main(int argc, char *argv[]) {
   test_tree_delete_left_subtree();
   test_tree_delete_right_subtree();
   test_tree_delete_both_subtrees();
+  test_tree_delete_both_subtrees_parent();
   test_tree_delete_missing();
   test_tree_delete_root();
   test_tree_dispose_filled();
   test_tree_preorder();
   test_tree_inorder();
   test_tree_postorder();
-
-#ifdef EXA
-  test_letter_count();
-  test_balance();
-#endif // EXA
+  test_delete1();
+  test_delete2();
+  test_delete2a();
+  test_delete3();
+  test_delete3a();
+  test_delete4();
+  test_delete5();
+  test_delete6();
+  test_delete6a();
+  test_delete6b();
+  test_delete7();
+  test_delete7a();
+  test_delete8();
+  test_delete8a();
+  test_delete9();
+  test_delete9a();
+  test_delete10();
 }

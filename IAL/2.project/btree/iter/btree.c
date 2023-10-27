@@ -42,24 +42,21 @@ void bst_init(bst_node_t **tree) {
  * Funkci implementujte iterativně bez použité vlastních pomocných funkcí.
  */
 bool bst_search(bst_node_t *tree, char key, int *value) {
-  if (tree) //! mby zbytecny, protoze se to provede na tom dalsim while
+  bst_node_t *tmp = tree;
+  while (tmp != NULL)
   {
-    bst_node_t *tmp = tree;
-    while (tmp != NULL)
+    if (tmp->key > key)
     {
-      if (tmp->key > key)
-      {
-        tmp = tmp->left;
-      }
-      else if (tmp->key < key)
-      {
-        tmp = tmp->right;
-      }
-      else
-      {
-        *value = tmp->value;
-        return true;
-      }
+      tmp = tmp->left;
+    }
+    else if (tmp->key < key)
+    {
+      tmp = tmp->right;
+    }
+    else
+    {
+      *value = tmp->value;
+      return true;
     }
   }
   return false;
@@ -146,18 +143,18 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
     }
     else
     {
-      if (tmp->left == NULL)
+      target->key = tmp->key;
+      target->value = tmp->value;
+      if (beforeTmp == target)
       {
-        target->key = tmp->key;
-        target->value = tmp->value;
-        free(tmp);
-        tmp = NULL;
-        beforeTmp->right = NULL;
+        target->left = tmp->left;
       }
       else
       {
-        //TODO
+        beforeTmp->right = tmp->left;
       }
+      free(tmp);
+      tmp = NULL;
     }
   }
 }
@@ -219,6 +216,7 @@ void bst_delete(bst_node_t **tree, char key) {
       else if (tmp->left != NULL && tmp->right != NULL)
       {
         bst_replace_by_rightmost(tmp, &tmp->left);
+        return;
       }
       else
       {
