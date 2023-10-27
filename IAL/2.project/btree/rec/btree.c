@@ -18,16 +18,18 @@
  * možné toto detekovat ve funkci. 
  */
 void bst_init(bst_node_t **tree) {
-  *tree = (bst_node_t *)malloc(sizeof(bst_node_t));
+  /**tree = (bst_node_t *)malloc(sizeof(bst_node_t));
   if ((*tree) == NULL)
   {
     //! malloc failed
     return;
-  }
+  }*/
+  (*tree) = NULL;
+  /*
   (*tree)->key = 0;
   (*tree)->value = 0;
   (*tree)->left = NULL;
-  (*tree)->right = NULL;
+  (*tree)->right = NULL;*/
 }
 
 /*
@@ -73,7 +75,16 @@ bool bst_search(bst_node_t *tree, char key, int *value) {
 void bst_insert(bst_node_t **tree, char key, int value) {
   if ((*tree) == NULL)
   {
-    bst_init(tree);
+    (*tree) = (bst_node_t *)malloc(sizeof(bst_node_t));
+    if (*tree == NULL)
+    {
+      //! malloc failed
+      return;
+    }
+    
+    (*tree)->left = NULL;
+    (*tree)->right = NULL;
+    // bst_init(tree);
     (*tree)->key = key;
     (*tree)->value = value;
   }
@@ -215,11 +226,19 @@ void bst_delete(bst_node_t **tree, char key) {
  * Funkci implementujte rekurzivně bez použití vlastních pomocných funkcí.
  */
 void bst_dispose(bst_node_t **tree) {
-  for (int i = 1; i < 256; i++)
+  /*for (int i = 1; i < 256; i++)
   {
     bst_delete(tree, (char)i); //! nejak podle klice mazat
   }
   (*tree)->key = 0; //! mby overkill 4 radky navic
+  (*tree)->value = 0;
+  (*tree)->left = NULL;
+  (*tree)->right = NULL;*/
+  while (!((*tree)->left == NULL && (*tree)->right == NULL))
+  {
+    bst_delete(tree, (*tree)->key);
+  }
+  (*tree)->key = 0;
   (*tree)->value = 0;
   (*tree)->left = NULL;
   (*tree)->right = NULL;
