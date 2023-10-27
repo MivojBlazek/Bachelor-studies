@@ -363,6 +363,23 @@ TEST(test_delete10, "Delete H in HCD")
     bst_print_tree(test_tree);
 ENDTEST
 
+#ifdef EXA
+
+TEST(test_letter_count, "Count letters");
+bst_init(&test_tree);
+letter_count(&test_tree, "abBcCc_ 123 *");
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance, "Count letters and balance");
+bst_init(&test_tree);
+letter_count(&test_tree, "abBcCc_ 123 *");
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+#endif // EXA
+
 int main(int argc, char *argv[]) {
   init_test();
 
@@ -403,4 +420,9 @@ int main(int argc, char *argv[]) {
   test_delete9();
   test_delete9a();
   test_delete10();
+
+#ifdef EXA
+  test_letter_count();
+  test_balance();
+#endif // EXA
 }
