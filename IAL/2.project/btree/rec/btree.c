@@ -234,14 +234,22 @@ void bst_dispose(bst_node_t **tree) {
   (*tree)->value = 0;
   (*tree)->left = NULL;
   (*tree)->right = NULL;*/
-  while (!((*tree)->left == NULL && (*tree)->right == NULL))
+  /* while (!((*tree)->left == NULL && (*tree)->right == NULL))
   {
     bst_delete(tree, (*tree)->key);
   }
   (*tree)->key = 0;
   (*tree)->value = 0;
   (*tree)->left = NULL;
-  (*tree)->right = NULL;
+  (*tree)->right = NULL;*/
+  if (*tree == NULL)
+  {
+    return;
+  }
+  bst_dispose(&((*tree)->left));
+  bst_dispose(&((*tree)->right));
+  free(*tree);
+  *tree = NULL;
 }
 
 /*

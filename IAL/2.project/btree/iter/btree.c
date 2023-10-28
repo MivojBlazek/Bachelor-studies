@@ -20,7 +20,7 @@
  * možné toto detekovat ve funkci. 
  */
 void bst_init(bst_node_t **tree) {
-  *tree = (bst_node_t *)malloc(sizeof(bst_node_t));
+  /**tree = (bst_node_t *)malloc(sizeof(bst_node_t));
   if ((*tree) == NULL)
   {
     //! malloc failed
@@ -29,7 +29,8 @@ void bst_init(bst_node_t **tree) {
   (*tree)->key = 0;
   (*tree)->value = 0;
   (*tree)->left = NULL;
-  (*tree)->right = NULL;
+  (*tree)->right = NULL;*/
+  (*tree) = NULL;
 }
 
 /*
@@ -76,7 +77,15 @@ bool bst_search(bst_node_t *tree, char key, int *value) {
 void bst_insert(bst_node_t **tree, char key, int value) {
   if ((*tree) == NULL)
   {
-    bst_init(tree);
+    (*tree) = (bst_node_t *)malloc(sizeof(bst_node_t));
+    if (*tree == NULL)
+    {
+      //! malloc failed
+      return;
+    }
+    (*tree)->left = NULL;
+    (*tree)->right = NULL;
+    // bst_init(tree);
     (*tree)->key = key;
     (*tree)->value = value;
     return;
@@ -90,7 +99,10 @@ void bst_insert(bst_node_t **tree, char key, int value) {
     {
       if (tmp->left == NULL)
       {
-        bst_init(&newNode);
+        //bst_init(&newNode);
+        newNode = (bst_node_t *)malloc(sizeof(bst_node_t));
+        newNode->left = NULL;
+        newNode->right = NULL;
         newNode->key = key;
         newNode->value = value;
         tmp->left = newNode;
@@ -102,7 +114,10 @@ void bst_insert(bst_node_t **tree, char key, int value) {
     {
       if (tmp->right == NULL)
       {
-        bst_init(&newNode);
+        //bst_init(&newNode);
+        newNode = (bst_node_t *)malloc(sizeof(bst_node_t));
+        newNode->left = NULL;
+        newNode->right = NULL;
         newNode->key = key;
         newNode->value = value;
         tmp->right = newNode;
@@ -251,14 +266,46 @@ void bst_delete(bst_node_t **tree, char key) {
  * vlastních pomocných funkcí.
  */
 void bst_dispose(bst_node_t **tree) {
-  for (int i = 1; i < 256; i++)
+  /*for (int i = 1; i < 256; i++)
   {
     bst_delete(tree, (char)i); //! nejak podle klice mazat
   }
   (*tree)->key = 0; //! mby overkill 4 radky navic
   (*tree)->value = 0;
   (*tree)->left = NULL;
-  (*tree)->right = NULL;
+  (*tree)->right = NULL;*/
+  if (*tree == NULL)
+  {
+    return;
+  }
+  stack_bst_t stack;
+  stack_bst_init(&stack);
+  bst_node_t *currentNode = *tree;
+  bst_node_t *lastVisited = NULL;
+
+  while (currentNode || stack.top != -1)
+  {
+    if (currentNode)
+    {
+      stack_bst_push(&stack, currentNode);
+      currentNode = currentNode->left;
+    }
+    else
+    {
+      bst_node_t *tmp = stack_bst_top(&stack);
+      if (tmp->right && tmp->right != lastVisited)
+      {
+        currentNode = tmp->right;
+      }
+      else
+      {
+        lastVisited = tmp;
+        free(tmp);
+        stack_bst_pop(&stack);
+      }
+    }
+  }
+  *tree = NULL;
 }
 
 /*
