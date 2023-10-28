@@ -62,6 +62,7 @@ void letter_count(bst_node_t **tree, char *input) {
 */
 void balanceTree(bst_node_t *tree, bool left, int situation)
 {
+    fprintf(stderr, "%c, %d, %d\n", tree->key, left, situation); //! DEBUG
     //TODO
 }
 
@@ -82,15 +83,15 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
 
     if (tree != NULL)
     {
-        leftBalanced = isHeightBalanced(tree->left, &left, &criticalState);
+        leftBalanced = isHeightBalanced(tree->left, &left, criticalState);
         if (!leftBalanced)
         {
-            balanceTree(tree, true, criticalState);
+            balanceTree(tree, true, *criticalState);
         }
-        rightBalanced = isHeightBalanced(tree->right, &right, &criticalState);
+        rightBalanced = isHeightBalanced(tree->right, &right, criticalState);
         if (!rightBalanced)
         {
-            balanceTree(tree, false, criticalState);
+            balanceTree(tree, false, *criticalState);
         }
 
 
@@ -111,22 +112,22 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
             // neni vyvazeny, vlevo tezsi
             if (tree->left->left != NULL)
             {
-                isHeightBalanced(tree->left->left, &countL, &criticalState);
+                isHeightBalanced(tree->left->left, &countL, criticalState);
             }
             if (tree->left->right != NULL)
             {
-                isHeightBalanced(tree->left->right, &countR, &criticalState);
+                isHeightBalanced(tree->left->right, &countR, criticalState);
             }
 
             if (countL > countR)
             {
                 // LL
-                criticalState = 1;
+                *criticalState = 1;
             }
             else
             {
                 // LR
-                criticalState = 2;
+                *criticalState = 2;
             }
         }
         else if ((left - right) <= -2)
@@ -134,22 +135,22 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
             // neni vyvazeny, vpravo tezsi
             if (tree->right->left != NULL)
             {
-                isHeightBalanced(tree->right->left, &countL, &criticalState);
+                isHeightBalanced(tree->right->left, &countL, criticalState);
             }
             if (tree->right->right != NULL)
             {
-                isHeightBalanced(tree->right->right, &countR, &criticalState);
+                isHeightBalanced(tree->right->right, &countR, criticalState);
             }
 
             if (countL > countR)
             {
                 // RL
-                criticalState = 3;
+                *criticalState = 3;
             }
             else
             {
                 // RR
-                criticalState = 4;
+                *criticalState = 4;
             }
         }
 
