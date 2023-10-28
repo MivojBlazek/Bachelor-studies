@@ -378,9 +378,74 @@ bst_balance(&test_tree);
 bst_print_tree(test_tree);
 ENDTEST
 
-TEST(test_balance2, "Count letters and balance (false)");
+TEST(test_balance2, "Count letters and balance2");
 bst_init(&test_tree);
 letter_count(&test_tree, "abBcCcD_ 123 *");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance3, "Count letters and balance3");
+bst_init(&test_tree);
+letter_count(&test_tree, "fgedc");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance4, "Count letters and balance4");
+bst_init(&test_tree);
+letter_count(&test_tree, "fgecd");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance5, "Count letters and balance5");
+bst_init(&test_tree);
+letter_count(&test_tree, "fgced");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance6, "Count letters and balance6");
+bst_init(&test_tree);
+letter_count(&test_tree, "fagih");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance7, "Count letters and balance7");
+bst_init(&test_tree);
+letter_count(&test_tree, "cagef");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance8, "Count letters and balance8");
+bst_init(&test_tree);
+letter_count(&test_tree, "hegfljk");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance9, "Count letters and balance9");
+bst_init(&test_tree);
+letter_count(&test_tree, "hcfgedljk");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance10, "Count letters and balance10");
+bst_init(&test_tree);
+letter_count(&test_tree, "hcfedljk");
+bst_print_tree(test_tree);
 bst_balance(&test_tree);
 bst_print_tree(test_tree);
 ENDTEST
@@ -432,5 +497,13 @@ int main(int argc, char *argv[]) {
   test_letter_count();
   test_balance();
   test_balance2();
+  test_balance3();
+  test_balance4();
+  test_balance5();
+  test_balance6();
+  test_balance7();
+  test_balance8();
+  test_balance9();
+  test_balance10();
 #endif // EXA
 }

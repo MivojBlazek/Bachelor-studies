@@ -62,8 +62,111 @@ void letter_count(bst_node_t **tree, char *input) {
 */
 void balanceTree(bst_node_t *tree, bool left, int situation)
 {
-    fprintf(stderr, "%c, %d, %d\n", tree->key, left, situation); //! DEBUG
-    //TODO
+    fprintf(stderr, "%c: %d, %d\n", tree->key, left, situation);
+    bst_node_t *tmp;
+    bst_node_t *tmpSon;
+    if (left)
+    {
+        // tree->left kriticky
+        switch (situation) // LL, LR, RL, RR
+        {
+            case 1:
+                tmp = tree->left->left->right;
+                tmpSon = tree->left->left;
+                tree->left->left->right = tree->left;
+                tree->left->left = tmp;
+                break;
+
+            case 2:
+                // 1. rotace
+                tmp = tree->left->left->right->left;
+                tmpSon = tree->left->left->right;
+                tree->left->left->right->left = tree->left->left;
+                tree->left->left->right = tmp;
+                tree->left->left = tmpSon;
+
+                // 2. rotace
+                tmp = tree->left->left->right;
+                tmpSon = tree->left->left;
+                tree->left->left->right = tree->left;
+                tree->left->left = tmp;
+                break;
+
+            case 3:
+                // 1. rotace
+                tmp = tree->left->right->left->right;
+                tmpSon = tree->left->right->left;
+                tree->left->right->left->right = tree->left->right;
+                tree->left->right->left = tmp;
+                tree->left->right = tmpSon;
+
+                // 2. rotace
+                tmp = tree->left->right->left;
+                tmpSon = tree->left->right;
+                tree->left->right->left = tree->left;
+                tree->left->right = tmp;
+                break;
+
+            case 4:
+                tmp = tree->left->right->left;
+                tmpSon = tree->left->right;
+                tree->left->right->left = tree->left;
+                tree->left->right = tmp;
+                break;
+        }
+        tree->left = tmpSon;
+    }
+    else
+    {
+        // tree->right kriticky
+        switch (situation) // LL, LR, RL, RR
+        {
+            case 1:
+                tmp = tree->right->left->right;
+                tmpSon = tree->right->left;
+                tree->right->left->right = tree->right;
+                tree->right->left = tmp;
+                break;
+
+            case 2:
+                // 1. rotace
+                tmp = tree->right->left->right->left;
+                tmpSon = tree->right->left->right;
+                tree->right->left->right->left = tree->right->left;
+                tree->right->left->right = tmp;
+                tree->right->left = tmpSon;
+
+                // 2. rotace
+                tmp = tree->right->left->right;
+                tmpSon = tree->right->left;
+                tree->right->left->right = tree->right;
+                tree->right->left = tmp;
+                break;
+
+            case 3:
+                // 1. rotace
+                tmp = tree->right->right->left->right;
+                tmpSon = tree->right->right->left;
+                tree->right->right->left->right = tree->right->right;
+                tree->right->right->left = tmp;
+                tree->right->right = tmpSon;
+
+                // 2. rotace
+                tmp = tree->right->right->left;
+                tmpSon = tree->right->right;
+                tree->right->right->left = tree->right;
+                tree->right->right = tmp;
+                break;
+
+            case 4:
+                tmp = tree->right->right->left;
+                tmpSon = tree->right->right;
+                tree->right->right->left = tree->right;
+                tree->right->right = tmp;
+                break;
+        }
+        tree->right = tmpSon;
+    }
 }
 
 
@@ -173,7 +276,7 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
 void bst_balance(bst_node_t **tree) {
     // "abBcCcd_ 123 *"
     int count, criticalState;
-    if (!isHeightBalanced(*tree, &count, &criticalState)) //while neni true
+    while (!isHeightBalanced(*tree, &count, &criticalState)) //while neni true
     {
         //neni vyvazeny
     }
