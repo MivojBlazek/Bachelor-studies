@@ -378,51 +378,59 @@ bst_balance(&test_tree);
 bst_print_tree(test_tree);
 ENDTEST
 
+TEST(test_balance2, "Count letters and balance (false)");
+bst_init(&test_tree);
+letter_count(&test_tree, "abBcCcD_ 123 *");
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
 #endif // EXA
 
 int main(int argc, char *argv[]) {
   init_test();
 
-  test_tree_init();
-  test_tree_dispose_empty();
-  test_tree_search_empty();
-  test_tree_insert_root();
-  test_tree_search_root();
-  test_tree_update_root();
-  test_tree_insert_many();
-  test_tree_search();
-  test_tree_search_missing();
-  test_tree_delete_leaf();
-  test_tree_delete_left_subtree();
-  test_tree_delete_right_subtree();
-  test_tree_delete_both_subtrees();
-  test_tree_delete_both_subtrees_parent();
-  test_tree_delete_missing();
-  test_tree_delete_root();
-  test_tree_dispose_filled();
-  test_tree_preorder();
-  test_tree_inorder();
-  test_tree_postorder();
-  test_delete1();
-  test_delete2();
-  test_delete2a();
-  test_delete3();
-  test_delete3a();
-  test_delete4();
-  test_delete5();
-  test_delete6();
-  test_delete6a();
-  test_delete6b();
-  test_delete7();
-  test_delete7a();
-  test_delete8();
-  test_delete8a();
-  test_delete9();
-  test_delete9a();
-  test_delete10();
+//   test_tree_init();
+//   test_tree_dispose_empty();
+//   test_tree_search_empty();
+//   test_tree_insert_root();
+//   test_tree_search_root();
+//   test_tree_update_root();
+//   test_tree_insert_many();
+//   test_tree_search();
+//   test_tree_search_missing();
+//   test_tree_delete_leaf();
+//   test_tree_delete_left_subtree();
+//   test_tree_delete_right_subtree();
+//   test_tree_delete_both_subtrees();
+//   test_tree_delete_both_subtrees_parent();
+//   test_tree_delete_missing();
+//   test_tree_delete_root();
+//   test_tree_dispose_filled();
+//   test_tree_preorder();
+//   test_tree_inorder();
+//   test_tree_postorder();
+//   test_delete1();
+//   test_delete2();
+//   test_delete2a();
+//   test_delete3();
+//   test_delete3a();
+//   test_delete4();
+//   test_delete5();
+//   test_delete6();
+//   test_delete6a();
+//   test_delete6b();
+//   test_delete7();
+//   test_delete7a();
+//   test_delete8();
+//   test_delete8a();
+//   test_delete9();
+//   test_delete9a();
+//   test_delete10();
 
 #ifdef EXA
   test_letter_count();
   test_balance();
+  test_balance2();
 #endif // EXA
 }

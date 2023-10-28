@@ -32,9 +32,132 @@
  * Pro implementaci si můžete v tomto souboru nadefinovat vlastní pomocné funkce.
 */
 void letter_count(bst_node_t **tree, char *input) {
+    bst_init(tree);
+    char c;
+    for (int i = 0; (c = input[i]) != '\0'; i++)
+    {
+        if (c >= 'A' && c <= 'Z')
+        {
+            c += 'a' - 'A';
+        }
+        else if (!(c == ' ') && !(c >= 'A' && c <= 'Z') && !(c >= 'a' && c <= 'z'))
+        {
+            c = '_';
+        }
+
+        int value = 0;
+        bst_search(*tree, c, &value);
+        bst_insert(tree, c, ++value);
+    }
+}
+
+/**
+ * Funkce provede dostatečný počet správných rotací
+ * 
+ * @param tree je strom ve kterym je syn kriticky uzel
+ * @param left urcuje ktery syn ve strome je kriticky uzel (true - left / false - right)
+ * @param situation udava situaci ktera nastala
+ * 
+ * @returns upraveny strom
+*/
+void balanceTree(bst_node_t *tree, bool left, int situation)
+{
+    //TODO
 }
 
 
+/**
+ * Funkce zjistí, jestli binarní strom je výškově vyvážený
+ * 
+ * @param tree očekává strom pro který bude zjišťovat vyváženost
+ * @param count vrací výšku stromu
+ * 
+ * @returns true - pokud je vyvážený \n
+ * @returns false - pokud není vyvážený
+*/
+bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
+{
+    bool leftBalanced, rightBalanced;
+    int left, right;
+
+    if (tree != NULL)
+    {
+        leftBalanced = isHeightBalanced(tree->left, &left, &criticalState);
+        if (!leftBalanced)
+        {
+            balanceTree(tree, true, criticalState);
+        }
+        rightBalanced = isHeightBalanced(tree->right, &right, &criticalState);
+        if (!rightBalanced)
+        {
+            balanceTree(tree, false, criticalState);
+        }
+
+
+        if (left > right)
+        {
+            *count = left + 1;
+        }
+        else
+        {
+            *count = right + 1;
+        }
+
+
+        int countL = 0;
+        int countR = 0;
+        if ((left - right) >= 2)
+        {
+            // neni vyvazeny, vlevo tezsi
+            if (tree->left->left != NULL)
+            {
+                isHeightBalanced(tree->left->left, &countL, &criticalState);
+            }
+            if (tree->left->right != NULL)
+            {
+                isHeightBalanced(tree->left->right, &countR, &criticalState);
+            }
+
+            if (countL > countR)
+            {
+                // LL
+                criticalState = 1;
+            }
+            else
+            {
+                // LR
+                criticalState = 2;
+            }
+        }
+        else if ((left - right) <= -2)
+        {
+            // neni vyvazeny, vpravo tezsi
+            if (tree->right->left != NULL)
+            {
+                isHeightBalanced(tree->right->left, &countL, &criticalState);
+            }
+            if (tree->right->right != NULL)
+            {
+                isHeightBalanced(tree->right->right, &countR, &criticalState);
+            }
+
+            if (countL > countR)
+            {
+                // RL
+                criticalState = 3;
+            }
+            else
+            {
+                // RR
+                criticalState = 4;
+            }
+        }
+
+        return (leftBalanced && rightBalanced && (abs(left - right) <= 1));
+    }
+    *count = 0;
+    return true;
+}
 
 /**
  * Vyvážení stromu.
@@ -47,4 +170,10 @@ void letter_count(bst_node_t **tree, char *input) {
  * Pro implementaci si můžete v tomto souboru nadefinovat vlastní pomocné funkce. Není nutné, aby funkce fungovala *in situ* (in-place).
 */
 void bst_balance(bst_node_t **tree) {
+    // "abBcCcd_ 123 *"
+    int count, criticalState;
+    if (!isHeightBalanced(*tree, &count, &criticalState)) //while neni true
+    {
+        //neni vyvazeny
+    }
 }
