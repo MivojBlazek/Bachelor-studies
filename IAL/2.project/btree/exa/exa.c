@@ -62,7 +62,6 @@ void letter_count(bst_node_t **tree, char *input) {
 */
 void balanceTree(bst_node_t *tree, bool left, int situation)
 {
-    fprintf(stderr, "%c: %d, %d\n", tree->key, left, situation);
     bst_node_t *tmp;
     bst_node_t *tmpSon;
     if (left)
