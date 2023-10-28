@@ -383,7 +383,7 @@ ENDTEST
 int main(int argc, char *argv[]) {
   init_test();
 
-/*  test_tree_init();
+  test_tree_init();
   test_tree_dispose_empty();
   test_tree_search_empty();
   test_tree_insert_root();
@@ -403,7 +403,7 @@ int main(int argc, char *argv[]) {
   test_tree_preorder();
   test_tree_inorder();
   test_tree_postorder();
-  */test_delete1();
+  test_delete1();
   test_delete2();
   test_delete2a();
   test_delete3();

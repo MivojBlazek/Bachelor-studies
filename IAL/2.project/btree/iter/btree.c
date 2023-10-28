@@ -20,16 +20,6 @@
  * možné toto detekovat ve funkci. 
  */
 void bst_init(bst_node_t **tree) {
-  /**tree = (bst_node_t *)malloc(sizeof(bst_node_t));
-  if ((*tree) == NULL)
-  {
-    //! malloc failed
-    return;
-  }
-  (*tree)->key = 0;
-  (*tree)->value = 0;
-  (*tree)->left = NULL;
-  (*tree)->right = NULL;*/
   (*tree) = NULL;
 }
 
@@ -83,9 +73,9 @@ void bst_insert(bst_node_t **tree, char key, int value) {
       //! malloc failed
       return;
     }
+
     (*tree)->left = NULL;
     (*tree)->right = NULL;
-    // bst_init(tree);
     (*tree)->key = key;
     (*tree)->value = value;
     return;
@@ -99,12 +89,12 @@ void bst_insert(bst_node_t **tree, char key, int value) {
     {
       if (tmp->left == NULL)
       {
-        //bst_init(&newNode);
         newNode = (bst_node_t *)malloc(sizeof(bst_node_t));
         newNode->left = NULL;
         newNode->right = NULL;
         newNode->key = key;
         newNode->value = value;
+
         tmp->left = newNode;
         return;
       }
@@ -114,12 +104,12 @@ void bst_insert(bst_node_t **tree, char key, int value) {
     {
       if (tmp->right == NULL)
       {
-        //bst_init(&newNode);
         newNode = (bst_node_t *)malloc(sizeof(bst_node_t));
         newNode->left = NULL;
         newNode->right = NULL;
         newNode->key = key;
         newNode->value = value;
+
         tmp->right = newNode;
         return;
       }
@@ -190,7 +180,7 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
 void bst_delete(bst_node_t **tree, char key) {
   bst_node_t *tmp = *tree;
   bst_node_t *beforeTmp;
-  int left;
+  int left = -1;
   while (tmp != NULL)
   {
     if (key < tmp->key)
@@ -219,6 +209,11 @@ void bst_delete(bst_node_t **tree, char key) {
       {
         free(tmp);
         tmp = NULL;
+        if (left == -1)
+        {
+          *tree = NULL;
+          return;
+        }
         if (left)
         {
           beforeTmp->left = NULL;
@@ -266,14 +261,6 @@ void bst_delete(bst_node_t **tree, char key) {
  * vlastních pomocných funkcí.
  */
 void bst_dispose(bst_node_t **tree) {
-  /*for (int i = 1; i < 256; i++)
-  {
-    bst_delete(tree, (char)i); //! nejak podle klice mazat
-  }
-  (*tree)->key = 0; //! mby overkill 4 radky navic
-  (*tree)->value = 0;
-  (*tree)->left = NULL;
-  (*tree)->right = NULL;*/
   if (*tree == NULL)
   {
     return;
