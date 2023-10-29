@@ -1109,12 +1109,12 @@ Binary tree structure:
 
 Binary tree structure:
 
-     +-[g,1]
+        +-[g,1]
+        |
+     +-[f,1]
      |
-  +-[f,1]
+  +-[e,1]
      |
-     |  +-[e,1]
-     |  |
      +-[d,1]
         |
         +-[c,1]
@@ -1135,12 +1135,12 @@ Binary tree structure:
 
 Binary tree structure:
 
-     +-[g,1]
+        +-[g,1]
+        |
+     +-[f,1]
      |
-  +-[f,1]
+  +-[e,1]
      |
-     |  +-[e,1]
-     |  |
      +-[d,1]
         |
         +-[c,1]
@@ -1161,12 +1161,12 @@ Binary tree structure:
 
 Binary tree structure:
 
-     +-[g,1]
+        +-[g,1]
+        |
+     +-[f,1]
      |
-  +-[f,1]
+  +-[e,1]
      |
-     |  +-[e,1]
-     |  |
      +-[d,1]
         |
         +-[c,1]
@@ -1187,15 +1187,15 @@ Binary tree structure:
 
 Binary tree structure:
 
-        +-[i,1]
-        |
-     +-[h,1]
-     |  |
+     +-[i,1]
+     |
+  +-[h,1]
+     |
      |  +-[g,1]
-     |
-  +-[f,1]
-     |
-     +-[a,1]
+     |  |
+     +-[f,1]
+        |
+        +-[a,1]
 
 
 [test_balance7] Count letters and balance7
@@ -1213,15 +1213,15 @@ Binary tree structure:
 
 Binary tree structure:
 
-        +-[g,1]
-        |
-     +-[f,1]
-     |  |
+     +-[g,1]
+     |
+  +-[f,1]
+     |
      |  +-[e,1]
-     |
-  +-[c,1]
-     |
-     +-[a,1]
+     |  |
+     +-[c,1]
+        |
+        +-[a,1]
 
 
 [test_balance8] Count letters and balance8
@@ -1336,5 +1336,221 @@ Binary tree structure:
         |  +-[d,1]
         |  |
         +-[c,1]
+
+
+[test_balance11] Count letters and balance11
+Binary tree structure:
+
+     +-[p,1]
+     |  |
+     |  |  +-[o,1]
+     |  |  |
+     |  +-[n,1]
+     |
+  +-[m,1]
+     |
+     |  +-[k,1]
+     |  |  |
+     |  |  +-[j,1]
+     |  |     |
+     |  |     +-[i,1]
+     |  |        |
+     |  |        +-[h,1]
+     |  |           |
+     |  |           +-[g,1]
+     |  |
+     +-[a,1]
+
+Binary tree structure:
+
+           +-[p,1]
+           |
+        +-[o,1]
+        |  |
+        |  +-[n,1]
+        |
+     +-[m,1]
+     |  |
+     |  +-[k,1]
+     |     |
+     |     +-[j,1]
+     |
+  +-[i,1]
+     |
+     |  +-[h,1]
+     |  |
+     +-[g,1]
+        |
+        +-[a,1]
+
+
+[test_balance12] Count letters and balance12
+Binary tree structure:
+
+     +-[p,1]
+     |  |
+     |  |  +-[o,1]
+     |  |  |
+     |  +-[n,1]
+     |
+  +-[m,1]
+     |
+     |  +-[k,1]
+     |  |  |
+     |  |  +-[j,1]
+     |  |     |
+     |  |     +-[i,1]
+     |  |        |
+     |  |        +-[h,1]
+     |  |           |
+     |  |           +-[g,1]
+     |  |              |
+     |  |              +-[f,1]
+     |  |
+     +-[a,1]
+
+Binary tree structure:
+
+           +-[p,1]
+           |
+        +-[o,1]
+        |  |
+        |  +-[n,1]
+        |
+     +-[m,1]
+     |  |
+     |  |  +-[k,1]
+     |  |  |
+     |  +-[j,1]
+     |     |
+     |     +-[i,1]
+     |
+  +-[h,1]
+     |
+     |  +-[g,1]
+     |  |
+     +-[f,1]
+        |
+        +-[a,1]
+
+
+[test_balance13] Count letters and balance13
+Binary tree structure:
+
+     +-[p,1]
+     |  |
+     |  |  +-[o,1]
+     |  |  |
+     |  +-[n,1]
+     |
+  +-[m,1]
+     |
+     |  +-[k,1]
+     |  |  |
+     |  |  +-[j,1]
+     |  |     |
+     |  |     +-[i,1]
+     |  |        |
+     |  |        +-[h,1]
+     |  |           |
+     |  |           +-[g,1]
+     |  |              |
+     |  |              +-[f,1]
+     |  |                 |
+     |  |                 +-[e,1]
+     |  |
+     +-[a,1]
+
+Binary tree structure:
+
+           +-[p,1]
+           |
+        +-[o,1]
+        |  |
+        |  +-[n,1]
+        |
+     +-[m,1]
+     |  |
+     |  +-[k,1]
+     |     |
+     |     +-[j,1]
+     |
+  +-[i,1]
+     |
+     |     +-[h,1]
+     |     |
+     |  +-[g,1]
+     |  |
+     +-[f,1]
+        |
+        +-[e,1]
+           |
+           +-[a,1]
+
+
+[test_balance14] Count letters and balance14
+Binary tree structure:
+
+     +-[p,1]
+     |  |
+     |  |  +-[o,1]
+     |  |  |
+     |  +-[n,1]
+     |
+  +-[m,1]
+     |
+     |  +-[k,1]
+     |  |  |
+     |  |  +-[j,1]
+     |  |     |
+     |  |     +-[i,1]
+     |  |        |
+     |  |        +-[h,1]
+     |  |           |
+     |  |           +-[g,1]
+     |  |              |
+     |  |              +-[f,1]
+     |  |                 |
+     |  |                 +-[e,1]
+     |  |                    |
+     |  |                    +-[d,1]
+     |  |                       |
+     |  |                       +-[c,1]
+     |  |                          |
+     |  |                          +-[b,1]
+     |  |
+     +-[a,1]
+
+Binary tree structure:
+
+           +-[p,1]
+           |
+        +-[o,1]
+        |  |
+        |  +-[n,1]
+        |
+     +-[m,1]
+     |  |
+     |  |  +-[k,1]
+     |  |  |  |
+     |  |  |  +-[j,1]
+     |  |  |
+     |  +-[i,1]
+     |     |
+     |     +-[h,1]
+     |        |
+     |        +-[g,1]
+     |
+  +-[f,1]
+     |
+     |     +-[e,1]
+     |     |
+     |  +-[d,1]
+     |  |
+     +-[c,1]
+        |
+        |  +-[b,1]
+        |  |
+        +-[a,1]
 
 

@@ -452,7 +452,31 @@ ENDTEST
 
 TEST(test_balance11, "Count letters and balance11");
 bst_init(&test_tree);
-letter_count(&test_tree, "hafedcbljk");
+letter_count(&test_tree, "makjihgpno");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance12, "Count letters and balance12");
+bst_init(&test_tree);
+letter_count(&test_tree, "makjihgpnof");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance13, "Count letters and balance13");
+bst_init(&test_tree);
+letter_count(&test_tree, "makjihgpnofe");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance14, "Count letters and balance14");
+bst_init(&test_tree);
+letter_count(&test_tree, "makjihgpnofedcb");
 bst_print_tree(test_tree);
 bst_balance(&test_tree);
 bst_print_tree(test_tree);
@@ -514,5 +538,8 @@ int main(int argc, char *argv[]) {
   test_balance9();
   test_balance10();
   test_balance11();
+  test_balance12();
+  test_balance13();
+  test_balance14();
 #endif // EXA
 }

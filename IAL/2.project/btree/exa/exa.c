@@ -54,118 +54,65 @@ void letter_count(bst_node_t **tree, char *input) {
 /**
  * Funkce provede dostatečný počet správných rotací
  * 
- * @param tree je strom ve kterym je syn kriticky uzel
- * @param left urcuje ktery syn ve strome je kriticky uzel (true - left / false - right)
+ * @param tree je ukazatel na kriticky uzel
  * @param situation udava situaci ktera nastala
  * 
  * @returns upraveny strom
 */
-void balanceTree(bst_node_t *tree, bool left, int situation)
+void balanceTree(bst_node_t **tree, int situation)
 {
     bst_node_t *tmp;
     bst_node_t *tmpSon;
-    if (left)
+    switch (situation) // LL, LR, RL, RR
     {
-        // tree->left kriticky
-        switch (situation) // LL, LR, RL, RR
-        {
-            case 1:
-                tmp = tree->left->left->right;
-                tmpSon = tree->left->left;
-                tree->left->left->right = tree->left;
-                tree->left->left = tmp;
-                break;
+        case 1:
+            tmp = (*tree)->left->right;
+            tmpSon = (*tree)->left;
+            (*tree)->left->right = *tree;
+            (*tree)->left = tmp;
+            break;
 
-            case 2:
-                // 1. rotace
-                tmp = tree->left->left->right->left;
-                tmpSon = tree->left->left->right;
-                tree->left->left->right->left = tree->left->left;
-                tree->left->left->right = tmp;
-                tree->left->left = tmpSon;
+        case 2:
+            // 1. rotace
+            tmp = (*tree)->left->right->left;
+            tmpSon = (*tree)->left->right;
+            (*tree)->left->right->left = (*tree)->left;
+            (*tree)->left->right = tmp;
+            (*tree)->left = tmpSon;
 
-                // 2. rotace
-                tmp = tree->left->left->right;
-                tmpSon = tree->left->left;
-                tree->left->left->right = tree->left;
-                tree->left->left = tmp;
-                break;
+            // 2. rotace
+            tmp = (*tree)->left->right;
+            tmpSon = (*tree)->left;
+            (*tree)->left->right = *tree;
+            (*tree)->left = tmp;
+            break;
 
-            case 3:
-                // 1. rotace
-                tmp = tree->left->right->left->right;
-                tmpSon = tree->left->right->left;
-                tree->left->right->left->right = tree->left->right;
-                tree->left->right->left = tmp;
-                tree->left->right = tmpSon;
+        case 3:
+            // 1. rotace
+            tmp = (*tree)->right->left->right;
+            tmpSon = (*tree)->right->left;
+            (*tree)->right->left->right = (*tree)->right;
+            (*tree)->right->left = tmp;
+            (*tree)->right = tmpSon;
 
-                // 2. rotace
-                tmp = tree->left->right->left;
-                tmpSon = tree->left->right;
-                tree->left->right->left = tree->left;
-                tree->left->right = tmp;
-                break;
+            // 2. rotace
+            tmp = (*tree)->right->left;
+            tmpSon = (*tree)->right;
+            (*tree)->right->left = *tree;
+            (*tree)->right = tmp;
+            break;
 
-            case 4:
-                tmp = tree->left->right->left;
-                tmpSon = tree->left->right;
-                tree->left->right->left = tree->left;
-                tree->left->right = tmp;
-                break;
-        }
-        tree->left = tmpSon;
+        case 4:
+            tmp = (*tree)->right->left;
+            tmpSon = (*tree)->right;
+            (*tree)->right->left = *tree;
+            (*tree)->right = tmp;
+            break;
+
+        default:
+            return;
     }
-    else
-    {
-        // tree->right kriticky
-        switch (situation) // LL, LR, RL, RR
-        {
-            case 1:
-                tmp = tree->right->left->right;
-                tmpSon = tree->right->left;
-                tree->right->left->right = tree->right;
-                tree->right->left = tmp;
-                break;
-
-            case 2:
-                // 1. rotace
-                tmp = tree->right->left->right->left;
-                tmpSon = tree->right->left->right;
-                tree->right->left->right->left = tree->right->left;
-                tree->right->left->right = tmp;
-                tree->right->left = tmpSon;
-
-                // 2. rotace
-                tmp = tree->right->left->right;
-                tmpSon = tree->right->left;
-                tree->right->left->right = tree->right;
-                tree->right->left = tmp;
-                break;
-
-            case 3:
-                // 1. rotace
-                tmp = tree->right->right->left->right;
-                tmpSon = tree->right->right->left;
-                tree->right->right->left->right = tree->right->right;
-                tree->right->right->left = tmp;
-                tree->right->right = tmpSon;
-
-                // 2. rotace
-                tmp = tree->right->right->left;
-                tmpSon = tree->right->right;
-                tree->right->right->left = tree->right;
-                tree->right->right = tmp;
-                break;
-
-            case 4:
-                tmp = tree->right->right->left;
-                tmpSon = tree->right->right;
-                tree->right->right->left = tree->right;
-                tree->right->right = tmp;
-                break;
-        }
-        tree->right = tmpSon;
-    }
+    *tree = tmpSon;
 }
 
 
@@ -188,12 +135,14 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
         leftBalanced = isHeightBalanced(tree->left, &left, criticalState);
         if (!leftBalanced)
         {
-            balanceTree(tree, true, *criticalState);
+            balanceTree(&(tree->left), *criticalState);
+            *criticalState = 0;
         }
         rightBalanced = isHeightBalanced(tree->right, &right, criticalState);
         if (!rightBalanced)
         {
-            balanceTree(tree, false, *criticalState);
+            balanceTree(&(tree->right), *criticalState);
+            *criticalState = 0;
         }
 
 
@@ -273,10 +222,11 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
  * Pro implementaci si můžete v tomto souboru nadefinovat vlastní pomocné funkce. Není nutné, aby funkce fungovala *in situ* (in-place).
 */
 void bst_balance(bst_node_t **tree) {
-    // "abBcCcd_ 123 *"
     int count, criticalState;
     while (!isHeightBalanced(*tree, &count, &criticalState)) //while neni true
     {
         //neni vyvazeny
+        balanceTree(tree, criticalState);
+        criticalState = 0;
     }
 }
