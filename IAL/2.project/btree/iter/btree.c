@@ -34,23 +34,23 @@ void bst_init(bst_node_t **tree) {
  */
 bool bst_search(bst_node_t *tree, char key, int *value) {
   bst_node_t *tmp = tree;
-  while (tmp != NULL)
+  while (tmp != NULL) // dokud jsme nenarazili na NULL za nejakym listem
   {
-    if (tmp->key > key)
+    if (tmp->key > key) // prohledavej levy podstrom
     {
       tmp = tmp->left;
     }
-    else if (tmp->key < key)
+    else if (tmp->key < key) // prohledavej pravy podstrom
     {
       tmp = tmp->right;
     }
-    else
+    else // nasel jsi, vrat jeho hodnotu a true
     {
       *value = tmp->value;
       return true;
     }
   }
-  return false;
+  return false; // pokud jsme narazili na NULL a nenasli jsme prvek, vrat false
 }
 
 /*
@@ -65,7 +65,7 @@ bool bst_search(bst_node_t *tree, char key, int *value) {
  * Funkci implementujte iterativně bez použití vlastních pomocných funkcí.
  */
 void bst_insert(bst_node_t **tree, char key, int value) {
-  if ((*tree) == NULL)
+  if ((*tree) == NULL) // jestlize je strom pouze inicializovany, vytvor novy uzel
   {
     (*tree) = (bst_node_t *)malloc(sizeof(bst_node_t));
     if (*tree == NULL)
@@ -83,11 +83,11 @@ void bst_insert(bst_node_t **tree, char key, int value) {
 
   bst_node_t *tmp = *tree;
   bst_node_t *newNode;
-  while (tmp != NULL)
+  while (tmp != NULL) // jiank prohledavej strom dokud nebudes az za nejakym listem
   {
-    if (tmp->key > key)
+    if (tmp->key > key) // pokud je vetsi, prohledej levy podstrom
     {
-      if (tmp->left == NULL)
+      if (tmp->left == NULL) // ale kdyz zadny podstrom neni, tak tam vytvor novy prvek
       {
         newNode = (bst_node_t *)malloc(sizeof(bst_node_t));
         newNode->left = NULL;
@@ -100,9 +100,9 @@ void bst_insert(bst_node_t **tree, char key, int value) {
       }
       tmp = tmp->left;
     }
-    else if (tmp->key < key)
+    else if (tmp->key < key)// pokud je mensi, prohledej pravy podstrom
     {
-      if (tmp->right == NULL)
+      if (tmp->right == NULL) // ale kdyz zadny podstrom neni, tak tam vytvor novy prvek
       {
         newNode = (bst_node_t *)malloc(sizeof(bst_node_t));
         newNode->left = NULL;
@@ -115,7 +115,7 @@ void bst_insert(bst_node_t **tree, char key, int value) {
       }
       tmp = tmp->right;
     }
-    else
+    else // kdyz jsme nasli prvek se stejnym klicem, jen prepis jeho hodnotu
     {
       tmp->value = value;
       return;

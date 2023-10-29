@@ -33,21 +33,21 @@ void bst_init(bst_node_t **tree) {
 bool bst_search(bst_node_t *tree, char key, int *value) {
   if (tree)
   {
-    if (tree->key == key)
+    if (tree->key == key) // kdyz jsme klic nasli, vrat hodnotu a true
     {
       *value = tree->value;
       return true;
     }
-    else if (key < tree->key)
+    else if (key < tree->key) // kdyz je mensi nez nalezeny, rekurzivne se podivej do leveho podstromu
     {
       return bst_search(tree->left, key, value);
     }
-    else
+    else // kdyz je vetsi nez nalezeny, rekurzivne se podivej do praveho podstromu
     {
       return bst_search(tree->right, key, value);
     }
   }
-  return false;
+  return false; // pokud dojedu do listu na ukazatel na NULL, nenasel jsem ho
 }
 
 /*
@@ -62,7 +62,7 @@ bool bst_search(bst_node_t *tree, char key, int *value) {
  * Funkci implementujte rekurzivně bez použití vlastních pomocných funkcí.
  */
 void bst_insert(bst_node_t **tree, char key, int value) {
-  if ((*tree) == NULL)
+  if ((*tree) == NULL) // pokud neexistuje zadny uzel nebo jsme dosli az pod list na misto kam patri, vytvor novy
   {
     (*tree) = (bst_node_t *)malloc(sizeof(bst_node_t));
     if (*tree == NULL)
@@ -76,7 +76,7 @@ void bst_insert(bst_node_t **tree, char key, int value) {
     (*tree)->key = key;
     (*tree)->value = value;
   }
-  else
+  else // jiank se podivej dal ve strome doleva nebo doprava podle hodnoty klice
   {
     if (key < (*tree)->key)
     {
@@ -88,7 +88,7 @@ void bst_insert(bst_node_t **tree, char key, int value) {
     }
     else
     {
-      (*tree)->value = value;
+      (*tree)->value = value; // nasli jsme uzel se stejnym klicem, zmen mu hodnotu
     }
   }
 }
@@ -108,24 +108,23 @@ void bst_insert(bst_node_t **tree, char key, int value) {
  */
 void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
   bst_node_t *tmp;
-  if ((*tree)->right == NULL)
+  if ((*tree)->right == NULL) // kdyz uz vic vpravo neni zadny uzel
   {
-    target->key = (*tree)->key;
+    target->key = (*tree)->key; // uloz hodnoty nejpravejsiho do target
     target->value = (*tree)->value;
-    if ((*tree)->left != NULL)
+    if ((*tree)->left != NULL) // a kdyz to neni list (ma leveho syna)
     {
-      tmp = (*tree)->left;
+      tmp = (*tree)->left; // posun syna na jeho pozici a smaz toho syna (zachovej ukazatele dal)
       free(*tree);
-      *tree = NULL;
       *tree = tmp;
     }
-    else
+    else // a kdyz je to list, vymaz ho
     {
       free(*tree);
       *tree = NULL;
     }
   }
-  else
+  else // pokud jeste muzeme jit doprava, jdeme tam
   {
     bst_replace_by_rightmost(target, &(*tree)->right);
   }
@@ -147,7 +146,7 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
 void bst_delete(bst_node_t **tree, char key) {
   if (*tree)
   {
-    if (key < (*tree)->key)
+    if (key < (*tree)->key) // kdyz je v levem podstromu, prohledej ten, pokud existuje
     {
       if ((*tree)->left == NULL)
       {
@@ -155,7 +154,7 @@ void bst_delete(bst_node_t **tree, char key) {
       }
       bst_delete(&(*tree)->left, key);
     }
-    else if (key > (*tree)->key)
+    else if (key > (*tree)->key) // kdyz je v pravem podstromu, prohledej ten, pokud existuje
     {
       if ((*tree)->right == NULL)
       {
@@ -163,18 +162,18 @@ void bst_delete(bst_node_t **tree, char key) {
       }
       bst_delete(&(*tree)->right, key);
     }
-    else
+    else // kdyz jsme ho nasli
     {
-      if ((*tree)->left == NULL && (*tree)->right == NULL)
+      if ((*tree)->left == NULL && (*tree)->right == NULL) // a nema syny, tak ho smazeme
       {
         free(*tree);
         *tree = NULL;
       }
-      else if ((*tree)->left != NULL && (*tree)->right != NULL)
+      else if ((*tree)->left != NULL && (*tree)->right != NULL) // a ma oba syny, tak ho nahradime nejpravejsim uzel z jeho leveho podstromu
       {
         bst_replace_by_rightmost(*tree, &(*tree)->left);
       }
-      else
+      else // a kdyz ma jen jednoho syna
       {
         bst_node_t *tmp;
         if ((*tree)->left == NULL)
@@ -185,7 +184,7 @@ void bst_delete(bst_node_t **tree, char key) {
         {
           tmp = (*tree)->left;
         }
-        (*tree)->left = tmp->left;
+        (*tree)->left = tmp->left; // smazeme uzel toho syna posuneme na jeho misto
         (*tree)->right = tmp->right;
         (*tree)->value = tmp->value;
         (*tree)->key = tmp->key;
@@ -205,13 +204,13 @@ void bst_delete(bst_node_t **tree, char key) {
  * Funkci implementujte rekurzivně bez použití vlastních pomocných funkcí.
  */
 void bst_dispose(bst_node_t **tree) {
-  if (*tree == NULL)
+  if (*tree == NULL) // kdzy uz nejsou uzly, koncime
   {
     return;
   }
-  bst_dispose(&((*tree)->left));
-  bst_dispose(&((*tree)->right));
-  free(*tree);
+  bst_dispose(&((*tree)->left)); // rekurzivne promazeme levy podstrom
+  bst_dispose(&((*tree)->right)); // a pote i pravy podstrom
+  free(*tree); // nakonec smazeme i koren
   *tree = NULL;
 }
 
@@ -225,7 +224,7 @@ void bst_dispose(bst_node_t **tree) {
 void bst_preorder(bst_node_t *tree, bst_items_t *items) {
   if (tree != NULL)
   {
-    bst_add_node_to_items(tree, items);
+    bst_add_node_to_items(tree, items); // vzdy zapis uzel a az pak jdi dal (nejdrive do leveho a az se sem vratime, tak i do praveho)
     bst_preorder(tree->left, items);
     bst_preorder(tree->right, items);
   }
@@ -241,7 +240,7 @@ void bst_preorder(bst_node_t *tree, bst_items_t *items) {
 void bst_inorder(bst_node_t *tree, bst_items_t *items) {
   if (tree != NULL)
   {
-    bst_inorder(tree->left, items);
+    bst_inorder(tree->left, items); // vzdy jdi dal do leveho uzlu pokud muzes a az potom ho zapis, pak projdi i pravy podstrom
     bst_add_node_to_items(tree, items);
     bst_inorder(tree->right, items);
   }
@@ -257,7 +256,7 @@ void bst_inorder(bst_node_t *tree, bst_items_t *items) {
 void bst_postorder(bst_node_t *tree, bst_items_t *items) {
   if (tree != NULL)
   {
-    bst_postorder(tree->left, items);
+    bst_postorder(tree->left, items); // vzdy jdi dal do leveho podstromu pokud muzes a potom projdi i pravy podstrom pokud muzes, nakonec zapis uzel
     bst_postorder(tree->right, items);
     bst_add_node_to_items(tree, items);
   }
