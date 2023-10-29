@@ -34,19 +34,19 @@
 void letter_count(bst_node_t **tree, char *input) {
     bst_init(tree);
     char c;
-    for (int i = 0; (c = input[i]) != '\0'; i++)
+    for (int i = 0; (c = input[i]) != '\0'; i++) // dokud neprecteme cely retezec v input
     {
-        if (c >= 'A' && c <= 'Z')
+        if (c >= 'A' && c <= 'Z') // pokud to je velke pismeno, udelame z nej male
         {
             c += 'a' - 'A';
         }
         else if (!(c == ' ') && !(c >= 'A' && c <= 'Z') && !(c >= 'a' && c <= 'z'))
         {
-            c = '_';
+            c = '_'; // pokud to neni mezera nebo pismeno, je to podtrzitko
         }
 
         int value = 0;
-        bst_search(*tree, c, &value);
+        bst_search(*tree, c, &value); // jestli tento znak uz existuje, pricti 1 a zmen mu ve strome hodnotu
         bst_insert(tree, c, ++value);
     }
 }
@@ -54,55 +54,55 @@ void letter_count(bst_node_t **tree, char *input) {
 /**
  * Funkce provede dostatečný počet správných rotací
  * 
- * @param tree je ukazatel na kriticky uzel
- * @param situation udava situaci ktera nastala
+ * @param tree je ukazatel na kritický uzel
+ * @param situation udává situaci která nastala
  * 
- * @returns upraveny strom
+ * @returns upravený strom
 */
 void balanceTree(bst_node_t **tree, int situation)
 {
     bst_node_t *tmp;
     bst_node_t *tmpSon;
-    switch (situation) // LL, LR, RL, RR
+    switch (situation) // 1:LL, 2:LR, 3:RL, 4:RR
     {
-        case 1:
+        case 1: // LL rotace doprava
             tmp = (*tree)->left->right;
             tmpSon = (*tree)->left;
             (*tree)->left->right = *tree;
             (*tree)->left = tmp;
             break;
 
-        case 2:
-            // 1. rotace
+        case 2: // LR
+            // 1. rotace (synu doleva)
             tmp = (*tree)->left->right->left;
             tmpSon = (*tree)->left->right;
             (*tree)->left->right->left = (*tree)->left;
             (*tree)->left->right = tmp;
             (*tree)->left = tmpSon;
 
-            // 2. rotace
+            // 2. rotace (doprava)
             tmp = (*tree)->left->right;
             tmpSon = (*tree)->left;
             (*tree)->left->right = *tree;
             (*tree)->left = tmp;
             break;
 
-        case 3:
-            // 1. rotace
+        case 3: // RL
+            // 1. rotace (synu doprava)
             tmp = (*tree)->right->left->right;
             tmpSon = (*tree)->right->left;
             (*tree)->right->left->right = (*tree)->right;
             (*tree)->right->left = tmp;
             (*tree)->right = tmpSon;
 
-            // 2. rotace
+            // 2. rotace (doleva)
             tmp = (*tree)->right->left;
             tmpSon = (*tree)->right;
             (*tree)->right->left = *tree;
             (*tree)->right = tmp;
             break;
 
-        case 4:
+        case 4: // RR rotace doleva
             tmp = (*tree)->right->left;
             tmpSon = (*tree)->right;
             (*tree)->right->left = *tree;
@@ -130,23 +130,23 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
     bool leftBalanced, rightBalanced;
     int left, right;
 
-    if (tree != NULL)
+    if (tree != NULL) // pokud jsme dosli az za listy nebo je strom prazdny
     {
-        leftBalanced = isHeightBalanced(tree->left, &left, criticalState);
+        leftBalanced = isHeightBalanced(tree->left, &left, criticalState); // zjisti, jestli je levy podstrom vyvazeny
         if (!leftBalanced)
         {
-            balanceTree(&(tree->left), *criticalState);
+            balanceTree(&(tree->left), *criticalState); // vyvaz to, co bylo prohlaseno za nevyvazene
             *criticalState = 0;
         }
-        rightBalanced = isHeightBalanced(tree->right, &right, criticalState);
+        rightBalanced = isHeightBalanced(tree->right, &right, criticalState); // zjisti, jestli je pravy podstrom vyvazeny
         if (!rightBalanced)
         {
-            balanceTree(&(tree->right), *criticalState);
+            balanceTree(&(tree->right), *criticalState); // vyvaz to, co bylo prohlaseno za nevyvazene
             *criticalState = 0;
         }
 
 
-        if (left > right)
+        if (left > right) // do count uloz vysku vetsiho podstromu
         {
             *count = left + 1;
         }
@@ -158,19 +158,19 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
 
         int countL = 0;
         int countR = 0;
-        if ((left - right) >= 2)
+        if ((left - right) >= 2) // jestli se podstromu ve vysce lisi alespon o 2 a levy je vetsi
         {
             // neni vyvazeny, vlevo tezsi
             if (tree->left->left != NULL)
             {
-                isHeightBalanced(tree->left->left, &countL, criticalState);
+                isHeightBalanced(tree->left->left, &countL, criticalState); // pro spocitani vysky leveho postromu
             }
             if (tree->left->right != NULL)
             {
-                isHeightBalanced(tree->left->right, &countR, criticalState);
+                isHeightBalanced(tree->left->right, &countR, criticalState); // pro spocitani vysky praveho podstromu
             }
 
-            if (countL > countR)
+            if (countL > countR) // urceni situace podle porovnani vysek porstromu
             {
                 // LL
                 *criticalState = 1;
@@ -181,7 +181,7 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
                 *criticalState = 2;
             }
         }
-        else if ((left - right) <= -2)
+        else if ((left - right) <= -2) // jestli se lisi alespon o 2 a pravy je vetsi
         {
             // neni vyvazeny, vpravo tezsi
             if (tree->right->left != NULL)
@@ -193,7 +193,7 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
                 isHeightBalanced(tree->right->right, &countR, criticalState);
             }
 
-            if (countL > countR)
+            if (countL > countR) // porovname vysky synu a urcime situaci
             {
                 // RL
                 *criticalState = 3;
@@ -205,9 +205,9 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
             }
         }
 
-        return (leftBalanced && rightBalanced && (abs(left - right) <= 1));
+        return (leftBalanced && rightBalanced && (abs(left - right) <= 1)); // pokud je vse vybalancovany vrati true, jinak false
     }
-    *count = 0;
+    *count = 0; // kdyz podstom je NULL vrati 0 a true
     return true;
 }
 
@@ -223,9 +223,9 @@ bool isHeightBalanced(bst_node_t *tree, int *count, int *criticalState)
 */
 void bst_balance(bst_node_t **tree) {
     int count, criticalState;
-    while (!isHeightBalanced(*tree, &count, &criticalState)) //while neni true
+    while (!isHeightBalanced(*tree, &count, &criticalState)) // dokud neni vyvazeny, opakuj
     {
-        //neni vyvazeny
+        // neni vyvazeny koren, vyvaz
         balanceTree(tree, criticalState);
         criticalState = 0;
     }
