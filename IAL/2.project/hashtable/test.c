@@ -76,11 +76,11 @@ INSERT_TEST_DATA(test_table)
 float *testFloat = ht_get(test_table, "Ethereum");
 if (testFloat != NULL)
 {
-  fprintf(stderr, "value of %s: %f\n", "Ethereum", *testFloat);
+  printf("value of %s: %f\n", "Ethereum", *testFloat);
 }
 else
 {
-  fprintf(stderr, "value of %s: NULL\n", "Ethereum");
+  printf("value of %s: NULL\n", "Ethereum");
 }
 ENDTEST
 
@@ -93,6 +93,62 @@ ENDTEST
 TEST(test_delete_all, "Delete all the items")
 ht_init(test_table);
 INSERT_TEST_DATA(test_table)
+ht_delete_all(test_table);
+ENDTEST
+
+//advance tests
+
+TEST(advance_test1, "Advance test1")
+ht_init(test_table);
+INSERT_TEST_DATA(test_table)
+ht_delete(test_table, "Cardano");
+ENDTEST
+
+TEST(advance_test2, "Advance test2")
+ht_init(test_table);
+INSERT_TEST_DATA(test_table)
+ht_delete(test_table, "Solana");
+ht_delete(test_table, "Binance Coin");
+ENDTEST
+
+TEST(advance_test3, "Advance test3")
+ht_init(test_table);
+INSERT_TEST_DATA(test_table)
+ht_delete(test_table, "Cardano");
+ht_delete(test_table, "Cardano");
+ht_delete(test_table, "Cardano");
+ht_delete(test_table, "Cardano");
+ht_delete(test_table, "Cardano");
+ENDTEST
+
+TEST(advance_test4, "Advance test4")
+ht_init(test_table);
+INSERT_TEST_DATA(test_table)
+ht_insert(test_table, "ethereum", 1234567.89);
+ENDTEST
+
+TEST(advance_test5, "Advance test5")
+ht_init(test_table);
+ht_insert(test_table, "", 12.89);
+ENDTEST
+
+TEST(advance_test6, "Advance test6")
+ht_init(test_table);
+ht_insert(test_table, "", 12.89);
+ht_delete(test_table, "");
+ENDTEST
+
+TEST(advance_test7, "Advance test7")
+ht_init(test_table);
+ht_init(test_table);
+ht_init(test_table);
+ENDTEST
+
+TEST(advance_test8, "Advance test8")
+ht_init(test_table);
+ht_insert(test_table, "", 12.89);
+ht_delete_all(test_table);
+ht_delete_all(test_table);
 ht_delete_all(test_table);
 ENDTEST
 
@@ -110,6 +166,16 @@ int main(int argc, char *argv[]) {
   test_get();
   test_delete();
   test_delete_all();
+
+  //advance tests
+  advance_test1();
+  advance_test2();
+  advance_test3();
+  advance_test4();
+  advance_test5();
+  advance_test6();
+  advance_test7();
+  advance_test8();
 
   free(uninitialized_item);
 }
