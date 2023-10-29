@@ -450,6 +450,14 @@ bst_balance(&test_tree);
 bst_print_tree(test_tree);
 ENDTEST
 
+TEST(test_balance11, "Count letters and balance11");
+bst_init(&test_tree);
+letter_count(&test_tree, "hafedcbljk");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
 #endif // EXA
 
 int main(int argc, char *argv[]) {
@@ -505,5 +513,6 @@ int main(int argc, char *argv[]) {
   test_balance8();
   test_balance9();
   test_balance10();
+  test_balance11();
 #endif // EXA
 }
