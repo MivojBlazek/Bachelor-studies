@@ -45,27 +45,20 @@ void ht_init(ht_table_t *table) {
  * hodnotu NULL.
  */
 ht_item_t *ht_search(ht_table_t *table, char *key) {
-  for (int i = 0; i < HT_SIZE; i++)
+  if ((*table)[get_hash(key)] == NULL)
   {
-    if ((*table)[i] == NULL)
+    return NULL;
+  }
+  ht_item_t *tmp = (*table)[get_hash(key)];
+  while (tmp->key != key)
+  {
+    tmp = tmp->next;
+    if (tmp == NULL)
     {
-      continue;
-    }
-    if (get_hash((*table)[i]->key) == get_hash(key))
-    {
-      ht_item_t *tmp = (*table)[i];
-      while (tmp->key != key)
-      {
-        tmp = tmp->next;
-        if (tmp == NULL)
-        {
-          return NULL;
-        }
-      }
-      return tmp;
+      return NULL;
     }
   }
-  return NULL;
+  return tmp;
 }
 
 /*
@@ -86,26 +79,8 @@ void ht_insert(ht_table_t *table, char *key, float value) {
   ht_item_t *newItem = (ht_item_t *)malloc(sizeof(ht_item_t));
   newItem->key = key;
   newItem->value = value;
-  for (int i = 0; i < HT_SIZE; i++)
-  {
-    if ((*table)[i] != NULL && get_hash((*table)[i]->key) == get_hash(key))
-    {
-      newItem->next = (*table)[i];
-      (*table)[i] = newItem;
-      return;
-    }
-  }
-  for (int i = 0; i < HT_SIZE; i++)
-  {
-    if ((*table)[i] == NULL)
-    {
-      newItem->next = NULL;
-      (*table)[i] = newItem;
-      return;
-    }
-  }
-  newItem->next = (*table)[0];
-  (*table)[0] = newItem;
+  newItem->next = (*table)[get_hash(key)];
+  (*table)[get_hash(key)] = newItem;
 }
 
 /*
@@ -134,36 +109,30 @@ float *ht_get(ht_table_t *table, char *key) {
  * Při implementaci NEPOUŽÍVEJTE funkci ht_search.
  */
 void ht_delete(ht_table_t *table, char *key) {
-  for (int i = 0; i < HT_SIZE; i++)
+  ht_item_t *beforeTmp;
+  ht_item_t *tmp = (*table)[get_hash(key)];
+  if (tmp == NULL)
   {
-    if ((*table)[i] == NULL)
+    return;
+  }
+  while (tmp->key != key)
+  {
+    beforeTmp = tmp;
+    tmp = tmp->next;
+    if (tmp == NULL)
     {
-      continue;
+      return;
     }
-    if (get_hash((*table)[i]->key) == get_hash(key))
-    {
-      ht_item_t *beforeTmp;
-      ht_item_t *tmp = (*table)[i];
-      while (tmp->key != key)
-      {
-        beforeTmp = tmp;
-        tmp = tmp->next;
-        if (tmp == NULL)
-        {
-          return;
-        }
-      }
-      if ((*table)[i] == tmp)
-      {
-        (*table)[i] = tmp->next;
-        free(tmp);
-      }
-      else
-      {
-        beforeTmp->next = tmp->next;
-        free(tmp);
-      }
-    }
+  }
+  if ((*table)[get_hash(key)] == tmp)
+  {
+    (*table)[get_hash(key)] = tmp->next;
+    free(tmp);
+  }
+  else
+  {
+    beforeTmp->next = tmp->next;
+    free(tmp);
   }
 }
 
