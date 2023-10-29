@@ -139,26 +139,26 @@ void bst_insert(bst_node_t **tree, char key, int value) {
 void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
   bst_node_t *tmp = *tree;
   bst_node_t *beforeTmp = target;
-  while (tmp != NULL)
+  while (tmp != NULL) // projizdej stromem dokud nenajdes nejpravejsi uzel
   {
-    if (tmp->right != NULL)
+    if (tmp->right != NULL) // pokud existuje pravejsi uzel, prozkoumej to
     {
       beforeTmp = tmp;
       tmp = tmp->right;
     }
-    else
+    else // nasli jsme nejpravejsi uzel
     {
-      target->key = tmp->key;
+      target->key = tmp->key; // ulozime jeho hodnoty do target
       target->value = tmp->value;
       if (beforeTmp == target)
       {
-        target->left = tmp->left;
+        target->left = tmp->left; // posuneme zbytek podstomu pod nejpravejsim uzlem misto nej
       }
       else
       {
         beforeTmp->right = tmp->left;
       }
-      free(tmp);
+      free(tmp); // smazeme okopirovany uzel
       tmp = NULL;
     }
   }
@@ -181,9 +181,9 @@ void bst_delete(bst_node_t **tree, char key) {
   bst_node_t *tmp = *tree;
   bst_node_t *beforeTmp;
   int left = -1;
-  while (tmp != NULL)
+  while (tmp != NULL) // dokud nejsme za listem na konci nejakeho podstomu
   {
-    if (key < tmp->key)
+    if (key < tmp->key) // pokud je hledany uzel v levem podstromu a tento podstrom existuje, prohledej ho
     {
       if (tmp->left == NULL)
       {
@@ -193,7 +193,7 @@ void bst_delete(bst_node_t **tree, char key) {
       left = 1;
       tmp = tmp->left;
     }
-    else if (key > tmp->key)
+    else if (key > tmp->key) // pokud je hledany uzel v pravem podstromu a tento podstrom existuje, prohledej ho
     {
       if (tmp->right == NULL)
       {
@@ -203,18 +203,18 @@ void bst_delete(bst_node_t **tree, char key) {
       left = 0;
       tmp = tmp->right;
     }
-    else
+    else // pokud jsme nasli hledany uzel
     {
-      if (tmp->left == NULL && tmp->right == NULL)
+      if (tmp->left == NULL && tmp->right == NULL) // a nema ani jednoho syna
       {
         free(tmp);
-        tmp = NULL;
+        tmp = NULL; // smazeme ho a kdyz je to koren, nastavime *tree na NULL
         if (left == -1)
         {
           *tree = NULL;
           return;
         }
-        if (left)
+        if (left) // kdyz je v levem nebo pravem podstromu, nastavime spravne ukazatele, aby se strom propojil
         {
           beforeTmp->left = NULL;
         }
@@ -223,15 +223,15 @@ void bst_delete(bst_node_t **tree, char key) {
           beforeTmp->right = NULL;
         }
       }
-      else if (tmp->left != NULL && tmp->right != NULL)
+      else if (tmp->left != NULL && tmp->right != NULL) // a ma oba syny
       {
-        bst_replace_by_rightmost(tmp, &tmp->left);
+        bst_replace_by_rightmost(tmp, &tmp->left); // nahradime ho nejpravejsim uzlem v jeho levem podstromu
         return;
       }
-      else
+      else // a ma jen 1 syna
       {
         beforeTmp = tmp;
-        if (tmp->left == NULL)
+        if (tmp->left == NULL) // urcime, jestli to je levy nebo pravy
         {
           tmp = tmp->right;
         }
@@ -239,7 +239,7 @@ void bst_delete(bst_node_t **tree, char key) {
         {
           tmp = tmp->left;
         }
-        beforeTmp->left = tmp->left;
+        beforeTmp->left = tmp->left; // vhodne propojime strom bez tohoto uzlu a tento uzel smazeme
         beforeTmp->right = tmp->right;
         beforeTmp->value = tmp->value;
         beforeTmp->key = tmp->key;
@@ -261,38 +261,38 @@ void bst_delete(bst_node_t **tree, char key) {
  * vlastních pomocných funkcí.
  */
 void bst_dispose(bst_node_t **tree) {
-  if (*tree == NULL)
+  if (*tree == NULL) // pokud nemame co mazat, nemazeme
   {
     return;
   }
   stack_bst_t stack;
-  stack_bst_init(&stack);
-  bst_node_t *currentNode = *tree;
+  stack_bst_init(&stack); // inicializace zasobniku
+  bst_node_t *tmp = *tree;
   bst_node_t *lastVisited = NULL;
 
-  while (currentNode || stack.top != -1)
+  while (tmp || stack.top != -1) // dokud mame neco v zasobniku nebo jsme jeste nedosli na konec stromu
   {
-    if (currentNode)
+    if (tmp) // kdyz jsme v nejakem uzlu, hodime ho na zasobnik a presuneme se o 1 doleva
     {
-      stack_bst_push(&stack, currentNode);
-      currentNode = currentNode->left;
+      stack_bst_push(&stack, tmp);
+      tmp = tmp->left;
     }
-    else
+    else // kdyz uz nejsme v zadnem uzlu, vyprazdnujeme zasobnik
     {
-      bst_node_t *tmp = stack_bst_top(&stack);
-      if (tmp->right && tmp->right != lastVisited)
+      bst_node_t *tmp2 = stack_bst_top(&stack);
+      if (tmp2->right && tmp2->right != lastVisited) // koukneme co je na vrsku zasobnik a kdyz jeho pravy syn neni naposled navstiven, posuneme se doprava od tohoto uzlu
       {
-        currentNode = tmp->right;
+        tmp = tmp2->right; // jednoduse z kazdeho leveho uzlu zkousime jit doprava a mazeme
       }
-      else
+      else // jinak tento uzel prenastavime na posledni navstiven, smazeme ho a vyndame ho ze zasobniku
       {
-        lastVisited = tmp;
-        free(tmp);
+        lastVisited = tmp2;
+        free(tmp2);
         stack_bst_pop(&stack);
       }
     }
   }
-  *tree = NULL;
+  *tree = NULL; // nastavime strom jako po inicializaci
 }
 
 /*
@@ -305,9 +305,9 @@ void bst_dispose(bst_node_t **tree) {
  * vlastních pomocných funkcí.
  */
 void bst_leftmost_preorder(bst_node_t *tree, stack_bst_t *to_visit, bst_items_t *items) {
-  while (tree != NULL)
+  while (tree != NULL) // dokud jsme nedosli v levem pruchodu na konec stromu
   {
-    stack_bst_push(to_visit, tree);
+    stack_bst_push(to_visit, tree); // vloz vsechny leve uzly na zasobnik a zapis je
     bst_add_node_to_items(tree, items);
     tree = tree->left;
   }
@@ -323,15 +323,14 @@ void bst_leftmost_preorder(bst_node_t *tree, stack_bst_t *to_visit, bst_items_t 
  */
 void bst_preorder(bst_node_t *tree, bst_items_t *items) {
   stack_bst_t stack;
-  stack_bst_init(&stack);
-  bst_leftmost_preorder(tree, &stack, items);
+  stack_bst_init(&stack); // inicializace zasobniku
+  bst_leftmost_preorder(tree, &stack, items); // naplneni zasobniku levymi uzly
 
-  while (!stack_bst_empty(&stack))
+  while (!stack_bst_empty(&stack)) // dokud nevyprazdnime zasobnik
   {
-    tree = stack_bst_pop(&stack);
+    tree = stack_bst_pop(&stack); // vkladame na zasobnik jeste pravy uzel kazdeho naseho leveho az projdeme cely strom
     bst_leftmost_preorder(tree->right, &stack, items);
   }
-  //!stack_bst_dispose(&stack);
 }
 
 /*
@@ -344,9 +343,9 @@ void bst_preorder(bst_node_t *tree, bst_items_t *items) {
  * vlastních pomocných funkcí.
  */
 void bst_leftmost_inorder(bst_node_t *tree, stack_bst_t *to_visit) {
-  while (tree != NULL)
+  while (tree != NULL) // dokud nejsme na konci stromu
   {
-    stack_bst_push(to_visit, tree);
+    stack_bst_push(to_visit, tree); // vkladej leve uzly na zasobnik
     tree = tree->left;
   }
 }
@@ -361,12 +360,12 @@ void bst_leftmost_inorder(bst_node_t *tree, stack_bst_t *to_visit) {
  */
 void bst_inorder(bst_node_t *tree, bst_items_t *items) {
   stack_bst_t stack;
-  stack_bst_init(&stack);
-  bst_leftmost_inorder(tree, &stack);
+  stack_bst_init(&stack); // inicializace zasobniku
+  bst_leftmost_inorder(tree, &stack); // naplneni zasobniku levymi uzly
 
-  while (!stack_bst_empty(&stack))
+  while (!stack_bst_empty(&stack)) // dokud zasobnik neni prazdny
   {
-    tree = stack_bst_pop(&stack);
+    tree = stack_bst_pop(&stack); // vkladame jako u preorderu na zasobnik i prave uzly, ale prubezne zapisujeme po zpracovani leveho podstromu
     bst_add_node_to_items(tree, items);
     bst_leftmost_inorder(tree->right, &stack);
   }
@@ -384,10 +383,10 @@ void bst_inorder(bst_node_t *tree, bst_items_t *items) {
  */
 void bst_leftmost_postorder(bst_node_t *tree, stack_bst_t *to_visit,
                             stack_bool_t *first_visit) {
-  while (tree != NULL)
+  while (tree != NULL) // dokud nejsme na konci stromu
   {
-    stack_bst_push(to_visit, tree);
-    stack_bool_push(first_visit, true);
+    stack_bst_push(to_visit, tree); // vkladame na zasobnik leve uzly
+    stack_bool_push(first_visit, true); // a na zasobnik navstivenosti davame true
     tree = tree->left;
   }
 }
@@ -404,22 +403,22 @@ void bst_postorder(bst_node_t *tree, bst_items_t *items) {
   stack_bst_t stack;
   stack_bst_init(&stack);
   stack_bool_t stackBool;
-  stack_bool_init(&stackBool);
+  stack_bool_init(&stackBool); // inicializace obou zasobniku
   bool fromLeft;
 
-  bst_leftmost_postorder(tree, &stack, &stackBool);
-  while (!stack_bst_empty(&stack))
+  bst_leftmost_postorder(tree, &stack, &stackBool); // naplneni zasobniku levymi uzly
+  while (!stack_bst_empty(&stack)) // dokud neni zasobnik uzlu prazdny
   {
     tree = stack_bst_top(&stack);
-    fromLeft = stack_bool_pop(&stackBool);
-    if (fromLeft)
+    fromLeft = stack_bool_pop(&stackBool); // zjistime, jestli jdeme zleva
+    if (fromLeft) // pokud ano
     {
-      stack_bool_push(&stackBool, false);
+      stack_bool_push(&stackBool, false); // prepiseme na false a klasicky pridame na zasobnik pravy uzel
       bst_leftmost_postorder(tree->right, &stack, &stackBool);
     }
-    else
+    else // pokud nejdeme zleva (tzn je zpracovano vse v obou podstromech)
     {
-      stack_bst_pop(&stack);
+      stack_bst_pop(&stack); // uz tento uzel nepotrebujeme a zapiseme ho
       bst_add_node_to_items(tree, items);
     }
   }
