@@ -32,6 +32,10 @@ int get_hash(char *key) {
  * Inicializace tabulky — zavolá sa před prvním použitím tabulky.
  */
 void ht_init(ht_table_t *table) {
+  for (int i = 0; i < HT_SIZE; i++)
+  {
+    (*table)[i] = NULL;
+  }
 }
 
 /*
@@ -41,6 +45,26 @@ void ht_init(ht_table_t *table) {
  * hodnotu NULL.
  */
 ht_item_t *ht_search(ht_table_t *table, char *key) {
+  for (int i = 0; i < HT_SIZE; i++)
+  {
+    if ((*table)[i] == NULL)
+    {
+      continue;
+    }
+    if (get_hash((*table)[i]->key) == get_hash(key))
+    {
+      ht_item_t *tmp = (*table)[i];
+      while (tmp->key != key)
+      {
+        tmp = tmp->next;
+        if (tmp == NULL)
+        {
+          return NULL;
+        }
+      }
+      return tmp;
+    }
+  }
   return NULL;
 }
 
@@ -53,6 +77,35 @@ ht_item_t *ht_search(ht_table_t *table, char *key) {
  * synonym zvolte nejefektivnější možnost a vložte prvek na začátek seznamu.
  */
 void ht_insert(ht_table_t *table, char *key, float value) {
+  ht_item_t *search = ht_search(table, key);
+  if (search != NULL)
+  {
+    search->value = value;
+    return;
+  }
+  ht_item_t *newItem = (ht_item_t *)malloc(sizeof(ht_item_t));
+  newItem->key = key;
+  newItem->value = value;
+  for (int i = 0; i < HT_SIZE; i++)
+  {
+    if ((*table)[i] != NULL && get_hash((*table)[i]->key) == get_hash(key))
+    {
+      newItem->next = (*table)[i];
+      (*table)[i] = newItem;
+      return;
+    }
+  }
+  for (int i = 0; i < HT_SIZE; i++)
+  {
+    if ((*table)[i] == NULL)
+    {
+      newItem->next = NULL;
+      (*table)[i] = newItem;
+      return;
+    }
+  }
+  newItem->next = (*table)[0];
+  (*table)[0] = newItem;
 }
 
 /*
@@ -64,6 +117,11 @@ void ht_insert(ht_table_t *table, char *key, float value) {
  * Při implementaci využijte funkci ht_search.
  */
 float *ht_get(ht_table_t *table, char *key) {
+  ht_item_t *search = ht_search(table, key);
+  if (search != NULL)
+  {
+    return &(search->value);
+  }
   return NULL;
 }
 
@@ -76,6 +134,37 @@ float *ht_get(ht_table_t *table, char *key) {
  * Při implementaci NEPOUŽÍVEJTE funkci ht_search.
  */
 void ht_delete(ht_table_t *table, char *key) {
+  for (int i = 0; i < HT_SIZE; i++)
+  {
+    if ((*table)[i] == NULL)
+    {
+      continue;
+    }
+    if (get_hash((*table)[i]->key) == get_hash(key))
+    {
+      ht_item_t *beforeTmp;
+      ht_item_t *tmp = (*table)[i];
+      while (tmp->key != key)
+      {
+        beforeTmp = tmp;
+        tmp = tmp->next;
+        if (tmp == NULL)
+        {
+          return;
+        }
+      }
+      if ((*table)[i] == tmp)
+      {
+        (*table)[i] = tmp->next;
+        free(tmp);
+      }
+      else
+      {
+        beforeTmp->next = tmp->next;
+        free(tmp);
+      }
+    }
+  }
 }
 
 /*
@@ -85,4 +174,19 @@ void ht_delete(ht_table_t *table, char *key) {
  * inicializaci.
  */
 void ht_delete_all(ht_table_t *table) {
+  for (int i = 0; i < HT_SIZE; i++)
+  {
+    if ((*table)[i] != NULL)
+    {
+      ht_item_t *current = (*table)[i];
+      ht_item_t *currentNext;
+      while (current != NULL)
+      {
+        currentNext = current->next;
+        free(current);
+        current = currentNext;
+      }
+    }
+    (*table)[i] = NULL;
+  }
 }

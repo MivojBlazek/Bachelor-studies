@@ -15,7 +15,7 @@ void ht_print_item_value(float *value) {
 
 void ht_print_item(ht_item_t *item) {
   if (item != NULL) {
-    printf("(%s,%.2f)\n", item->key, item->value);
+    printf("(%d,%s,%.2f)\n", get_hash(item->key), item->key, item->value);
   } else {
     printf("NULL\n");
   }
@@ -31,7 +31,7 @@ void ht_print_table(ht_table_t *table) {
     int count = 0;
     ht_item_t *item = (*table)[i];
     while (item != NULL) {
-      printf("(%s,%.2f)", item->key, item->value);
+      printf("(%d,%s,%.2f)", get_hash(item->key), item->key, item->value);
       if (item != uninitialized_item) {
         count++;
       }
