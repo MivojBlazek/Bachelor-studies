@@ -1,0 +1,4 @@
+v 4
+file "/homes/eva/xb/xblaze38/Coding/INP/1_project/zadani/test/" "../src/cpu.vhd" "828a1c1addbf73426dbc1841bbe935ae2e7161bb" "20231030162856.197":
+  entity cpu at 6( 214) + 0 on 11;
+  architecture behavioral of cpu at 47( 2232) + 0 on 12;
