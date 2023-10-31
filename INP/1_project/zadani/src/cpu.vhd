@@ -55,9 +55,16 @@ begin
 
   process (RESET) -- reset -> incializace stavu
   begin
-    if rising_edge(RESET) then
+    if (rising_edge(RESET)) then
       DATA_ADDR <= "0000000000000";
       READY <= '1';
+    end if;
+  end process;
+
+  process (RESET, EN, CLK) -- inicializace
+  begin
+    if (rising_edge(CLK) and RESET = '0' and EN = '0') then
+      -- cpu vykonava program pri kazde vzestupne hrane CLK
     end if;
   end process;
 
