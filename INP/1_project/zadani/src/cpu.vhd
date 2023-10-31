@@ -53,5 +53,13 @@ begin
  --      - u synchronnich komponent obsahuje sensitivity list pouze CLK a RESET a 
  --      - u kombinacnich komponent obsahuje sensitivity list vsechny ctene signaly. 
 
+  process (RESET) -- reset -> incializace stavu
+  begin
+    if rising_edge(RESET) then
+      DATA_ADDR <= "0000000000000";
+      READY <= '1';
+    end if;
+  end process;
+
 end behavioral;
 

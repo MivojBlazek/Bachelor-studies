@@ -1,6 +1,6 @@
 -- uart_rx.vhd: UART controller - receiving (RX) side
 -- Author(s): Michal Blažek (xblaze38)
-
+-- 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
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
