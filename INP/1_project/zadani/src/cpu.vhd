@@ -72,17 +72,21 @@ begin
       IN_REQ <= '0';
       OUT_WE <= '0';
       pc_data <= (others => '0');
+      pc_inc <= '0';
+      pc_ld <= '0';
     end if;
   end process;
 
-  process (CLK, RESET, EN)
+  process (CLK, RESET, EN, pc_data)
   begin
     if (RESET = '1') then
       READY <= '0';
       DATA_EN <= '0';
+      pc_inc <= '0';
     elsif (EN = '1' and rising_edge(CLK)) then
       DATA_EN <= '1';
       DATA_RDWR <= '0';
+      pc_inc <= '1';
       if (DATA_RDATA = "10000000") then
         READY <= '1';
         DATA_ADDR <= pc_data + 1;
@@ -97,6 +101,8 @@ begin
   begin
     if (RESET = '1') then
       pc_data <= (others => '0');
+      pc_inc <= '0';
+      pc_ld <= '0';
     elsif (rising_edge(CLK)) then
       if (pc_ld = '1') then
         pc_data <= pc_max;
