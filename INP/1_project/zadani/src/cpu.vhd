@@ -74,6 +74,7 @@ begin
       pc_data <= (others => '0');
       pc_inc <= '0';
       pc_ld <= '0';
+      pc_max <= (others => '0');
     end if;
   end process;
 
@@ -126,10 +127,5 @@ begin
 	-- 	end if;
 	-- end process;
   
-
-
-  -- pc_mx <= "0000" & ireg_reg(11 downto 0) when pc_mx_sel="00" else DBUS;
-  -- ABUS <= pc_reg when (pc_abus = '1') else (others => 'Z');
-
 end behavioral;
 
