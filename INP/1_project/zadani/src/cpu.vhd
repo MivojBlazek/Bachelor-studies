@@ -74,6 +74,19 @@ begin
     end if;
   end process;
 
+  process (CLK, RESET, EN)
+  begin
+    if (RESET = '1') then
+      READY <= '0';
+    elsif (rising_edge(CLK) and EN = '1') then
+      if (DATA_RDATA = "10000000") then
+        READY <= '1';
+      else
+        READY <= '0';
+      end if; 
+    end if;
+  end process;
+
   -- pc: process (RESET, CLK) --! pekna varianta
   -- begin
   --   if (RESET = '1') then
