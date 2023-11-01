@@ -46,10 +46,10 @@ end cpu;
 -- ----------------------------------------------------------------------------
 architecture behavioral of cpu is
 -- Program counter
-signal pc_data : std_logic_vector(15 downto 0);
+signal pc_data : std_logic_vector(12 downto 0);
 signal pc_ld : std_logic;
 signal pc_inc : std_logic;
-signal pc_mx : std_logic_vector(15 downto 0);
+signal pc_max : std_logic_vector(12 downto 0);
 -- Pointer
 signal ptr_data : std_logic_vector(12 downto 0);
 signal ptr_inc : std_logic;
@@ -71,6 +71,7 @@ begin
       READY <= '0';
       IN_REQ <= '0';
       OUT_WE <= '0';
+      pc_data <= (others => '0');
     end if;
   end process;
 
@@ -78,28 +79,31 @@ begin
   begin
     if (RESET = '1') then
       READY <= '0';
-    elsif (rising_edge(CLK) and EN = '1') then
+    elsif (EN = '1' and rising_edge(CLK)) then
+      DATA_EN <= '1';
+      DATA_RDWR <= '0';
       if (DATA_RDATA = "10000000") then
         READY <= '1';
+        DATA_ADDR <= pc_data + 1;
       else
         READY <= '0';
+        DATA_ADDR <= (others => '0');
       end if; 
     end if;
   end process;
 
-  -- pc: process (RESET, CLK) --! pekna varianta
-  -- begin
-  --   if (RESET = '1') then
-  --     pc_data <= (others => '0');
-  --     READY <= '1';
-  --   elsif (rising_edge(CLK)) then
-  --     if (pc_ld = '1') then
-  --       pc_data <= pc_mx;
-  --     elsif (pc_inc = '1') then
-  --       pc_data <= pc_data + 1;
-  --     end if;
-  --   end if;
-  -- end process;
+  process (RESET, CLK)
+  begin
+    if (RESET = '1') then
+      pc_data <= (others => '0');
+    elsif (rising_edge(CLK)) then
+      if (pc_ld = '1') then
+        pc_data <= pc_max;
+      elsif (pc_inc = '1') then
+        pc_data <= pc_data + 1;
+      end if;
+    end if;
+  end process;
 
   -- ptr: process (RESET, CLK)
 	-- begin
@@ -119,23 +123,6 @@ begin
 
   -- pc_mx <= "0000" & ireg_reg(11 downto 0) when pc_mx_sel="00" else DBUS;
   -- ABUS <= pc_reg when (pc_abus = '1') else (others => 'Z');
-
-
-
-  -- reset: process (RESET) -- reset -> incializace stavu
-  -- begin
-  --   if (rising_edge(RESET)) then
-  --     DATA_ADDR <= "0000000000000";
-  --     READY <= '1';
-  --   end if;
-  -- end process;
-
-  -- init: process (RESET, EN, CLK) -- inicializace
-  -- begin
-  --   if (rising_edge(CLK) and RESET = '0' and EN = '0') then
-  --     -- cpu vykonava program pri kazde vzestupne hrane CLK
-  --   end if;
-  -- end process;
 
 end behavioral;
 
