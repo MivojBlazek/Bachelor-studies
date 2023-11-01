@@ -39,7 +39,7 @@ clean:
 ghdl:	$(VHDL_SRC)
 	$(GHDL_BINARY) -i --ieee=synopsys -fexplicit --workdir=$(WORK_DIR) --work=work $(VHDL_SRC)
 	$(GHDL_BINARY) -m --ieee=synopsys -fexplicit --workdir=$(WORK_DIR) -P$(WORK_DIR) --work=work $(TOPLEVEL)
-	$(GHDL_BINARY) -r --ieee=synopsys -fexplicit --workdir=$(WORK_DIR) -P$(WORK_DIR) --work=work $(TOPLEVEL) --wave=wave.ghw
+	$(GHDL_BINARY) -r --ieee=synopsys -fexplicit --workdir=$(WORK_DIR) -P$(WORK_DIR) --work=work $(TOPLEVEL) --vpi=$(GHDL_VPI) --wave=wave.ghw
 
 gtkwave: ghdl    # upraveny makefile o gtkwave
 	gtkwave wave.ghw
