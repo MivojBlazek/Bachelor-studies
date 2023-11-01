@@ -47,9 +47,8 @@ end cpu;
 architecture behavioral of cpu is
 -- Program counter
 signal pc_data : std_logic_vector(12 downto 0);
-signal pc_ld : std_logic;
+signal pc_dec : std_logic;
 signal pc_inc : std_logic;
-signal pc_max : std_logic_vector(12 downto 0);
 -- Pointer
 signal ptr_data : std_logic_vector(12 downto 0);
 signal ptr_inc : std_logic;
@@ -73,8 +72,7 @@ begin
       OUT_WE <= '0';
       pc_data <= (others => '0');
       pc_inc <= '0';
-      pc_ld <= '0';
-      pc_max <= (others => '0');
+      pc_dec <= '0';
     end if;
   end process;
 
@@ -103,10 +101,10 @@ begin
     if (RESET = '1') then
       pc_data <= (others => '0');
       pc_inc <= '0';
-      pc_ld <= '0';
+      pc_dec <= '0';
     elsif (rising_edge(CLK)) then
-      if (pc_ld = '1') then
-        pc_data <= pc_max;
+      if (pc_dec = '1') then
+        pc_data <= pc_data - 1;
       elsif (pc_inc = '1') then
         pc_data <= pc_data + 1;
       end if;
