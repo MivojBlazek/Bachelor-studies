@@ -63,34 +63,47 @@ begin
  --      - u synchronnich komponent obsahuje sensitivity list pouze CLK a RESET a 
  --      - u kombinacnich komponent obsahuje sensitivity list vsechny ctene signaly. 
 
-  pc: process (RESET, CLK)
+  process (RESET)
   begin
-    if (RESET = '1') then
-      pc_data <= (others => '0');
-      READY <= '1';
-    elsif (rising_edge(CLK)) then
-      if (pc_ld = '1') then
-        pc_data <= pc_mx;
-      elsif (pc_inc = '1') then
-        pc_data <= pc_data + 1;
-      end if;
+    if (rising_edge(RESET)) then
+      DATA_EN <= '0';
+      DONE <= '0';
+      READY <= '0';
+      IN_REQ <= '0';
+      OUT_WE <= '0';
     end if;
   end process;
 
-  ptr: process (RESET, CLK)
-	begin
-		if (RESET = '1') then
-			ptr_data <= (others => '0');
-      READY <= '1';
-		elsif (rising_edge(CLK)) then
-			if (ptr_inc = '1') then
-        ptr_data <= ptr_data + 1;
-			elsif (ptr_dec = '1') then
-        ptr_data <= ptr_data - 1;
-			end if;
-		end if;
-	end process;
+  -- pc: process (RESET, CLK) --! pekna varianta
+  -- begin
+  --   if (RESET = '1') then
+  --     pc_data <= (others => '0');
+  --     READY <= '1';
+  --   elsif (rising_edge(CLK)) then
+  --     if (pc_ld = '1') then
+  --       pc_data <= pc_mx;
+  --     elsif (pc_inc = '1') then
+  --       pc_data <= pc_data + 1;
+  --     end if;
+  --   end if;
+  -- end process;
+
+  -- ptr: process (RESET, CLK)
+	-- begin
+	-- 	if (RESET = '1') then
+	-- 		ptr_data <= (others => '0');
+  --     READY <= '1';
+	-- 	elsif (rising_edge(CLK)) then
+	-- 		if (ptr_inc = '1') then
+  --       ptr_data <= ptr_data + 1;
+	-- 		elsif (ptr_dec = '1') then
+  --       ptr_data <= ptr_data - 1;
+	-- 		end if;
+	-- 	end if;
+	-- end process;
   
+
+
   -- pc_mx <= "0000" & ireg_reg(11 downto 0) when pc_mx_sel="00" else DBUS;
   -- ABUS <= pc_reg when (pc_abus = '1') else (others => 'Z');
 
