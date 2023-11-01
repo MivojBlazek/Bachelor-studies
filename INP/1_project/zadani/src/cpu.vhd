@@ -79,6 +79,7 @@ begin
   begin
     if (RESET = '1') then
       READY <= '0';
+      DATA_EN <= '0';
     elsif (EN = '1' and rising_edge(CLK)) then
       DATA_EN <= '1';
       DATA_RDWR <= '0';
