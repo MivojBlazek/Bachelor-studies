@@ -74,11 +74,6 @@ begin
     end if;
   end process;
 
-  process (CLK)
-  begin
-    READY <= '1';
-  end process;
-
   -- pc: process (RESET, CLK) --! pekna varianta
   -- begin
   --   if (RESET = '1') then
