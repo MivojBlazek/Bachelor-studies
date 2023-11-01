@@ -63,16 +63,21 @@ begin
  --      - u synchronnich komponent obsahuje sensitivity list pouze CLK a RESET a 
  --      - u kombinacnich komponent obsahuje sensitivity list vsechny ctene signaly. 
 
-  process (RESET)
+  reset: process (RESET)
   begin
     if (rising_edge(RESET)) then
-      DATA_EN <= '0';
+      DATA_EN <= '0'; 
       DONE <= '0';
       READY <= '0';
       IN_REQ <= '0';
       OUT_WE <= '0';
     end if;
-  end process;
+  end process reset;
+
+  init: process (CLK)
+  begin
+    READY <= '1';
+  end process init;
 
   -- pc: process (RESET, CLK) --! pekna varianta
   -- begin
