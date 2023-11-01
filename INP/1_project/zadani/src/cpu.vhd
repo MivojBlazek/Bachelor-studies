@@ -24,7 +24,7 @@ entity cpu is
 		CODE_EN		: out std_logic;						-- Povolení činosti
 
 		-- Synchronní paměť RAM
-		DATA_ADDR	: out std_logic_vector(9 downto 0);		-- Adresa do paměti
+		DATA_ADDR	: out std_logic_vector(12 downto 0);		-- Adresa do paměti
 		DATA_WDATA	: out std_logic_vector(7 downto 0);		-- mem[DATA_ADDR] <- DATA_WDATA pokud DATA_EN='1'
 		DATA_RDATA	: in  std_logic_vector(7 downto 0);		-- DATA_RDATA <- ram[DATA_ADDR] pokud DATA_EN='1'
 		DATA_RDWR	: out std_logic;						-- Čtení z paměti (DATA_RDWR='0') / zápis do paměti (DATA_RDWR='1')
@@ -85,7 +85,7 @@ architecture behavioral of cpu is
 	signal pc_data			: std_logic_vector(11 downto 0);
 	signal pc_inc, pc_dec	: std_logic;
 
-	signal ptr_data			: std_logic_vector(9 downto 0);
+	signal ptr_data			: std_logic_vector(12 downto 0);
 	signal ptr_inc, ptr_dec	: std_logic;
 
 	signal cnt_data			: std_logic_vector(7 downto 0);
