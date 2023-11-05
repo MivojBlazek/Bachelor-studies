@@ -124,13 +124,11 @@ begin
     elsif (rising_edge(CLK)) then
       if (ptr_rst = '1') then
         ptr_data <= (others => '0');
-        ptr_rst <= '0';
       elsif (ptr_inc = '1') then
-        ptr_data <= ptr_data + 1;
+        ptr_data <= ptr_data + 1; --! wtf not incrementing
       elsif (ptr_dec = '1') then
         ptr_data <= ptr_data - 1;
       end if;
-    else
     end if;
   end process;
 
@@ -205,7 +203,7 @@ begin
         DATA_EN <= '1';
         DATA_RDWR <= '0';
         mx1_sel <= '0';
-        ptr_rst <= '1';
+        ptr_rst <= '0';
         -- while (DATA_RDATA /= X"40") loop
         --   ptr_inc <= '1';
         -- end loop;
@@ -213,7 +211,7 @@ begin
         READY <= '1';
         nextState <= initS;
       when initS => --INIT
-        if (DATA_RDATA /= X"40") then
+        if (DATA_RDATA = X"40") then
           ptr_inc <= '1';
           nextState <= fetchS;
         else
