@@ -275,7 +275,7 @@ begin
         nextState <= fetchS;
 
       when ptrDecS => -- <
-        ptr_inc <= '1';-- % X"2000"; --! kdyz ukazuju na konec pameti jdu od zacatku
+        ptr_dec <= '1';-- % X"2000"; --! kdyz ukazuju na konec pameti jdu od zacatku
         -- pc_inc <= '1';
         nextState <= fetchS;
 
