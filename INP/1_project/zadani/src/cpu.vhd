@@ -57,6 +57,9 @@ signal ptr_inc : std_logic;
 signal ptr_dec : std_logic;
 signal ptr_rst : std_logic;
 
+-- WHILE HOLDER
+signal hold : std_logic_vector(12 downto 0) := (others => '0');
+
 -- MX1
 signal mx1_sel : std_logic := '0';
 signal mx1_out : std_logic_vector(12 downto 0) := (others => '0');
@@ -249,6 +252,7 @@ begin
           when X"2D" => -- -
             nextState <= pcDecPhase0S;
           when X"5B" => -- [
+            hold <= pc_data;
             nextState <= whileBeginS;
           when X"5D" => -- ]
             nextState <= whileEndS;
@@ -265,6 +269,7 @@ begin
           when others =>
             pc_inc <= '1';
             nextState <= decodeS;
+            -- nextState <= haltS;
         end case;
 
       when ptrIncS => -- >
@@ -337,35 +342,48 @@ begin
           nextState <= fetchS;
         end if;
 
-      -- when whileBeginS => -- [
-      --   pc_inc <= '1';
-      --   DATA_EN <= '1';
-      --   DATA_RDWR <= '0';
-      --   nextState <= whileInside0S;
-      -- when whileInside0S =>
-      --   if (DATA_RDATA /= "00000000") then
-      --     nextState <= fetchS;
-      --   else
-      --     mx1_sel <= '1';
-      --     nextState <= whileInside1S;
-      --   end if;
-      -- when whileInside1S =>
-      --   pc_inc <= '1';
-      --   if (DATA_RDATA = X"7E") then
-      --     nextState <= fetchS;
-      --   elsif (DATA_RDATA = X"5D") then
-      --     nextState <= whileEndS;
-      --   else
-      --     DATA_EN <= '1';
-      --   end if;
+      when whileBeginS => -- [
+        -- pc_inc <= '1';
+        DATA_EN <= '1';
+        DATA_RDWR <= '0';
+        nextState <= whileInside0S;
+      when whileInside0S =>
+        -- if (DATA_RDATA = "00000000") then --! idea: goto hold if hold /= 0
+        --   hold <= (others => '0');
+        --   nextState <= fetchS;
+        -- else
+          mx1_sel <= '1';
+          nextState <= whileInside1S;
+        -- end if;
+      when whileInside1S =>
+        if (DATA_RDATA = X"7E") then
+          previousState <= whileInside1S;
+          nextState <= whileEndS;
+        elsif (DATA_RDATA = X"5D") then
+          nextState <= whileEndS;
+        else
+          DATA_EN <= '1';
+          DATA_RDWR <= '0';
+          mx1_sel <= '1';
+          pc_inc <= '1';
+          nextState <= whileInside1S;
+        end if;
 
-      -- when whileEndS => -- ]
-      --   if (DATA_RDATA /= "00000000") then
-      --     pc_dec <= '1';
-      --     nextState <= fetchS;
-      --   end if;
-      --   pc_inc <= '1';
-      --   nextState <= fetchS;
+      when whileEndS => -- ]
+        if (previousState = whileInside1S) then -- break
+          pc_inc <= '1';
+          nextState <= fetchS;
+          -- if (DATA_RDATA /= "00000000") then
+          --   nextState <= fetchS;
+          -- end if;
+        else -- no break
+          if (DATA_RDATA /= "00000000") then
+            pc_dec <= '1';
+            nextState <= fetchS;
+          end if;
+          -- pc_inc <= '1';
+          nextState <= fetchS;
+        end if;
 
       when haltS => -- HALT
         DONE <= '1';
