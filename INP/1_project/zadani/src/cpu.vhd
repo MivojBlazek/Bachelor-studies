@@ -57,9 +57,6 @@ signal ptr_inc : std_logic;
 signal ptr_dec : std_logic;
 signal ptr_rst : std_logic;
 
--- WHILE HOLDER
-signal hold : std_logic_vector(12 downto 0) := (others => '0');
-
 -- MX1
 signal mx1_sel : std_logic := '0';
 signal mx1_out : std_logic_vector(12 downto 0) := (others => '0');
@@ -81,13 +78,16 @@ type states is
   pcIncPhase1S,
   pcDecPhase0S,
   pcDecPhase1S,
+
   ptrIncS,
   ptrDecS,
+
   whileBeginS,
   whileInside0S,
-  whileInside1S,
   whileEndS,
-  breakS,
+  whileSkipS,
+  whileSkipBackS,
+
   writePhase0S,
   writePhase1S,
   readPhase0S,
@@ -217,13 +217,12 @@ begin
         ptr_rst <= '1';
         nextState <= startS;
       when startS => -- IDLE
-        -- INIT
         DATA_EN <= '1';
         DATA_RDWR <= '0';
         mx1_sel <= '0';
         READY <= '1';
         nextState <= initS;
-      when initS => --INIT
+      when initS => -- INIT
         if (DATA_RDATA = X"40") then
           nextState <= fetchS;
           ptr_dec <= '1';
@@ -233,7 +232,7 @@ begin
         end if;
       when fetchS => -- FETCH
         DATA_EN <= '1';
-        if (previousState = writePhase1S) then
+        if ((previousState = writePhase1S) or (previousState = whileInside0S)) then
           DATA_RDWR <= '0';
         else
           DATA_RDWR <= '1';
@@ -252,19 +251,17 @@ begin
           when X"2D" => -- -
             nextState <= pcDecPhase0S;
           when X"5B" => -- [
-            hold <= pc_data;
             nextState <= whileBeginS;
           when X"5D" => -- ]
             nextState <= whileEndS;
           when X"7E" => -- ~
-            nextState <= breakS;
+            previousState <= whileSkipS;
+            nextState <= whileEndS;
           when X"2E" => -- .
             nextState <= writePhase0S;
           when X"2C" => -- ,
             nextState <= readPhase0S;
           when X"40" => -- @
-            -- mx1_sel <= '0';
-            -- mx2_sel <= "11"; --?
             nextState <= haltS;
           when others =>
             pc_inc <= '1';
@@ -344,45 +341,58 @@ begin
 
       when whileBeginS => -- [
         -- pc_inc <= '1';
+        if (previousState = whileSkipBackS) then
+          pc_inc <= '1';
+        end if;
         DATA_EN <= '1';
         DATA_RDWR <= '0';
         nextState <= whileInside0S;
       when whileInside0S =>
-        -- if (DATA_RDATA = "00000000") then --! idea: goto hold if hold /= 0
-        --   hold <= (others => '0');
-        --   nextState <= fetchS;
-        -- else
+        if (DATA_RDATA = "00000000") then
           mx1_sel <= '1';
-          nextState <= whileInside1S;
-        -- end if;
-      when whileInside1S =>
-        if (DATA_RDATA = X"7E") then
-          previousState <= whileInside1S;
-          nextState <= whileEndS;
-        elsif (DATA_RDATA = X"5D") then
+          nextState <= whileSkipS;
+        else
+          mx1_sel <= '0';
+          previousState <= whileInside0S;
+          nextState <= fetchS;
+        end if;
+
+      when whileEndS => -- ]
+        if (previousState = whileSkipS) then -- break
+          pc_inc <= '1';
+          nextState <= fetchS;
+        else -- no break
+          if (DATA_RDATA /= "00000000") then
+            mx1_sel <= '1';
+            nextState <= whileSkipBackS;
+          else
+            nextState <= fetchS;
+          end if;
+          -- pc_inc <= '1';
+        end if;
+
+      when whileSkipS =>
+        if (DATA_RDATA = X"5D") then
           nextState <= whileEndS;
         else
           DATA_EN <= '1';
           DATA_RDWR <= '0';
           mx1_sel <= '1';
           pc_inc <= '1';
-          nextState <= whileInside1S;
+          nextState <= whileSkipS;
         end if;
 
-      when whileEndS => -- ]
-        if (previousState = whileInside1S) then -- break
+      when whileSkipBackS =>
+        if (DATA_RDATA = X"5B") then
           pc_inc <= '1';
-          nextState <= fetchS;
-          -- if (DATA_RDATA /= "00000000") then
-          --   nextState <= fetchS;
-          -- end if;
-        else -- no break
-          if (DATA_RDATA /= "00000000") then
-            pc_dec <= '1';
-            nextState <= fetchS;
-          end if;
-          -- pc_inc <= '1';
-          nextState <= fetchS;
+          previousState <= whileSkipBackS;
+          nextState <= whileBeginS;
+        else
+          DATA_EN <= '1';
+          DATA_RDWR <= '0';
+          mx1_sel <= '1';
+          pc_dec <= '1';
+          nextState <= whileSkipBackS;
         end if;
 
       when haltS => -- HALT

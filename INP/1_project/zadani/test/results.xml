@@ -1,19 +1,8 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1699270143" />
-    <testcase name="test_reset" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="10" time="0.0014226436614990234" sim_time_ns="51.000001" ratio_time="35848.75283966884" />
-    <testcase name="test_init" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="26" time="0.004348278045654297" sim_time_ns="110.000001" ratio_time="25297.3705556697" />
-    <testcase name="test_increment" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="33" time="0.010074377059936523" sim_time_ns="320.000001" ratio_time="31763.750661325383" />
-    <testcase name="test_decrement" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="42" time="0.00843191146850586" sim_time_ns="320.000001" ratio_time="37951.06272109665" />
-    <testcase name="test_move" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="50" time="0.0072782039642333984" sim_time_ns="250.0000010000001" ratio_time="34349.13369129965" />
-    <testcase name="test_print" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="61" time="0.023405075073242188" sim_time_ns="1240.000001" ratio_time="52979.962555968385" />
-    <testcase name="test_input" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="70" time="0.07262897491455078" sim_time_ns="2520.0000009999994" ratio_time="34696.89616251396" />
-    <testcase name="test_while_loop" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="84" time="0.01314854621887207" sim_time_ns="290.00000100000034" ratio_time="22055.670351127046">
-      <failure message="Test failed with RANDOM_SEED=1699270143" />
-    </testcase>
-    <testcase name="test_break" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="92" time="0.010769128799438477" sim_time_ns="290.00000100000034" ratio_time="26928.82650034992" />
-    <testcase name="test_login_xblaze38" classname="cpu" file="&lt;makefun-gen-1&gt;" lineno="1" time="4.042590379714966" sim_time_ns="250055.00000099998" ratio_time="61855.14150920005">
-      <failure message="Test failed with RANDOM_SEED=1699270143" />
+    <property name="random_seed" value="1699294234" />
+    <testcase name="test_login_xblaze38" classname="cpu" file="&lt;makefun-gen-1&gt;" lineno="1" time="3.9785921573638916" sim_time_ns="250055.000001" ratio_time="62850.121377276264">
+      <failure message="Test failed with RANDOM_SEED=1699294234" />
     </testcase>
   </testsuite>
 </testsuites>

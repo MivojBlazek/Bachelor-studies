@@ -87,6 +87,9 @@ async def test_while_loop(dut):
     instcnt, mem, lcd = await run_program(dut, '[.-]@\3', timeout_ns = LCD_WAIT_TIME*10)
     assert mem[5] == 0
     assert lcd == "\3\2\1"
+    # print("Contents of the first 20 memory cells:")
+    # for i in range(min(20, len(mem))):
+    #     print(f"Memory cell {i}: {mem[i]}")
 
 
 @tb_test()
