@@ -125,7 +125,7 @@ begin
       if (ptr_rst = '1') then
         ptr_data <= (others => '0');
       elsif (ptr_inc = '1') then
-        ptr_data <= ptr_data + 1; --! wtf not incrementing
+        ptr_data <= ptr_data + 1;
       elsif (ptr_dec = '1') then
         ptr_data <= ptr_data - 1;
       end if;
@@ -183,13 +183,24 @@ begin
 -- FSM next state
   process (state, OUT_BUSY, IN_VLD, DATA_RDATA)
   begin
+    pc_inc <= '0';
+    pc_dec <= '0';
+    ptr_inc <= '0';
+    ptr_dec <= '0';
+    ptr_rst <= '0';
+    DATA_EN <= '1';
+    DATA_RDWR <= '0';
+    OUT_WE <= '0';
+    mx1_sel <= '0';
+    mx2_sel <= (others => '0');
+    IN_REQ <= '0';
+
     case state is
       when resetS => -- RESET
         pc_inc <= '0';
         pc_dec <= '0';
         ptr_inc <= '0';
         ptr_dec <= '0';
-        ptr_rst <= '0';
         DATA_EN <= '1';
         DATA_RDWR <= '0';
         OUT_WE <= '0';
@@ -205,20 +216,19 @@ begin
         DATA_EN <= '1';
         DATA_RDWR <= '0';
         mx1_sel <= '0';
-        ptr_rst <= '0';
         READY <= '1';
         nextState <= initS;
       when initS => --INIT
         if (DATA_RDATA = X"40") then
-          ptr_inc <= '1';
           nextState <= fetchS;
+          ptr_dec <= '1';
         else
           ptr_inc <= '1';
           nextState <= initS;
         end if;
       when fetchS => -- FETCH
         DATA_EN <= '1';
-        DATA_RDWR <= '0';
+        DATA_RDWR <= '1';
         mx1_sel <= '1';
         nextState <= decodeS;
       when decodeS => -- DECODE
@@ -242,22 +252,23 @@ begin
           when X"2C" => -- ,
             nextState <= readPhase0S;
           when X"40" => -- @
-            mx2_sel <= "10"; --?
+            -- mx2_sel <= "10"; --?
             nextState <= haltS;
           when others =>
             pc_inc <= '1';
             nextState <= decodeS;
         end case;
       when ptrIncS => -- >
-        ptr_data <= ptr_data + 1;-- % X"2000"; --! wtf
+        ptr_inc <= '1';-- % X"2000"; --! wtf
         pc_inc <= '1';
         nextState <= fetchS;
       when ptrDecS => -- <
-        ptr_data <= ptr_data - 1;-- % X"2000"; --! wtf
+        ptr_inc <= '1';-- % X"2000"; --! wtf
         pc_inc <= '1';
         nextState <= fetchS;
 
       when pcIncPhase0S => -- +
+        mx1_sel <= '0';
         DATA_EN <= '1';
         DATA_RDWR <= '0';
         nextState <= pcIncPhase1S;
@@ -267,15 +278,18 @@ begin
         mx1_sel <= '0';
         mx2_sel <= "10";
         nextState <= fetchS;
-      -- when pcDecPhase0S => -- -
-      --   DATA_EN <= '1';
-      --   DATA_RDWR <= '0';
-      --   nextState <= pcDecPhase1S;
-      -- when pcDecPhase1S =>
-      --   DATA_EN <= '1';
-      --   DATA_RDWR <= '1';
-      --   mx2_sel <= "01";
-      --   nextState <= fetchS;
+        
+      when pcDecPhase0S => -- -
+        mx1_sel <= '0';
+        DATA_EN <= '1';
+        DATA_RDWR <= '0';
+        nextState <= pcDecPhase1S;
+      when pcDecPhase1S =>
+        DATA_EN <= '1';
+        DATA_RDWR <= '1';
+        mx1_sel <= '0';
+        mx2_sel <= "01";
+        nextState <= fetchS;
 
       -- when writePhase0S => -- .
       --   DATA_EN <= '1';
@@ -394,3 +408,8 @@ begin
 
 end behavioral;
 
+--! Python print of mem
+-- # Printing the contents of the first 20 memory cells
+-- print("Contents of the first 20 memory cells:")
+-- for i in range(min(20, len(mem))):
+--     print(f"Memory cell {i}: {mem[i]}")
