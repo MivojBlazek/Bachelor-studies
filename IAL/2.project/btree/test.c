@@ -16,25 +16,6 @@ const int traversal_data_count = 5;
 const char traversal_keys[] = {'D', 'B', 'A', 'C', 'E'};
 const int traversal_values[] = {1, 2, 3, 4, 5};
 
-void red() {
-  printf("\033[1;31m");
-}
-
-void green() {
-  printf("\033[1;32m");
-}
-
-void cyan() {
-  printf("\033[1;36m");
-}
-
-void reset_color(){
-  printf("\033[0m");
-}
-
-int tests_passed = 0;
-int tests_failed;
-
 void init_test() {
   printf("Binary Search Tree - testing script\n");
   printf("-----------------------------------\n");
@@ -52,54 +33,24 @@ ENDTEST
 
 TEST(test_tree_search_empty, "Search in an empty tree (A)")
 bst_init(&test_tree);
-int result;
-bool bool_res;
-bool_res = bst_search(test_tree, 'A', &result);
-if (bool_res == true){
-  red();
-  printf("\nNode A was found! [TEST FAILED ☓]\n\n");
-} else{
-  green();
-  printf("\nNode A was not found: [TEST PASSED ✓]\n\n");
-  tests_passed++;
-} 
-reset_color();
+int result = -1234;
+bst_search(test_tree, 'A', &result);
+printf("Result: %d\n", result);
 ENDTEST
 
 TEST(test_tree_insert_root, "Insert an item (H,1)")
 bst_init(&test_tree);
 bst_insert(&test_tree, 'H', 1);
 bst_print_tree(test_tree);
-int result;
-bool bool_res;
-bool_res = bst_search(test_tree, 'H', &result);
-if (bool_res == true && (result) == 1){
-  green();
-  printf("Node H was inserted correctly: [TEST PASSED ✓]\n\n");
-  tests_passed++;
-} else {
-  red();
-  printf("Node H was NOT inserted correctly: [TEST FAILED ☓]\n\n");
-}
-reset_color();
 ENDTEST
 
 TEST(test_tree_search_root, "Search in a single node tree (H)")
 bst_init(&test_tree);
 bst_insert(&test_tree, 'H', 1);
 int result;
-bool bool_res;
-bool_res = bst_search(test_tree, 'H', &result);
+bst_search(test_tree, 'H', &result);
+printf("Result: %d\n", result);
 bst_print_tree(test_tree);
-if (bool_res == true){
-  green();
-  printf("Node H was found correctly: [TEST PASSED ✓]\n\n");
-  tests_passed++;
-} else {
-  red();
-  printf("Node H was NOT found correctly: [TEST FAILED ☓]\n\n");
-}
-reset_color();
 ENDTEST
 
 TEST(test_tree_update_root, "Update a node in a single node tree (H,1)->(H,8)")
@@ -108,63 +59,11 @@ bst_insert(&test_tree, 'H', 1);
 bst_print_tree(test_tree);
 bst_insert(&test_tree, 'H', 8);
 bst_print_tree(test_tree);
-int result;
-bool bool_res;
-bool_res = bst_search(test_tree, 'H', &result);
-if (bool_res == true && result == 8){
-  green();
-  printf("Value of the H node was updated correctly! [TEST PASSED ✓]\n");
-  printf("New value of the H node is: 8\n");
-  tests_passed++;
-} else {
-  red();
-  printf("Value of the H node was NOT updated correctly! [TEST PASSED ✓]\n\n");
-}
-reset_color();
 ENDTEST
 
 TEST(test_tree_insert_many, "Insert many values")
 bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
-cyan();
-printf("\n");
-printf("-------------------------------------------------------------------------------------------\n");
-printf("|  If you implemented the bst_insert() correctly, output below should look like this now  |\n");
-printf("-------------------------------------------------------------------------------------------\n");
-printf("\n");
-printf("Binary tree structure:\n");
-printf("\n");
-printf("           +-[O,16]\n");
-printf("           |\n");
-printf("        +-[N,14]\n");
-printf("        |  |\n");
-printf("        |  +-[M,13]\n");
-printf("        |\n");
-printf("     +-[L,12]\n");
-printf("     |  |\n");
-printf("     |  |  +-[K,11]\n");
-printf("     |  |  |\n");
-printf("     |  +-[J,10]\n");
-printf("     |     |\n");
-printf("     |     +-[I,9]\n");
-printf("     |\n");
-printf("  +-[H,8]\n");
-printf("     |\n");
-printf("     |     +-[G,7]\n");
-printf("     |     |\n");
-printf("     |  +-[F,6]\n");
-printf("     |  |  |\n");
-printf("     |  |  +-[E,5]\n");
-printf("     |  |\n");
-printf("     +-[D,4]\n");
-printf("        |\n");
-printf("        |  +-[C,3]\n");
-printf("        |  |\n");
-printf("        +-[B,2]\n");
-printf("           |\n");
-printf("           +-[A,1]\n");
-printf("\n");
-reset_color();
 bst_print_tree(test_tree);
 ENDTEST
 
@@ -172,35 +71,17 @@ TEST(test_tree_search, "Search for an item deeper in the tree (A)")
 bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
 int result;
-bool bool_res;
-bool_res = bst_search(test_tree, 'A', &result);
-if (bool_res == true){
-  green();
-  printf("\nNode A was found correctly: [TEST PASSED ✓]\n\n");
-  tests_passed++;
-} else{
-  red();
-  printf("\nNode A was NOT found correctly: [TEST FAILED ☓]\n\n");
-}
-reset_color();
+bst_search(test_tree, 'A', &result);
+    printf("Result: %d\n", result);
 bst_print_tree(test_tree);
 ENDTEST
 
 TEST(test_tree_search_missing, "Search for a missing key (X)")
 bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
-int result;
-bool bool_res;
-bool_res = bst_search(test_tree, 'X', &result);
-if (bool_res == true){
-  red();
-  printf("\nNode X was found INcorrectly: [TEST FAILED ☓]\n\n");
-} else {
-  green();
-  printf("\nNode X was NOT found: [TEST PASSED ✓]\n\n");
-  tests_passed++;
-}
-reset_color();
+int result = -1234;
+bst_search(test_tree, 'X', &result);
+printf("Result: %d\n", result);
 bst_print_tree(test_tree);
 ENDTEST
 
@@ -209,21 +90,6 @@ bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
 bst_print_tree(test_tree);
 bst_delete(&test_tree, 'A');
-int result;
-int result2;
-bool bool_res;
-bool bool_res2;
-bool_res = bst_search(test_tree, 'A', &result);
-bool_res2 = bst_search(test_tree, 'H', &result2);
-if (bool_res2 == true && bool_res == false){
-  green();
-  printf("Node A was deleted correctly: [TEST PASSED ✓]\n\n");
-  tests_passed++;
-} else {
-  red();
-  printf("Node A was NOT deleted correctly: [TEST FAILED ☓]\n\n");
-}
-reset_color();
 bst_print_tree(test_tree);
 ENDTEST
 
@@ -234,21 +100,6 @@ bst_insert_many(&test_tree, additional_keys, additional_values,
                 additional_data_count);
 bst_print_tree(test_tree);
 bst_delete(&test_tree, 'R');
-int result;
-int result2;
-bool bool_res;
-bool bool_res2;
-bool_res = bst_search(test_tree, 'R', &result);
-bool_res2 = bst_search(test_tree, 'H', &result2);
-if (bool_res2 == true && bool_res == false){
-  green();
-  printf("Node R was deleted correctly: [TEST PASSED ✓]\n\n");
-  tests_passed++;
-} else {
-  red();
-  printf("Node R was NOT deleted correctly: [TEST FAILED ☓]\n\n");
-}
-reset_color();
 bst_print_tree(test_tree);
 ENDTEST
 
@@ -261,21 +112,6 @@ bst_insert_many(&test_tree, additional_keys, additional_values,
 
 bst_print_tree(test_tree);
 bst_delete(&test_tree, 'X');
-int result;
-int result2;
-bool bool_res;
-bool bool_res2;
-bool_res = bst_search(test_tree, 'X', &result);
-bool_res2 = bst_search(test_tree, 'H', &result2);
-if (bool_res2 == true && bool_res == false){
-  green();
-  printf("Node X was deleted correctly: [TEST PASSED ✓]\n\n");
-  tests_passed++;
-} else {
-  red();
-  printf("Node X was NOT deleted correctly: [TEST FAILED ☓]\n\n");
-}
-reset_color();
 bst_print_tree(test_tree);
 ENDTEST
 
@@ -287,21 +123,6 @@ bst_insert_many(&test_tree, additional_keys, additional_values,
 
 bst_print_tree(test_tree);
 bst_delete(&test_tree, 'L');
-int result;
-int result2;
-bool bool_res;
-bool bool_res2;
-bool_res = bst_search(test_tree, 'L', &result);
-bool_res2 = bst_search(test_tree, 'H', &result2);
-if (bool_res2 == true && bool_res == false){
-  green();
-  printf("Node L was deleted correctly: [TEST PASSED ✓]\n\n");
-  tests_passed++;
-} else {
-  red();
-  printf("Node L was NOT deleted correctly: [TEST FAILED ☓]\n\n");
-}
-reset_color();
 bst_print_tree(test_tree);
 ENDTEST
 
@@ -310,14 +131,6 @@ bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
 bst_print_tree(test_tree);
 bst_delete(&test_tree, 'U');
-cyan();
-cyan();
-printf("\n");
-printf("--------------------------------------------------------------------------\n");
-printf("|  Nothing should change ---> Output above and below should be the same  |\n");
-printf("--------------------------------------------------------------------------\n");
-printf("\n");
-reset_color();
 bst_print_tree(test_tree);
 ENDTEST
 
@@ -326,19 +139,20 @@ bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
 bst_print_tree(test_tree);
 bst_delete(&test_tree, 'H');
-int result;
-bool bool_res;
-bool_res = bst_search(test_tree, 'H', &result);
-if (bool_res == true){
-  red();
-  printf("Node H was NOT deleted correctly: [TEST FAILED ☓]\n\n");
-} else {
-  green();
-  printf("Node H was deleted correctly: [TEST PASSED ✓]\n\n");
-  tests_passed++;
-}
-reset_color();
 bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_tree_delete_both_subtrees_parent,
+     "Delete a node with both subtrees while moving a parent (F, H)")
+bst_init(&test_tree);
+bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
+bst_insert_many(&test_tree, additional_keys, additional_values,
+                additional_data_count);
+bst_delete(&test_tree, 'G');
+bst_print_tree(test_tree);
+bst_delete(&test_tree, 'H');
+bst_print_tree(test_tree);
+bst_dispose(&test_tree);
 ENDTEST
 
 TEST(test_tree_dispose_filled, "Dispose the whole tree")
@@ -346,59 +160,207 @@ bst_init(&test_tree);
 bst_insert_many(&test_tree, base_keys, base_values, base_data_count);
 bst_print_tree(test_tree);
 bst_dispose(&test_tree);
-cyan();
-printf("\n");
-printf("---------------------------------------------------\n");
-printf("|  Correct output below should be: Tree is empty  |\n");
-printf("---------------------------------------------------\n");
-printf("\n");
-reset_color();
 bst_print_tree(test_tree);
 ENDTEST
 
 TEST(test_tree_preorder, "Traverse the tree using preorder")
 bst_init(&test_tree);
-bst_insert_many(&test_tree, traversal_keys, traversal_values, traversal_data_count);
+bst_insert_many(&test_tree, traversal_keys, traversal_values,
+                traversal_data_count);
 bst_preorder(test_tree, test_items);
+printf("\n");
 bst_print_tree(test_tree);
-cyan();
-printf("\n");
-printf("---------------------------------------------------------------\n");
-printf("|  Correct output below should be: [D,1][B,2][A,3][C,4][E,5]  |\n");
-printf("---------------------------------------------------------------\n");
-printf("\n");
-reset_color();
 bst_print_items(test_items);
 ENDTEST
 
 TEST(test_tree_inorder, "Traverse the tree using inorder")
 bst_init(&test_tree);
-bst_insert_many(&test_tree, traversal_keys, traversal_values, traversal_data_count);
+bst_insert_many(&test_tree, traversal_keys, traversal_values,
+                traversal_data_count);
 bst_inorder(test_tree, test_items);
+printf("\n");
 bst_print_tree(test_tree);
-cyan();
-printf("\n");
-printf("---------------------------------------------------------------\n");
-printf("|  Correct output below should be: [A,3][B,2][C,4][D,1][E,5]  |\n");
-printf("---------------------------------------------------------------\n");
-printf("\n");
-reset_color();
 bst_print_items(test_items);
 ENDTEST
 
 TEST(test_tree_postorder, "Traverse the tree using postorder")
 bst_init(&test_tree);
-bst_insert_many(&test_tree, traversal_keys, traversal_values, traversal_data_count);
+bst_insert_many(&test_tree, traversal_keys, traversal_values,
+                traversal_data_count);
 bst_postorder(test_tree, test_items);
+printf("\n");
 bst_print_tree(test_tree);
-cyan();
-printf("\n");
-printf("---------------------------------------------------------------\n");
-printf("|  Correct output below should be: [A,3][C,4][B,2][E,5][D,1]  |\n");
-printf("---------------------------------------------------------------\n");
-printf("\n");
-reset_color();
 bst_print_items(test_items);
+ENDTEST
+
+// DELETION TESTS
+TEST(test_delete1, "Delete H in H")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete2, "Delete H in HA")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete2a, "Delete A in HA")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'A');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete3, "Delete H in HZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete3a, "Delete Z in HZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'Z');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete4, "Delete H in HAZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete5, "Delete H in HAC")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'C', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete6, "Delete H in HCAB")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'C', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_insert(&test_tree, 'B', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete6a, "Delete A in HCAB")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'C', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_insert(&test_tree, 'B', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'A');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete6b, "Delete B in HCAB")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'C', 20);
+    bst_insert(&test_tree, 'A', 20);
+    bst_insert(&test_tree, 'B', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'B');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete7, "Delete H in HJT")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_insert(&test_tree, 'T', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete7a, "Delete J in HJT")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_insert(&test_tree, 'T', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'J');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete8, "Delete H in HJZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete8a, "Delete J in HJZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'J');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete9, "Delete H in HJTZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_insert(&test_tree, 'T', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete9a, "Delete J in HJTZ")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'J', 20);
+    bst_insert(&test_tree, 'T', 20);
+    bst_insert(&test_tree, 'Z', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'J');
+    bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_delete10, "Delete H in HCD")
+    bst_init(&test_tree);
+    bst_insert(&test_tree, 'H', 20);
+    bst_insert(&test_tree, 'C', 20);
+    bst_insert(&test_tree, 'D', 20);
+    bst_print_tree(test_tree);
+    bst_delete(&test_tree, 'H');
+    bst_print_tree(test_tree);
 ENDTEST
 
 #ifdef EXA
@@ -412,6 +374,110 @@ ENDTEST
 TEST(test_balance, "Count letters and balance");
 bst_init(&test_tree);
 letter_count(&test_tree, "abBcCc_ 123 *");
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance2, "Count letters and balance2");
+bst_init(&test_tree);
+letter_count(&test_tree, "abBcCcD_ 123 *");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance3, "Count letters and balance3");
+bst_init(&test_tree);
+letter_count(&test_tree, "fgedc");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance4, "Count letters and balance4");
+bst_init(&test_tree);
+letter_count(&test_tree, "fgecd");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance5, "Count letters and balance5");
+bst_init(&test_tree);
+letter_count(&test_tree, "fgced");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance6, "Count letters and balance6");
+bst_init(&test_tree);
+letter_count(&test_tree, "fagih");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance7, "Count letters and balance7");
+bst_init(&test_tree);
+letter_count(&test_tree, "cagef");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance8, "Count letters and balance8");
+bst_init(&test_tree);
+letter_count(&test_tree, "hegfljk");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance9, "Count letters and balance9");
+bst_init(&test_tree);
+letter_count(&test_tree, "hcfgedljk");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance10, "Count letters and balance10");
+bst_init(&test_tree);
+letter_count(&test_tree, "hcfedljk");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance11, "Count letters and balance11");
+bst_init(&test_tree);
+letter_count(&test_tree, "makjihgpno");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance12, "Count letters and balance12");
+bst_init(&test_tree);
+letter_count(&test_tree, "makjihgpnof");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance13, "Count letters and balance13");
+bst_init(&test_tree);
+letter_count(&test_tree, "makjihgpnofe");
+bst_print_tree(test_tree);
+bst_balance(&test_tree);
+bst_print_tree(test_tree);
+ENDTEST
+
+TEST(test_balance14, "Count letters and balance14");
+bst_init(&test_tree);
+letter_count(&test_tree, "makjihgpnofedcb");
+bst_print_tree(test_tree);
 bst_balance(&test_tree);
 bst_print_tree(test_tree);
 ENDTEST
@@ -434,40 +500,46 @@ int main(int argc, char *argv[]) {
   test_tree_delete_left_subtree();
   test_tree_delete_right_subtree();
   test_tree_delete_both_subtrees();
+  test_tree_delete_both_subtrees_parent();
   test_tree_delete_missing();
   test_tree_delete_root();
   test_tree_dispose_filled();
   test_tree_preorder();
   test_tree_inorder();
   test_tree_postorder();
-  
-  tests_failed = 11 - tests_passed;
-  printf("\n");
-  printf("---------- TESTS SUMMARY ----------\n");
-  printf("|                                 |\n");
-  printf("|");
-  green();
-  printf(" TESTS PASSED: %d", tests_passed);
-  reset_color();
-  if(tests_passed < 10)
-    printf(" ");
-  printf("                |\n");
-  printf("|");
-  red();
-  printf(" TESTS FAILED: %d", tests_failed);
-  reset_color();
-    if(tests_failed < 10)
-    printf(" ");
-  printf("                |\n");
-  printf("|                                 |\n");
-  printf("-----------------------------------\n");
-  printf("\n");
-  reset_color();
+  test_delete1();
+  test_delete2();
+  test_delete2a();
+  test_delete3();
+  test_delete3a();
+  test_delete4();
+  test_delete5();
+  test_delete6();
+  test_delete6a();
+  test_delete6b();
+  test_delete7();
+  test_delete7a();
+  test_delete8();
+  test_delete8a();
+  test_delete9();
+  test_delete9a();
+  test_delete10();
 
 #ifdef EXA
   test_letter_count();
   test_balance();
+  test_balance2();
+  test_balance3();
+  test_balance4();
+  test_balance5();
+  test_balance6();
+  test_balance7();
+  test_balance8();
+  test_balance9();
+  test_balance10();
+  test_balance11();
+  test_balance12();
+  test_balance13();
+  test_balance14();
 #endif // EXA
 }
-
-/* author ~ xcuprm01 */

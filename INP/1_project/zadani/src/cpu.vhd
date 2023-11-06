@@ -93,6 +93,7 @@ type states is
 );
 signal state : states := resetS;
 signal nextState : states;
+signal previousState : states;
 
 begin
 
@@ -160,7 +161,7 @@ begin
       elsif (mx2_sel = "10") then
         mx2_out <= DATA_RDATA + 1;
       else
-        mx2_out <= (others => '0');
+        -- mx2_out <= (others => '0');
       end if;
     end if;
   end process;
@@ -194,6 +195,7 @@ begin
     mx1_sel <= '0';
     mx2_sel <= (others => '0');
     IN_REQ <= '0';
+    OUT_DATA <= (others => '0');
 
     case state is
       when resetS => -- RESET
@@ -228,10 +230,15 @@ begin
         end if;
       when fetchS => -- FETCH
         DATA_EN <= '1';
-        DATA_RDWR <= '1';
+        if (previousState = writePhase1S) then
+          DATA_RDWR <= '0';
+        else
+          DATA_RDWR <= '1';
+        end if;
         mx1_sel <= '1';
         nextState <= decodeS;
       when decodeS => -- DECODE
+        previousState <= fetchS;
         case DATA_RDATA is
           when X"3E" => -- >
             nextState <= ptrIncS;
@@ -252,19 +259,22 @@ begin
           when X"2C" => -- ,
             nextState <= readPhase0S;
           when X"40" => -- @
-            -- mx2_sel <= "10"; --?
+            -- mx1_sel <= '0';
+            -- mx2_sel <= "11"; --?
             nextState <= haltS;
           when others =>
             pc_inc <= '1';
             nextState <= decodeS;
         end case;
+
       when ptrIncS => -- >
-        ptr_inc <= '1';-- % X"2000"; --! wtf
-        pc_inc <= '1';
+        ptr_inc <= '1';-- % X"2000"; --! kdyz ukazuju na konec pameti jdu od zacatku
+        -- pc_inc <= '1';
         nextState <= fetchS;
+
       when ptrDecS => -- <
-        ptr_inc <= '1';-- % X"2000"; --! wtf
-        pc_inc <= '1';
+        ptr_inc <= '1';-- % X"2000"; --! kdyz ukazuju na konec pameti jdu od zacatku
+        -- pc_inc <= '1';
         nextState <= fetchS;
 
       when pcIncPhase0S => -- +
@@ -278,7 +288,7 @@ begin
         mx1_sel <= '0';
         mx2_sel <= "10";
         nextState <= fetchS;
-        
+
       when pcDecPhase0S => -- -
         mx1_sel <= '0';
         DATA_EN <= '1';
@@ -291,30 +301,41 @@ begin
         mx2_sel <= "01";
         nextState <= fetchS;
 
-      -- when writePhase0S => -- .
-      --   DATA_EN <= '1';
-      --   DATA_RDWR <= '0';
-      --   nextState <= writePhase1S;
-      -- when writePhase1S =>
-      --   while (OUT_BUSY = '1') loop
-      --   end loop;
-      --   OUT_WE <= '1';
-      --   pc_inc <= '1';
-      --   nextState <= fetchS;
+      when writePhase0S => -- .
+        mx1_sel <= '0';
+        DATA_EN <= '1';
+        DATA_RDWR <= '0';
+        nextState <= writePhase1S;
+      when writePhase1S =>
+        if (OUT_BUSY = '1') then
+          DATA_RDWR <= '0';
+          nextState <= writePhase1S;
+        else
+          DATA_RDWR <= '0';
+          OUT_DATA <= DATA_RDATA;
+          OUT_WE <= '1';
+          -- pc_inc <= '1';
+          previousState <= writePhase1S;
+          nextState <= fetchS;
+        end if;
 
-      -- when readPhase0S => -- ,
-      --   DATA_EN <= '1';
-      --   DATA_RDWR <= '1'; --?
-      --   IN_REQ <= '1';
-      --   mx2_sel <= "00";
-      --   nextState <= readPhase1S;
-      -- when readPhase1S =>
-      --   while (IN_VLD /= '1') loop
-      --   end loop;
-      --   DATA_EN <= '1';
-      --   DATA_RDWR <= '1';
-      --   pc_inc <= '1';
-      --   nextState <= fetchS;
+      when readPhase0S => -- ,
+        DATA_EN <= '1';
+        DATA_RDWR <= '1';
+        IN_REQ <= '1';
+        mx2_sel <= "00";
+        nextState <= readPhase1S;
+      when readPhase1S =>
+        if (IN_VLD /= '1') then
+          IN_REQ <= '1';
+          nextState <= readPhase1S;
+        else
+          IN_REQ <= '1';
+          DATA_EN <= '1';
+          DATA_RDWR <= '1';
+          -- pc_inc <= '1';
+          nextState <= fetchS;
+        end if;
 
       -- when whileBeginS => -- [
       --   pc_inc <= '1';
@@ -354,62 +375,4 @@ begin
         nextState <= fetchS;
     end case;
   end process;
-
-
-
-  -- process (RESET)
-  -- begin
-  --   if (rising_edge(RESET)) then
-  --     DATA_EN <= '0'; 
-  --     DONE <= '0';
-  --     READY <= '0';
-  --     IN_REQ <= '0';
-  --     OUT_WE <= '0';
-  --     pc_data <= (others => '0');
-  --     pc_inc <= '0';
-  --     pc_dec <= '0';
-  --   end if;
-  -- end process;
-
-  -- process (CLK, RESET, EN, pc_data)
-  -- begin
-  --   if (RESET = '1') then
-  --     READY <= '0';
-  --     DATA_EN <= '0';
-  --     pc_inc <= '0';
-  --   elsif (EN = '1' and rising_edge(CLK)) then
-  --     DATA_EN <= '1';
-  --     DATA_RDWR <= '0';
-  --     pc_inc <= '1';
-  --     if (DATA_RDATA = "10000000") then
-  --       READY <= '1';
-  --       DATA_ADDR <= pc_data + 1;
-  --     else
-  --       READY <= '0';
-  --       DATA_ADDR <= (others => '0');
-  --     end if; 
-  --   end if;
-  -- end process;
-
-  -- process (RESET, CLK)
-  -- begin
-  --   if (RESET = '1') then
-  --     pc_data <= (others => '0');
-  --     pc_inc <= '0';
-  --     pc_dec <= '0';
-  --   elsif (rising_edge(CLK)) then
-  --     if (pc_dec = '1') then
-  --       pc_data <= pc_data - 1;
-  --     elsif (pc_inc = '1') then
-  --       pc_data <= pc_data + 1;
-  --     end if;
-  --   end if;
-  -- end process;
-
 end behavioral;
-
---! Python print of mem
--- # Printing the contents of the first 20 memory cells
--- print("Contents of the first 20 memory cells:")
--- for i in range(min(20, len(mem))):
---     print(f"Memory cell {i}: {mem[i]}")

@@ -54,22 +54,32 @@ async def test_move(dut):
     assert instcnt == 3
     assert mem[3] == 0
     assert mem[4] == 1
+    # print("Contents of the first 20 memory cells:")
+    # for i in range(min(20, len(mem))):
+    #     print(f"Memory cell {i}: {mem[i]}")
 
 @tb_test()
 async def test_print(dut):
     """Print data to the output, i.e. putchar(*ptr)"""
     instcnt, mem, lcd = await run_program(dut, '...@012', timeout_ns=LCD_WAIT_TIME*5 + 1000)
     assert lcd == "000"
+    # print("Contents of the first 20 memory cells:")
+    # for i in range(min(20, len(mem))):
+    #     print(f"Memory cell {i}: {mem[i]}")
 
 @tb_test()
 async def test_input(dut):
     """Load data from the input, i.e. *ptr=getchar()"""
     instcnt, mem, lcd = await run_program(dut, ',,,@', kb_data='312', timeout_ns=(KB_WAIT_TIME+LCD_WAIT_TIME)*5 + 100)
     assert mem[4] == ord('2')
-
+    # print("Contents of the first 20 memory cells:")
+    # for i in range(min(20, len(mem))):
+    #     print(f"Memory cell {i}: {mem[i]}")
     instcnt, mem, lcd = await run_program(dut, ',,,@', kb_data='123', timeout_ns=(KB_WAIT_TIME+LCD_WAIT_TIME)*5 + 100)
     assert mem[4] == ord('3')
-
+    # print("Contents of the first 20 memory cells:")
+    # for i in range(min(20, len(mem))):
+    #     print(f"Memory cell {i}: {mem[i]}")
 
 @tb_test()
 async def test_while_loop(dut):
