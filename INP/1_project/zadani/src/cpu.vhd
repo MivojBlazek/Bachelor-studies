@@ -174,6 +174,8 @@ begin
     elsif (rising_edge(CLK)) then
       if (EN = '1') then
         state <= nextState;
+      else
+        state <= resetS;
       end if;
     end if;
   end process;
@@ -204,10 +206,6 @@ begin
         DATA_RDWR <= '0';
         mx1_sel <= '0';
         ptr_rst <= '0';
-        -- while (DATA_RDATA /= X"40") loop
-        --   ptr_inc <= '1';
-        -- end loop;
-        -- ptr_inc <= '1';
         READY <= '1';
         nextState <= initS;
       when initS => --INIT

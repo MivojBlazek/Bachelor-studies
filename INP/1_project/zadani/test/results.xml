@@ -1,8 +1,6 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1699202221" />
-    <testcase name="test_increment" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="33" time="0.04374051094055176" sim_time_ns="1055.000001" ratio_time="24119.5170864342">
-      <failure message="Test failed with RANDOM_SEED=1699202221" />
-    </testcase>
+    <property name="random_seed" value="1699259549" />
+    <testcase name="test_init" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="26" time="0.008668661117553711" sim_time_ns="110.000001" ratio_time="12689.387612263923" />
   </testsuite>
 </testsuites>
