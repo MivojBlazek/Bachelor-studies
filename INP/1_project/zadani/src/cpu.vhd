@@ -76,8 +76,10 @@ type states is
 
   pcIncPhase0S,
   pcIncPhase1S,
+  pcIncPhase2S,
   pcDecPhase0S,
   pcDecPhase1S,
+  pcDecPhase2S,
 
   ptrIncS,
   ptrDecS,
@@ -90,8 +92,11 @@ type states is
 
   writePhase0S,
   writePhase1S,
+
   readPhase0S,
   readPhase1S,
+  readPhase2S,
+
   haltS
 );
 signal state : states := resetS;
@@ -232,13 +237,10 @@ begin
         end if;
       when fetchS => -- FETCH
         DATA_EN <= '1';
-        if ((previousState = writePhase1S) or (previousState = whileInside0S)) then
-          DATA_RDWR <= '0';
-        else
-          DATA_RDWR <= '1';
-        end if;
+        DATA_RDWR <= '0';
         mx1_sel <= '1';
         nextState <= decodeS;
+
       when decodeS => -- DECODE
         previousState <= fetchS;
         case DATA_RDATA is
@@ -289,6 +291,10 @@ begin
         DATA_RDWR <= '1';
         mx1_sel <= '0';
         mx2_sel <= "10";
+        nextState <= pcIncPhase2S;
+      when pcIncPhase2S =>
+        DATA_EN <= '1';
+        DATA_RDWR <= '1';
         nextState <= fetchS;
 
       when pcDecPhase0S => -- -
@@ -301,6 +307,10 @@ begin
         DATA_RDWR <= '1';
         mx1_sel <= '0';
         mx2_sel <= "01";
+        nextState <= pcDecPhase2S;
+      when pcDecPhase2S =>
+        DATA_EN <= '1';
+        DATA_RDWR <= '1';
         nextState <= fetchS;
 
       when writePhase0S => -- .
@@ -336,8 +346,12 @@ begin
           DATA_EN <= '1';
           DATA_RDWR <= '1';
           -- pc_inc <= '1';
-          nextState <= fetchS;
+          nextState <= readPhase2S;
         end if;
+      when readPhase2S =>
+        DATA_EN <= '1';
+        DATA_RDWR <= '1';
+        nextState <= fetchS;
 
       when whileBeginS => -- [
         -- pc_inc <= '1';
