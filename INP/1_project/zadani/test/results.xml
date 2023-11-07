@@ -1,17 +1,6 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1699358035" />
-    <testcase name="test_reset" classname="cpu" file="/homes/eva/xb/xblaze38/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="10" time="0.003163576126098633" sim_time_ns="51.000001" ratio_time="16120.996924734643" />
-    <testcase name="test_init" classname="cpu" file="/homes/eva/xb/xblaze38/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="26" time="0.008164405822753906" sim_time_ns="110.000001" ratio_time="13473.117748928396" />
-    <testcase name="test_increment" classname="cpu" file="/homes/eva/xb/xblaze38/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="33" time="0.018592119216918945" sim_time_ns="350.000001" ratio_time="18825.180546470347" />
-    <testcase name="test_decrement" classname="cpu" file="/homes/eva/xb/xblaze38/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="42" time="0.01836562156677246" sim_time_ns="350.000001" ratio_time="19057.345798370836" />
-    <testcase name="test_move" classname="cpu" file="/homes/eva/xb/xblaze38/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="50" time="0.014327526092529297" sim_time_ns="260.0000010000001" ratio_time="18146.887279833336" />
-    <testcase name="test_print" classname="cpu" file="/homes/eva/xb/xblaze38/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="61" time="0.047817230224609375" sim_time_ns="1240.000001" ratio_time="25932.075010940887" />
-    <testcase name="test_input" classname="cpu" file="/homes/eva/xb/xblaze38/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="70" time="0.1129448413848877" sim_time_ns="2540.0000009999994" ratio_time="22488.853584240438" />
-    <testcase name="test_while_loop" classname="cpu" file="/homes/eva/xb/xblaze38/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="84" time="0.05758476257324219" sim_time_ns="1400.0000010000003" ratio_time="24311.987033363857" />
-    <testcase name="test_break" classname="cpu" file="/homes/eva/xb/xblaze38/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="95" time="0.01941823959350586" sim_time_ns="380.00000100000034" ratio_time="19569.23021626974" />
-    <testcase name="test_login_xblaze38" classname="cpu" file="&lt;makefun-gen-1&gt;" lineno="1" time="7.240495920181274" sim_time_ns="250055.00000099998" ratio_time="34535.61783026867">
-      <failure />
-    </testcase>
+    <property name="random_seed" value="1699377987" />
+    <testcase name="test_login_xblaze38" classname="cpu" file="&lt;makefun-gen-1&gt;" lineno="1" time="0.3047959804534912" sim_time_ns="16410.000001" ratio_time="53839.2926855018" />
   </testsuite>
 </testsuites>

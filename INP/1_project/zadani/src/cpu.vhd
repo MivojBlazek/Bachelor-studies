@@ -87,6 +87,7 @@ type states is
   whileBeginS,
   whileInside0S,
   whileEndS,
+  whileEnd2S,
   whileSkipS,
   whileSkipBackS,
 
@@ -243,33 +244,44 @@ begin
 
       when decodeS => -- DECODE
         previousState <= fetchS;
-        case DATA_RDATA is
-          when X"3E" => -- >
-            nextState <= ptrIncS;
-          when X"3C" => -- <
-            nextState <= ptrDecS;
-          when X"2B" => -- +
-            nextState <= pcIncPhase0S;
-          when X"2D" => -- -
-            nextState <= pcDecPhase0S;
-          when X"5B" => -- [
-            nextState <= whileBeginS;
-          when X"5D" => -- ]
-            nextState <= whileEndS;
-          when X"7E" => -- ~
-            previousState <= whileSkipS;
-            nextState <= whileEndS;
-          when X"2E" => -- .
-            nextState <= writePhase0S;
-          when X"2C" => -- ,
-            nextState <= readPhase0S;
-          when X"40" => -- @
-            nextState <= haltS;
-          when others =>
-            pc_inc <= '1';
-            nextState <= decodeS;
-            -- nextState <= haltS;
-        end case;
+        if (mx1_sel /= '1') then
+          DATA_EN <= '1';
+          DATA_RDWR <= '0';
+          mx1_sel <= '1';
+          nextState <= decodeS;
+        else
+          case DATA_RDATA is
+            when X"3E" => -- >
+              nextState <= ptrIncS;
+            when X"3C" => -- <
+              nextState <= ptrDecS;
+            when X"2B" => -- +
+              nextState <= pcIncPhase0S;
+            when X"2D" => -- -
+              nextState <= pcDecPhase0S;
+            when X"5B" => -- [
+              nextState <= whileBeginS;
+            when X"5D" => -- ]
+              mx1_sel <= '0';
+              nextState <= whileEndS;
+            when X"7E" => -- ~
+              mx1_sel <= '0';
+              previousState <= whileSkipS;
+              nextState <= whileEndS;
+            when X"2E" => -- .
+              nextState <= writePhase0S;
+            when X"2C" => -- ,
+              nextState <= readPhase0S;
+            when X"40" => -- @
+              nextState <= haltS;
+            when others =>
+              pc_inc <= '1';
+              DATA_EN <= '1';
+              DATA_RDWR <= '0';
+              mx1_sel <= '1';
+              nextState <= decodeS;
+          end case;
+        end if;
 
       when ptrIncS => -- >
         ptr_inc <= '1';-- % X"2000"; --! kdyz ukazuju na konec pameti jdu od zacatku
@@ -311,6 +323,7 @@ begin
       when pcDecPhase2S =>
         DATA_EN <= '1';
         DATA_RDWR <= '1';
+        mx2_sel <= "01"; --! mby overkill
         nextState <= fetchS;
 
       when writePhase0S => -- .
@@ -351,7 +364,7 @@ begin
       when readPhase2S =>
         DATA_EN <= '1';
         DATA_RDWR <= '1';
-        nextState <= fetchS;
+        nextState <= decodeS;
 
       when whileBeginS => -- [
         -- pc_inc <= '1';
@@ -371,7 +384,12 @@ begin
           nextState <= fetchS;
         end if;
 
-      when whileEndS => -- ]
+      when whileEndS =>
+        DATA_EN <= '1';
+        DATA_RDWR <= '0';
+        mx1_sel <= '0';
+        nextState <= whileEnd2S;
+      when whileEnd2S => -- ]
         if (previousState = whileSkipS) then -- break
           pc_inc <= '1';
           nextState <= fetchS;
