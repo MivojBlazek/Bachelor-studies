@@ -109,7 +109,7 @@ async def test_login(dut, uid=''):
     instcnt, mem, lcd = await run_program(dut, prog, timeout_ns = 250_000)
     lcd = lcd.lower()
     # assert lcd == uid, "Invalid output"
-    print("Contents of the first 20 memory cells:")
+    print("Contents of the first 100 memory cells:")
     for i in range(min(100, len(mem))):
         print(f"Memory cell {i}: {mem[i]}")
     print("LCD Output:", lcd)

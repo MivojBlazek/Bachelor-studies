@@ -77,6 +77,7 @@ type states is
   pcIncPhase0S,
   pcIncPhase1S,
   pcIncPhase2S,
+  pcIncPhase3S,
   pcDecPhase0S,
   pcDecPhase1S,
   pcDecPhase2S,
@@ -212,7 +213,7 @@ begin
         pc_dec <= '0';
         ptr_inc <= '0';
         ptr_dec <= '0';
-        DATA_EN <= '1';
+        DATA_EN <= '0';
         DATA_RDWR <= '0';
         OUT_WE <= '0';
         mx1_sel <= '0';
@@ -307,6 +308,9 @@ begin
       when pcIncPhase2S =>
         DATA_EN <= '1';
         DATA_RDWR <= '1';
+        nextState <= pcIncPhase3S;
+      when pcIncPhase3S =>
+        DATA_EN <= '0';
         nextState <= fetchS;
 
       when pcDecPhase0S => -- -
@@ -373,6 +377,7 @@ begin
         end if;
         DATA_EN <= '1';
         DATA_RDWR <= '0';
+        mx1_sel <= '0';
         nextState <= whileInside0S;
       when whileInside0S =>
         if (DATA_RDATA = "00000000") then
@@ -380,7 +385,6 @@ begin
           nextState <= whileSkipS;
         else
           mx1_sel <= '0';
-          previousState <= whileInside0S;
           nextState <= fetchS;
         end if;
 
