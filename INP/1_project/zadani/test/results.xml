@@ -1,17 +1,15 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1699433495" />
-    <testcase name="test_reset" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="10" time="0.0015094280242919922" sim_time_ns="51.000001" ratio_time="33787.63357989322" />
-    <testcase name="test_init" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="26" time="0.004203319549560547" sim_time_ns="100.000001" ratio_time="23790.720600924786" />
-    <testcase name="test_increment" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="33" time="0.007458686828613281" sim_time_ns="260.000001" ratio_time="34858.6831669321" />
-    <testcase name="test_decrement" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="42" time="0.007486820220947266" sim_time_ns="260.000001" ratio_time="34727.693911034454" />
-    <testcase name="test_move" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="50" time="0.006782054901123047" sim_time_ns="200.000001" ratio_time="29489.587435643112" />
-    <testcase name="test_print" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="61" time="0.025187253952026367" sim_time_ns="1200.0000010000003" ratio_time="47643.145349850965" />
-    <testcase name="test_input" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="70" time="0.049488067626953125" sim_time_ns="2460.0000009999994" ratio_time="49708.9524598893" />
-    <testcase name="test_while_loop" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="84" time="0.023595809936523438" sim_time_ns="1330.0000010000003" ratio_time="56365.93974006048" />
-    <testcase name="test_break" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="95" time="0.10422134399414062" sim_time_ns="5055.000000999999" ratio_time="48502.54091219735">
-      <failure message="Test failed with RANDOM_SEED=1699433495" />
-    </testcase>
-    <testcase name="test_login_xblaze38" classname="cpu" file="&lt;makefun-gen-1&gt;" lineno="1" time="0.46296000480651855" sim_time_ns="26230.000001000004" ratio_time="56657.162019777745" />
+    <property name="random_seed" value="1699456589" />
+    <testcase name="test_reset" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="10" time="0.0013339519500732422" sim_time_ns="51.000001" ratio_time="38232.26241185058" />
+    <testcase name="test_init" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="26" time="0.004335165023803711" sim_time_ns="100.000001" ratio_time="23067.17286445053" />
+    <testcase name="test_increment" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="33" time="0.00741887092590332" sim_time_ns="260.000001" ratio_time="35045.76418659588" />
+    <testcase name="test_decrement" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="42" time="0.008718252182006836" sim_time_ns="260.000001" ratio_time="29822.491432009843" />
+    <testcase name="test_move" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="50" time="0.01006937026977539" sim_time_ns="200.000001" ratio_time="19862.215376102286" />
+    <testcase name="test_print" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="61" time="0.022144556045532227" sim_time_ns="1200.0000010000003" ratio_time="54189.39077092522" />
+    <testcase name="test_input" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="70" time="0.047118186950683594" sim_time_ns="2460.0000009999994" ratio_time="52209.13961682708" />
+    <testcase name="test_while_loop" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="84" time="0.02365422248840332" sim_time_ns="1330.0000010000003" ratio_time="56226.74774670966" />
+    <testcase name="test_break" classname="cpu" file="/home/xblaze38/Plocha/Coding/INP/1_project/zadani/test/scripts/cpu_lib.py" lineno="95" time="0.007578372955322266" sim_time_ns="300.00000100000034" ratio_time="39586.33373794455" />
+    <testcase name="test_login_xblaze38" classname="cpu" file="&lt;makefun-gen-1&gt;" lineno="1" time="1.9436581134796143" sim_time_ns="108550.00000100001" ratio_time="55848.29927042543" />
   </testsuite>
 </testsuites>

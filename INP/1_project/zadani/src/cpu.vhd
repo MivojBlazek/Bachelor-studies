@@ -45,424 +45,417 @@ end cpu;
 --                      Architecture declaration
 -- ----------------------------------------------------------------------------
 architecture behavioral of cpu is
-     -- PC (programové počítadlo)
-     signal PC       : std_logic_vector(12 downto 0);
-     signal PC_INC   : std_logic;
-     signal PC_DEC   : std_logic;
-     -- PTR (ukazateľ do pamäte dát)
-     signal PTR      : std_logic_vector(12 downto 0);
-     signal PTR_INC  : std_logic;
-     signal PTR_DEC  : std_logic;
-     -- CNT (počítadlo cyklov)
-     signal CNT      : std_logic_vector(7 downto 0);
-     signal CNT_INC  : std_logic;
-     signal CNT_DEC  : std_logic;
-     signal CNT_LOAD : std_logic;
-     -- Pomocné signály
-     signal MX1_SEL  : std_logic;
-     signal MX2_SEL  : std_logic_vector(1 downto 0);
-     signal CNT_ZERO : std_logic;
-     -- FSM (konečný automat)
-     type t_state is (idle, fetch, decode, initS,
-                      ex_inc_r, ex_inc_w,
-                      ex_dec_r, ex_dec_w,
-                      ex_lmov, ex_rmov,
-                      ex_print_r, ex_print_out,
-                      ex_read_await, ex_read_w,
-                      ex_whilebeg_r, ex_whilebeg_cmp, ex_whilebeg_jmp, ex_whilebeg_skip, ex_whilebeg_cnt,
-                      ex_whileend_r, ex_whileend_cmp, ex_whileend_jmp, ex_whileend_ret, ex_whileend_cnt,
-                      ex_dobeg,
-                      ex_doend_r, ex_doend_cmp, ex_doend_jmp, ex_doend_ret, ex_doend_cnt,
-                      ex_noop, halt);
-     signal PSTATE                    : t_state := idle;
-     signal NSTATE                    : t_state;
-     attribute fsm_encoding           : string;
-     attribute fsm_encoding of PSTATE : signal is "sequential";
-     attribute fsm_encoding of NSTATE : signal is "sequential";
+
+-- PC
+signal pc_data : std_logic_vector(12 downto 0) := (others => '0');
+signal pc_dec : std_logic;
+signal pc_inc : std_logic;
+
+-- PTR
+signal ptr_data : std_logic_vector(12 downto 0) := (others => '0');
+signal ptr_inc : std_logic;
+signal ptr_dec : std_logic;
+signal ptr_rst : std_logic; --! Not sure
+
+-- MX1
+signal mx1_sel : std_logic := '0';
+signal mx1_out : std_logic_vector(12 downto 0) := (others => '0');
+
+-- MX2
+signal mx2_sel : std_logic_vector(1 downto 0) := (others => '0');
+signal mx2_out : std_logic_vector(7 downto 0) := (others => '0');
+
+-- CNT
+signal cnt_data : std_logic_vector(7 downto 0) := (others => '0'); --! fakt 8 bitu?
+signal cnt_inc : std_logic;
+signal cnt_dec : std_logic;
+signal cnt_ld : std_logic; --! ????
+
+-- FSM
+type states is
+(
+  startS,
+  initS,
+  fetchS,
+  decodeS,
+
+  pcIncPhase0S,
+  pcIncPhase1S,
+  pcDecPhase0S,
+  pcDecPhase1S,
+
+  ptrIncS,
+  ptrDecS,
+
+  whileBeginS,
+  whileInside0S,
+  whileEndS,
+  whileEnd2S,
+  whileSkipS,
+  whileSkipBackS,
+  whileBreakS,
+
+  writePhase0S,
+  writePhase1S,
+
+  readPhase0S,
+  readPhase1S,
+
+  haltS
+);
+signal state : states := startS;
+signal nextState : states;
+
 begin
-     -- PC (programové počítadlo)
-     PROCESS_PC : process (CLK, RESET)
-     begin
-          if (RESET = '1') then
-               PC <= (others => '0');
-          elsif (rising_edge(CLK)) then
-               if (PC_INC = '1') then
-                    PC <= PC + 1;
-               elsif (PC_DEC = '1') then
-                    PC <= PC - 1;
-               end if;
-          end if;
-     end process;
 
-     -- PTR (ukazateľ do pamäte dát)
-     PROCESS_PTR : process (CLK, RESET)
-     begin
-          if (RESET = '1') then
-               PTR <= (others => '0');
-          elsif (rising_edge(CLK)) then
-               if (PTR_INC = '1') then
-                    PTR <= PTR + 1;
-               elsif (PTR_DEC = '1') then
-                    PTR <= PTR - 1;
-               end if;
-          end if;
-     end process;
+ -- pri tvorbe kodu reflektujte rady ze cviceni INP, zejmena mejte na pameti, ze 
+ --   - nelze z vice procesu ovladat stejny signal,
+ --   - je vhodne mit jeden proces pro popis jedne hardwarove komponenty, protoze pak
+ --      - u synchronnich komponent obsahuje sensitivity list pouze CLK a RESET a 
+ --      - u kombinacnich komponent obsahuje sensitivity list vsechny ctene signaly. 
 
-     -- CNT (počítadlo cyklov)
-     PROCESS_CNT : process (CLK, RESET)
-     begin
-          if (RESET = '1') then
-               CNT <= (others => '0');
-          elsif (rising_edge(CLK)) then
-               if (CNT_LOAD = '1') then
-                    CNT <= X"01";
-               elsif (CNT_INC = '1') then
-                    CNT <= CNT + 1;
-               elsif (CNT_DEC = '1') then
-                    CNT <= CNT - 1;
-               end if;
-          end if;
-     end process;
-     -- CNT_ZERO (CNT ?= 0)
-     PROCESS_CNTZERO : process (CNT)
-     begin
-          if (CNT = X"00") then
-               CNT_ZERO <= '1';
-          else
-               CNT_ZERO <= '0';
-          end if;
-     end process;
+-- PC
+  process (RESET, CLK, pc_inc, pc_dec)
+  begin
+    if (RESET = '1') then
+      pc_data <= (others => '0');
+    elsif (rising_edge(CLK)) then
+      if (pc_inc = '1') then
+        pc_data <= pc_data + 1;
+      elsif (pc_dec = '1') then
+        pc_data <= pc_data - 1;
+      end if;
+    end if;
+  end process;
 
-     -- MX1 (programová (0) alebo dátová (1) adresa v pamäti)
-     MX1 : process (PC, PTR, MX1_SEL)
-     begin
-          case MX1_SEL is
-               when '0'    => DATA_ADDR <= PC;
-               when '1'    => DATA_ADDR <= PTR;
-               when others => null;
-          end case;
-     end process;
+-- PTR
+  process (RESET, CLK, ptr_inc, ptr_dec, ptr_rst)
+  begin
+    if (RESET = '1') then
+      ptr_data <= (others => '0');
+    elsif (rising_edge(CLK)) then
+      if (ptr_rst = '1') then
+        ptr_data <= (others => '0');
+      elsif (ptr_inc = '1') then
+        ptr_data <= ptr_data + 1;
+      elsif (ptr_dec = '1') then
+        ptr_data <= ptr_data - 1;
+      end if;
+    end if;
+  end process;
 
-     -- MX2 (hodnota na zápis do pamäti)
-     MX2 : process (IN_DATA, DATA_RDATA, MX2_SEL)
-     begin
-          case MX2_SEL is
-               when "00"   => DATA_WDATA <= IN_DATA;
-               when "01"   => DATA_WDATA <= DATA_RDATA;
-               when "10"   => DATA_WDATA <= DATA_RDATA - 1;
-               when "11"   => DATA_WDATA <= DATA_RDATA + 1;
-               when others => null;
-          end case;
-     end process;
+-- MX1
+--   process (RESET, CLK, mx1_sel, ptr_data, pc_data)
+--   begin
+--     if (RESET = '1') then
+--       mx1_out <= (others => '0');
+--     elsif (rising_edge(CLK)) then
+--       if (mx1_sel = '0') then
+--         mx1_out <= ptr_data;
+--       elsif (mx1_sel = '1') then
+--         mx1_out <= pc_data;
+--       end if;
+--     end if;
+--   end process;
+--   DATA_ADDR <= mx1_out;
 
-     -- KONEČNÝ AUTOMAT
-     -- Present state logic
-     FSM_PSTATE : process (CLK, RESET)
-     begin
-          if (RESET = '1') then
-               PSTATE <= idle;
-          elsif (rising_edge(CLK)) then
-               PSTATE <= NSTATE;
-          end if;
-     end process;
+-- -- MX2
+--   process (RESET, CLK, mx2_sel, IN_DATA, DATA_RDATA)
+--   begin
+--     if (RESET = '1') then
+--       mx2_out <= (others => '0');
+--     elsif (rising_edge(CLK)) then
+--       if (mx2_sel = "00") then
+--         mx2_out <= DATA_RDATA;
+--       elsif (mx2_sel = "01") then
+--         mx2_out <= DATA_RDATA - 1;
+--       elsif (mx2_sel = "10") then
+--         mx2_out <= DATA_RDATA + 1;
+--       else
+--         mx2_out <= IN_DATA;
+--       end if;
+--     end if;
+--   end process;
+--   DATA_WDATA <= mx2_out;
 
-     -- Next state logic; output logic
-     FSM_NSTATE : process (PSTATE, IN_VLD, OUT_BUSY, DATA_RDATA, CNT_ZERO, EN)
-     begin
-          -- Východzí stav
-          DATA_EN   <= '0';
+-- MX1
+  process (pc_data, ptr_data, mx1_sel)
+  begin
+    case mx1_sel is
+      when '0' =>
+        DATA_ADDR <= ptr_data;
+      when '1' =>
+        DATA_ADDR <= pc_data;
+      when others =>
+        null;
+    end case;
+  end process;
+
+-- MX2
+  process (IN_DATA, DATA_RDATA, mx2_sel)
+  begin
+    case mx2_sel is
+      when "00" =>
+        DATA_WDATA <= DATA_RDATA;
+      when "01" =>
+        DATA_WDATA <= DATA_RDATA - 1;
+      when "10" =>
+        DATA_WDATA <= DATA_RDATA + 1;
+      when "11" =>
+        DATA_WDATA <= IN_DATA;
+      when others =>
+        null;
+    end case;
+  end process;
+
+-- CNT
+  process (RESET, CLK, cnt_inc, cnt_dec, cnt_ld)
+  begin
+    if (RESET = '1') then
+      cnt_data <= (others => '0');
+    elsif (rising_edge(CLK)) then
+      if (cnt_ld = '1') then
+        cnt_data <= X"01";
+      elsif (cnt_inc = '1') then
+        cnt_data <= cnt_data + 1;
+      elsif (cnt_dec = '1') then
+        cnt_data <= cnt_data - 1;
+      end if;
+    end if;
+  end process;
+
+-- FSM present state
+  process (RESET, CLK)
+  begin
+    if (RESET = '1') then
+      state <= startS;
+    elsif (rising_edge(CLK)) then
+      state <= nextState;
+    end if;
+  end process;
+
+-- FSM next state
+  process (EN, state, OUT_BUSY, IN_VLD, DATA_RDATA)
+  begin
+    -- DEFUALT
+    DATA_EN <= '0';
+    DATA_RDWR <= '0';
+    pc_inc <= '0';
+    pc_dec <= '0';
+    ptr_inc <= '0';
+    ptr_dec <= '0';
+    ptr_rst <= '0';
+    cnt_dec <= '0';
+    cnt_inc <= '0';
+    cnt_ld <= '0';
+    OUT_WE <= '0';
+    mx1_sel <= '1';
+    mx2_sel <= "00";
+    IN_REQ <= '0';
+    OUT_DATA <= (others => '0');
+
+    case state is
+      when startS => -- IDLE
+        if (EN = '1') then
+          DATA_EN <= '1';
           DATA_RDWR <= '0';
-          IN_REQ    <= '0';
-          OUT_WE    <= '0';
-          OUT_DATA  <= X"00";
-          PC_INC    <= '0';
-          PC_DEC    <= '0';
-          PTR_INC   <= '0';
-          PTR_DEC   <= '0';
-          CNT_INC   <= '0';
-          CNT_DEC   <= '0';
-          CNT_LOAD  <= '0';
-          MX1_SEL   <= '0';
-          MX2_SEL   <= "01";
+          mx1_sel <= '0';
+          READY <= '1';
+          DONE <= '0';
+          nextState <= initS;
+        else -- RESET
+          READY <= '0';
+          DONE <= '0';
+          nextState <= startS;
+        end if;
 
-          case PSTATE is
-               -- IDLE (východzí stav procesora)
-               when idle =>
-                    if (EN = '1') then
-                    READY <= '1';
-                    DONE <= '0';
-                  DATA_EN <= '1';
-                  DATA_RDWR <= '0';
-                  MX1_SEL <= '1';
-                  READY <= '1';
-                         NSTATE <= initS;
-                    else
-                    READY <= '0';
-                    DONE <= '0';
-                         NSTATE <= idle;
-                    end if;
-              when initS => -- INIT
-                  if (DATA_RDATA = X"40") then
-                    NSTATE <= fetch;
-                  MX1_SEL <= '1';
-                  else
-                    PTR_INC <= '1';
-                  DATA_EN <= '1';
-                  DATA_RDWR <= '0';
-                  MX1_SEL <= '1';
-                    NSTATE <= initS;
-                  end if;
+      when initS => -- INIT
+        if (DATA_RDATA = X"40") then
+          mx1_sel <= '0';
+          nextState <= fetchS;
+        else
+          ptr_inc <= '1';
+          DATA_EN <= '1';
+          DATA_RDWR <= '0';
+          mx1_sel <= '0';
+          nextState <= initS;
+        end if;
 
-               -- FETCH (načítanie následujúcej inštrukcie z procesora)
-               when fetch =>
-                    if (EN = '1') then
-                         NSTATE    <= decode;
-                         MX1_SEL   <= '0';  -- programova pamat
-                         DATA_RDWR <= '0';  -- citanie z pamate
-                         DATA_EN   <= '1';  -- povolenie pamate
-                    else
-                         NSTATE <= idle;
-                    end if;
+      when fetchS => -- FETCH
+        if (EN = '1') then
+          DATA_EN <= '1';
+          DATA_RDWR <= '0';
+          mx1_sel <= '1';
+          nextState <= decodeS;
+        else
+          nextState <= startS;
+        end if;
 
-               -- DECODE (dekódovanie inštrukcie)
-               when decode =>
-                    case (DATA_RDATA) is
-                         when X"40"  => NSTATE <= halt;
-                         when X"2B"  => NSTATE <= ex_inc_r;
-                         when X"2D"  => NSTATE <= ex_dec_r;
-                         when X"3E"  => NSTATE <= ex_lmov;
-                         when X"3C"  => NSTATE <= ex_rmov;
-                         when X"2E"  => NSTATE <= ex_print_r;
-                         when X"2C"  => NSTATE <= ex_read_await;
-                         when X"5B"  => NSTATE <= ex_whilebeg_r;
-                         when X"5D"  => NSTATE <= ex_whileend_r;
-                         when X"28"  => NSTATE <= ex_dobeg;
-                         when X"29"  => NSTATE <= ex_doend_r;
-                         when others => NSTATE <= ex_noop;
-                    end case;
+      when decodeS => -- DECODE
+        case DATA_RDATA is
+          when X"3E" => -- >
+            nextState <= ptrIncS;
+          when X"3C" => -- <
+            nextState <= ptrDecS;
+          when X"2B" => -- +
+            nextState <= pcIncPhase0S;
+          when X"2D" => -- -
+            nextState <= pcDecPhase0S;
+          when X"5B" => -- [
+            nextState <= whileBeginS;
+          when X"5D" => -- ]
+            nextState <= whileEndS;
+          when X"7E" => -- ~
+            nextState <= whileBreakS;
+          when X"2E" => -- .
+            nextState <= writePhase0S;
+          when X"2C" => -- ,
+            nextState <= readPhase0S;
+          when X"40" => -- @
+            nextState <= haltS;
+          when others =>
+            pc_inc <= '1';
+            nextState <= fetchS;
+        end case;
 
-               -- NOOP (žiadna operácia)
-               when ex_noop =>
-                    PC_INC <= '1';
-                    NSTATE <= fetch;
+      when ptrIncS => -- >
+        ptr_inc <= '1';-- % X"2000"; --! kdyz ukazuju na konec pameti jdu od zacatku
+        pc_inc <= '1';
+        nextState <= fetchS;
 
-               -- HALT (nekonečný cyklus, efektívne zastavenie procesora)
-               when halt =>
-                    DONE <= '1';
-                    NSTATE <= halt;
+      when ptrDecS => -- <
+        ptr_dec <= '1';-- % X"2000"; --! kdyz ukazuju na konec pameti jdu od zacatku
+        pc_inc <= '1';
+        nextState <= fetchS;
 
-               -- INC (inkrementácia hodnoty)
-               -- takt 1 - načítanie hodnoty aktuálnej bunky
-               when ex_inc_r =>
-                    PC_INC    <= '1';   -- inkrementácia programovej adresy
-                    MX1_SEL   <= '1';   -- dátová pamäť
-                    DATA_RDWR <= '0';   -- čítanie z pamäte
-                    DATA_EN   <= '1';   -- povolenie pamäte
-                    NSTATE    <= ex_inc_w;
-               -- takt 2 - zápis inkrementovanej hodnoty do pamäte
-               when ex_inc_w =>
-                    MX1_SEL   <= '1';   -- dátová pamäť
-                    MX2_SEL   <= "11";  -- inkrementácia RDATA
-                    DATA_RDWR <= '1';   -- zápis do pamäte
-                    DATA_EN   <= '1';   -- povolenie pamäte
-                    NSTATE    <= fetch;
+      when pcIncPhase0S => -- +
+        pc_inc <= '1';
+        mx1_sel <= '0';
+        DATA_EN <= '1';
+        DATA_RDWR <= '0';
+        nextState <= pcIncPhase1S;
+      when pcIncPhase1S =>
+        DATA_EN <= '1';
+        DATA_RDWR <= '1';
+        mx1_sel <= '0';
+        mx2_sel <= "10";
+        nextState <= fetchS;
 
-               -- DEC (dekrementácia hodnoty)
-               -- takt 1 - načítanie hodnoty aktuálnej bunky
-               when ex_dec_r =>
-                    PC_INC    <= '1';   -- inkrementácia programovej adresy
-                    MX1_SEL   <= '1';   -- dátová pamäť
-                    DATA_RDWR <= '0';   -- čítanie z pamäte
-                    DATA_EN   <= '1';   -- povolenie pamäte
-                    NSTATE    <= ex_dec_w;
-               -- takt 2 - zápis dekrementovanej hodnoty do pamäte
-               when ex_dec_w =>
-                    MX1_SEL   <= '1';   -- dátová pamäť
-                    MX2_SEL   <= "10";  -- dekrementácia RDATA
-                    DATA_RDWR <= '1';   -- zápis do pamäte
-                    DATA_EN   <= '1';   -- povolenie pamäte
-                    NSTATE    <= fetch;
+      when pcDecPhase0S => -- -
+        pc_inc <= '1';
+        mx1_sel <= '0';
+        DATA_EN <= '1';
+        DATA_RDWR <= '0';
+        nextState <= pcDecPhase1S;
+      when pcDecPhase1S =>
+        DATA_EN <= '1';
+        DATA_RDWR <= '1';
+        mx1_sel <= '0';
+        mx2_sel <= "01";
+        nextState <= fetchS;
 
-               -- LMOV (posun doľava; inkrementácia ukazovateľa)
-               when ex_lmov =>
-                    PC_INC  <= '1';     -- inkrementácia programovej adresy
-                    PTR_INC <= '1';     -- inkrementácia ukazovateľa
-                    NSTATE  <= fetch;
+      when writePhase0S => -- .
+        pc_inc <= '1';
+        mx1_sel <= '0';
+        DATA_EN <= '1';
+        DATA_RDWR <= '0';
+        nextState <= writePhase1S;
+      when writePhase1S =>
+        if (OUT_BUSY = '1') then
+          nextState <= writePhase1S;
+        else
+          OUT_DATA <= DATA_RDATA;
+          OUT_WE <= '1';
+          nextState <= fetchS;
+        end if;
 
-               -- RMOV (posun doprava; dekrementácia ukazovateľa)
-               when ex_rmov =>
-                    PC_INC  <= '1';     -- inkrementácia programovej adresy
-                    PTR_DEC <= '1';     -- dekrementácia ukazovateľa
-                    NSTATE  <= fetch;
+      when readPhase0S => -- ,
+        IN_REQ <= '1';
+        if (IN_VLD /= '1') then
+          IN_REQ <= '1';
+          nextState <= readPhase0S;
+        else
+          nextState <= readPhase1S;
+        end if;
+      when readPhase1S =>
+        pc_inc <= '1';
+        DATA_EN <= '1';
+        DATA_RDWR <= '1';
+        mx1_sel <= '0';
+        mx2_sel <= "11";
+        nextState <= fetchS;
 
-               -- PRINT (výpis hodnoty)
-               -- takt 1 - načítanie hodnoty aktuálnej bunky
-               when ex_print_r =>
-                    PC_INC    <= '1';   -- inkrementácia programovej adresy
-                    MX1_SEL   <= '1';   -- dátová pamäť
-                    DATA_RDWR <= '0';   -- čítanie z pamäte
-                    DATA_EN   <= '1';   -- povolenie pamäte
-                    NSTATE    <= ex_print_out;
-               -- takt 2 - čakanie na povolenie výstupu a následný výpis hodnoty
-               when ex_print_out =>
-                    if (OUT_BUSY = '1') then
-                         NSTATE <= ex_print_out;
-                    else
-                         OUT_WE   <= '1';         -- povolenie vystupu
-                         OUT_DATA <= DATA_RDATA;  -- vypis hodnoty
-                         NSTATE   <= fetch;
-                    end if;
+        --! WHILE ----------------------------------
+      when whileBeginS => -- [
+        pc_inc <= '1';
+        DATA_EN <= '1';
+        DATA_RDWR <= '0';
+        mx1_sel <= '0';
+        cnt_inc <= '1';
+        nextState <= whileInside0S;
+      when whileInside0S =>
+        if (DATA_RDATA = "00000000") then
+          mx1_sel <= '1';
+          nextState <= whileSkipS;
+        else
+          mx1_sel <= '0';
+          nextState <= fetchS;
+        end if;
 
-               -- READ (načítanie hodnoty do bunky)
-               -- takt 1 - požiadavka o vstup (a čakanie na IN_VLD)
-               when ex_read_await =>
-                    IN_REQ <= '1';      -- požiadavka o vstup
-                    if (IN_VLD = '1') then
-                         NSTATE <= ex_read_w;
-                    else
-                         NSTATE <= ex_read_await;  -- čakanie na vstup
-                    end if;
-               -- takt 2 - zápis načítanej hodnoty do bunky
-               when ex_read_w =>
-                    PC_INC    <= '1';   -- inkrementácia programovej adresy
-                    MX1_SEL   <= '1';   -- dátová pamäť
-                    MX2_SEL   <= "00";  -- načítaná hodnota -> WDATA
-                    DATA_RDWR <= '1';   -- zápis do pamäte
-                    DATA_EN   <= '1';   -- povolenie pamäte
-                    NSTATE    <= fetch;
+      when whileEndS =>
+        DATA_EN <= '1';
+        DATA_RDWR <= '0';
+        mx1_sel <= '0';
+        nextState <= whileEnd2S;
+      when whileEnd2S => -- ]
+        if (DATA_RDATA = "00000000") then
+          pc_inc <= '1';
+          cnt_dec <= '1';
+          nextState <= fetchS;
+        else
+          nextState <= whileSkipBackS;
+        end if;
+      when whileBreakS => -- ~
+        if (DATA_RDATA = X"5D") then
+          cnt_dec <= '1';
+          nextState <= fetchS;
+        else
+          DATA_EN <= '1';
+          DATA_RDWR <= '0';
+          mx1_sel <= '1';
+          pc_inc <= '1';
+          nextState <= whileBreakS;
+        end if;
 
-               -- WHILE_BEGIN (začiatok while cyklu)
-               -- takt 1 - načítanie hodnoty aktuálnej bunky
-               when ex_whilebeg_r =>
-                    PC_INC    <= '1';       -- inkrementácia programovej adresy
-                    MX1_SEL   <= '1';       -- dátová pamäť
-                    DATA_RDWR <= '0';       -- čítanie z pamäte
-                    DATA_EN   <= '1';       -- povolenie pamäte
-                    NSTATE    <= ex_whilebeg_cmp;
-               -- takt 2 - porovnanie hodnoty s nulou; ak je nula, skok na koniec cyklu
-               when ex_whilebeg_cmp =>
-                    if (DATA_RDATA = X"00") then
-                         CNT_LOAD  <= '1';
-                         MX1_SEL   <= '0';  -- programová pamäť
-                         DATA_RDWR <= '0';  -- čítanie z pamäte
-                         DATA_EN   <= '1';  -- povolenie pamäte
-                         NSTATE    <= ex_whilebeg_jmp;
-                    else
-                         NSTATE <= fetch;
-                    end if;
-               -- takt 3 - prečítanie následujúcej inštrukcie
-               when ex_whilebeg_jmp =>
-                    MX1_SEL   <= '0';       -- programová pamäť
-                    DATA_RDWR <= '0';       -- čítanie z pamäte
-                    DATA_EN   <= '1';       -- povolenie pamäte
-                    NSTATE    <= ex_whilebeg_skip;
-               -- takt 4 - zmena počítadla cyklov (prispôsobenie vnoreným cyklom)
-               when ex_whilebeg_skip =>
-                    if (DATA_RDATA = X"5B") then
-                         CNT_INC <= '1';
-                    elsif (DATA_RDATA = X"5D") then
-                         CNT_DEC <= '1';
-                    end if;
-                    NSTATE <= ex_whilebeg_cnt;
-               -- takt 5 - prechod na ďalšiu inštrukciu a pokračovanie preskakovania, ak treba
-               when ex_whilebeg_cnt =>
-                    PC_INC <= '1';
-                    if (CNT_ZERO = '1') then
-                         NSTATE <= fetch;
-                    else
-                         NSTATE <= ex_whilebeg_jmp;
-                    end if;
+      when whileSkipS =>
+        if (DATA_RDATA = X"5D") then
+          nextState <= whileEndS;
+        else
+          DATA_EN <= '1';
+          DATA_RDWR <= '0';
+          mx1_sel <= '1';
+          pc_inc <= '1';
+          nextState <= whileSkipS;
+        end if;
 
-               -- WHILE_END (koniec while cyklu)
-               -- takt 1 - načítanie hodnoty aktuálnej bunky
-               when ex_whileend_r =>
-                    MX1_SEL   <= '1';   -- dátová pamäť
-                    DATA_RDWR <= '0';   -- čítanie z pamäte
-                    DATA_EN   <= '1';   -- povolenie pamäte
-                    NSTATE    <= ex_whileend_cmp;
-               -- takt 2 - porovnanie hodnoty s nulou; ak nie je nula, skok na zaciatok cyklu
-               when ex_whileend_cmp =>
-                    if (DATA_RDATA = X"00") then
-                         PC_INC <= '1';
-                         NSTATE <= fetch;
-                    else
-                         CNT_LOAD <= '1';
-                         PC_DEC   <= '1';
-                         NSTATE   <= ex_whileend_jmp;
-                    end if;
-               -- takt 3 - prečítanie následujúcej inštrukcie
-               when ex_whileend_jmp =>
-                    MX1_SEL   <= '0';   -- programová pamäť
-                    DATA_RDWR <= '0';   -- čítanie z pamäte
-                    DATA_EN   <= '1';   -- povolenie pamäte
-                    NSTATE    <= ex_whileend_ret;
-               -- takt 4 - zmena počítadla cyklov (prispôsobenie vnoreným cyklom)
-               when ex_whileend_ret =>
-                    if (DATA_RDATA = X"5D") then
-                         CNT_INC <= '1';
-                    elsif (DATA_RDATA = X"5B") then
-                         CNT_DEC <= '1';
-                    end if;
-                    NSTATE <= ex_whileend_cnt;
-               -- takt 5 - prechod na ďalšiu (predchádzajúcu) inštrukciu a pokračovanie preskakovania, ak treba
-               when ex_whileend_cnt =>
-                    if (CNT_ZERO = '1') then
-                         PC_INC <= '1';
-                         NSTATE <= fetch;
-                    else
-                         PC_DEC <= '1';
-                         NSTATE <= ex_whileend_jmp;
-                    end if;
+      when whileSkipBackS =>
+        if (DATA_RDATA = X"5B") then
+          nextState <= whileBeginS;
+        else
+          DATA_EN <= '1';
+          DATA_RDWR <= '0';
+          mx1_sel <= '1';
+          pc_dec <= '1';
+          nextState <= whileSkipBackS;
+        end if;
 
-               -- DO_BEGIN (začiatok do cyklu)
-               when ex_dobeg =>
-                    PC_INC <= '1';
-                    NSTATE <= fetch;
+      when haltS => -- HALT
+        DONE <= '1';
+        nextState <= haltS;
 
-               -- DO_END (koniec do cyklu)
-               -- takt 1 - načítanie hodnoty aktuálnej bunky
-               when ex_doend_r =>
-                    MX1_SEL   <= '1';   -- dátová pamäť
-                    DATA_RDWR <= '0';   -- čítanie z pamäte
-                    DATA_EN   <= '1';   -- povolenie pamäte
-                    NSTATE    <= ex_doend_cmp;
-               -- takt 2 - porovnanie hodnoty s nulou; ak nie je nula, skok na zaciatok cyklu
-               when ex_doend_cmp =>
-                    if (DATA_RDATA = X"00") then
-                         PC_INC <= '1';
-                         NSTATE <= fetch;
-                    else
-                         CNT_LOAD <= '1';
-                         PC_DEC   <= '1';
-                         NSTATE   <= ex_doend_jmp;
-                    end if;
-               -- takt 3 - prečítanie následujúcej inštrukcie
-               when ex_doend_jmp =>
-                    MX1_SEL   <= '0';   -- programová pamäť
-                    DATA_RDWR <= '0';   -- čítanie z pamäte
-                    DATA_EN   <= '1';   -- povolenie pamäte
-                    NSTATE    <= ex_doend_ret;
-               -- takt 4 - zmena počítadla cyklov (prispôsobenie vnoreným cyklom)
-               when ex_doend_ret =>
-                    if (DATA_RDATA = X"28") then
-                         CNT_DEC <= '1';
-                    elsif (DATA_RDATA = X"29") then
-                         CNT_INC <= '1';
-                    end if;
-                    NSTATE <= ex_doend_cnt;
-               -- takt 5 - prechod na ďalšiu (predchádzajúcu) inštrukciu a pokračovanie preskakovania, ak treba
-               when ex_doend_cnt =>
-                    if (CNT_ZERO = '1') then
-                         PC_INC <= '1';
-                         NSTATE <= fetch;
-                    else
-                         PC_DEC <= '1';
-                         NSTATE <= ex_doend_jmp;
-                    end if;
-
-               -- (fallthrough, nemalo by nastať)
-               when others =>
-                    NSTATE <= idle;
-          end case;
-     end process;
+      when others =>
+        -- pc_inc <= '1'; --! ??????
+        nextState <= startS;
+    end case;
+  end process;
 end behavioral;
