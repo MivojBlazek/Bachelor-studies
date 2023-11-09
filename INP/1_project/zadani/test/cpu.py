@@ -123,25 +123,29 @@ async def test_login(dut, uid=''):
 @tb_test()
 async def test_double_while(dut):
     """Double while test"""
-    instcnt, mem, lcd = await run_program(dut, '[>[-]<-]@\3\4', timeout_ns = LCD_WAIT_TIME*50)
-    # assert mem[9] == 0
-    # assert mem[10] == 0
-    print("Contents of the first 20 memory cells:")
-    for i in range(min(20, len(mem))):
-        print(f"Memory cell {i}: {mem[i]}")
+    instcnt, mem, lcd = await run_program(dut, '[>[-]<-]@\2\5', timeout_ns = LCD_WAIT_TIME*50)
+    assert mem[9] == 0
+    assert mem[10] == 0
+    # print("Contents of the first 20 memory cells:")
+    # for i in range(min(20, len(mem))):
+    #     print(f"Memory cell {i}: {mem[i]}")
 
 #Odkomentujte jeden z nasledujicich radku pro zarazeni do testu
 #@tb_test(skip=True) #test se nespousti automaticky, spustit lze volanim TESTCASE=test_printf make
-# @tb_test() #test se spousti automaticky
+@tb_test() #test se spousti automaticky
 async def test_printf(dut):
     """Program which emulates printing of %d """
 
     #Priklad testu, ktery provede pozadovany program:
     #Program ocekava vstup z klavesnice, v testu je stisknuta klavesa odpovidajici hodnote 123
-    prog = ',#load value and print#[>>+>+<<<-]>>>[<<<+>>>-]<<+>[<->[>++++++++++<[->-[>+>>]>[+[-<+>]>+>>]<<<<<]>[-]++++++++[<++++++>-]>[<<+>>-]>[<<+>>-]<<]>]<[->>++++++++[<++++++>-]]<[.[-]<]<@'
+    prog = ',[>>+>+<<<-]>>>[<<<+>>>-]<<+>[<->[>++++++++++<[->-[>+>>]>[+[-<+>]>+>>]<<<<<]>[-]++++++++[<++++++>-]>[<<+>>-]>[<<+>>-]<<]>]<[->>++++++++[<++++++>-]]<[.[-]<]<@'
     enableDebug(lcd=True)
     instcnt, mem, lcd = await run_program(dut, prog, kb_data=chr(123), timeout_ns = 1_000_000)
     assert lcd == '123', "Invalid output"
+    # print("Contents of the first 170 memory cells:")
+    # for i in range(min(170, len(mem))):
+    #     print(f"Memory cell {i}: {mem[i]}")
+    # print("LCD Output:", lcd)
 
 
 
