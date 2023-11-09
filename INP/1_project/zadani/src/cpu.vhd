@@ -302,8 +302,14 @@ begin
           when X"2D" => -- -
             nextState <= pcDecPhase0S;
           when X"5B" => -- [
+            if (cnt_data /= X"00") then
+              cnt_inc <= '1';
+            end if;
             nextState <= whileBeginS;
           when X"5D" => -- ]
+            if (cnt_data /= X"00") then
+              cnt_dec <= '1';
+            end if;
             nextState <= whileEndS;
           when X"7E" => -- ~
             nextState <= whileBreakS;
@@ -391,11 +397,11 @@ begin
         DATA_EN <= '1';
         DATA_RDWR <= '0';
         mx1_sel <= '0';
-        cnt_inc <= '1';
         nextState <= whileInside0S;
       when whileInside0S =>
         if (DATA_RDATA = "00000000") then
           mx1_sel <= '1';
+          cnt_ld <= '1';
           nextState <= whileSkipS;
         else
           mx1_sel <= '0';
@@ -410,14 +416,14 @@ begin
       when whileEnd2S => -- ]
         if (DATA_RDATA = "00000000") then
           pc_inc <= '1';
-          cnt_dec <= '1';
           nextState <= fetchS;
         else
+          cnt_ld <= '1';
+          pc_dec <= '1';
           nextState <= whileSkipBackS;
         end if;
       when whileBreakS => -- ~
         if (DATA_RDATA = X"5D") then
-          cnt_dec <= '1';
           nextState <= fetchS;
         else
           DATA_EN <= '1';
@@ -428,8 +434,18 @@ begin
         end if;
 
       when whileSkipS =>
+        -- if (DATA_RDATA = X"5B") then
+        --   if (cnt_data /= X"00") then
+        --     cnt_inc <= '1';
+        --   end if;
+        --   nextState <= whileBeginS;
         if (DATA_RDATA = X"5D") then
-          nextState <= whileEndS;
+          if (cnt_data /= X"01") then
+            cnt_dec <= '1';
+            nextState <= whileSkipS;
+          else
+            nextState <= whileEndS;
+          end if;
         else
           DATA_EN <= '1';
           DATA_RDWR <= '0';
@@ -440,7 +456,17 @@ begin
 
       when whileSkipBackS =>
         if (DATA_RDATA = X"5B") then
-          nextState <= whileBeginS;
+          if (cnt_data /= X"01") then
+            cnt_dec <= '1';
+            nextState <= whileSkipBackS;
+          else
+            nextState <= whileBeginS;
+          end if;
+        -- elsif (DATA_RDATA = X"5D") then
+        --   if (cnt_data /= X"00") then
+        --     cnt_inc <= '1';
+        --   end if;
+        --   nextState <= XXX;
         else
           DATA_EN <= '1';
           DATA_RDWR <= '0';

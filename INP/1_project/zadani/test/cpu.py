@@ -120,11 +120,19 @@ async def test_login(dut, uid=''):
 # ===========================================================================================================
 # V teto casti muzete v pripade potreby vlozit jakekoliv vlastni testy. 
 #-------------------------------------------------------------------------------------------------------
-
+@tb_test()
+async def test_double_while(dut):
+    """Double while test"""
+    instcnt, mem, lcd = await run_program(dut, '[>[-]<-]@\3\4', timeout_ns = LCD_WAIT_TIME*50)
+    # assert mem[9] == 0
+    # assert mem[10] == 0
+    print("Contents of the first 20 memory cells:")
+    for i in range(min(20, len(mem))):
+        print(f"Memory cell {i}: {mem[i]}")
 
 #Odkomentujte jeden z nasledujicich radku pro zarazeni do testu
 #@tb_test(skip=True) #test se nespousti automaticky, spustit lze volanim TESTCASE=test_printf make
-#@tb_test() #test se spousti automaticky
+# @tb_test() #test se spousti automaticky
 async def test_printf(dut):
     """Program which emulates printing of %d """
 
