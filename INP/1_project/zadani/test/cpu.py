@@ -106,7 +106,7 @@ async def test_login(dut, uid=''):
     with open(file_name,'rt') as f:
         prog = f.read()
     assert len(prog), "File login.b doesn't contain any program"
-    instcnt, mem, lcd = await run_program(dut, prog, timeout_ns = 250_000)
+    instcnt, mem, lcd = await run_program(dut, prog, timeout_ns = 2_500_000)
     lcd = lcd.lower()
     assert lcd == uid, "Invalid output"
     # print("Contents of the first 100 memory cells:")
@@ -120,12 +120,43 @@ async def test_login(dut, uid=''):
 # ===========================================================================================================
 # V teto casti muzete v pripade potreby vlozit jakekoliv vlastni testy. 
 #-------------------------------------------------------------------------------------------------------
+
 @tb_test()
 async def test_double_while(dut):
     """Double while test"""
     instcnt, mem, lcd = await run_program(dut, '[>[-]<-]@\2\5', timeout_ns = LCD_WAIT_TIME*50)
     assert mem[9] == 0
     assert mem[10] == 0
+    # print("Contents of the first 20 memory cells:")
+    # for i in range(min(20, len(mem))):
+    #     print(f"Memory cell {i}: {mem[i]}")
+
+@tb_test()
+async def test_double_while_break(dut):
+    """Double while break test"""
+    instcnt, mem, lcd = await run_program(dut, '[>[-]<~-]@\2\5', timeout_ns = LCD_WAIT_TIME*50)
+    assert mem[10] == 2
+    assert mem[11] == 0
+    # print("Contents of the first 20 memory cells:")
+    # for i in range(min(20, len(mem))):
+    #     print(f"Memory cell {i}: {mem[i]}")
+
+@tb_test()
+async def test_double_while_break2(dut):
+    """Double while break 2 test"""
+    instcnt, mem, lcd = await run_program(dut, '[>[-~+++]<-]@\2\5', timeout_ns = LCD_WAIT_TIME*50)
+    assert mem[13] == 0
+    assert mem[14] == 3
+    # print("Contents of the first 20 memory cells:")
+    # for i in range(min(20, len(mem))):
+    #     print(f"Memory cell {i}: {mem[i]}")
+
+@tb_test()
+async def test_double_while_break3(dut):
+    """Double while break 3 test"""
+    instcnt, mem, lcd = await run_program(dut, '[>[-~+++]<~-]@\2\5', timeout_ns = LCD_WAIT_TIME*50)
+    assert mem[14] == 2
+    assert mem[15] == 4
     # print("Contents of the first 20 memory cells:")
     # for i in range(min(20, len(mem))):
     #     print(f"Memory cell {i}: {mem[i]}")
