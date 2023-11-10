@@ -11,7 +11,7 @@
                 "_UNICODE"
             ],
             "windowsSdkVersion": "10.0.19041.0",
-            "cStandard": "gnu99",
+            "cStandard": "c17", //gnu99
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-gcc-x64",
             "compilerPath": "C:/MinGW/bin/gcc.exe"
@@ -27,7 +27,7 @@
                 "_UNICODE"
             ],
             "windowsSdkVersion": "10.0.19041.0",
-            "cStandard": "gnu99",
+            "cStandard": "c17", //gnu99
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-gcc-x64",
             "compilerPath": "/usr/bin/gcc"
@@ -43,7 +43,7 @@
                 "_UNICODE"
             ],
             "windowsSdkVersion": "10.0.19041.0",
-            "cStandard": "gnu99",
+            "cStandard": "c17", //gnu99
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-gcc-x64",
             "compilerPath": "/usr/bin/gcc"
