@@ -24,6 +24,325 @@ async def test_reset(dut):
     assert (dut.out_we.value.binstr == '0'), "Can't write to the output" 
 
 @tb_test()
+async def test_debug_00(dut):
+    instcnt, mem, lcd = await run_program(dut, 'A+@\1')
+    assert mem[instcnt] == 2
+    
+    
+@tb_test()
+async def test_debug_01(dut):
+    instcnt, mem, lcd = await run_program(dut, '.@9')
+    assert lcd == "9"
+    
+    
+@tb_test()
+async def test_debug_02(dut):
+    instcnt, mem, _ = await run_program(dut, '>+<>+-@')
+    assert mem[instcnt+1] == 1
+    
+    
+@tb_test()
+async def test_debug_03(dut):
+    instcnt, mem, lcd = await run_program(dut, ',@', kb_data='Q', timeout_ns=(KB_WAIT_TIME+LCD_WAIT_TIME)*5 + 100)
+    assert mem[instcnt] == ord('Q')
+    
+    
+@tb_test()
+async def test_debug_04(dut):
+    instcnt, mem, lcd = await run_program(dut, ',+,@', kb_data='YQ', timeout_ns=(KB_WAIT_TIME+LCD_WAIT_TIME)*5 + 100)
+    assert mem[instcnt] == ord('Q')
+    
+    
+@tb_test()
+async def test_debug_05(dut):
+    instcnt, mem, lcd = await run_program(dut, '[-]@\3')
+    assert mem[instcnt] == 0
+    
+    
+@tb_test()
+async def test_debug_06(dut):
+    instcnt, mem, lcd = await run_program(dut, '++>++<[-[>+<-]]@')
+    assert mem[instcnt] == 0
+    assert mem[instcnt+1] == 3
+    
+    
+@tb_test()
+async def test_debug_07(dut):
+    instcnt, mem, lcd = await run_program(dut, f"""[>+>+<<-]@{chr(4)}""", timeout_ns=10_000)
+    assert mem[instcnt] == 0
+    assert mem[instcnt+1] == 4
+    assert mem[instcnt+2] == 4
+    
+    
+@tb_test()
+async def test_debug_08(dut):
+    instcnt, mem, lcd = await run_program(dut, f"""[<<+>>-]@{chr(0)}{chr(4)}{chr(4)}""", timeout_ns=10_000)
+    assert mem[instcnt] == 0
+    assert mem[instcnt+1] == 4
+    assert mem[instcnt+2] == 4
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_09(dut):
+    instcnt, mem, lcd = await run_program(dut, f"""[->->+<<]@{chr(4)}{chr(4)}""", timeout_ns=10_000)
+    assert mem[instcnt] == 0
+    assert mem[instcnt+1] == 0
+    assert mem[instcnt+2] == 4
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_10(dut):
+    instcnt, mem, lcd = await run_program(dut, f"""[->>+<<]@{chr(4)}{chr(4)}""", timeout_ns=10_000)
+    assert mem[instcnt] == 0
+    assert mem[instcnt+1] == 4
+    assert mem[instcnt+2] == 4
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_11(dut):
+    instcnt, mem, lcd = await run_program(dut, f""">[<+>-]@{chr(0)}{chr(4)}""", timeout_ns=10_000)
+    assert mem[instcnt] == 4
+    assert mem[instcnt+1] == 0
+    assert mem[instcnt+2] == 0
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_12(dut):
+    instcnt, mem, lcd = await run_program(dut, f""">>[<<+>>-]@{chr(0)}{chr(20)}{chr(4)}""", timeout_ns=10_000)
+    assert mem[instcnt] == 4
+    assert mem[instcnt+1] == 20
+    assert mem[instcnt+2] == 0
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_13(dut):
+    instcnt, mem, lcd = await run_program(dut, f""">>[<<+>>-]@{chr(0)}{chr(4)}{chr(4)}""", timeout_ns=10_000)
+    assert mem[instcnt] == 4
+    assert mem[instcnt+1] == 4
+    assert mem[instcnt+2] == 0
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_14(dut):
+    instcnt, mem, lcd = await run_program(dut, f"""[>+>+<<-]YYYYYYY>>[<<+>>-]@{chr(4)}""", timeout_ns=10_000)
+    assert mem[instcnt] == 4
+    assert mem[instcnt+1] == 4
+    assert mem[instcnt+2] == 0
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_15(dut):
+    instcnt, mem, lcd = await run_program(dut, f"""; copy cell0 => cell2
+(
+  ; move cell0 => cell2 & cell3
+  [>>+>+<<<-]
+)
+@{chr(123)}""", timeout_ns=200_000)
+    assert mem[instcnt] == 123
+    assert mem[instcnt+1] == 0
+    assert mem[instcnt+2] == 0
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_16(dut):
+    instcnt, mem, lcd = await run_program(dut, '[>+>+>+<<<-]@\2', timeout_ns=5000)
+    assert mem[instcnt] == 0
+    assert mem[instcnt+1] == 2
+    assert mem[instcnt+2] == 2
+    assert mem[instcnt+3] == 2
+    
+    
+@tb_test()
+async def test_debug_17(dut):
+    instcnt, mem, lcd = await run_program(dut, 'X[X>X+X>+X>\n+<X<<-]@\2', timeout_ns=5000)
+    assert mem[instcnt] == 0
+    assert mem[instcnt+1] == 2
+    assert mem[instcnt+2] == 2
+    assert mem[instcnt+3] == 2
+    
+    
+@tb_test()
+async def test_debug_18(dut):
+    instcnt, mem, lcd = await run_program(dut, """++
+[
+  > +
+  < -
+]
+>.
+@""", timeout_ns=200_000)
+    assert mem[instcnt] == 0
+    assert mem[instcnt+1] == 2
+    
+    
+@tb_test()
+async def test_debug_19(dut):
+    instcnt, mem, lcd = await run_program(dut, """+++++ +++++        bunku cislo 0 inicializovat na 10
+[                  pouzit cyklus pro inicializaci nasledujicich tri bunek na 90/80/50
+ > +-++++ +++++    pricist 9 k bunce cislo 1
+ > +-++++ ++++     pricist 8 k bunce cislo 2
+ > +++++           pricist 5 k bunce cislo 3
+ <<< -             vratit se a dekrementovat hodnotu bunky cislo 0
+]
+>@""", timeout_ns=200_000)
+    assert mem[instcnt] == 0
+    assert mem[instcnt+1] == 90
+    assert mem[instcnt+2] == 80
+    assert mem[instcnt+3] == 50
+    
+    
+@tb_test()
+async def test_debug_20(dut):
+    instcnt, mem, lcd = await run_program(dut, f"""
+>--.         tisk znaku "x"
+>----.       tisk znaku "l"
++++.         tisk znaku "o"
+--------.    tisk znaku "g"
+++.          tisk znaku "i"
++++++.       tisk znaku "n"
+>--.         tisk znaku "0"
+.            tisk znaku "0"
+            
+Tento kod lze tak jak jej vidite tj vcetne komentaru odsmimulovat
+pomoci debuggeru na adrese http://www TECKA fit TECKA vutbr TECKA cz/ VLNOVKA vasicek/inp23/
+Pozor za znakem zavinac nesmi byt odradkovani jinak nebude tento kod pracovat korektne protoze
+ASCII hodnoty odradkovani budou pouzity jako inicializator datove casti pameti
+@{chr(0)}{chr(90)}{chr(80)}{chr(50)}""", timeout_ns=200_000)
+    lcd = lcd.lower()
+    assert lcd == "xlogin00", "Invalid output"
+    
+    
+@tb_test()
+async def test_debug_21(dut):
+    instcnt, mem, lcd = await run_program(dut, f"""+++++ +++++        bunku cislo 0 inicializovat na 10
+[                  pouzit cyklus pro inicializaci nasledujicich tri bunek na 90/80/50
+ > +-++++ +++++    pricist 9 k bunce cislo 1 (90=Z)
+ > +-++++ ++++     pricist 8 k bunce cislo 2 (80=P)
+ > +++++           pricist 5 k bunce cislo 3 (50=2)
+ <<< -             vratit se a dekrementovat hodnotu bunky cislo 0
+]
+>--.         tisk znaku "x"
+>----.       tisk znaku "l"
++++.         tisk znaku "o"
+--------.    tisk znaku "g"
+++.          tisk znaku "i"
++++++.       tisk znaku "n"
+>--.         tisk znaku "0"
+.            tisk znaku "0"
+            
+Tento kod lze tak jak jej vidite tj vcetne komentaru odsmimulovat
+pomoci debuggeru na adrese http://www TECKA fit TECKA vutbr TECKA cz/ VLNOVKA vasicek/inp23/
+Pozor za znakem zavinac nesmi byt odradkovani jinak nebude tento kod pracovat korektne protoze
+ASCII hodnoty odradkovani budou pouzity jako inicializator datove casti pameti
+@""", timeout_ns=200_000)
+    lcd = lcd.lower()
+    assert lcd == "xlogin00", "Invalid output"
+    
+    
+@tb_test()
+async def test_debug_22(dut):
+    instcnt, mem, lcd = await run_program(dut, '-Q@\2', timeout_ns=5000)
+    assert mem[instcnt] == 1
+    
+    
+@tb_test()
+async def test_debug_23(dut):
+    instcnt, mem, lcd = await run_program(dut, '+[[[[[~]~]~]~]~]+@', timeout_ns=10_000)
+    assert mem[instcnt] == 2
+    
+    
+@tb_test()
+async def test_debug_24(dut):
+    instcnt, mem, lcd = await run_program(dut, """[+++]>[-]@\0\5""", timeout_ns=100_000)
+    assert mem[instcnt] == 0
+    assert mem[instcnt+1] == 0
+    assert mem[instcnt+2] == 0
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_25(dut):
+    instcnt, mem, lcd = await run_program(dut, """
+[>>+>+<<<-]
+>>>
+[<<<+>>>-]
+<<+>
+
+[<->[>++++++++++<[->-[>+>>]>[+[-<+>]>+>>]<<<<<]>[-]++++++++[<++++++>-]>[<<+>>-]>[<<+>>-]<<]>]@\5""", timeout_ns=50_000)
+    assert mem[instcnt] == 5
+    assert mem[instcnt+1] == 0
+    assert mem[instcnt+2] == 53
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_26(dut):
+    instcnt, mem, lcd = await run_program(dut, '+>[[[[[~]~]~]~]~]+@', timeout_ns=50_000)
+    assert mem[instcnt] == 1
+    assert mem[instcnt+1] == 1
+    assert mem[instcnt+2] == 0
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_27(dut):
+    instcnt, mem, lcd = await run_program(dut, '++++[>[[[[[~]~]~]~]~]+<-]++@', timeout_ns=50_000)
+    assert mem[instcnt] == 2
+    assert mem[instcnt+1] == 4
+    assert mem[instcnt+2] == 0
+    assert mem[instcnt+3] == 0
+    
+    
+@tb_test()
+async def test_debug_28(dut):
+    instcnt, mem, lcd = await run_program(dut, '++++++++++[>+++++++>[[[[[~]~]~]~]~]>+++++<<<-]>++++@', timeout_ns=50_000)
+    assert mem[instcnt] == 0
+    assert mem[instcnt+1] == 74
+    assert mem[instcnt+2] == 0
+    assert mem[instcnt+3] == 50
+    
+    
+@tb_test()
+async def test_debug_29(dut):
+    instcnt, mem, lcd = await run_program(dut, '+>[]>[[]<~][~[]~][[[]][[][[[]~]]]]>+@', timeout_ns=5000)
+    assert mem[instcnt] == 1
+    assert mem[instcnt+1] == 0
+    assert mem[instcnt+2] == 0
+    assert mem[instcnt+3] == 1
+    
+    
+@tb_test()
+async def test_break_while_while(dut):
+    prog = "++++++++++[>+++++++>[~~]>+++++<<<-]>+++.+++++.++.>>-----.+++++.--.++.+.-----.<<++++++++++++++++++++++++++++++++.++.---.-----.>>+++.@"
+    enableDebug(lcd=True)
+    instcnt, mem, lcd = await run_program(dut, prog, timeout_ns=1_000_000)
+    assert lcd == "INP-2023.proj1"
+    
+    
+@tb_test()
+async def test_break_while_while_2(dut):
+    # prog = "++++++++++[>+++++++>[[~]~]>+++++<<<-]>+++.+++++.++.>>-----.+++++.--.++.+.-----.<<++++++++++++++++++++++++++++++++.++.---.-----.>>+++.@"
+    prog = "++++++++++[>+++++++>[[[[[~]~]~]~]~]>+++++<<<-]>+++.+++++.++.>>-----.+++++.--.++.+.-----.<<++++++++++++++++++++++++++++++++.++.---.-----.>>+++.@"
+    enableDebug(lcd=True)
+    instcnt, mem, lcd = await run_program(dut, prog, timeout_ns=1_000_000)
+    assert lcd == "INP-2023.proj1"
+    
+    
+@tb_test()
+async def test_hello_world(dut):
+    prog = "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.@"
+    enableDebug(lcd=True)
+    instcnt, mem, lcd = await run_program(dut, prog, timeout_ns=1_000_000)
+    assert lcd == "Hello World!\n"
+
+@tb_test()
 async def test_init(dut):
     """Procesor initialization test"""
     instcnt, mem, _ = await run_program(dut, '@')
@@ -120,6 +439,61 @@ async def test_login(dut, uid=''):
 # ===========================================================================================================
 # V teto casti muzete v pripade potreby vlozit jakekoliv vlastni testy. 
 #-------------------------------------------------------------------------------------------------------
+
+
+@tb_test()  # test se spousti automaticky
+async def test_example_abc(dut):
+    prog = """+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.+.+.+.+.+.+.+.+.+.+.+.@"""
+    instcnt, mem, lcd = await run_program(dut, prog, kb_data=f"", timeout_ns=10_000)
+    assert lcd == "ABCDEFGHIJKL", "Invalid output"
+    
+    
+@tb_test()  # test se spousti automaticky
+async def test_example_hello(dut):
+    prog = """.>.>.>.>.@Hello"""
+    instcnt, mem, lcd = await run_program(dut, prog, kb_data=f"", timeout_ns=5_000)
+    assert lcd == "Hello", "Invalid output"
+    
+    
+@tb_test()  # test se spousti automaticky
+async def test_example_text(dut):
+    prog = """++++++++++[>+++++++>+++>+++++<<<-]>+++.+++++.++.>>-----.+++++.--.++.+.-----.<<++++++++++++++++++++++++++++++++.++.---.-----.>>+++.@"""
+    instcnt, mem, lcd = await run_program(dut, prog, kb_data=f"", timeout_ns=40_000)
+    assert lcd == "INP-2023.proj1", "Invalid output"
+    
+    
+@tb_test()  # test se spousti automaticky
+async def test_example_sum(dut):
+    prog = """+++++++++++++++secte cisla od 1 do N=15[>+<-]>[[>+>+<<-]>>[-<<+>>]<-]<[[>[<+>-]]<<]>[<+>-]<.@"""
+    instcnt, mem, lcd = await run_program(dut, prog, kb_data=f"", timeout_ns=500_000)
+    # assert lcd == "x", "Invalid output"
+    print("Contents of the first 100 memory cells:")
+    for i in range(min(100, len(mem))):
+        print(f"Memory cell {i}: {mem[i]}")
+    print("LCD Output:", lcd)
+    
+    
+@tb_test()  # test se spousti automaticky
+async def test_example_hello_world(dut):
+    prog = """++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.@"""
+    instcnt, mem, lcd = await run_program(dut, prog, kb_data=f"", timeout_ns=40_000)
+    assert lcd == "Hello World!\n", "Invalid output"
+    
+    
+@tb_test()  # test se spousti automaticky
+async def test_example_bsort(dut):
+    prog = """>>,[>>,]<<[
+[<<]>>>>[
+<<[>+<<+>-]
+>>[>+<<<<[->]>[<]>>-]
+<<<[[-]>>[>+<-]>>[<<<+>>>-]]
+>>[[<+>-]>>]<
+]<<[>>+<<-]<<
+]>>>>[.>>]@"""
+    instcnt, mem, lcd = await run_program(dut, prog, kb_data=f"312\0", timeout_ns=500_000)
+    # assert lcd == "123", "Invalid output"
+    print("LCD Output:", lcd)
+    
 
 @tb_test()
 async def test_double_while(dut):
