@@ -27,6 +27,7 @@ except SystemExit as err:
         
 import re
 
+# splits file content into words
 inputFile = sys.stdin.read()
 inputFile = re.sub(r'#', ' # ', inputFile)  # makes spaces around '#'
 words = re.findall(r'\S+|\n', inputFile)    # splits into words without witespaces and with '\n'
@@ -34,7 +35,8 @@ words = re.findall(r'\S+|\n', inputFile)    # splits into words without witespac
 tokens = []
 comment = False
 
-for word in words:  # deletes comments
+# deletes comments
+for word in words:
     if word == '\n':
         tokens.append(word)
         comment = False
@@ -99,8 +101,9 @@ tokenTypes = {
     'BREAK':        'COMMAND',
 }
 
+# recognize type of tokens
 pairs = []
-for item in tokens: # recognize type of tokens
+for item in tokens:
     tokenType = tokenTypes.get(item, '-')
     if tokenType == '-':
         if item.startswith('GF@'):
@@ -126,14 +129,440 @@ for item in tokens: # recognize type of tokens
             tokenType = 'NIL'
     pairs.append((item, tokenType))
 
-# printing tokens with their types
-for token, tokenType in pairs:
-    print(f"({repr(token)}, {repr(tokenType)})")
+# printing tokens with their types #! DEBUG
+#for token, tokenType in pairs:
+#    print(f"({repr(token)}, {repr(tokenType)})")
+#print('\n') #! DEBUG
 
 #### end of lexical analyzer
 
 #### syntax analyzer
 
+# checks header in IPPcode24 code
+currentToken = pairs.pop(0)
+while currentToken[1] == 'NEW_LINE':
+    currentToken = pairs.pop(0)
+if currentToken[1] != 'PROGRAM':
+    sys.exit(21)    #! missing .IPPcode24 in code
+currentToken = pairs.pop(0)
+if currentToken[1] != 'NEW_LINE':
+    sys.exit(21)    #! missing new line after .IPPcode24
 
+#! DEBUG
+#for token, tokenType in pairs:
+#    print(f"({repr(token)}, {repr(tokenType)})")
+#print('\n') #! DEBUG
+
+# getting rid of new line characters
+tokens.clear()
+for token, tokenType in pairs:
+    if tokenType != 'NEW_LINE':
+        tokens.append((token, tokenType))
+
+#! DEBUG
+for token, tokenType in tokens:
+    print(f"({repr(token)}, {repr(tokenType)})")
+print('\n') #! DEBUG
+
+# rest of syntax analysis
+
+# <prog> -> <command> <prog>
+# <prog> -> \0
+def prog(currentToken):
+    if currentToken[1] == 'COMMAND':
+        currentToken = tokens.pop(0)
+        ret = command(currentToken)
+        if ret > 0:
+            sys.exit(100)   #TODO RETURN
+        currentToken = tokens.pop(0)
+        return prog(currentToken)
+    elif currentToken[1] == 'END_OF_FILE':
+        return 0
+
+# <command> -> commands
+# <command> -> epsilon
+def command(currentToken):
+    match currentToken[0]:
+        case 'MOVE':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'CREATEFRAME':
+            currentToken = tokens.pop(0)
+            return 0
+        case 'PUSHFRAME':
+            currentToken = tokens.pop(0)
+            return 0
+        case 'POPFRAME':
+            currentToken = tokens.pop(0)
+            return 0
+        case 'DEFVAR':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'CALL':
+            ret = label(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'RETURN':
+            currentToken = tokens.pop(0)
+            return 0
+        case 'PUSHS':
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'POPS':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'ADD':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'SUB':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'MUL':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'IDIV':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'LT':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'GT':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'EQ':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'AND':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'OR':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'NOT':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'INT2CHAR':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'STRI2INT':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'READ':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = data_type(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'WRITE':
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'CONCAT':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'STRLEN':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'GETCHAR':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'SETCHAR':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'TYPE':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'LABEL':
+            ret = label(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'JUMP':
+            ret = label(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'JUMPIFEQ':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'JUMPIFNEQ':
+            ret = var(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'EXIT':
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'DPRINT':
+            ret = symb(currentToken)
+            if ret > 0:
+                sys.exit(100)   #TODO RETURN
+            currentToken = tokens.pop(0)
+            return 0
+        case 'BREAK':
+            currentToken = tokens.pop(0)
+            return 0
+        case _:
+            return 0
+
+
+# <var> -> ...
+def var(currentToken):
+    return 0 #! DEBUG
+    # if #another token is:
+       #TODO inside var
+
+# <symb> -> ...
+def symb(currentToken):
+    return 0 #! DEBUG
+    # if #another token is:
+       #TODO inside symb
+
+# <label> -> ...
+def label(currentToken):
+    return 0 #! DEBUG
+    # if #another token is:
+       #TODO inside label
+
+# <data_type> -> ...
+def data_type(currentToken):
+    return 0 #! DEBUG
+    # if #another token is:
+       #TODO inside data_type
+
+
+# main
+currentToken = tokens.pop(0)
+result = prog(currentToken)
+print(result) #! DEBUG
+
+#! DEBUG
+for token, tokenType in tokens:
+    print(f"({repr(token)}, {repr(tokenType)})")
+print('\n') #! DEBUG
 
 #### end of syntax analyzer
