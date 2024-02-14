@@ -156,9 +156,9 @@ if currentToken[1] != 'NEW_LINE':
 # getting rid of new line characters
 tokens.clear()
 for token, tokenType in pairs:
-    if tokenType != 'NEW_LINE':
-        tokens.append((token, tokenType))
-
+    tokens.append((token, tokenType))
+#    if tokenType != 'NEW_LINE':
+#
 #! DEBUG
 for token, tokenType in tokens:
     print(f"({repr(token)}, {repr(tokenType)})")
@@ -166,17 +166,37 @@ print('\n') #! DEBUG
 
 # rest of syntax analysis
 
-# <prog> -> <command> <prog>
+# <prog> -> <command> <enter> <prog>
 # <prog> -> \0
 def prog(currentToken):
     if currentToken[1] == 'COMMAND':
-        currentToken = tokens.pop(0)
         ret = command(currentToken)
+        if ret > 0:
+            sys.exit(100)   #TODO RETURN
+        currentToken = tokens.pop(0)
+        ret = enter(currentToken)
         if ret > 0:
             sys.exit(100)   #TODO RETURN
         currentToken = tokens.pop(0)
         return prog(currentToken)
     elif currentToken[1] == 'END_OF_FILE':
+        return 0
+    else:
+        sys.exit(100)    #TODO RETURN
+
+# <enter> -> \n <enother_enter>
+def enter(currentToken):
+    if currentToken[1] != 'NEW_LINE':
+        sys.exit(100)    #TODO RETURN
+    currentToken = tokens.pop(0)
+    return another_enter(currentToken)
+
+# <another_enter> -> <enter>
+# <another_enter> -> epsilon
+def another_enter(currentToken):
+    if currentToken[1] == 'NEW_LINE':
+        return enter(currentToken)
+    else:
         return 0
 
 # <command> -> commands
@@ -557,6 +577,12 @@ def data_type(currentToken):
 
 # main
 currentToken = tokens.pop(0)
+resultEnter = another_enter(currentToken)
+print('Enter: ', resultEnter) #! DEBUG
+#! DEBUG
+for token, tokenType in tokens:
+    print(f"({repr(token)}, {repr(tokenType)})")
+print('\n!', currentToken, '!\n') #! DEBUG
 result = prog(currentToken)
 print(result) #! DEBUG
 
