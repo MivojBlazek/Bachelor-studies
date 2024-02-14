@@ -1,6 +1,7 @@
 <prog>      ->  <command> <enter> <prog>
 <prog>      ->  \0
 <enter>     ->  \n <another_enter>
+<enter>     ->  \0
 <another_enter> ->  <enter>
 <another_enter> ->  epsilon
 
