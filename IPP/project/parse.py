@@ -1,9 +1,9 @@
 # hlavicka parse.py
 
 #///TODO lexikalni analyza
-#TODO syntakticka analyza
+#///TODO syntakticka analyza
 #TODO generovani kodu v xml
-#TODO problem s ctenim noveho tokenu
+
 
 import sys
 
