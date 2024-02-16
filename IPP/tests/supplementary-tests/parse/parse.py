@@ -148,25 +148,27 @@ for item in tokens:
 
 #### code generator
 
-import xml.etree.ElementTree as eTree
+import xml.dom.minidom as mnD
+
+xmlFile = mnD.Document()
 
 # header generator
+def headerGen():
+    header = xmlFile.createProcessingInstruction('xml', 'version="1.0" encoding="UTF-8"')
+    #print('<?xml version="1.0" encoding="UTF-8"?>', file=sys.stdout)
+    #header = mnD.DocumentType('<?xml version="1.0" encoding="UTF-8"?>')
+    xmlFile.appendChild(header) #TODO
+
+# program generator
 def programGen():
-    programArgs = {
-        'language': 'IPPcode24',
-        'hello2':   'world2'
-    }
-    header = eTree.Element("program", programArgs)
-    return header
+    program = xmlFile.createElement('program')
+    program.setAttribute('language', 'IPPcode24')
+    xmlFile.appendChild(program)
+    return program
 
 # instruction generator
-def instructionGen(header):
-    instrArgs = {
-        'order': '1',
-        'hello': 'world'
-    }
-    instruction = eTree.SubElement(header, "instruction", instrArgs)
-    instruction.text = 'Text inside'
+def instructionGen(program):
+    pass #TODO
 
 #### end of code generator
 
@@ -406,7 +408,8 @@ def data_type(currentToken):
 # main
 
 # header gen
-header = programGen()
+headerGen()
+program = programGen()
 #TODO instructionGen(header)
 
 currentToken = tokens.pop(0)
@@ -420,8 +423,7 @@ for token, tokenType in tokens:
     print(f"({repr(token)}, {repr(tokenType)})")
 print('\n') #! DEBUG
 
-# code gen
-xmlTree = eTree.ElementTree(header)
-xmlTree.write('output.xml')
+xmlFile = xmlFile.toprettyxml()
+print(xmlFile, file=sys.stdout)
 
 #### end of syntax analyzer
