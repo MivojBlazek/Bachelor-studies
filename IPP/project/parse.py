@@ -175,19 +175,17 @@ def prog(currentToken):
     if currentToken[1] == 'COMMAND':
         currentToken = command(currentToken)
         currentToken = enter(currentToken)
-        EOFExpected = prog(currentToken)
-        if EOFExpected != 0:
-            sys.exit(101)   #TODO RETURN
+        prog(currentToken)
         return 0
     elif currentToken[1] == 'END_OF_FILE':
         return 0
     else:
-        sys.exit(100)   #TODO RETURN
+        sys.exit(22) #! no command or EOF
 
 # <enter> -> \n <another_enter>
 def enter(currentToken):
     if currentToken[1] not in ('NEW_LINE', 'END_OF_FILE'):
-        sys.exit(100)   #TODO RETURN
+        sys.exit(23) #! missing new line
     if currentToken[1] == 'END_OF_FILE':
         return currentToken # returns currentToken (\0) for prog
     currentToken = tokens.pop(0)
@@ -350,28 +348,28 @@ def command(currentTokenFirst):
 # <var> -> ...
 def var(currentToken):
     if currentToken[1] not in ('GF', 'LF', 'TF'):
-        sys.exit(100)    #TODO RETURN
+        sys.exit(23) #! missing variable
     currentToken = tokens.pop(0)
     return currentToken
 
 # <symb> -> ...
 def symb(currentToken):
     if currentToken[1] not in ('GF', 'LF', 'TF', 'BOOL', 'STRING', 'INT'):
-        sys.exit(100)    #TODO RETURN
+        sys.exit(23) #! missing variable or constant
     currentToken = tokens.pop(0)
     return currentToken
 
 # <label> -> ...
 def label(currentToken):
     if currentToken[1] != 'LABEL':
-        sys.exit(100)    #TODO RETURN
+        sys.exit(23) #! missing label
     currentToken = tokens.pop(0)
     return currentToken
 
 # <data_type> -> ...
 def data_type(currentToken):
     if currentToken[1] != 'DATA_TYPE':
-        sys.exit(100)    #TODO RETURN
+        sys.exit(23) #! missing data type
     currentToken = tokens.pop(0)
     return currentToken
 
