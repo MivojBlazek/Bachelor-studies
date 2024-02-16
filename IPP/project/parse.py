@@ -181,6 +181,9 @@ if currentToken[1] != 'PROGRAM':
     sys.exit(21)    #! missing .IPPcode24 in code
 currentToken = pairs.pop(0)
 if currentToken[1] == 'END_OF_FILE':
+    print('<?xml version="1.0" encoding="UTF-8"?>')
+    print('<program language="IPPcode24">')
+    print('</program>')
     sys.exit(0)    #! returns 0 as there is only header
 if currentToken[1] != 'NEW_LINE':
     sys.exit(21)    #! missing new line after .IPPcode24
