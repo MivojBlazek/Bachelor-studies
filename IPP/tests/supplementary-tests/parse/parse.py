@@ -1,12 +1,9 @@
-# hlavicka parse.py
-
-#///TODO lexikalni analyza
-#///TODO syntakticka analyza
-#TODO generovani kodu v xml
-
+# IPP project
+#
+# file: parse.py
+# author: Michal Blažek (xblaze38)
 
 import sys
-
 
 # argument parsing
 import argparse
@@ -46,7 +43,6 @@ for word in words:
         tokens.append(word)
 
 tokens.append('\0')
-#print(tokens) #!DEBUG
 
 tokenTypes = {
     '.IPPcode24':   'PROGRAM',
@@ -137,12 +133,6 @@ for item in tokens:
 
     pairs.append((item, tokenType))
 
-
-# printing tokens with their types #! DEBUG
-#for token, tokenType in pairs:
-#    print(f"({repr(token)}, {repr(tokenType)})")
-#print('\n') #! DEBUG
-
 #### end of lexical analyzer
 
 
@@ -155,9 +145,7 @@ xmlFile = mnD.Document()
 # header generator
 def headerGen():
     header = xmlFile.createProcessingInstruction('xml', 'version="1.0" encoding="UTF-8"')
-    #print('<?xml version="1.0" encoding="UTF-8"?>', file=sys.stdout)
-    #header = mnD.DocumentType('<?xml version="1.0" encoding="UTF-8"?>')
-    xmlFile.appendChild(header) #TODO
+    xmlFile.appendChild(header)
 
 # program generator
 def programGen():
@@ -167,8 +155,18 @@ def programGen():
     return program
 
 # instruction generator
-def instructionGen(program):
-    pass #TODO
+def instructionGen(order, opcode):
+    instruction = xmlFile.createElement('instruction')
+    instruction.setAttribute('order', str(order))
+    instruction.setAttribute('opcode', opcode)
+    return instruction, order
+
+# instruction argument generator
+def instrArgGen(instruction, argNum, type, argText):
+    arg = xmlFile.createElement(argNum)
+    arg.setAttribute('type', type)
+    arg.appendChild(xmlFile.createTextNode(argText))
+    instruction.appendChild(arg)
 
 #### end of code generator
 
@@ -192,19 +190,14 @@ tokens.clear()
 for token, tokenType in pairs:
     tokens.append((token, tokenType))
 
-#! DEBUG
-# for token, tokenType in tokens:
-#     print(f"({repr(token)}, {repr(tokenType)})")
-# print('\n') #! DEBUG
-
 
 # <prog> -> <command> <enter> <prog>
 # <prog> -> \0
-def prog(currentToken):
+def prog(currentToken, order):
     if currentToken[1] == 'COMMAND':
-        currentToken = command(currentToken)
+        currentToken, order = command(currentToken, order)
         currentToken = enter(currentToken)
-        prog(currentToken)
+        prog(currentToken, order)
         return 0
     elif currentToken[1] == 'END_OF_FILE':
         return 0
@@ -234,175 +227,411 @@ def another_enter(currentToken):
 
 # <command> -> commands
 # <command> -> epsilon
-def command(currentTokenFirst):
+def command(currentTokenFirst, order):
     currentToken = tokens.pop(0)
     match currentTokenFirst[0]:
         case 'MOVE':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'MOVE')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'CREATEFRAME':
-            return currentToken
+            instr, order = instructionGen(order, 'CREATEFRAME')
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'PUSHFRAME':
-            return currentToken
+            instr, order = instructionGen(order, 'PUSHFRAME')
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'POPFRAME':
-            return currentToken
+            instr, order = instructionGen(order, 'POPFRAME')
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'DEFVAR':
-            currentToken = var(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'DEFVAR')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'CALL':
-            currentToken = label(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'CALL')
+            label(currentToken)
+            instrArgGen(instr, 'arg1', 'label', currentToken[0])
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'RETURN':
-            return currentToken
+            instr, order = instructionGen(order, 'RETURN')
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'PUSHS':
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'PUSHS')
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg1', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'POPS':
-            currentToken = var(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'POPS')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'ADD':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'ADD')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'SUB':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'SUB')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'MUL':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'MUL')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'IDIV':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'IDIV')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'LT':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'LT')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'GT':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'GT')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'EQ':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'EQ')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'AND':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'AND')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'OR':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'OR')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'NOT':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'NOT')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'INT2CHAR':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'INT2CHAR')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'STRI2INT':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'STRI2INT')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'READ':
-            currentToken = var(currentToken)
-            currentToken = data_type(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'READ')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            data_type(currentToken)
+            instrArgGen(instr, 'arg2', 'type', currentToken[0])
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'WRITE':
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'WRITE')
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg1', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'CONCAT':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'CONCAT')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'STRLEN':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'STRLEN')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'GETCHAR':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'GETCHAR')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'SETCHAR':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'SETCHAR')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'TYPE':
-            currentToken = var(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'TYPE')
+            var(currentToken)
+            instrArgGen(instr, 'arg1', 'var', currentToken[1] + '@' + currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'LABEL':
-            currentToken = label(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'LABEL')
+            label(currentToken)
+            instrArgGen(instr, 'arg1', 'label', currentToken[0])
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'JUMP':
-            currentToken = label(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'JUMP')
+            label(currentToken)
+            instrArgGen(instr, 'arg1', 'label', currentToken[0])
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'JUMPIFEQ':
-            currentToken = label(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'JUMPIFEQ')
+            label(currentToken)
+            instrArgGen(instr, 'arg1', 'label', currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'JUMPIFNEQ':
-            currentToken = label(currentToken)
-            currentToken = symb(currentToken)
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'JUMPIFNEQ')
+            label(currentToken)
+            instrArgGen(instr, 'arg1', 'label', currentToken[0])
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg2', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg3', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'EXIT':
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'EXIT')
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg1', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'DPRINT':
-            currentToken = symb(currentToken)
-            return currentToken
+            instr, order = instructionGen(order, 'DPRINT')
+            varOrConst, argText = symb(currentToken)
+            instrArgGen(instr, 'arg1', varOrConst, argText)
+            currentToken = tokens.pop(0)
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case 'BREAK':
-            return currentToken
+            instr, order = instructionGen(order, 'BREAK')
+            program.appendChild(instr)
+            order += 1
+            return currentToken, order
         case _:
-            return currentToken #??? what is the purpose of this
+            # instr, order = instructionGen(order, 'MOVE')
+            # program.appendChild(instr)
+            # order += 1
+            return currentToken, order #??? what is the purpose of this
 
 # <var> -> ...
 def var(currentToken):
     if currentToken[1] not in ('GF', 'LF', 'TF'):
         sys.exit(23) #! missing variable
-    currentToken = tokens.pop(0)
-    return currentToken
 
 # <symb> -> ...
 def symb(currentToken):
-    if currentToken[1] not in ('GF', 'LF', 'TF', 'BOOL', 'STRING', 'INT'):
+    if currentToken[1] not in ('GF', 'LF', 'TF', 'BOOL', 'STRING', 'INT', 'NIL'):
         sys.exit(23) #! missing variable or constant
-    currentToken = tokens.pop(0)
-    return currentToken
+    if currentToken[1] in ('GF', 'LF', 'TF'):
+        return 'var', currentToken[1] + '@' + currentToken[0]
+    else:
+        return currentToken[1].lower(), currentToken[0]
 
 # <label> -> ...
 def label(currentToken):
     if currentToken[1] != 'LABEL':
         sys.exit(23) #! missing label
-    currentToken = tokens.pop(0)
-    return currentToken
 
 # <data_type> -> ...
 def data_type(currentToken):
     if currentToken[1] != 'DATA_TYPE':
         sys.exit(23) #! missing data type
-    currentToken = tokens.pop(0)
-    return currentToken
 
 
 # main
@@ -410,20 +639,17 @@ def data_type(currentToken):
 # header gen
 headerGen()
 program = programGen()
-#TODO instructionGen(header)
+order = 1
 
 currentToken = tokens.pop(0)
 currentToken = another_enter(currentToken)
-
-result = prog(currentToken)
-print(result) #! DEBUG
-
-#! DEBUG
-for token, tokenType in tokens:
-    print(f"({repr(token)}, {repr(tokenType)})")
-print('\n') #! DEBUG
+result = prog(currentToken, order)
 
 xmlFile = xmlFile.toprettyxml()
+xmlFileSplit = xmlFile.split('\n')
+xmlFile = '\n'.join(xmlFileSplit[1:])
+
 print(xmlFile, file=sys.stdout)
+sys.exit(result)
 
 #### end of syntax analyzer
