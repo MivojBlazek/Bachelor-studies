@@ -1,0 +1,48 @@
+digraph client_fsm {
+	fontname = "Consolas"
+    label = "Server FSM (Mealy machine)"
+    labelloc = "t"
+    nodesep = .3
+
+    #splines = ortho
+    rankdir = LR
+
+    # states
+	node [shape = circle];
+    listen [style = invis]
+    accept
+    open
+    auth
+    error
+
+    # final states
+	node [shape = doublecircle];
+    end
+
+    listen -> accept 
+    accept -> open [label = < <font color="red">AUTH</font>  /<font color="blue">REPLY</font>>]
+    accept -> auth [label = < <font color="red">AUTH</font>  /<font color="blue">!REPLY</font>>]
+
+    auth -> open [label = < <font color="red">AUTH</font>  /<font color="blue">REPLY</font>>]
+    auth -> auth:s [label = < <font color="red">AUTH</font>  /<font color="blue">!REPLY</font>>]
+    auth -> end:s [
+        label = <
+<font color="red">BYE</font>  /<font color="blue">_</font>
+<br/><font color="red">_</font>  /<font color="blue">BYE</font>>
+        labelangle = -15
+        labeldistance = 8
+    ]
+    
+    open -> end [label = < <font color="red">ERR</font>  /<font color="blue">BYE</font>>]
+    open -> end [label = < <font color="red">BYE</font>  /<font color="blue">_</font>>]
+    open -> error  [label = < <font color="red">* ∖ MSG, JOIN, ERR, BYE</font>  /<font color="blue">ERR</font>>]
+    open -> open [label = <
+<font color="red">MSG</font>  /<font color="blue">_</font>
+<br/><font color="red">_</font>  /<font color="blue">MSG</font>
+>]
+    open -> open:s [label = <<font color="red">JOIN</font>  /<font color="blue">REPLY, !REPLY</font>>]
+
+    error -> end [taillabel = < <font color="red">_</font>  /<font color="blue">BYE</font>>]
+
+    end -> end [label = < <font color="red">*</font>  /<font color="blue">_</font>>]
+}
