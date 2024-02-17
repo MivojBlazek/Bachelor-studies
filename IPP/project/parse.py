@@ -9,15 +9,16 @@ import sys
 import argparse
 
 try:
-    argParser = argparse.ArgumentParser(description='Description')
+    argParser = argparse.ArgumentParser(description='This program is a compiler from the IPPcode24 language to the XML language')
     args = argParser.parse_args()
     if vars(args):
         print(args.accumulate(args.integers))
     else:
         pass
 except SystemExit as err:
-    if err.code > 0:
-        sys.exit(10)
+    if '-h' in sys.argv or '--help' in sys.argv:
+        sys.exit(0)
+    sys.exit(10)
 
 
 #### lexical analyzer
