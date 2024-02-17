@@ -45,7 +45,7 @@ for word in words:
 tokens.append('\0')
 
 tokenTypes = {
-    '.IPPcode24':   'PROGRAM',
+    '.IPPCODE24':   'PROGRAM',
     '\n':           'NEW_LINE',
     '\0':           'END_OF_FILE',
 
@@ -113,15 +113,26 @@ for item in tokens:
             tokenType = 'TF'
         elif item.startswith('bool@'):
             item = item[len('bool@'):]
+            if item not in ('false', 'true'):
+                sys.exit(23) #! false or true only
             tokenType = 'BOOL'
         elif item.startswith('string@'):
             item = item[len('string@'):]
             tokenType = 'STRING'
         elif item.startswith('int@'):
             item = item[len('int@'):]
+            if not (item.isdigit() or (item[0] == '-' and item[1:].isdigit())):
+                if (item[0] == '0' and item[1] == 'x' and all(hexChars.isdigit() or hexChars.lower() in 'abcdef' for hexChars in item[2:])): # hex numbers
+                    pass
+                elif (item[0] == '0' and item[1] == 'o' and all(hexChars.isdigit() and hexChars not in '89' for hexChars in item[2:])): # oct numbers
+                    pass
+                else:
+                    sys.exit(23) #! integers only
             tokenType = 'INT'
         elif item.startswith('nil@'):
             item = item[len('nil@'):]
+            if item != 'nil':
+                sys.exit(23) #! nil only
             tokenType = 'NIL'
 
     # still could be command with lowercase

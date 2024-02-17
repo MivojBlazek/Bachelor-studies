@@ -628,7 +628,7 @@ def symb(currentToken):
 
 # <label> -> ...
 def label(currentToken):
-    if currentToken[1] != 'LABEL':
+    if currentToken[1] not in ('LABEL', 'DATA_TYPE'):
         sys.exit(23) #! missing label
 
 # <data_type> -> ...
