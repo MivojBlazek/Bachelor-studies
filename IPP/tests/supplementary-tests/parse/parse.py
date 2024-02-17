@@ -118,6 +118,9 @@ for item in tokens:
             tokenType = 'BOOL'
         elif item.startswith('string@'):
             item = item[len('string@'):]
+            wrongEscapeSeq = re.finditer(r'\\(\D|\d{1}\D|\d{2}\D|$|\d{1}$|\d{2}$)', item)
+            for match in wrongEscapeSeq:
+                sys.exit(23) #! invalid escape sequence in string
             tokenType = 'STRING'
         elif item.startswith('int@'):
             item = item[len('int@'):]
