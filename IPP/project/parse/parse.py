@@ -105,12 +105,27 @@ for item in tokens:
     if tokenType == '-':
         if item.startswith('GF@'):
             item = item[len('GF@'):]
+            for character in item:
+                if not (character.isalnum() or character in '_-$&%*!?'):
+                    sys.exit(23) #! invalid character in variable name
+            if item[0].isdigit():
+                sys.exit(23) #! variable name starts with digit 
             tokenType = 'GF'
         elif item.startswith('LF@'):
             item = item[len('LF@'):]
+            for character in item:
+                if not (character.isalnum() or character in '_-$&%*!?'):
+                    sys.exit(23) #! invalid character in variable name
+            if item[0].isdigit():
+                sys.exit(23) #! variable name starts with digit 
             tokenType = 'LF'
         elif item.startswith('TF@'):
             item = item[len('TF@'):]
+            for character in item:
+                if not (character.isalnum() or character in '_-$&%*!?'):
+                    sys.exit(23) #! invalid character in variable name
+            if item[0].isdigit():
+                sys.exit(23) #! variable name starts with digit 
             tokenType = 'TF'
         elif item.startswith('bool@'):
             item = item[len('bool@'):]
@@ -125,10 +140,12 @@ for item in tokens:
             tokenType = 'STRING'
         elif item.startswith('int@'):
             item = item[len('int@'):]
-            if not (item.isdigit() or (item[0] == '-' and item[1:].isdigit())):
-                if (item[0] == '0' and item[1] == 'x' and all(hexChars.isdigit() or hexChars.lower() in 'abcdef' for hexChars in item[2:])) or (item[0] == '-' and item[1] == '0' and item[2] == 'x' and all(hexChars.isdigit() or hexChars.lower() in 'abcdef' for hexChars in item[3:])): # hex numbers
+            if len(item) == 0:
+                sys.exit(23) #! empty int@
+            if not (item.isdigit() or ((item[0] == '-' or item[0] == '+') and item[1:].isdigit())):
+                if (item[0] == '0' and item[1] == 'x' and all(hexChars.isdigit() or hexChars.lower() in 'abcdef' for hexChars in item[2:])) or ((item[0] == '-' or item[0] == '+') and item[1] == '0' and item[2] == 'x' and all(hexChars.isdigit() or hexChars.lower() in 'abcdef' for hexChars in item[3:])): # hex numbers
                     pass
-                elif (item[0] == '0' and item[1] == 'o' and all(hexChars.isdigit() and hexChars not in '89' for hexChars in item[2:])) or (item[0] == '-' and item[1] == '0' and item[2] == 'o' and all(hexChars.isdigit() and hexChars not in '89' for hexChars in item[3:])): # oct numbers
+                elif (item[0] == '0' and item[1] == 'o' and all(hexChars.isdigit() and hexChars not in '89' for hexChars in item[2:])) or ((item[0] == '-' or item[0] == '+') and item[1] == '0' and item[2] == 'o' and all(hexChars.isdigit() and hexChars not in '89' for hexChars in item[3:])): # oct numbers
                     pass
                 else:
                     sys.exit(23) #! integers only
@@ -140,11 +157,11 @@ for item in tokens:
             tokenType = 'NIL'
 
     # still could be command with lowercase
+    itemCaseSensitive = item
     if tokenType == '-':
-        tmpItem = item.upper()
-        tokenType = tokenTypes.get(tmpItem, 'LABEL')
+        tokenType = tokenTypes.get(item.upper(), 'LABEL')
         if tokenType != 'LABEL':
-            item = tmpItem
+            item = itemCaseSensitive
 
     pairs.append((item, tokenType))
 
@@ -247,7 +264,7 @@ def another_enter(currentToken):
 # <command> -> epsilon
 def command(currentTokenFirst, order):
     currentToken = tokens.pop(0)
-    match currentTokenFirst[0]:
+    match currentTokenFirst[0].upper():
         case 'MOVE':
             instr, order = instructionGen(order, 'MOVE')
             var(currentToken)
@@ -643,8 +660,13 @@ def symb(currentToken):
 
 # <label> -> ...
 def label(currentToken):
-    if currentToken[1] not in ('LABEL', 'DATA_TYPE'):
+    if currentToken[1] not in ('LABEL', 'DATA_TYPE', 'COMMAND'):
         sys.exit(23) #! missing label
+    for character in currentToken[0]:
+        if not (character.isalnum() or character in '_-$&%*!?'):
+            sys.exit(23) #! invalid character in label
+    if currentToken[0][0].isdigit():
+        sys.exit(23) #! label starts with digit 
 
 # <data_type> -> ...
 def data_type(currentToken):
