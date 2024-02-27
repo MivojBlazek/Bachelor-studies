@@ -140,11 +140,12 @@ for item in tokens:
             tokenType = 'NIL'
 
     # still could be command with lowercase
+    itemCaseSensitive = item
     if tokenType == '-':
         tmpItem = item.upper()
         tokenType = tokenTypes.get(tmpItem, 'LABEL')
         if tokenType != 'LABEL':
-            item = tmpItem
+            item = itemCaseSensitive
 
     pairs.append((item, tokenType))
 
@@ -247,7 +248,7 @@ def another_enter(currentToken):
 # <command> -> epsilon
 def command(currentTokenFirst, order):
     currentToken = tokens.pop(0)
-    match currentTokenFirst[0]:
+    match currentTokenFirst[0].upper():
         case 'MOVE':
             instr, order = instructionGen(order, 'MOVE')
             var(currentToken)
@@ -643,7 +644,7 @@ def symb(currentToken):
 
 # <label> -> ...
 def label(currentToken):
-    if currentToken[1] not in ('LABEL', 'DATA_TYPE'):
+    if currentToken[1] not in ('LABEL', 'DATA_TYPE', 'COMMAND'):
         sys.exit(23) #! missing label
 
 # <data_type> -> ...
