@@ -1,0 +1,9 @@
+Archive:  xblaze38.zip
+  inflating: parse.py                
+  inflating: readme1.pdf             
+usage: parse.py [-h]
+
+This program is a compiler from the IPPcode24 language to the XML language
+
+options:
+  -h, --help  show this help message and exit
