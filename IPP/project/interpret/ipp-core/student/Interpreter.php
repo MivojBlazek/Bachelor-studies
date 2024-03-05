@@ -53,6 +53,8 @@ class Interpreter extends AbstractInterpreter
     // method returns program after it process XML source and create program, instructions and arguments objects
     protected function processXML($dom): ProgramTag
     {
+        $prog = new ProgramTag('IPPcode24');
+
         $program = $dom->getElementsByTagName('program')->item(0);
         if ($program instanceof DOMElement)
         {

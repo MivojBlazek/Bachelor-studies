@@ -51,6 +51,14 @@ class InstructionTag
     // main method to execute instruction
     public function executeInstr($instrIndex, $labels, $frames, $stack, $functionStack, $stdout, $stderr, $inputReader)
     {
+        // default setting arg variables
+        $arg1Type = 'nil';
+        $arg1Value = 'nil';
+        $arg2Type = 'nil';
+        $arg2Value = 'nil';
+        $arg3Type = 'nil';
+        $arg3Value = 'nil';
+
         // get arguments of instruction
         if (isset($this->args[0]))
         {
@@ -118,10 +126,8 @@ class InstructionTag
                 }
                 $functionStack->stackPush('#CALL#' . $instrIndex);
                 return $arg1Value;
-                break;
             case 'RETURN':
                 return $functionStack->stackPop();
-                break;
             case 'PUSHS':
                 if ($arg1Type === 'var')
                 {
@@ -181,6 +187,7 @@ class InstructionTag
                     exit(53);
                 }
                 
+                $result = '0';
                 if ($arg3Type === 'var')
                 {
                     list($frame, $var) = explode('@', $arg3Value);
@@ -228,7 +235,7 @@ class InstructionTag
                             $result = floor($variable->getValue() * $arg3Value);
                             break;
                         case 'IDIV':
-                            if ($arg3Type === '0')
+                            if ($arg3Value === '0')
                             {
                                 exit(57); //! division by zero
                             }
@@ -591,7 +598,6 @@ class InstructionTag
                         break;
                     default:
                         exit(53);
-                        break;
                 }
                 $variable->setValue($read);
                 break;
@@ -915,7 +921,6 @@ class InstructionTag
                     exit(52);
                 }
                 return $arg1Value;
-                break;
             case 'JUMPIFEQ':
             case 'JUMPIFNEQ':
                 if ($arg1Type !== 'label')
@@ -1008,7 +1013,6 @@ class InstructionTag
                     exit(57);
                 }
                 exit(intval($value));
-                break;
             case 'DPRINT':
                 if ($arg1Type === 'var')
                 {
