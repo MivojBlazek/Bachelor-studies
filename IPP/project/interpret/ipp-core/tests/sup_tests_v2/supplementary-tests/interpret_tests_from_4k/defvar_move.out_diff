@@ -1,0 +1,5 @@
+--- defvar_move.out	2024-03-06 12:43:12.763337224 +0100
++++ defvar_move.your_out	2024-03-06 14:20:52.722793751 +0100
+@@ -1 +0,0 @@
+-42
+\ Chybí znak konce řádku na konci souboru

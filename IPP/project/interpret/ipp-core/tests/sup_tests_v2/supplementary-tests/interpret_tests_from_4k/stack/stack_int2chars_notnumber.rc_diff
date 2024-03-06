@@ -1,0 +1,6 @@
+--- stack_int2chars_notnumber.rc	2024-03-06 12:43:12.867336731 +0100
++++ stack_int2chars_notnumber.your_rc	2024-03-06 13:25:40.789159808 +0100
+@@ -1 +1 @@
+-53
+\ Chybí znak konce řádku na konci souboru
++0

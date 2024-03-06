@@ -1,0 +1,6 @@
+--- float_int2float_undefined_frame2.rc	2024-03-06 12:43:12.823336941 +0100
++++ float_int2float_undefined_frame2.your_rc	2024-03-06 13:13:34.750620885 +0100
+@@ -1 +1 @@
+-55
+\ Chybí znak konce řádku na konci souboru
++56

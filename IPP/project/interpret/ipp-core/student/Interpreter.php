@@ -40,7 +40,7 @@ class Interpreter extends AbstractInterpreter
             $language = $program->getAttribute('language');
             if ($language !== 'IPPcode24')
             {
-                exit(31); //! invalid attribute language in header
+                exit(32); //! invalid attribute language in header
             }
 
             $instructions = $dom->getElementsByTagName('instruction');

@@ -28,6 +28,10 @@ class InstructionTag
     public function __construct(string $opcode, int $order, $args)
     {
         $this->opcode = strtoupper($opcode);
+        if ($order <= 0)
+        {
+            exit(32); //! invalid order number
+        }
         $this->order = $order;
         $this->args = $args;
     }
@@ -195,6 +199,10 @@ class InstructionTag
                     {
                         exit(53);
                     }
+                    if (!is_numeric($variable2->getValue()))
+                    {
+                        exit(32);
+                    }
                     $variable->setValue($variable2->getValue());
                 }
                 elseif ($arg2Type === 'int')
@@ -219,6 +227,10 @@ class InstructionTag
                     {
                         exit(53);
                     }
+                    if (!is_numeric($variable3->getValue()))
+                    {
+                        exit(32);
+                    }
                     switch ($this->opcode)
                     {
                         case 'ADD':
@@ -240,33 +252,34 @@ class InstructionTag
                     }
                     $variable->setValue(strval($result));
                 }
-                elseif ($arg3Type === 'int' && $arg3Value !== '')
-                {
-                    switch ($this->opcode)
-                    {
-                        case 'ADD':
-                            $result = floor(intval($variable->getValue()) + intval($arg3Value));
-                            break;
-                        case 'SUB':
-                            $result = floor(intval($variable->getValue()) - intval($arg3Value));
-                            break;
-                        case 'MUL':
-                            $result = floor(intval($variable->getValue()) * intval($arg3Value));
-                            break;
-                        case 'IDIV':
-                            if ($arg3Value === '0')
-                            {
-                                exit(57); //! division by zero
-                            }
-                            $result = floor(intval($variable->getValue()) / intval($arg3Value));
-                            break;
-                    }
-                    $variable->setValue(strval($result));
-                }
-                else
+                elseif ($arg3Type !== 'int' || $arg3Value === '')
                 {
                     exit(53);
                 }
+                elseif (!is_numeric($arg3Value) || !is_numeric($variable->getValue()))
+                {
+                    exit(32);
+                }
+                switch ($this->opcode)
+                {
+                    case 'ADD':
+                        $result = floor(intval($variable->getValue()) + intval($arg3Value));
+                        break;
+                    case 'SUB':
+                        $result = floor(intval($variable->getValue()) - intval($arg3Value));
+                        break;
+                    case 'MUL':
+                        $result = floor(intval($variable->getValue()) * intval($arg3Value));
+                        break;
+                    case 'IDIV':
+                        if ($arg3Value === '0')
+                        {
+                            exit(57); //! division by zero
+                        }
+                        $result = floor(intval($variable->getValue()) / intval($arg3Value));
+                        break;
+                }
+                $variable->setValue(strval($result));
                 break;
             case 'LT':
             case 'GT':

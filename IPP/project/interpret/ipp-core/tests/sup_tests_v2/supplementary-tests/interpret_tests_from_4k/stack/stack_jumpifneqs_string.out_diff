@@ -1,0 +1,5 @@
+--- stack_jumpifneqs_string.out	2024-03-06 12:43:12.879336675 +0100
++++ stack_jumpifneqs_string.your_out	2024-03-06 13:25:41.077155576 +0100
+@@ -1 +0,0 @@
+-noice
+\ Chybí znak konce řádku na konci souboru

@@ -1,0 +1,6 @@
+--- bad_argument_tag.rc	2024-03-06 12:43:12.731337377 +0100
++++ bad_argument_tag.your_rc	2024-03-06 14:20:52.674794188 +0100
+@@ -1 +1 @@
+-32
+\ Chybí znak konce řádku na konci souboru
++0

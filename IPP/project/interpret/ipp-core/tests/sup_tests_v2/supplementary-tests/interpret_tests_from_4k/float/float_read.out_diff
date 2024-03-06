@@ -1,0 +1,5 @@
+--- float_read.out	2024-03-06 12:43:12.839336865 +0100
++++ float_read.your_out	2024-03-06 13:13:34.986619570 +0100
+@@ -1 +0,0 @@
+-0x1.2000000000000p+0
+\ Chybí znak konce řádku na konci souboru

@@ -1,0 +1,5 @@
+--- float_add_float_float.out	2024-03-06 12:43:12.807337016 +0100
++++ float_add_float_float.your_out	2024-03-06 13:13:34.414622758 +0100
+@@ -1 +0,0 @@
+-0x1.2000000000000p+1
+\ Chybí znak konce řádku na konci souboru

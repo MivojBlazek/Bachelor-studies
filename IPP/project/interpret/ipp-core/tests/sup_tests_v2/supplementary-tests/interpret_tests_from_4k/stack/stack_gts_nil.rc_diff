@@ -1,0 +1,6 @@
+--- stack_gts_nil.rc	2024-03-06 12:43:12.859336770 +0100
++++ stack_gts_nil.your_rc	2024-03-06 13:25:40.697161160 +0100
+@@ -1 +1 @@
+-53
+\ Chybí znak konce řádku na konci souboru
++0

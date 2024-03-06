@@ -1,0 +1,6 @@
+--- float_add_float_float.rc	2024-03-06 12:43:12.807337016 +0100
++++ float_add_float_float.your_rc	2024-03-06 13:13:34.430622669 +0100
+@@ -1 +1 @@
+-0
+\ Chybí znak konce řádku na konci souboru
++53

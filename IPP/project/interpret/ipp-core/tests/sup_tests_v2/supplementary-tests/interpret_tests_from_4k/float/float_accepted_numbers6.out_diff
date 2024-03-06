@@ -1,0 +1,7 @@
+--- float_accepted_numbers6.out	2024-03-06 12:43:12.803337035 +0100
++++ float_accepted_numbers6.your_out	2024-03-06 13:13:34.406622803 +0100
+@@ -1 +1 @@
+--0x1.175c57117ca21p+270x1.0000000000000p-4
+\ Chybí znak konce řádku na konci souboru
++-0x1.175c57117ca21p+27.1
+\ Chybí znak konce řádku na konci souboru

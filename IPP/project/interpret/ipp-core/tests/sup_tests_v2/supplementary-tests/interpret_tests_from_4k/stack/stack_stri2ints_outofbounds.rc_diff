@@ -1,0 +1,6 @@
+--- stack_stri2ints_outofbounds.rc	2024-03-06 12:43:12.899336580 +0100
++++ stack_stri2ints_outofbounds.your_rc	2024-03-06 13:25:41.365151347 +0100
+@@ -1 +1 @@
+-58
+\ Chybí znak konce řádku na konci souboru
++0

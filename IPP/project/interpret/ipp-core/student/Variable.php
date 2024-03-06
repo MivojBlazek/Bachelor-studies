@@ -75,6 +75,11 @@ class Variable
     // method returns type of variable
     public function getType(): string
     {
+        if (!isset($this->value))
+        {
+            $this->type = '';
+            return '';
+        }
         if (is_numeric($this->value) && intval($this->value) == $this->value)
         {
             $this->type = 'int';

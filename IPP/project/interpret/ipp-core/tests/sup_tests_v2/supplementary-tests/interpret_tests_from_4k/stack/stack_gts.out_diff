@@ -1,0 +1,7 @@
+--- stack_gts.out	2024-03-06 12:43:12.859336770 +0100
++++ stack_gts.your_out	2024-03-06 13:25:40.717160866 +0100
+@@ -1 +1 @@
+-falsefalsefalsefalsefalsetruetruetrue
+\ Chybí znak konce řádku na konci souboru
++4zdartruetruefalsefalse3ahoj
+\ Chybí znak konce řádku na konci souboru

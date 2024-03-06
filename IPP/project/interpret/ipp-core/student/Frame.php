@@ -75,6 +75,10 @@ class Frame
         }
         else
         {
+            if (!isset($this->tempFrame))
+            {
+                exit(55); //! missing temporary frame
+            }
             $this->tempFrame[] = $variable;
         }
     }
@@ -93,6 +97,10 @@ class Frame
         }
         else
         {
+            if (!isset($this->tempFrame))
+            {
+                exit(55); //! missing temporary frame
+            }
             $frameToCheck = &$this->tempFrame;
         }
 
