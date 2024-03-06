@@ -17,9 +17,15 @@ use IPP\Core\Interface\InputReader;
 class ProgramTag
 {
     /** @var InstructionTag[] */
-    private $instructions = [];
+    private $instructions;
     /** @var int[] */
-    private $labels = [];
+    private $labels;
+
+    public function __construct()
+    {
+        $this->instructions = [];
+        $this->labels = [];
+    }
 
     // method adds instruction to array
     public function addInstruction(InstructionTag $instr): void
@@ -72,7 +78,7 @@ class ProgramTag
             $instruction = $this->instructions[$instrIndex];
             $jumpToLabel = $instruction->executeInstr($instrIndex, $this->labels, $frames, $stack, $functionStack, $stdout, $stderr, $inputReader);
             
-            if (empty($jumpToLabel))
+            if ($jumpToLabel === null)
             {
                 $instrIndex++;
             }

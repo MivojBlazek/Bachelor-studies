@@ -32,15 +32,16 @@ class Interpreter extends AbstractInterpreter
         $dom = $this->source->getDOMDocument();
 
         // making objects from xml document
-        //$prog = $this->processXML($dom);
         $prog = new ProgramTag();
 
         $program = $dom->getElementsByTagName('program')->item(0);
         if ($program instanceof DOMElement)
         {
             $language = $program->getAttribute('language');
-            //TODO check if language is correct
-            // $prog = new ProgramTag();
+            if ($language !== 'IPPcode24')
+            {
+                exit(31); //! invalid attribute language in header
+            }
 
             $instructions = $dom->getElementsByTagName('instruction');
             foreach ($instructions as $instr)
@@ -59,19 +60,49 @@ class Interpreter extends AbstractInterpreter
                     {
                         if ($argName->nodeName === 'arg1')
                         {
-                            $arg = new ArgumentTag($argName->getAttribute('type'), trim($argName->nodeValue));
+                            $argType = $argName->getAttribute('type');
+                            if (empty($argType))
+                            {
+                                exit(31);
+                            }
+                            $argValue = $argName->nodeValue;
+                            if ($argValue === null)
+                            {
+                                exit(31);
+                            }
+                            $arg = new ArgumentTag($argType, trim($argValue));
                             $instruction->addArgument($arg);
                             $arg1 = true;
                         }
                         if ($argName->nodeName === 'arg2' && $arg1)
                         {
-                            $arg = new ArgumentTag($argName->getAttribute('type'), trim($argName->nodeValue));
+                            $argType = $argName->getAttribute('type');
+                            if (empty($argType))
+                            {
+                                exit(31);
+                            }
+                            $argValue = $argName->nodeValue;
+                            if ($argValue === null)
+                            {
+                                exit(31);
+                            }
+                            $arg = new ArgumentTag($argType, trim($argValue));
                             $instruction->addArgument($arg);
                             $arg2 = true;
                         }
                         if ($argName->nodeName === 'arg3' && $arg1 && $arg2)
                         {
-                            $arg = new ArgumentTag($argName->getAttribute('type'), trim($argName->nodeValue));
+                            $argType = $argName->getAttribute('type');
+                            if (empty($argType))
+                            {
+                                exit(31);
+                            }
+                            $argValue = $argName->nodeValue;
+                            if ($argValue === null)
+                            {
+                                exit(31);
+                            }
+                            $arg = new ArgumentTag($argType, trim($argValue));
                             $instruction->addArgument($arg);
                         }
                     }
@@ -94,11 +125,4 @@ class Interpreter extends AbstractInterpreter
 
         exit(0);
     }
-
-    // method returns program after it process XML source and create program, instructions and arguments objects
-    /** @param DOMDocument $dom */
-    //protected function processXML(DOMDocument $dom): ProgramTag
-    //{
-   //     return $prog;
-    //}
 }

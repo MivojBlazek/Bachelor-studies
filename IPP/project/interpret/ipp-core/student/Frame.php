@@ -96,11 +96,14 @@ class Frame
             $frameToCheck = &$this->tempFrame;
         }
 
-        foreach ($frameToCheck as $vars)
+        if (is_iterable($frameToCheck))
         {
-            if ($vars->getName() === $variable)
+            foreach ($frameToCheck as $vars)
             {
-                return $vars;
+                if ($vars->getName() === $variable)
+                {
+                    return $vars;
+                }
             }
         }
         return null;

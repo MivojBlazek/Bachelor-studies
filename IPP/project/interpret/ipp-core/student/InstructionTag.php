@@ -1055,5 +1055,6 @@ class InstructionTag
                 // should not occur if opcode is correct from parse.py
                 break;
         }
+        return null;
     }
 }
