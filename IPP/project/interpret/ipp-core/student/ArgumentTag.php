@@ -9,23 +9,23 @@ namespace IPP\Student;
 
 class ArgumentTag
 {
-    private $type;
-    private $value;
+    private string $type;
+    private string $value;
 
-    public function __construct($type, $value)
+    public function __construct(string $type, string $value)
     {
         $this->type = $type;
         $this->value = $value;
     }
 
     // method returns type of argument
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
     // method returns value of argument
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }

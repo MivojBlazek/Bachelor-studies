@@ -10,14 +10,22 @@ namespace IPP\Student;
 use IPP\Student\Variable;
 use IPP\Student\Frame;
 use IPP\Student\Stack;
+use IPP\Core\Interface\OutputWriter;
+use IPP\Core\Interface\InputReader;
 
 class InstructionTag
 {
-    private $opcode;
-    protected $order;
+    private string $opcode;
+    protected int $order;
+    /** @var ArgumentTag[] */
     private $args = [];
 
-    public function __construct($opcode, $order, $args)
+    /**
+     * @param string $opcode
+     * @param int $order
+     * @param ArgumentTag[] $args
+     */
+    public function __construct(string $opcode, int $order, $args)
     {
         $this->opcode = strtoupper($opcode);
         $this->order = $order;
@@ -25,31 +33,42 @@ class InstructionTag
     }
 
     // method adds argument to instruction
-    public function addArgument(ArgumentTag $arg)
+    public function addArgument(ArgumentTag $arg): void
     {
         $this->args[] = $arg;
     }
 
     // method returns operation code of instruction
-    public function getOpcode()
+    public function getOpcode(): string
     {
         return $this->opcode;
     }
 
     // method returns order of instruction
-    public function getOrder()
+    public function getOrder(): int
     {
         return $this->order;
     }
 
     // method returns arguments of instruction
-    public function getArguments()
+    /** @return ArgumentTag[] */
+    public function getArguments(): array
     {
         return $this->args;
     }
 
     // main method to execute instruction
-    public function executeInstr($instrIndex, $labels, $frames, $stack, $functionStack, $stdout, $stderr, $inputReader)
+    /**
+     * @param string $instrIndex
+     * @param int[] $labels
+     * @param Frame $frames
+     * @param Stack $stack
+     * @param Stack $functionStack
+     * @param $stdout
+     * @param $stderr
+     * @param $inputReader
+     */
+    public function executeInstr(string $instrIndex, $labels, Frame $frames, Stack $stack, Stack $functionStack, OutputWriter $stdout, OutputWriter $stderr, InputReader $inputReader): ?string
     {
         // default setting arg variables
         $arg1Type = 'nil';
@@ -203,46 +222,46 @@ class InstructionTag
                     switch ($this->opcode)
                     {
                         case 'ADD':
-                            $result = floor($variable->getValue() + $variable3->getValue());
+                            $result = floor(intval($variable->getValue()) + intval($variable3->getValue()));
                             break;
                         case 'SUB':
-                            $result = floor($variable->getValue() - $variable3->getValue());
+                            $result = floor(intval($variable->getValue()) - intval($variable3->getValue()));
                             break;
                         case 'MUL':
-                            $result = floor($variable->getValue() * $variable3->getValue());
+                            $result = floor(intval($variable->getValue()) * intval($variable3->getValue()));
                             break;
                         case 'IDIV':
                             if ($variable3->getValue() === '0')
                             {
                                 exit(57); //! division by zero
                             }
-                            $result = floor($variable->getValue() / $variable3->getValue());
+                            $result = floor(intval($variable->getValue()) / intval($variable3->getValue()));
                             break;
                     }
-                    $variable->setValue($result);
+                    $variable->setValue(strval($result));
                 }
                 elseif ($arg3Type === 'int' && $arg3Value !== '')
                 {
                     switch ($this->opcode)
                     {
                         case 'ADD':
-                            $result = floor($variable->getValue() + $arg3Value);
+                            $result = floor(intval($variable->getValue()) + intval($arg3Value));
                             break;
                         case 'SUB':
-                            $result = floor($variable->getValue() - $arg3Value);
+                            $result = floor(intval($variable->getValue()) - intval($arg3Value));
                             break;
                         case 'MUL':
-                            $result = floor($variable->getValue() * $arg3Value);
+                            $result = floor(intval($variable->getValue()) * intval($arg3Value));
                             break;
                         case 'IDIV':
                             if ($arg3Value === '0')
                             {
                                 exit(57); //! division by zero
                             }
-                            $result = floor($variable->getValue() / $arg3Value);
+                            $result = floor(intval($variable->getValue()) / intval($arg3Value));
                             break;
                     }
-                    $variable->setValue($result);
+                    $variable->setValue(strval($result));
                 }
                 else
                 {
@@ -549,7 +568,7 @@ class InstructionTag
                 {
                     exit(58);
                 }
-                $variable->setValue(ord($string[intval($position)]));
+                $variable->setValue(strval(ord($string[intval($position)])));
                 break;
             case 'READ':
                 list($frame, $var) = explode('@', $arg1Value);
@@ -599,7 +618,7 @@ class InstructionTag
                     default:
                         exit(53);
                 }
-                $variable->setValue($read);
+                $variable->setValue(strval($read));
                 break;
             case 'WRITE':
                 if ($arg1Type === 'var')
@@ -750,11 +769,11 @@ class InstructionTag
                     {
                         exit(53);
                     }
-                    $variable->setValue(strlen($variable2->getValue()));
+                    $variable->setValue(strval(strlen($variable2->getValue())));
                 }
                 elseif ($arg2Type === 'string')
                 {
-                    $variable->setValue(strlen($arg2Value));
+                    $variable->setValue(strval(strlen($arg2Value)));
                 }
                 else
                 {

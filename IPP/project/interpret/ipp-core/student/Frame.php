@@ -9,9 +9,13 @@ namespace IPP\Student;
 
 class Frame
 {
+    /** @var Variable[][] */
     private $frameStack;
+    /** @var Variable[] */
     private $globalFrame;
-    private array $localFrame;
+    /** @var Variable[] */
+    private $localFrame;
+    /** @var Variable[]|null */
     private $tempFrame;
 
     public function __construct()
@@ -22,7 +26,7 @@ class Frame
     }
 
     // method creates local frame from temporary frame
-    public function createLocalFrame()
+    public function createLocalFrame(): void
     {
         if (!isset($this->tempFrame))
         {
@@ -34,7 +38,7 @@ class Frame
     }
 
     // method removes local frame and makes temporary frame
-    public function popLocalFrame()
+    public function popLocalFrame(): void
     {
         if (count($this->frameStack) > 1)
         {
@@ -47,13 +51,13 @@ class Frame
     }
 
     // method creates temporary frame
-    public function createTempFrame()
+    public function createTempFrame(): void
     {
         $this->tempFrame = [];
     }
 
     // method adds variable to correct frame
-    public function addVariable($frame, Variable $variable)
+    public function addVariable(string $frame, Variable $variable): void
     {
         if (($this->getVarIfExists($frame, $variable->getName())) !== null)
         {
@@ -76,7 +80,7 @@ class Frame
     }
 
     // method to check duplicate declaration of variable
-    public function getVarIfExists($frame, $variable) : ?Variable
+    public function getVarIfExists(string $frame, string $variable) : ?Variable
     {
         if ($frame === 'GF')
         {

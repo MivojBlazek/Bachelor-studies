@@ -9,18 +9,18 @@ namespace IPP\Student;
 
 class Variable
 {
-    private $type;
-    public $name;
-    private $value;
+    private string $type;
+    public string $name;
+    private string $value;
 
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->type = 'nil';
         $this->name = $name;
     }
 
     // method sets variable value and type
-    public function setValue($value)
+    public function setValue(string $value): void
     {
         $this->value = $value;
         if (is_numeric($this->value) && intval($this->value) == $this->value)
@@ -42,13 +42,13 @@ class Variable
     }
 
     // method returns name of variable
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     // method returns value of variable
-    public function getValue()
+    public function getValue(): string
     {
 
         if (!isset($this->value))
@@ -63,7 +63,7 @@ class Variable
     }
 
     // method returns value of variable with nil included
-    public function getValueNil()
+    public function getValueNil(): string
     {
         if (!isset($this->value))
         {
@@ -73,7 +73,7 @@ class Variable
     }
 
     // method returns type of variable
-    public function getType()
+    public function getType(): string
     {
         if (is_numeric($this->value) && intval($this->value) == $this->value)
         {

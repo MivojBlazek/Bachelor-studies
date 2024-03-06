@@ -11,42 +11,37 @@ use IPP\Student\InstructionTag;
 use IPP\Student\Frame;
 use IPP\Student\Stack;
 use IPP\Core\FileInputReader;
+use IPP\Core\Interface\OutputWriter;
+use IPP\Core\Interface\InputReader;
 
 class ProgramTag
 {
-    private $language; //TODO
-    private $name; //TODO
-    private $description; //TODO
+    /** @var InstructionTag[] */
     private $instructions = [];
+    /** @var int[] */
     private $labels = [];
 
-    public function __construct($language, $name = null, $description = null)
-    {
-        $this->language = $language; //TODO
-        $this->name = $name ?? ''; //TODO
-        $this->description = $description ?? ''; //TODO
-    }
-
     // method adds instruction to array
-    public function addInstruction(InstructionTag $instr)
+    public function addInstruction(InstructionTag $instr): void
     {
         $this->instructions[] = $instr;
     }
 
     // method returns instruction array
-    public function getInstructions()
+    /** @return InstructionTag[] */
+    public function getInstructions(): array
     {
         return $this->instructions;
     }
 
     // method sorts instructions in array
-    public function sortInstructions()
+    public function sortInstructions(): void
     {
         usort($this->instructions, array($this, 'sortOrders'));
     }
 
     // helper method for sorting
-    private function sortOrders($first, $second)
+    private function sortOrders(InstructionTag $first, InstructionTag $second): int
     {
         if ($first->getOrder() < $second->getOrder())
         {
@@ -63,7 +58,7 @@ class ProgramTag
     }
 
     // method executes program by executing instructions
-    public function executeProgram($stdout, $stderr, $inputReader)
+    public function executeProgram(OutputWriter $stdout, OutputWriter $stderr, InputReader $inputReader): void
     {
         $frames = new Frame();
         $stack = new Stack();
@@ -94,7 +89,7 @@ class ProgramTag
     }
 
     // method finds instructions LABEL and saves their position
-    private function findLabels()
+    private function findLabels(): void
     {
         foreach ($this->instructions as $labelIndex => $instruction)
         {

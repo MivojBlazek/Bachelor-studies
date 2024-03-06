@@ -32,7 +32,52 @@ class Interpreter extends AbstractInterpreter
         $dom = $this->source->getDOMDocument();
 
         // making objects from xml document
-        $prog = $this->processXML($dom);
+        //$prog = $this->processXML($dom);
+        $prog = new ProgramTag();
+
+        $program = $dom->getElementsByTagName('program')->item(0);
+        if ($program instanceof DOMElement)
+        {
+            $language = $program->getAttribute('language');
+            //TODO check if language is correct
+            // $prog = new ProgramTag();
+
+            $instructions = $dom->getElementsByTagName('instruction');
+            foreach ($instructions as $instr)
+            {
+                $opcode = $instr->getAttribute('opcode');
+                $order = intval($instr->getAttribute('order'));
+                $args = [];
+                $instruction = new InstructionTag($opcode, $order, $args);
+                $prog->addInstruction($instruction);
+
+                $arg1 = false;
+                $arg2 = false;
+                foreach ($instr->childNodes as $argName)
+                {
+                    if ($argName instanceof DOMElement)
+                    {
+                        if ($argName->nodeName === 'arg1')
+                        {
+                            $arg = new ArgumentTag($argName->getAttribute('type'), trim($argName->nodeValue));
+                            $instruction->addArgument($arg);
+                            $arg1 = true;
+                        }
+                        if ($argName->nodeName === 'arg2' && $arg1)
+                        {
+                            $arg = new ArgumentTag($argName->getAttribute('type'), trim($argName->nodeValue));
+                            $instruction->addArgument($arg);
+                            $arg2 = true;
+                        }
+                        if ($argName->nodeName === 'arg3' && $arg1 && $arg2)
+                        {
+                            $arg = new ArgumentTag($argName->getAttribute('type'), trim($argName->nodeValue));
+                            $instruction->addArgument($arg);
+                        }
+                    }
+                }
+            }
+        }
 
         // sort instructions
         try
@@ -51,51 +96,9 @@ class Interpreter extends AbstractInterpreter
     }
 
     // method returns program after it process XML source and create program, instructions and arguments objects
-    protected function processXML($dom): ProgramTag
-    {
-        $prog = new ProgramTag('IPPcode24');
-
-        $program = $dom->getElementsByTagName('program')->item(0);
-        if ($program instanceof DOMElement)
-        {
-            $language = $program->getAttribute('language');
-            $name = $program->getAttribute('name');
-            $description = $program->getAttribute('description');
-            $prog = new ProgramTag($language, $name, $description);
-
-            $instructions = $dom->getElementsByTagName('instruction');
-            foreach ($instructions as $instr)
-            {
-                $opcode = $instr->getAttribute('opcode');
-                $order = $instr->getAttribute('order');
-                $args = [];
-                $instruction = new InstructionTag($opcode, $order, $args);
-                $prog->addInstruction($instruction);
-
-                $arg1 = false;
-                $arg2 = false;
-                foreach ($instr->childNodes as $argName)
-                {
-                    if ($argName->nodeName === 'arg1')
-                    {
-                        $arg = new ArgumentTag($argName->getAttribute('type'), trim($argName->nodeValue));
-                        $instruction->addArgument($arg);
-                        $arg1 = true;
-                    }
-                    if ($argName->nodeName === 'arg2' && $arg1)
-                    {
-                        $arg = new ArgumentTag($argName->getAttribute('type'), trim($argName->nodeValue));
-                        $instruction->addArgument($arg);
-                        $arg2 = true;
-                    }
-                    if ($argName->nodeName === 'arg3' && $arg1 && $arg2)
-                    {
-                        $arg = new ArgumentTag($argName->getAttribute('type'), trim($argName->nodeValue));
-                        $instruction->addArgument($arg);
-                    }
-                }
-            }
-        }
-        return $prog;
-    }
+    /** @param DOMDocument $dom */
+    //protected function processXML(DOMDocument $dom): ProgramTag
+    //{
+   //     return $prog;
+    //}
 }

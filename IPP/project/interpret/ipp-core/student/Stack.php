@@ -9,6 +9,7 @@ namespace IPP\Student;
 
 class Stack
 {
+    /** @var string[] */
     private $stackItems;
 
     public function __construct()
@@ -16,12 +17,12 @@ class Stack
         $this->stackItems = [];
     }
 
-    public function stackPush($item)
+    public function stackPush(string $item): void
     {
         $this->stackItems[] = $item;
     }
 
-    public function stackPop()
+    public function stackPop(): string
     {
         if (count($this->stackItems) === 0)
         {
