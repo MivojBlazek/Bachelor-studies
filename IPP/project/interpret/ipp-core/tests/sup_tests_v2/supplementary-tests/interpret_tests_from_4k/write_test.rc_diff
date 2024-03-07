@@ -1,5 +1,5 @@
---- write_test.rc	2024-03-06 12:43:12.743337320 +0100
-+++ write_test.your_rc	2024-03-06 14:20:53.534786359 +0100
+--- ./tests/sup_tests_v2/supplementary-tests/interpret_tests_from_4k/write_test.rc	2024-03-07 11:59:34.175041000 +0100
++++ ./tests/sup_tests_v2/supplementary-tests/interpret_tests_from_4k/write_test.your_rc	2024-03-07 13:38:33.637660000 +0100
 @@ -1 +1 @@
 -32
 \ Chybí znak konce řádku na konci souboru

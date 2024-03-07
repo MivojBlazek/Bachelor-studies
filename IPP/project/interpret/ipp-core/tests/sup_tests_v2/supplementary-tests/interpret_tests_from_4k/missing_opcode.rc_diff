@@ -1,5 +1,5 @@
---- missing_opcode.rc	2024-03-06 12:43:12.739337339 +0100
-+++ missing_opcode.your_rc	2024-03-06 14:20:53.066790619 +0100
+--- ./tests/sup_tests_v2/supplementary-tests/interpret_tests_from_4k/missing_opcode.rc	2024-03-07 11:59:33.508857000 +0100
++++ ./tests/sup_tests_v2/supplementary-tests/interpret_tests_from_4k/missing_opcode.your_rc	2024-03-07 13:38:32.670378000 +0100
 @@ -1 +1 @@
 -32
 \ Chybí znak konce řádku na konci souboru

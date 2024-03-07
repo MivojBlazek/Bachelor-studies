@@ -1,5 +1,5 @@
---- missing_argument.rc	2024-03-06 12:43:12.735337357 +0100
-+++ missing_argument.your_rc	2024-03-06 14:20:53.042790837 +0100
+--- ./tests/sup_tests_v2/supplementary-tests/interpret_tests_from_4k/missing_argument.rc	2024-03-07 11:59:33.501571000 +0100
++++ ./tests/sup_tests_v2/supplementary-tests/interpret_tests_from_4k/missing_argument.your_rc	2024-03-07 13:38:32.618317000 +0100
 @@ -1 +1 @@
 -32
 \ Chybí znak konce řádku na konci souboru

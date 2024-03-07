@@ -1,0 +1,7 @@
+--- ./tests/sup_tests_v2/supplementary-tests/interpret/factorial.out	2024-02-27 11:21:32.655381000 +0100
++++ ./tests/sup_tests_v2/supplementary-tests/interpret/factorial.your_out	2024-03-07 13:21:28.687225000 +0100
+@@ -1 +1 @@
+-Faktoriál čísla 5 je 24
+\ Chybí znak konce řádku na konci souboru
++Faktoriál čísla 5 je 0
+\ Chybí znak konce řádku na konci souboru
