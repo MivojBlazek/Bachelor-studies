@@ -1,0 +1,86 @@
+\documentclass[a4paper, twocolumn, 11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[top=2.3cm, text={18.3cm, 25.2cm}, left=1.4cm]{geometry}
+\usepackage{lmodern}
+\usepackage[czech]{babel}
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+    \Huge
+    \textsc{Vysoké učení technické v Brně\\
+    \huge{Fakulta informačních technologií}}\\
+    \vspace{\stretch{0.382}}
+    \Large{Typografie a publikování\,--\,2. projekt\\
+    Sazba dokumentů a matematických výrazů}\\
+    \vspace{\stretch{0.618}}
+\end{center}
+{\Large 2024 \hfill Michal Blažek (xblaze38)}
+\end{titlepage}
+
+\section*{Úvod}
+
+V této úloze si vysázíme titulní stranu a kousek matematického textu, v němž se vyskytují například Definice 1 nebo rovnice (2) na straně 1. Pro vytvoření těchto odkazů používáme kombinace příkazů \verb|\label|, \verb|\ref|, \verb|\eqref| a \verb|\pageref|. Před odkazy patří nezlomitelná mezera. Pro zvýrazňování textu se používají příkazy \verb|\verb| a \verb|\emph|.
+
+Titulní strana je vysázena prostředím \texttt{titlepage} a nadpis je v optickém středu s využitím \emph{přesného} zlatého řezu, který byl probrán na přednášce. Dále jsou na titulní straně čtyři různé velikosti písma a mezi dvojicemi řádků textu je použito řádkování se zadanou relativní velikostí 0,5 em a 0,6 em\footnote{Použijte správný typ mezery mezi číslem a jednotkou.}.
+
+\section{Matematický text}
+
+Matematické symboly a výrazy v plynulém textu jsou v prostředí \texttt{math}. Definice a věty sázíme v prostředí definovaném příkazem \verb|\newtheorem| z balíku amsthm. Tato prostředí obracejí význam \verb|\emph|: uvnitř textu sázeného kurzívou se zvýrazňuje písmem v základním řezu. Někdy je vhodné použít konstrukci \verb|${}$| nebo \verb|\mbox{}|, která zabrání zalomení (matematicého) textu. Pozor také na tvar i sklon řeckých písmen: srovnejte \verb|\epsilon| a \verb|\varepsilon|, \verb|\Xi| a \verb|\varXi|.
+
+\noindent\textbf{Definice 1.} Konečný přepisovací stroj \emph{neboli} Mealyho automat \emph{je definován jako uspořádaná pětice tvaru $M = (Q, \Sigma, \Gamma, \delta, q_0)$, kde:}
+
+\begin{itemize}
+    \item \emph{Q je konečná množina} stavů,
+    \item \emph{$\Sigma$ je konečná vstupní} abeceda,
+    \item \emph{$\Gamma$ je konečná výstupní} abeceda,
+    \item \emph{$\delta : Q × \Sigma → Q × \Gamma$ je totální} přechodová funkce,
+    \item \emph{${q_0 ∈ Q}$ je} počáteční stav.
+\end{itemize}
+
+\subsection{Podsekce s definicí}
+
+Pomocí přechodové funkce δ zavedeme novou funkci δ∗ pro překlad vstupních slov u∈Σ∗ do výstupních slov w ∈ Γ∗.
+
+\noindent\textbf{Definice 2.} Nechť M = (Q, Σ, Γ, δ, q0) je Mealyho automat. Překládací funkce δ∗ : Q × Σ∗ × Γ∗ → Γ∗ je pro každý stav q∈Q, symbol x∈Σ, slova u∈Σ∗, w ∈ Γ ∗ definována rekurentním předpisem:
+
+\begin{itemize}
+    \item XXX
+    \item XXX
+\end{itemize}
+
+\subsection{Rovnice}
+
+Složitější matematické formule sázíme mimo plynulý text pomocí prostředí displaymath. Lze umístit i více výrazů na jeden řádek, ale pak je třeba tyto vhodně oddělit, například pomocí \verb|\quad|, při dostatku místa i \verb|\qquad|.
+
+$$g^(a_n) ∈/ A B n y 01 − q5 x + \sqrt{7y} x > y 2 ≥ y 3$$
+Velikost závorek a svislých čar je potřeba přizpůsobit jejich obsahu. Velikost lze stanovit explicitně, anebo pomocí \verb|\left| a \verb|\right|. Kombinační čísla sázejte makrem \verb|\binom|.
+
+XXX
+
+XXX
+
+V rovnici (1) jsou tři typy závorek s různou expliitně definovanou velikostí. Obě rovnice mají svisle zaovnaná rovnítka. Použijte k tomu vhodné prostředí.
+
+XXX
+
+XXX
+
+V této větě vidíme, jak se vysází proměnná určující limitu v běžném textu: limm→∞ f(m). Podobně je to i s dalšími symboly jako SN ∈M N či Pmi=1 x2i . S vynucením méně úsporné sazby příkazem \verb|\limits| budou m
+vzorce vysázeny v podobě lim f (m) a P x2i . m→∞ i=1
+
+\section{Matice}
+
+Pro sázení matic se používá prostředí array a závorky s výškou nastavenou pomocí \verb|\left|, \verb|\right|.
+
+XXX
+
+Prostředí array lze úspěšně využít i jinde, například na pravé straně následující rovnosti.
+
+XXX
+
+\end{document}
+
