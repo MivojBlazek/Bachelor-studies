@@ -7,6 +7,10 @@
 \usepackage{amsmath}
 \usepackage[czech]{babel}
 \usepackage[hidelinks]{hyperref}
+\usepackage{ntheorem}
+
+\theoremseparator{.}
+\newtheorem{definition}{Definice}
 
 \begin{document}
 
@@ -16,7 +20,7 @@
     \textsc{Vysoké učení technické v Brně\\
     \huge{Fakulta informačních technologií}}\\
     \vspace{\stretch{0.382}}
-    \Large{Typografie a publikování\,--\,2. projekt\\
+    \LARGE{Typografie a publikování\,--\,2. projekt\\
     Sazba dokumentů a matematických výrazů}\\
     \vspace{\stretch{0.618}}
 \end{center}
@@ -25,65 +29,63 @@
 
 \section*{Úvod}
 
-V této úloze si vysázíme titulní stranu a kousek matematického textu, v němž se vyskytují například Definice 1 nebo rovnice~(2) na straně 1. Pro vytvoření těchto odkazů používáme kombinace příkazů \verb|\label|, \verb|\ref|, \verb|\eqref| a \verb|\pageref|. Před odkazy patří nezlomitelná mezera. Pro zvýrazňování textu se používají příkazy \verb|\verb| a \verb|\emph|.
+V této úloze si vysázíme titulní stranu a kousek matematického textu, v němž se vyskytují například Definice \ref{definice1} nebo rovnice~(\ref{rovnice2}) na straně \pageref{rovnice2}. Pro vytvoření těchto odkazů používáme kombinace příkazů \verb|\label|, \verb|\ref|, \verb|\eqref| a \verb|\pageref|. Před odkazy patří nezlomitelná mezera. Pro zvýrazňování textu se používají příkazy \verb|\verb| a \verb|\emph|.
 
-Titulní strana je vysázena prostředím \texttt{titlepage} a nadpis je v optickém středu s využitím \emph{přesného} zlatého řezu, který byl probrán na přednášce. Dále jsou na titulní straně čtyři různé velikosti písma a mezi dvojicemi řádků textu je použito řádkování se zadanou relativní velikostí 0,5 em a 0,6 em\footnote{Použijte správný typ mezery mezi číslem a jednotkou.}.
+Titulní strana je vysázena prostředím \texttt{titlepage} a~nadpis je v optickém středu s využitím \emph{přesného} zlatého řezu, který byl probrán na přednášce. Dále jsou na titulní straně čtyři různé velikosti písma a mezi dvojicemi řádků textu je použito řádkování se zadanou relativní velikostí 0,5\,em a 0,6\,em\footnote{Použijte správný typ mezery mezi číslem a jednotkou.}.
 
 \section{Matematický text}
 
-Matematické symboly a výrazy v plynulém textu jsou v prostředí \texttt{math}. Definice a věty sázíme v prostředí definovaném příkazem \verb|\newtheorem| z balíku \texttt{amsthm}. Tato prostředí obracejí význam \verb|\emph|: uvnitř textu sázeného kurzívou se zvýrazňuje písmem v základním řezu. Někdy je vhodné použít konstrukci \verb|${}$| nebo \verb|\mbox{}|, která zabrání zalomení (matematicého) textu. Pozor také na tvar i sklon řeckých písmen: srovnejte \verb|\epsilon| a \verb|\varepsilon|, \verb|\Xi| a \verb|\varXi|.
+Matematické symboly a výrazy v plynulém textu jsou v prostředí \texttt{math}. Definice a věty sázíme v prostředí definovaném příkazem \verb|\newtheorem| z balíku \texttt{amsthm}. Tato prostředí obracejí význam \verb|\emph|: uvnitř textu sázeného kurzívou se zvýrazňuje písmem v základním řezu. Někdy je vhodné použít konstrukci \verb|${}$| nebo \verb|\mbox{}|, která zabrání zalomení (matematického) textu. Pozor také na tvar i sklon řeckých písmen: srovnejte \verb|\epsilon| a \verb|\varepsilon|, \verb|\Xi| a \verb|\varXi|.
 
-\noindent\textbf{Definice 1.} Konečný přepisovací stroj \emph{neboli} Mealyho automat \emph{je definován jako uspořádaná pětice tvaru $M=(Q,\Sigma,\Gamma,\delta,q_0)$, kde:}
+\begin{definition}
+    \label{definice1}\emph{Konečný přepisovací stroj} neboli \emph{Mealyho automat} je definován jako uspořádaná pětice tvaru $\mathnormal{M=(Q,\Sigma,\Gamma,\delta,q_0)}$, kde:
 
-\begin{itemize}
-    \item \emph{Q je konečná množina} stavů,
-    \item \emph{$\Sigma$ je konečná vstupní} abeceda,
-    \item \emph{$\Gamma$ je konečná výstupní} abeceda,
-    \item \emph{$\delta:Q\times\Sigma\rightarrow Q\times\Gamma$ je totální} přechodová funkce,
-    \item \emph{$q_0\in Q$ je} počáteční stav.
-\end{itemize}
+    \begin{itemize}
+        \item Q je konečná množina \emph{stavů,}
+        \item $\mathnormal{\Sigma}$ je konečná vstupní \emph{abeceda,}
+        \item $\mathnormal{\Gamma}$ je konečná výstupní \emph{abeceda,}
+        \item $\mathnormal{\delta:Q\times\Sigma\rightarrow Q\times\Gamma}$ je totální \emph{přechodová funkce,}
+        \item $q_0\in Q$ je \emph{počáteční stav.}
+    \end{itemize}
+\end{definition}
 
 \subsection{Podsekce s definicí}
 
-Pomocí přechodové funkce $\delta$ zavedeme novou funkci $\delta^*$ pro překlad vstupních slov $u\in\Sigma^*$ do výstupních slov $w\in\Gamma^*$.
+Pomocí přechodové funkce $\delta$ zavedeme novou funkci $\delta^*$ pro překlad vstupních slov $\mathnormal{u\in\Sigma^*}$ do výstupních slov $\mathnormal{w\in\Gamma^*}$.
 
-\noindent\textbf{Definice 2.} Nechť $M=(Q,\Sigma,\Gamma,\delta,q_0)$ je Mealyho automat. Překládací funkce \emph{$\delta^*:Q\times\Sigma^*\times\Gamma^*\rightarrow\Gamma^*$ je pro každý stav $q\in Q$, symbol $x\in\Sigma$, slova $u\in\Sigma^*$, $w\in\Gamma^*$ definována rekurentním předpisem:}
-
-\begin{itemize}
-    \item $\delta^*(q,\varepsilon,w)=w$
-    \item \emph{$\delta^*(q,xu,w)=\delta^*(q',u,wy)$, kde $(q',y)=\delta(q,x)$}
-\end{itemize}
+\begin{definition}
+    Nechť $\mathnormal{M=(Q,\Sigma,\Gamma,\delta,q_0)}$ je Mealyho automat. \emph{Překládací funkce} $\mathnormal{\delta^*:Q\times\Sigma^*\times\Gamma^*\rightarrow\Gamma^*}$ je pro každý stav $q\in Q$, symbol $\mathnormal{x\in\Sigma}$, slova $\mathnormal{u\in\Sigma^*}$, $\mathnormal{w\in\Gamma^*}$ definována rekurentním předpisem:
+    \begin{itemize}
+        \item $\delta^*(q,\varepsilon,w)=w$
+        \item $\delta^*(q,xu,w)=\delta^*(q',u,wy)$, kde $(q',y)=\delta(q,x)$
+    \end{itemize}
+\end{definition}
 
 \subsection{Rovnice}
 
-Složitější matematické formule sázíme mimo plynulý text pomocí prostředí \texttt{displaymath}. Lze umístit i více výrazů na jeden řádek, ale pak je třeba tyto vhodně oddělit, například pomocí \verb|\quad|, při dostatku místa i \verb|\qquad|.
-
+Složitější matematické formule sázíme mimo plynulý text pomocí prostředí \texttt{displaymath}. Lze umístit i více výrazů na jeden řádek, ale pak je třeba tyto vhodně oddělit, například pomocí \verb|\quad|, při dostatku místa i~\verb|\qquad|.
 $$g^{a_n}\notin A^{B^n}\qquad y^1_0-\sqrt[5]{x+\sqrt[7]{y}}\qquad x>y^2\geq y^3$$
 
 Velikost závorek a svislých čar je potřeba přizpůsobit jejich obsahu. Velikost lze stanovit explicitně, anebo pomocí \verb|\left| a \verb|\right|. Kombinační čísla sázejte makrem \verb|\binom|.
 
-\begin{equation}
+\begin{equation*}
     \left|\bigcup P\right|=\sum\limits _{\emptyset\neq X\subseteq P}(-1)^{|X|-1}\left|\bigcap X\right|
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     F_{n+1}=\binom{n}{0}+\binom{n-1}{1}+\binom{n-2}{2}+\cdots+\binom{\lceil\frac{n}{2}\rceil}{\lfloor\frac{n}{2}\rfloor}
-\end{equation}
+\end{equation*}
 
-
-V rovnici~(1) jsou tři typy závorek s různou \emph{explicitně} definovanou velikostí. Obě rovnice mají svisle zarovnaná rovnítka. Použijte k tomu vhodné prostředí.
-
+V rovnici~(\ref{rovnice1}) jsou tři typy závorek s různou \emph{explicitně} definovanou velikostí. Obě rovnice mají svisle zarovnaná rovnítka. Použijte k tomu vhodné prostředí.
 \begin{eqnarray}
-\left(\left\{b\otimes[c_1\oplus c_2]\circ a\right\}^{\frac{2}{3}}\right) & = & \mathrm{log}_z x\\
-\int_a^b f(x)\,\mathrm{d}x & = & -\int_a^b f(y)\,\mathrm{d}y
+    \label{rovnice1}\left(\left\{b\otimes[c_1\oplus c_2]\circ a\right\}^{\frac{2}{3}}\right) & = & \mathrm{log}_z x\\
+    \label{rovnice2}\int_a^b f(x)\,\mathrm{d}x & = & -\int_b^a f(y)\,\mathrm{d}y
 \end{eqnarray}
-
-\noindent V této větě vidíme, jak se vysází proměnná určující limitu v běžném textu: $\lim_{m\rightarrow\infty} f(m)$. Podobně je to i s dalšími symboly jako $\bigcup_{N \in \mathcal{M}}$ či $\sum_{i=1}^m x_i^2$. S vynucením méně úsporné sazby příkazem \verb|\limits| budou vzorce vysázeny v podobě $\lim\limits _{m\rightarrow\infty}f(m)$ a $\sum\limits _{i=1}^m x_i^2$
+V této větě vidíme, jak se vysází proměnná určující limitu v běžném textu: $\lim_{m\rightarrow\infty} f(m)$. Podobně je to i s dalšími symboly jako $\bigcup_{N \in \mathcal{M}}N$ či $\sum_{i=1}^m x_i^2$. S vynucením méně úsporné sazby příkazem \verb|\limits| budou vzorce vysázeny v podobě $\lim\limits _{m\rightarrow\infty}f(m)$ a $\sum\limits _{i=1}^m x_i^2$.
 
 \section{Matice}
 
 Pro sázení matic se používá prostředí \texttt{array} a závorky s výškou nastavenou pomocí \verb|\left|, \verb|\right|.
-
 $$D=
 \left|
 \begin{array}{cccc}
@@ -106,7 +108,7 @@ Prostředí \texttt{array} lze úspěšně využít i jinde, například na prav
 
 $$\binom{n}{k}=
 \left\{
-\begin{array}{c l}
+\begin{array}{ll}
     \frac{n!}{k!(n-k)!} & \text{pro } 0\leq k\leq n\\
     0 & \text{jinak}
 \end{array}
