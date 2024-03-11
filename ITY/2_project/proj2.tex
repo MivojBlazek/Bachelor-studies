@@ -5,11 +5,10 @@
 \usepackage{lmodern}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage[czech]{babel}
 \usepackage[hidelinks]{hyperref}
-\usepackage{ntheorem}
 
-\theoremseparator{.}
 \newtheorem{definition}{Definice}
 
 \begin{document}
@@ -17,10 +16,10 @@
 \begin{titlepage}
 \begin{center}
     \Huge
-    \textsc{Vysoké učení technické v Brně\\
+    \textsc{Vysoké učení technické v Brně\\[0.5em]
     \huge{Fakulta informačních technologií}}\\
     \vspace{\stretch{0.382}}
-    \LARGE{Typografie a publikování\,--\,2. projekt\\
+    \LARGE{Typografie a publikování\,--\,2. projekt\\[0.5em]
     Sazba dokumentů a matematických výrazů}\\
     \vspace{\stretch{0.618}}
 \end{center}
@@ -29,7 +28,7 @@
 
 \section*{Úvod}
 
-V této úloze si vysázíme titulní stranu a kousek matematického textu, v němž se vyskytují například Definice \ref{definice1} nebo rovnice~(\ref{rovnice2}) na straně \pageref{rovnice2}. Pro vytvoření těchto odkazů používáme kombinace příkazů \verb|\label|, \verb|\ref|, \verb|\eqref| a \verb|\pageref|. Před odkazy patří nezlomitelná mezera. Pro zvýrazňování textu se používají příkazy \verb|\verb| a \verb|\emph|.
+V této úloze si vysázíme titulní stranu a kousek matematického textu, v němž se vyskytují například Definice~\ref{definice1} nebo rovnice~(\ref{rovnice2}) na straně~\pageref{rovnice2}. Pro vytvoření těchto odkazů používáme kombinace příkazů \verb|\label|, \verb|\ref|, \verb|\eqref| a \verb|\pageref|. Před odkazy patří nezlomitelná mezera. Pro zvýrazňování textu se používají příkazy \verb|\verb| a \verb|\emph|.
 
 Titulní strana je vysázena prostředím \texttt{titlepage} a~nadpis je v optickém středu s využitím \emph{přesného} zlatého řezu, který byl probrán na přednášce. Dále jsou na titulní straně čtyři různé velikosti písma a mezi dvojicemi řádků textu je použito řádkování se zadanou relativní velikostí 0,5\,em a 0,6\,em\footnote{Použijte správný typ mezery mezi číslem a jednotkou.}.
 
