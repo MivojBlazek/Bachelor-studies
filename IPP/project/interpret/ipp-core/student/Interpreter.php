@@ -34,6 +34,15 @@ class Interpreter extends AbstractInterpreter
         // making objects from xml document
         $prog = new ProgramTag();
 
+        $tags = $dom->getElementsByTagName('*');
+        foreach ($tags as $tag)
+        {
+            if (!in_array($tag->tagName, ['program', 'instruction', 'arg1', 'arg2', 'arg3']))
+            {
+                exit(32); //! unknown element
+            }
+        }
+
         $program = $dom->getElementsByTagName('program')->item(0);
         if ($program instanceof DOMElement)
         {
@@ -47,13 +56,21 @@ class Interpreter extends AbstractInterpreter
             foreach ($instructions as $instr)
             {
                 $opcode = $instr->getAttribute('opcode');
+                if ($opcode === '')
+                {
+                    exit(32);
+                }
                 $order = intval($instr->getAttribute('order'));
                 $args = [];
                 $instruction = new InstructionTag($opcode, $order, $args);
                 $prog->addInstruction($instruction);
 
+                $argTag1 = new ArgumentTag('default', 'default');
+                $argTag2 = new ArgumentTag('default', 'default');
+                $argTag3 = new ArgumentTag('default', 'default');
                 $arg1 = false;
                 $arg2 = false;
+                $arg3 = false;
                 foreach ($instr->childNodes as $argName)
                 {
                     if ($argName instanceof DOMElement)
@@ -70,11 +87,10 @@ class Interpreter extends AbstractInterpreter
                             {
                                 exit(31);
                             }
-                            $arg = new ArgumentTag($argType, trim($argValue));
-                            $instruction->addArgument($arg);
+                            $argTag1 = new ArgumentTag($argType, trim($argValue));
                             $arg1 = true;
                         }
-                        if ($argName->nodeName === 'arg2' && $arg1)
+                        if ($argName->nodeName === 'arg2')
                         {
                             $argType = $argName->getAttribute('type');
                             if (empty($argType))
@@ -86,11 +102,10 @@ class Interpreter extends AbstractInterpreter
                             {
                                 exit(31);
                             }
-                            $arg = new ArgumentTag($argType, trim($argValue));
-                            $instruction->addArgument($arg);
+                            $argTag2 = new ArgumentTag($argType, trim($argValue));
                             $arg2 = true;
                         }
-                        if ($argName->nodeName === 'arg3' && $arg1 && $arg2)
+                        if ($argName->nodeName === 'arg3')
                         {
                             $argType = $argName->getAttribute('type');
                             if (empty($argType))
@@ -102,10 +117,26 @@ class Interpreter extends AbstractInterpreter
                             {
                                 exit(31);
                             }
-                            $arg = new ArgumentTag($argType, trim($argValue));
-                            $instruction->addArgument($arg);
+                            $argTag3 = new ArgumentTag($argType, trim($argValue));
+                            $arg3 = true;
                         }
                     }
+                }
+                if (!(($arg3 && $arg2 && $arg1) || (!$arg3 && $arg2 && $arg1) || (!$arg3 && !$arg2 && $arg1) || (!$arg3 && !$arg2 && !$arg1)))
+                {
+                    exit(32);
+                }
+                if ($arg1)
+                {
+                    $instruction->addArgument($argTag1);
+                }
+                if ($arg2)
+                {
+                    $instruction->addArgument($argTag2);
+                }
+                if ($arg3)
+                {
+                    $instruction->addArgument($argTag3);
                 }
             }
         }
