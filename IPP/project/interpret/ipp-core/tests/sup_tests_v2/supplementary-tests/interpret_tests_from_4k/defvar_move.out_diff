@@ -1,5 +1,0 @@
---- ./tests/sup_tests_v2/supplementary-tests/interpret_tests_from_4k/defvar_move.out	2024-03-07 11:59:33.079519000 +0100
-+++ ./tests/sup_tests_v2/supplementary-tests/interpret_tests_from_4k/defvar_move.your_out	2024-03-07 11:59:33.084485000 +0100
-@@ -1 +0,0 @@
--42
-\ Chybí znak konce řádku na konci souboru

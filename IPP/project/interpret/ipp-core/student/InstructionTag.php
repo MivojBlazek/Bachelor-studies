@@ -19,6 +19,7 @@ class InstructionTag
     protected int $order;
     /** @var ArgumentTag[] */
     private $args = [];
+    private int $numberOfArgsLeft;
 
     /**
      * @param string $opcode
@@ -34,11 +35,60 @@ class InstructionTag
         }
         $this->order = $order;
         $this->args = $args;
+        $this->numberOfArgsLeft = $this->getMaxNumberOfArgs();
+    }
+
+    // method gets a maximal number of arguments for instruction
+    private function getMaxNumberOfArgs(): int
+    {
+       switch ($this->opcode)
+       {
+           case 'ADD':
+           case 'SUB':
+           case 'MUL':
+           case 'IDIV':
+           case 'LT':
+           case 'GT':
+           case 'EQ':
+           case 'AND':
+           case 'OR':
+           case 'STRI2INT':
+           case 'CONCAT':
+           case 'GETCHAR':
+           case 'SETCHAR':
+           case 'JUMPIFEQ':
+           case 'JUMPIFNEQ':
+               return 3;
+           case 'MOVE':
+           case 'NOT':
+           case 'INT2CHAR':
+           case 'READ':
+           case 'STRLEN':
+           case 'TYPE':
+               return 2;
+           case 'DEFVAR':
+           case 'CALL':
+           case 'PUSHS':
+           case 'POPS':
+           case 'WRITE':
+           case 'LABEL':
+           case 'JUMP':
+           case 'EXIT':
+           case 'DPRINT':
+               return 1;
+           default:
+               return 0;
+       }
     }
 
     // method adds argument to instruction
     public function addArgument(ArgumentTag $arg): void
     {
+        if (!$this->numberOfArgsLeft)
+        {
+            exit(32); //! invalid number of arguments
+        }
+        $this->numberOfArgsLeft--;
         $this->args[] = $arg;
     }
 
@@ -81,6 +131,11 @@ class InstructionTag
         $arg2Value = 'nil';
         $arg3Type = 'nil';
         $arg3Value = 'nil';
+
+        if ($this->numberOfArgsLeft)
+        {
+            exit(32); //! not all arguments parsed
+        }
 
         // get arguments of instruction
         if (isset($this->args[0]))
@@ -186,6 +241,8 @@ class InstructionTag
                 {
                     exit(54);
                 }
+                $result = '0';
+                $resultInt = 0;
 
                 if ($arg2Type === 'var' && $arg3Value !== '')
                 {
@@ -203,18 +260,17 @@ class InstructionTag
                     {
                         exit(32);
                     }
-                    $variable->setValue($variable2->getValue());
+                    $result = $variable2->getValue();
                 }
                 elseif ($arg2Type === 'int')
                 {
-                    $variable->setValue($arg2Value);
+                    $result = $arg2Value;
                 }
                 else
                 {
                     exit(53);
                 }
                 
-                $result = '0';
                 if ($arg3Type === 'var')
                 {
                     list($frame, $var) = explode('@', $arg3Value);
@@ -234,52 +290,55 @@ class InstructionTag
                     switch ($this->opcode)
                     {
                         case 'ADD':
-                            $result = floor(intval($variable->getValue()) + intval($variable3->getValue()));
+                            $resultInt = floor(intval($result) + intval($variable3->getValue()));
                             break;
                         case 'SUB':
-                            $result = floor(intval($variable->getValue()) - intval($variable3->getValue()));
+                            $resultInt = floor(intval($result) - intval($variable3->getValue()));
                             break;
                         case 'MUL':
-                            $result = floor(intval($variable->getValue()) * intval($variable3->getValue()));
+                            $resultInt = floor(intval($result) * intval($variable3->getValue()));
                             break;
                         case 'IDIV':
                             if ($variable3->getValue() === '0')
                             {
                                 exit(57); //! division by zero
                             }
-                            $result = floor(intval($variable->getValue()) / intval($variable3->getValue()));
+                            $resultInt = floor(intval($result) / intval($variable3->getValue()));
                             break;
                     }
-                    $variable->setValue(strval($result));
+                    $variable->setValue(strval($resultInt));
                 }
                 elseif ($arg3Type !== 'int' || $arg3Value === '')
                 {
                     exit(53);
                 }
-                elseif (!is_numeric($arg3Value) || !is_numeric($variable->getValue()))
+                elseif (!is_numeric($arg3Value) || !is_numeric($result))
                 {
                     exit(32);
                 }
-                switch ($this->opcode)
+                else
                 {
-                    case 'ADD':
-                        $result = floor(intval($variable->getValue()) + intval($arg3Value));
-                        break;
-                    case 'SUB':
-                        $result = floor(intval($variable->getValue()) - intval($arg3Value));
-                        break;
-                    case 'MUL':
-                        $result = floor(intval($variable->getValue()) * intval($arg3Value));
-                        break;
-                    case 'IDIV':
-                        if ($arg3Value === '0')
-                        {
-                            exit(57); //! division by zero
-                        }
-                        $result = floor(intval($variable->getValue()) / intval($arg3Value));
-                        break;
+                    switch ($this->opcode)
+                    {
+                        case 'ADD':
+                            $resultInt = floor(intval($result) + intval($arg3Value));
+                            break;
+                        case 'SUB':
+                            $resultInt = floor(intval($result) - intval($arg3Value));
+                            break;
+                        case 'MUL':
+                            $resultInt = floor(intval($result) * intval($arg3Value));
+                            break;
+                        case 'IDIV':
+                            if ($arg3Value === '0')
+                            {
+                                exit(57); //! division by zero
+                            }
+                            $resultInt = floor(intval($result) / intval($arg3Value));
+                            break;
+                    }
+                    $variable->setValue(strval($resultInt));
                 }
-                $variable->setValue(strval($result));
                 break;
             case 'LT':
             case 'GT':
