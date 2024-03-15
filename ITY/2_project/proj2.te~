@@ -15,7 +15,7 @@
 \begin{titlepage}
 \begin{center}
     \Huge
-    \textsc{Vysoké učení technické v~Brně\\[0.5em]
+    \textsc{Vysoké učení technické v Brně\\[0.5em]
     \huge{Fakulta informačních technologií}}\\
     \vspace{\stretch{0.382}}
     \LARGE{Typografie a publikování\,--\,2. projekt\\[0.5em]
@@ -27,13 +27,13 @@
 
 \section*{Úvod}
 
-V~této úloze si vysázíme titulní stranu a kousek matematického textu, v~němž se vyskytují například Definice~\ref{definice1} nebo rovnice~(\ref{rovnice2}) na straně~\pageref{rovnice2}. Pro vytvoření těchto odkazů používáme kombinace příkazů \verb|\label|, \verb|\ref|, \verb|\eqref| a \verb|\pageref|. Před odkazy patří nezlomitelná mezera. Pro zvýrazňování textu se používají příkazy \verb|\verb| a \verb|\emph|.
+V této úloze si vysázíme titulní stranu a kousek matematického textu, v němž se vyskytují například Definice~\ref{definice1} nebo rovnice~(\ref{rovnice2}) na straně~\pageref{rovnice2}. Pro vytvoření těchto odkazů používáme kombinace příkazů \verb|\label|, \verb|\ref|, \verb|\eqref| a \verb|\pageref|. Před odkazy patří nezlomitelná mezera. Pro zvýrazňování textu se používají příkazy \verb|\verb| a \verb|\emph|.
 
-Titulní strana je vysázena prostředím \texttt{titlepage} a~nadpis je v~optickém středu s~využitím \emph{přesného} zlatého řezu, který byl probrán na přednášce. Dále jsou na titulní straně čtyři různé velikosti písma a mezi dvojicemi řádků textu je použito řádkování se zadanou relativní velikostí 0,5\,em a 0,6\,em\footnote{Použijte správný typ mezery mezi číslem a jednotkou.}.
+Titulní strana je vysázena prostředím \texttt{titlepage} a~nadpis je v optickém středu s využitím \emph{přesného} zlatého řezu, který byl probrán na přednášce. Dále jsou na titulní straně čtyři různé velikosti písma a mezi dvojicemi řádků textu je použito řádkování se zadanou relativní velikostí 0,5\,em a 0,6\,em\footnote{Použijte správný typ mezery mezi číslem a jednotkou.}.
 
 \section{Matematický text}
 
-Matematické symboly a výrazy v~plynulém textu jsou v~prostředí \texttt{math}. Definice a věty sázíme v~prostředí definovaném příkazem \verb|\newtheorem| z~balíku \texttt{amsthm}. Tato prostředí obracejí význam \verb|\emph|: uvnitř textu sázeného kurzívou se zvýrazňuje písmem v~základním řezu. Někdy je vhodné použít konstrukci \verb|${}$| nebo \verb|\mbox{}|, která zabrání zalomení (matematického) textu. Pozor také na tvar i sklon řeckých písmen: srovnejte \verb|\epsilon| a \verb|\varepsilon|, \verb|\Xi| a \verb|\varXi|.
+Matematické symboly a výrazy v plynulém textu jsou v prostředí \texttt{math}. Definice a věty sázíme v prostředí definovaném příkazem \verb|\newtheorem| z balíku \texttt{amsthm}. Tato prostředí obracejí význam \verb|\emph|: uvnitř textu sázeného kurzívou se zvýrazňuje písmem v základním řezu. Někdy je vhodné použít konstrukci \verb|${}$| nebo \verb|\mbox{}|, která zabrání zalomení (matematického) textu. Pozor také na tvar i sklon řeckých písmen: srovnejte \verb|\epsilon| a \verb|\varepsilon|, \verb|\Xi| a \verb|\varXi|.
 
 \begin{definition}
     \label{definice1}\emph{Konečný přepisovací stroj} neboli \emph{Mealyho automat} je definován jako uspořádaná pětice tvaru $\mathnormal{M=(Q,\Sigma,\Gamma,\delta,q_0)}$, kde:
@@ -47,7 +47,7 @@ Matematické symboly a výrazy v~plynulém textu jsou v~prostředí \texttt{math
     \end{itemize}
 \end{definition}
 
-\subsection{Podsekce s~definicí}
+\subsection{Podsekce s definicí}
 
 Pomocí přechodové funkce $\delta$ zavedeme novou funkci $\delta^*$ pro překlad vstupních slov $\mathnormal{u\in\Sigma^*}$ do výstupních slov $\mathnormal{w\in\Gamma^*}$.
 
@@ -74,16 +74,16 @@ Velikost závorek a svislých čar je potřeba přizpůsobit jejich obsahu. Veli
     F_{n+1}=\binom{n}{0}+\binom{n-1}{1}+\binom{n-2}{2}+\cdots+\binom{\lceil\frac{n}{2}\rceil}{\lfloor\frac{n}{2}\rfloor}
 \end{equation*}
 
-V~rovnici~(\ref{rovnice1}) jsou tři typy závorek s~různou \emph{explicitně} definovanou velikostí. Obě rovnice mají svisle zarovnaná rovnítka. Použijte k~tomu vhodné prostředí.
+V rovnici~(\ref{rovnice1}) jsou tři typy závorek s různou \emph{explicitně} definovanou velikostí. Obě rovnice mají svisle zarovnaná rovnítka. Použijte k tomu vhodné prostředí.
 \begin{eqnarray}
     \label{rovnice1}\left(\left\{b\otimes[c_1\oplus c_2]\circ a\right\}^{\frac{2}{3}}\right) & = & \mathrm{log}_z x\\
     \label{rovnice2}\int_a^b f(x)\,\mathrm{d}x & = & -\int_b^a f(y)\,\mathrm{d}y
 \end{eqnarray}
-V~této větě vidíme, jak se vysází proměnná určující limitu v~běžném textu: $\lim_{m\rightarrow\infty} f(m)$. Podobně je to i s~dalšími symboly jako $\bigcup_{N \in \mathcal{M}}N$ či $\sum_{i=1}^m x_i^2$. S~vynucením méně úsporné sazby příkazem \verb|\limits| budou vzorce vysázeny v~podobě $\lim\limits _{m\rightarrow\infty}f(m)$ a $\sum\limits _{i=1}^m x_i^2$.
+V této větě vidíme, jak se vysází proměnná určující limitu v běžném textu: $\lim_{m\rightarrow\infty} f(m)$. Podobně je to i s dalšími symboly jako $\bigcup_{N \in \mathcal{M}}N$ či $\sum_{i=1}^m x_i^2$. S vynucením méně úsporné sazby příkazem \verb|\limits| budou vzorce vysázeny v podobě $\lim\limits _{m\rightarrow\infty}f(m)$ a $\sum\limits _{i=1}^m x_i^2$.
 
 \section{Matice}
 
-Pro sázení matic se používá prostředí \texttt{array} a závorky s~výškou nastavenou pomocí \verb|\left|, \verb|\right|.
+Pro sázení matic se používá prostředí \texttt{array} a závorky s výškou nastavenou pomocí \verb|\left|, \verb|\right|.
 $$D=
 \left|
 \begin{array}{cccc}
