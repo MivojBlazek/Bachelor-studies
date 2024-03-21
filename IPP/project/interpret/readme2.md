@@ -47,3 +47,7 @@ Zde nalezneme informace o proměnných. Každá si uchovává svůj datový typ,
 ### Soubor Stack.php
 
 Tento soubor má třídu `Stack`, ve které je třídní atribut pole položek zásobníku. Samozřejmě na zásobník lze dát položku pomocí metody `stackPush()` a získat z něj položku pomocí `stackPop()`. Instance tohoto zásobníku v `InstructionTag` slouží pro instrukce provádějící zásobníkové operace.
+
+## Diagram tříd
+
+![Diagram tříd](IPP_class_diagram.jpg)
