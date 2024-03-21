@@ -1120,8 +1120,9 @@ class InstructionTag
                     $stderr->writeString($arg1Value);
                 }
                 break;
-            case 'BREAK': //TODO
-                $stderr->writeString('Info about current position in code');
+            case 'BREAK':
+                $stderr->writeString('Actual position in code: ');
+                $stderr->writeString(strval(intval($instrIndex) + 1));
                 break;
             default:
                 // should not occur if opcode is correct from parse.py
