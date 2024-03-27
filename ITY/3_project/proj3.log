@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=latex 2023.11.30)  25 MAR 2024 18:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=latex 2023.11.30)  27 MAR 2024 08:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -417,19 +417,8 @@ File: etiopan.eps Graphic file (type eps)
 File: oniisan.eps Graphic file (type eps)
  <oniisan.eps>
 File: oniisan2.eps Graphic file (type eps)
- <oniisan2.eps> [2] [3]
-
-LaTeX Warning: \oval, \circle, or \line size unavailable on input line 194.
-
-
-Overfull \hbox (17.13387pt too wide) in paragraph at lines 248--249
-[][] 
- []
-
-
-LaTeX Warning: Float too large for page by 42.27374pt on input line 251.
-
-[4] (./proj3.aux)
+ <oniisan2.eps> [2] [3] [4]
+(./proj3.aux)
  ***********
 LaTeX2e <2023-11-01>
 L3 programming layer <2023-11-09>
@@ -438,10 +427,10 @@ Package rerunfilecheck Info: File `proj3.out' has not changed.
 (rerunfilecheck)             Checksum: 2A9904D8BA4A17DF581596ED5F6DAB41;666.
  ) 
 Here is how much of TeX's memory you used:
- 11305 strings out of 474268
- 177131 string characters out of 5744443
+ 11309 strings out of 474268
+ 177179 string characters out of 5744443
  1953552 words of memory out of 5000000
- 33380 multiletter control sequences out of 15000+600000
+ 33384 multiletter control sequences out of 15000+600000
  595821 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,12n,79p,6926b,537s stack positions out of 10000i,1000n,20000p,200000b,200000s
