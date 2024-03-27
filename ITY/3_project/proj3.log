@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=latex 2023.11.30)  27 MAR 2024 08:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=latex 2023.11.30)  27 MAR 2024 09:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -312,7 +312,7 @@ Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: dvips (dvips) on input line 124.
 ))
-LaTeX Font Info:    Trying to load font information for T1+ptm on input line 15
+LaTeX Font Info:    Trying to load font information for T1+ptm on input line 13
 .
 
 (/usr/local/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd
@@ -331,24 +331,24 @@ File: l3backend-dvips.def 2023-11-09 L3 backend support: dvips
 (./proj3.aux)
 \openout1 = `proj3.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: dvips
@@ -384,7 +384,7 @@ LaTeX Font Info:    ... okay on input line 15.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 15.
+Package hyperref Info: Link coloring OFF on input line 13.
 (./proj3.out) (./proj3.out)
 \@outlinefile=\write3
 \openout3 = `proj3.out'.
@@ -392,22 +392,22 @@ Package hyperref Info: Link coloring OFF on input line 15.
  [1
 
 ]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 36
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 34
 .
 
 (/usr/local/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 53.
+(Font)              <10.95> on input line 51.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 53.
+(Font)              <8> on input line 51.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 53.
+(Font)              <6> on input line 51.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 53.
+(Font)              <9> on input line 51.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 53.
+(Font)              <5> on input line 51.
  [1]
 File: etiopan.eps Graphic file (type eps)
 
@@ -415,9 +415,9 @@ File: etiopan.eps Graphic file (type eps)
 File: etiopan.eps Graphic file (type eps)
  <etiopan.eps>
 File: oniisan.eps Graphic file (type eps)
- <oniisan.eps>
+ <oniisan.eps> [2]
 File: oniisan2.eps Graphic file (type eps)
- <oniisan2.eps> [2] [3] [4]
+ <oniisan2.eps> [3] [4]
 (./proj3.aux)
  ***********
 LaTeX2e <2023-11-01>
@@ -429,10 +429,10 @@ Package rerunfilecheck Info: File `proj3.out' has not changed.
 Here is how much of TeX's memory you used:
  11309 strings out of 474268
  177179 string characters out of 5744443
- 1953552 words of memory out of 5000000
+ 1954552 words of memory out of 5000000
  33384 multiletter control sequences out of 15000+600000
  595821 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,12n,79p,6926b,537s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on proj3.dvi (5 pages, 25804 bytes).
+Output written on proj3.dvi (5 pages, 25816 bytes).

@@ -6,11 +6,9 @@
 \usepackage[czech]{babel}
 \usepackage{multirow}
 \usepackage[hidelinks]{hyperref}
-\usepackage[ruled, noline, linesnumbered]{algorithm2e}
+\usepackage[czech, ruled, noline, longend, linesnumbered]{algorithm2e}
 \usepackage{graphicx}
 \usepackage{pdflscape}
-
-\renewcommand{\algorithmcfname}{Algoritmus}
 
 \begin{document}
 
@@ -64,7 +62,7 @@ Další možností, jak vytvořit tabulku, je použít prostředí \texttt{tabul
             USD           & 22,943                             & 24,357          \\ \hline
         \end{tabular}
         \label{TabulkaKurzu}
-        \caption{Tabulka kurzů k~nešnímu dni}\label{tab1}
+        \caption{Tabulka kurzů k~dnešnímu dni}\label{tab1}
     \end{center}
 \end{table}
 
@@ -118,35 +116,36 @@ Pokud budeme chtít vysázet algoritmus, můžeme použít prostředí \texttt{a
 {http://ftp.cstug.cz/pub/tex/CTAN/macros/latex/contrib/algorithms/algorithms.pdf}.} nebo \texttt{algorithm2e}\footnote{Pro \texttt{algorithm2e} zase tuhle \href{http://ftp.cstug.cz/pub/tex/CTAN/macros/latex/contrib/algorithm2e/doc/algorithm2e.pdf}{http://ftp.cstug.cz/pub/tex/CTAN/macros/latex/contrib/algorithm2e/doc/algorithm2e.pdf}.}. Příklad použití prostředí \texttt{algorithm2e} viz Algoritmus \ref{Algoritmus1}.
 
 \begin{algorithm} \label{Algoritmus1}
+    \DontPrintSemicolon
     \caption{\textsc{FastSLAM}}
     \KwIn{$(X_{t - 1}, u_t, z_t)$}
     \KwOut{$X_t$}
     \SetNlSty{}{}{:}
-    \SetKwFor{For}{for}{do}{end\ for}
     
-    $\overline{X_t} = X_t = 0$ \\
+    \BlankLine
+    $\overline{X_t} = X_t = 0$ \;
     \For{$k = 1$ \emph{to} $M$}
     {
-        $x_t^{[k]} = sample\mathunderscore motion\mathunderscore model(u_t, x_{t - 1}^{[k]})$ \\
-        $\omega_t^{[k]} = measurement\mathunderscore model(z_t, x_t^{[k]}, m_{t - 1})$ \\
-        $m_t^{[k]} = updated\mathunderscore occupancy\mathunderscore grid(z_t, x_t^{[k]}, m_{t - 1}^{[k]})$ \\
-        $\overline{X_t} = \overline{X_t} + \langle x_x^{[m]}, \omega_t^{[m]} \rangle$ \\
+        $x_t^{[k]} = sample\mathunderscore motion\mathunderscore model(u_t, x_{t - 1}^{[k]})$ \;
+        $\omega_t^{[k]} = measurement\mathunderscore model(z_t, x_t^{[k]}, m_{t - 1})$ \;
+        $m_t^{[k]} = updated\mathunderscore occupancy\mathunderscore grid(z_t, x_t^{[k]}, m_{t - 1}^{[k]})$ \;
+        $\overline{X_t} = \overline{X_t} + \langle x_x^{[m]}, \omega_t^{[m]} \rangle$ \;
     }
     \For{$k = 1$ \emph{to} $M$}
     {
-        draw \emph{i} with probability $\approx \omega_t^{[i]}$ \\
-        add $\langle x_x^{[k]}, m_t^{[k]} \rangle$ to $X_t$
+        draw \emph{i} with probability $\approx \omega_t^{[i]}$ \;
+        add $\langle x_x^{[k]}, m_t^{[k]} \rangle$ to $X_t$ \;
     }
-    \Return{$X_t$}
+    \Return{$X_t$} \;
 \end{algorithm}
 
 \section{Obrázky}
 
-Do našich článků můžeme samozřejmě vkládat obrázky. Pokud je obrázek fotografie, můžeme klidně použít bitmapový soubor. Pokud by to ale mělo být nějaké schéma nebo něco podobného, je dobrým zvykem takovýto obrázek vytvořit vektorově.
+Do našich článků můžeme samozřejmě vkládat obrázky. Pokud je obrázkem fotografie, můžeme klidně použít bitmapový soubor. Pokud by to ale mělo být nějaké schéma nebo něco podobného, je dobrým zvykem takovýto obrázek vytvořit vektorově.
 
 \begin{figure}[ht]
     \centering
-    \scalebox{0.4}{
+    \scalebox{0.42}{
         \includegraphics{etiopan.eps}
         \reflectbox{\includegraphics{etiopan.eps}}}
     \label{ObrazekEtiopan1}
@@ -162,7 +161,7 @@ Rozdíl mezi vektorovým \dots
     \caption{Vektorový obrázek}\label{obr2}
 \end{figure}
 
-\dots a bitmapovým obrázkem
+\dots~a bitmapovým obrázkem
 
 \begin{figure}[ht]
     \centering
