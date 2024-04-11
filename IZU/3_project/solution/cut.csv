@@ -1,0 +1,16 @@
+teplota;den;obdobi;vhkost;classes
+stredni;svatek;zima;velka;Nizka
+vysoka;svatek;zima;mala;Stredni
+stredni;vikend;podzim;velka;Stredni
+stredni;pracovni;jaro;mala;Nizka
+nizka;svatek;zima;mala;Velka
+stredni;svatek;podzim;velka;Nizka
+nizka;pracovni;podzim;mala;Velka
+stredni;svatek;jaro;velka;Velka
+stredni;pracovni;leto;velka;Nizka
+vysoka;pracovni;leto;mala;Velka
+vysoka;pracovni;leto;velka;Nizka
+vysoka;pracovni;jaro;mala;Stredni
+vysoka;vikend;podzim;mala;Velka
+stredni;svatek;leto;velka;Nizka
+stredni;pracovni;podzim;velka;Nizka
