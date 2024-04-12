@@ -1,0 +1,54 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[top=3cm, text={17cm, 24cm}, left=2cm]{geometry}
+\usepackage{times}
+\usepackage[czech]{babel}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+    \Huge
+    \textsc{Vysoké učení technické v~Brně\\
+    \huge{Fakulta informačních technologií}}\\
+    \vspace{\stretch{0.382}}
+    \LARGE{Typografie a publikování\,--\,4. projekt}\\
+    \Huge{Bibliografické citace}\\
+    \vspace{\stretch{0.618}}
+\end{center}
+{\Large \today \hfill Michal Blažek}
+\end{titlepage}
+
+\section{Typografie}
+
+\subsection{Úvod}
+
+Typografie a \LaTeX~hrají důležitou roli ve světě psaní, sazby a designu dokumentů. Od knihtiskáren až po moderní digitální technologie do tvorby dokumentů přinášejí efektivitu a estetiku. Typografie tvoří základní vizuální hierarchii, která řídí čtenářovu pozornost~\cite{Kottwitz2011}.
+
+\subsection{Historie a důležitost typografie}
+
+Historie typografie sahá až do doby starověkých civilizací, kdy se písmo vyvíjelo z rytin na jeskynních stěnách. Důležitost správného použití typografie spočívá v schopnosti efektivně sdělovat informace a vytvářet jejich čtení příjemné~\cite{Saltz2010}. Typografie také klade velký důraz na kompletnost a správnost informací, proto také udává určitá pravidla pro psaní dokumentů. Podle knihy "Základy typografie: 100 principů pro práci s písmem"~\cite{Saltz2010} byla serifová písma tradičně používána v tištěných knihách, což přispívalo k čitelnosti a příjemnosti při čtení textu. Jelikož autoři chtějí, aby čtenáře jejich práce bavila, preferují patková písma. Díky vývoji knihtisku v 15. století byla umožněna obrovská produkce knih. Tento rozmach tisku vedl ke vzniku nových typografických stylů a fontů, které ovlivnily celou další historii.
+
+\subsection{Moderní typografie na webových stránkách}
+
+V moderní době se typografie stala klíčovým prvkem v designu a to třeba i na webových stránkách~\cite{FontgemGuideForBegginers}. Responzivní design umožňuje flexibilní a dynamické uspořádání textu na různých zařízeních~\cite{FontgemGuideForBegginers}. Minimalistický design je také častým prvkem v moderní typografii. Například optimální délka řádku je kolem 50\,-\,75 znaků, aby se uživatel při čtení neztrácel v textu~\cite{FontgemWebDesign}.
+
+\section{\LaTeX : sazebník pro akademické dokumenty}
+
+\LaTeX , sázecí systém založený na programovacím jazyce \TeX , se stal nedílnou součástí akademického prostředí. Provotně může \LaTeX~působit složitě, protože uživatel je nucen psát dokument pomocí příkazů. Avšak nakonec stačí naučit se několik málo příkazů a dokumenty vypadají mnohem profesionálněji~\cite{Rybicka2003}. Hlavní schopností \LaTeX u je vytvářet profesionálně vypadající dokumenty s matematickými vzorci, tabulkami a citacemi usnadňuje psaní vědeckých prací a technických dokumentů. \LaTeX~také poskytuje mechanismy pro formátování textu nebo třeba pro křížové odkazy, což velice usnadňuje tvorbu dlouhých dokumentů~\cite{Gratzer2013}. 
+
+\subsection{Vysoká efektivita a profesionálnost}
+
+Spojení tradiční typografie s moderním nástrojem jako je \LaTeX~přináší do psaní a formátování dokumentů nové možnosti~\cite{Jiricek2012}. Kombinace funkcionality a technického know-how umožňuje tvorbu dokumentů, které vypadají profesionálně a také jsou efektivní ve sdělování informací~\cite{Bednar2011}.
+
+\section{Závěr}
+
+Typografie a \LaTeX~jsou velmi důležité části ve světě psaní a designu~\cite{Huys2023}. Jejich kombinace nám umožňuje vytvářet kvalitní dokumenty, které jsou vizuálně přitažlivé a zároveň sdělují svůj obsah jasně a efektivně~\cite{Kafka2017}. Samozřejmě lze pomocí \LaTeX u psát dokumenty velmi rychle.
+
+\newpage
+
+\bibliographystyle{czechiso}
+\bibliography{proj4}
+
+\end{document}
