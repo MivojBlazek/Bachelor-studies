@@ -1,0 +1,51 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\selectlanguage}[1]{\relax}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem{FontgemWebDesign}
+The Importance of Typography in Web Design. [online].
+\newline\urlprefix\url{https://www.fontgem.com/importance-of-typography-in-web-design}
+
+\bibitem{FontgemGuideForBegginers}
+What is Typography? A Guide for Beginners. [online].
+\newline\urlprefix\url{https://www.fontgem.com/what-is-typography}
+
+\bibitem{Bednar2011}
+BEDNÁR, P.: Tvorba písma OpenType volně dostupnými softwarovými
+  prostředky. 2011.
+\newline\urlprefix\url{http://hdl.handle.net/11012/5218}
+
+\bibitem{Gratzer2013}
+GRÄTZER, G.: \emph{Math into LaTeX}, kapitola Text and math. Birkhäuser
+  Boston, třetí vydání, 2013, ISBN 9781461221340.
+
+\bibitem{Huys2023}
+HUYS, N.: \emph{Typography for begginers}, kapitola Importance of Typography in
+  Communication. Nicky Huys, 2023.
+
+\bibitem{Jiricek2012}
+JIŘÍČEK, M.: Živý font. 2012.
+\newline\urlprefix\url{http://hdl.handle.net/11012/8696}
+
+\bibitem{Kafka2017}
+KAFKA, O.: Font 156. \emph{Časopisy}, 2017, ISSN 1211-4049.
+
+\bibitem{Kottwitz2011}
+KOTTWITZ, S.: \emph{LaTeX Beginner's Guide}. Birmingham: Packt Publishing,
+  2011, ISBN 978-1847199867.
+
+\bibitem{Rybicka2003}
+RYBIČKA, J.: \emph{LaTeX pro začátečníky}. Brno: Konvoj, třetí vydání,
+  2003, ISBN 80-7302-049-1.
+
+\bibitem{Saltz2010}
+SALTZ, I.: \emph{Základy typografie: 100 principů pro práci s písmem}.
+  Slovart (ČR), 2010, ISBN 978-80-7391-404-2, str.~50.
+
+\end{thebibliography}

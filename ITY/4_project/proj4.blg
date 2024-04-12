@@ -1,0 +1,61 @@
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: proj4.aux
+The style file: czechiso.bst
+Database file #1: proj4.bib
+Warning--entry type for "Jiricek2012" isn't style-file defined
+--line 68 of file proj4.bib
+Warning--entry type for "Bednar2011" isn't style-file defined
+--line 77 of file proj4.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--to sort, need author or key in FontgemGuideForBegginers
+Warning--to sort, need author or key in FontgemWebDesign
+Warning--empty pages in Gratzer2013
+Warning--empty pages in Huys2023
+Warning--empty chapter and pages in Kottwitz2011
+Warning--empty pages in Kottwitz2011
+Warning--empty chapter and pages in Rybicka2003
+Warning--empty pages in Rybicka2003
+Warning--empty chapter and pages in Saltz2010
+You've used 10 entries,
+            3151 wiz_defined-function locations,
+            715 strings with 6498 characters,
+and the built_in function-call counts, 3387 in all, are:
+= -- 200
+> -- 60
+< -- 5
++ -- 27
+- -- 16
+* -- 175
+:= -- 386
+add.period$ -- 20
+call.type$ -- 10
+change.case$ -- 32
+chr.to.int$ -- 6
+cite$ -- 19
+duplicate$ -- 363
+empty$ -- 407
+format.name$ -- 16
+if$ -- 746
+int.to.chr$ -- 0
+int.to.str$ -- 10
+missing$ -- 91
+newline$ -- 44
+num.names$ -- 16
+pop$ -- 207
+preamble$ -- 1
+purify$ -- 28
+quote$ -- 0
+skip$ -- 119
+stack$ -- 0
+substring$ -- 59
+swap$ -- 154
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 30
+warning$ -- 9
+while$ -- 19
+width$ -- 12
+write$ -- 97
+(There were 11 warnings)
