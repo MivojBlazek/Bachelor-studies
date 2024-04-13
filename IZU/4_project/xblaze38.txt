@@ -1,0 +1,12 @@
+Zadani c. 28
+
+Metodou K-means clustering zaradte nasledujci body (x,y,z) v 3D prostoru 
+(-4,-7,-4) (-9, 1, 3) (-7,-7,-3) ( 7,-8, 0) (-2,-9,-7) (-4, 1, 2) ( 3,-3, 9) (-2,-6, 7) (-6, 3, 9) (-5, 7, 7) 
+do 3 shluku s pocatecnimi stredy 
+(-4, 1, 2) (-7,-7,-3) (-5, 7, 7).
+
+Vysledky vypoctu zaokrouhlujte na dve desetinna mista. 
+
+C1 = (-4, 1, 2) (-9, 1, 3) ( 3,-3, 9) (-2,-6, 7)
+C2 = (-7,-7,-3) (-4,-7,-4) ( 7,-8, 0) (-2,-9,-7)
+C3 = (-5, 7, 7) (-6, 3, 9)
