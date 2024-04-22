@@ -18,7 +18,7 @@
 %xblaze38@fit.vutbr.cz}
 
 \institute[]{Fakulta informačních technologií
-Vysokého učení technického v~Brně\\
+Vysokého učení technického v Brně\\
 Bo\v{z}et\v{e}chova 1/2. 612 66 Brno - Kr\'alovo Pole\\
 xblaze38@fit.vutbr.cz}
 
@@ -37,16 +37,16 @@ xblaze38@fit.vutbr.cz}
 \begin{frame}\frametitle{Co je to binární strom}
 
     \begin{itemize}
-        \item Binární strom je orientovaný graf s~jedním vrcholem a z~něj existuje cesta do všech ostatních vrcholů grafu.
-        \item Binární strom se skládá z~\emph{uzlů}, které jsou propojeny pomocí \emph{hran}.
+        \item Binární strom je orientovaný graf s jedním vrcholem a z něj existuje cesta do všech ostatních vrcholů grafu.
+        \item Binární strom se skládá z \emph{uzlů}, které jsou propojeny pomocí \emph{hran}.
         \item Každý uzel může mít maximálně 2 další potomky a 1 rodičovský uzel.
         \item Uzel, který nemá žádného rodiče, se nazývá \emph{kořen stromu}.
-        \item Kořenový uzel existuje v~každém binárním stromě a to přesně jeden.
+        \item Kořenový uzel existuje v každém binárním stromě a to přesně jeden.
     \end{itemize}
     
     \begin{block}{Rekurzivní definice binárního stromu viz \cite{HonzíkJanMaxmilián1991Vkzp}:}
         \begin{quote}
-            Binární strom je buď prázdný, nebo sestává z~jednoho uzlu zvaného kořen a dvou binárních podstromů – levého a pravého. (Oba podstromy mají vlastnosti binárního stromu.)
+            Binární strom je buď prázdný, nebo sestává z jednoho uzlu zvaného kořen a dvou binárních podstromů – levého a pravého. (Oba podstromy mají vlastnosti binárního stromu.)
         \end{quote}
     \end{block}
     
@@ -57,7 +57,7 @@ xblaze38@fit.vutbr.cz}
     \begin{figure}[ht]
         \centering
         \scalebox{0.23}{\includegraphics{img/binary_tree.png}}
-        \caption{Příklad binárního stromu s~kořenem, který má hodnotu 1}
+        \caption{Příklad binárního stromu s kořenem, který má hodnotu 1}
         \label{imgBinaryTree}
     \end{figure}
     
@@ -67,8 +67,8 @@ xblaze38@fit.vutbr.cz}
 
     \begin{itemize}
         \item Každý uzel má přiřazen klíč a podle něj jsou uzly uspořádány.
-        \item \emph{Levý} podstrom obsahuje vždy pouze uzly s~klíčem, který je \emph{menší} než je klíč tohoto uzlu.
-        \item \emph{Pravý} podstrom potom obsahuje pouze uzly s~klíčem, který je \emph{větší} než je klíč tohoto uzlu.
+        \item \emph{Levý} podstrom obsahuje vždy pouze uzly s klíčem, který je \emph{menší} než je klíč tohoto uzlu.
+        \item \emph{Pravý} podstrom potom obsahuje pouze uzly s klíčem, který je \emph{větší} než je klíč tohoto uzlu.
     \end{itemize}
     
     \begin{alertblock}{Poznámka:}
@@ -81,8 +81,8 @@ xblaze38@fit.vutbr.cz}
 
     \begin{block}{Výhody}
         \begin{itemize}
-            \item[$+$] Ve vyváženém binárním stromě je přístup k~uzlu rychlý.
-            \item[$+$] Lze využít i k~řazení prvků.
+            \item[$+$] Ve vyváženém binárním stromě je přístup k uzlu rychlý.
+            \item[$+$] Lze využít i k řazení prvků.
             \item[$+$] Využití při tvorbě asociativní paměti.
         \end{itemize}
     \end{block}
@@ -90,7 +90,7 @@ xblaze38@fit.vutbr.cz}
     \begin{alertblock}{Nevýhody}
         \begin{itemize}
             \item[$-$] Strom může při nešťastném vkládání a odstraňování prvků degradovat na seznam, pokud se nevyvažuje.
-            \item[$-$] Vrcholy naukládají informaci o~rodiči, takže je potřeba si ukládat cestu k~danému uzlu.
+            \item[$-$] Vrcholy naukládají informaci o rodiči, takže je potřeba si ukládat cestu k danému uzlu.
         \end{itemize}
     \end{alertblock}
     
@@ -118,7 +118,7 @@ xblaze38@fit.vutbr.cz}
         \item \emph{Postorder} - nejprve zpracovává levý podstrom, pak pravý podstrom a až nakonec kořen.
     \end{itemize}
 
-    Toto zpracovávání se provádí rekurzivně, přičemž se vždy začíná v~kořenu binárního stromu.
+    Toto zpracovávání se provádí rekurzivně, přičemž se vždy začíná v kořenu binárního stromu.
     \begin{columns}
         \begin{column}{0.35\textwidth}
             \scalebox{0.15}{\includegraphics{img/preorder.png}}
@@ -130,7 +130,7 @@ xblaze38@fit.vutbr.cz}
             
             \item \emph{Inorder} by nám vrátil seřazené prvky: 1,2,5,7,9,14.
             
-            \item A~\emph{postorder} by vypadal následovně: 1,5,2,14,9,7
+            \item A \emph{postorder} by vypadal následovně: 1,5,2,14,9,7
             \end{itemize}
         \end{column}
     \end{columns}
@@ -188,19 +188,19 @@ xblaze38@fit.vutbr.cz}
 
     Pro maximální efektivitu binárního stromu je zapotřebí strom vyvážit po každém vložení nebo odstranění uzlu.
     
-    Existují 2 druhy vyváženosti (lze nalézt v~\cite{HonzíkJanMaxmilián1991Vkzp}):
+    Existují 2 druhy vyváženosti (lze nalézt v \cite{HonzíkJanMaxmilián1991Vkzp}):
     \begin{itemize}
         \item \emph{Výšková} vyváženost
     \end{itemize}
     \begin{quote}
-        Binární strom je \emph{výškově} vyvážený, když pro každý jeho uzel platí, že výška levého podstromu se rovná výšce pravého podstromu a nebo se liší právě o~1.
+        Binární strom je \emph{výškově} vyvážený, když pro každý jeho uzel platí, že výška levého podstromu se rovná výšce pravého podstromu a nebo se liší právě o 1.
     \end{quote}
     
     \begin{itemize}
         \item \emph{Váhová} vyváženost
     \end{itemize}
     \begin{quote}
-        Binární strom je \emph{váhově} vyvážený, když pro každý jeho uzel platí, že počty uzlů jeho levého a pravého podstromu se rovnají a nebo se liší právě o~1.
+        Binární strom je \emph{váhově} vyvážený, když pro každý jeho uzel platí, že počty uzlů jeho levého a pravého podstromu se rovnají a nebo se liší právě o 1.
     \end{quote}
     
 \end{frame}
