@@ -1,0 +1,47 @@
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: proj5.aux
+The style file: czechiso.bst
+Database file #1: proj5.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+You've used 1 entry,
+            3151 wiz_defined-function locations,
+            657 strings with 5495 characters,
+and the built_in function-call counts, 532 in all, are:
+= -- 36
+> -- 16
+< -- 2
++ -- 7
+- -- 4
+* -- 27
+:= -- 62
+add.period$ -- 2
+call.type$ -- 1
+change.case$ -- 6
+chr.to.int$ -- 6
+cite$ -- 1
+duplicate$ -- 50
+empty$ -- 51
+format.name$ -- 5
+if$ -- 116
+int.to.chr$ -- 0
+int.to.str$ -- 1
+missing$ -- 13
+newline$ -- 13
+num.names$ -- 2
+pop$ -- 30
+preamble$ -- 1
+purify$ -- 4
+quote$ -- 0
+skip$ -- 18
+stack$ -- 0
+substring$ -- 8
+swap$ -- 24
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 2
+warning$ -- 0
+while$ -- 3
+width$ -- 2
+write$ -- 19
