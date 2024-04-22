@@ -3,12 +3,10 @@
 PROJ=proj5
 
 $(PROJ).pdf: $(PROJ).tex
-	latex $(PROJ).tex
+	pdflatex $(PROJ).tex
 	bibtex $(PROJ)
-	latex $(PROJ).tex
-	latex $(PROJ).tex
-	dvips -t a4 $(PROJ).dvi
-	ps2pdf -sPAPERSIZE=a4 $(PROJ).ps
+	pdflatex $(PROJ).tex
+	pdflatex $(PROJ).tex
 
 clean:
 	rm -f $(PROJ).aux $(PROJ).dvi $(PROJ).log $(PROJ).ps $(PROJ).out
