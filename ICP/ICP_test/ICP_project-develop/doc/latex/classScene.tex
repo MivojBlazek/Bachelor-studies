@@ -1,0 +1,457 @@
+\hypertarget{classScene}{}\doxysection{Scene Class Reference}
+\label{classScene}\index{Scene@{Scene}}
+
+
+Class representing the graphics scene in the ICP Project.  
+
+
+
+
+{\ttfamily \#include $<$scene.\+h$>$}
+
+Inheritance diagram for Scene\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classScene}
+\end{center}
+\end{figure}
+\doxysubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classScene_acac933955165045d52983d62b795f0cb}\label{classScene_acac933955165045d52983d62b795f0cb}} 
+void \mbox{\hyperlink{classScene_acac933955165045d52983d62b795f0cb}{is\+Player}} ()
+\begin{DoxyCompactList}\small\item\em Signals that the player robot has been spawned. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_a2dde14679123a64b9a411bf6cab36812}\label{classScene_a2dde14679123a64b9a411bf6cab36812}} 
+void \mbox{\hyperlink{classScene_a2dde14679123a64b9a411bf6cab36812}{add\+Robot\+To\+List}} ()
+\begin{DoxyCompactList}\small\item\em Signals that a robot has been added to the list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classScene_abaaf58cde185094df3ab47c5eedef55e}{Scene}} (QObject $\ast$parent=nullptr)
+\begin{DoxyCompactList}\small\item\em Constructs a \mbox{\hyperlink{classScene}{Scene}} object. \end{DoxyCompactList}\item 
+QString \mbox{\hyperlink{classScene_ac7a880a68f39d4f853392aa8cbdaee89}{to\+JSON}} ()
+\begin{DoxyCompactList}\small\item\em Converts the scene to JSON format. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_af1c55c1cd88c6665609f5cba96dff226}\label{classScene_af1c55c1cd88c6665609f5cba96dff226}} 
+void \mbox{\hyperlink{classScene_af1c55c1cd88c6665609f5cba96dff226}{start}} ()
+\begin{DoxyCompactList}\small\item\em Starts the simulation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_abb5d29d3af5354bd22b7aaba76459834}\label{classScene_abb5d29d3af5354bd22b7aaba76459834}} 
+void \mbox{\hyperlink{classScene_abb5d29d3af5354bd22b7aaba76459834}{pause}} ()
+\begin{DoxyCompactList}\small\item\em Pauses the simulation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_a34dbddf56b82088193736f09f15e2ffa}\label{classScene_a34dbddf56b82088193736f09f15e2ffa}} 
+void \mbox{\hyperlink{classScene_a34dbddf56b82088193736f09f15e2ffa}{timeout}} ()
+\begin{DoxyCompactList}\small\item\em Handles the timeout event for the simulation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_a065868b5be029b3d64fc4caa9c6ac3ef}\label{classScene_a065868b5be029b3d64fc4caa9c6ac3ef}} 
+void \mbox{\hyperlink{classScene_a065868b5be029b3d64fc4caa9c6ac3ef}{forward}} ()
+\begin{DoxyCompactList}\small\item\em Moves the player robot forward. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_afa4d61f4920044e6b4055161ef59630e}\label{classScene_afa4d61f4920044e6b4055161ef59630e}} 
+void \mbox{\hyperlink{classScene_afa4d61f4920044e6b4055161ef59630e}{stop\+Player}} ()
+\begin{DoxyCompactList}\small\item\em Stops the player robot. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_a1165ab137fa089cfa81e514d0830c106}\label{classScene_a1165ab137fa089cfa81e514d0830c106}} 
+void \mbox{\hyperlink{classScene_a1165ab137fa089cfa81e514d0830c106}{left}} ()
+\begin{DoxyCompactList}\small\item\em Rotates the player robot left. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_a368e3297c2b67832e4ffe8e138eb9ddf}\label{classScene_a368e3297c2b67832e4ffe8e138eb9ddf}} 
+void \mbox{\hyperlink{classScene_a368e3297c2b67832e4ffe8e138eb9ddf}{right}} ()
+\begin{DoxyCompactList}\small\item\em Rotates the player robot right. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_ac4dbc01c1eb4c50c01121de8e1164193}\label{classScene_ac4dbc01c1eb4c50c01121de8e1164193}} 
+void \mbox{\hyperlink{classScene_ac4dbc01c1eb4c50c01121de8e1164193}{left\+End}} ()
+\begin{DoxyCompactList}\small\item\em Signals the end of the left rotation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_a5544371053bbba4992d1e05ad8a52eaa}\label{classScene_a5544371053bbba4992d1e05ad8a52eaa}} 
+void \mbox{\hyperlink{classScene_a5544371053bbba4992d1e05ad8a52eaa}{right\+End}} ()
+\begin{DoxyCompactList}\small\item\em Signals the end of the right rotation. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classScene_ad3262f0c0dfb7e10e511935dc06d8d13}{spawn\+Obstacle}} (int width, int height)
+\begin{DoxyCompactList}\small\item\em Spawns an obstacle on the scene with the specified dimensions. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_a1bb3c1385a5a12ebc808702c5921b304}\label{classScene_a1bb3c1385a5a12ebc808702c5921b304}} 
+void \mbox{\hyperlink{classScene_a1bb3c1385a5a12ebc808702c5921b304}{spawn\+Robot}} ()
+\begin{DoxyCompactList}\small\item\em Spawns a robot on the scene. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_a704a84fa92d73884558f5dca9345c6a4}\label{classScene_a704a84fa92d73884558f5dca9345c6a4}} 
+void \mbox{\hyperlink{classScene_a704a84fa92d73884558f5dca9345c6a4}{spawn\+Robot\+Player}} ()
+\begin{DoxyCompactList}\small\item\em Spawns a player robot on the scene. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_a988f70270f7ac3c0550cdd1ed63a7397}\label{classScene_a988f70270f7ac3c0550cdd1ed63a7397}} 
+void \mbox{\hyperlink{classScene_a988f70270f7ac3c0550cdd1ed63a7397}{generate\+New\+Rubbish}} ()
+\begin{DoxyCompactList}\small\item\em Generates new rubbish items on the scene. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classScene_a32739730fea338396aa2544acae5d3dd}{spawn\+Rubbish}} (bool generate\+Rubbish)
+\begin{DoxyCompactList}\small\item\em Starts or stops generating rubbish based on the specified flag. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classScene_acf45f34f108a03a844b30c2681ca704d}{spawn\+Obstacle\+From\+Load}} (qreal x, qreal y, qreal rotation, qreal scale, int width, int height)
+\begin{DoxyCompactList}\small\item\em Spawns an obstacle on the scene from loaded data. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classScene_aec35ad09a9eb0674deb4f27d1eed9be6}{spawn\+Robot\+From\+Load}} (qreal x, qreal y, qreal rotation, bool player=false)
+\begin{DoxyCompactList}\small\item\em Spawns a robot on the scene from loaded data. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_a72cbd20328236b3994be41ab9239abe8}\label{classScene_a72cbd20328236b3994be41ab9239abe8}} 
+void \mbox{\hyperlink{classScene_a72cbd20328236b3994be41ab9239abe8}{clear\+Arrays\+After\+Load}} ()
+\begin{DoxyCompactList}\small\item\em Clears arrays after loading data. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classScene_a0be2fe7d1b02acdf597aaef9e892de5b}\label{classScene_a0be2fe7d1b02acdf597aaef9e892de5b}} 
+void \mbox{\hyperlink{classScene_a0be2fe7d1b02acdf597aaef9e892de5b}{reset\+ID}} ()
+\begin{DoxyCompactList}\small\item\em Resets the robot ID counter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classRobot}{Robot}} $\ast$ \mbox{\hyperlink{classScene_a0aa612258d7adfa7a1d29e8a197051d5}{get\+Robot}} (int robot\+ID)
+\begin{DoxyCompactList}\small\item\em Gets a pointer to the robot with the specified ID. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classScene_aadd25d52c8160459fb3834ff5855dbf1}{set\+Simulation\+Speed}} (int speed)
+\begin{DoxyCompactList}\small\item\em Sets the simulation speed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing the graphics scene in the ICP Project. 
+
+Definition at line 28 of file scene.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classScene_abaaf58cde185094df3ab47c5eedef55e}\label{classScene_abaaf58cde185094df3ab47c5eedef55e}} 
+\index{Scene@{Scene}!Scene@{Scene}}
+\index{Scene@{Scene}!Scene@{Scene}}
+\doxysubsubsection{\texorpdfstring{Scene()}{Scene()}}
+{\footnotesize\ttfamily Scene\+::\+Scene (\begin{DoxyParamCaption}\item[{QObject $\ast$}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructs a \mbox{\hyperlink{classScene}{Scene}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & The parent object (default is nullptr). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 31 of file scene.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{32     : QGraphicsScene\{parent\},}
+\DoxyCodeLine{33       stop(\textcolor{keyword}{false}),}
+\DoxyCodeLine{34       robotID(0),}
+\DoxyCodeLine{35       rubbishID(0),}
+\DoxyCodeLine{36       playerRobot(\textcolor{keyword}{false}),}
+\DoxyCodeLine{37       TIME\_TO\_REFRESH\_TIMER(25)}
+\DoxyCodeLine{38 \{}
+\DoxyCodeLine{39     mTimer = \textcolor{keyword}{new} QTimer(\textcolor{keyword}{this});}
+\DoxyCodeLine{40     timer = \textcolor{keyword}{new} QTimer(\textcolor{keyword}{this});}
+\DoxyCodeLine{41     timerLeft = \textcolor{keyword}{new} QTimer(\textcolor{keyword}{this});}
+\DoxyCodeLine{42     timerRight = \textcolor{keyword}{new} QTimer(\textcolor{keyword}{this});}
+\DoxyCodeLine{43     timerRotation = \textcolor{keyword}{new} QTimer(\textcolor{keyword}{this});}
+\DoxyCodeLine{44     rubbishTimer = \textcolor{keyword}{new} QTimer(\textcolor{keyword}{this});}
+\DoxyCodeLine{45     connect(mTimer, \&QTimer::timeout, \textcolor{keyword}{this}, \&\mbox{\hyperlink{classScene_a34dbddf56b82088193736f09f15e2ffa}{Scene::timeout}});}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47     endOfScene.append(\textcolor{keyword}{new} QGraphicsLineItem(0, 0, 0, 690));}
+\DoxyCodeLine{48     endOfScene.append(\textcolor{keyword}{new} QGraphicsLineItem(0, 0, 990, 0));}
+\DoxyCodeLine{49     endOfScene.append(\textcolor{keyword}{new} QGraphicsLineItem(0, 690, 990, 690));}
+\DoxyCodeLine{50     endOfScene.append(\textcolor{keyword}{new} QGraphicsLineItem(990, 0, 990, 690));}
+\DoxyCodeLine{51 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classScene_a0aa612258d7adfa7a1d29e8a197051d5}\label{classScene_a0aa612258d7adfa7a1d29e8a197051d5}} 
+\index{Scene@{Scene}!getRobot@{getRobot}}
+\index{getRobot@{getRobot}!Scene@{Scene}}
+\doxysubsubsection{\texorpdfstring{getRobot()}{getRobot()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classRobot}{Robot}} $\ast$ Scene\+::get\+Robot (\begin{DoxyParamCaption}\item[{int}]{robot\+ID }\end{DoxyParamCaption})}
+
+
+
+Gets a pointer to the robot with the specified ID. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em robot\+ID} & The ID of the robot to retrieve. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the robot with the specified ID. 
+\end{DoxyReturn}
+
+
+Definition at line 557 of file scene.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{558 \{}
+\DoxyCodeLine{559     \textcolor{keywordflow}{for} (\mbox{\hyperlink{classRobot}{Robot}} *robot : mRobots)}
+\DoxyCodeLine{560     \{}
+\DoxyCodeLine{561         \textcolor{keywordflow}{if} (robotID == robot-\/>getRobotID())}
+\DoxyCodeLine{562         \{}
+\DoxyCodeLine{563             \textcolor{keywordflow}{return} robot;}
+\DoxyCodeLine{564         \}}
+\DoxyCodeLine{565     \}}
+\DoxyCodeLine{566     \textcolor{keywordflow}{return} NULL;}
+\DoxyCodeLine{567 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classScene_aadd25d52c8160459fb3834ff5855dbf1}\label{classScene_aadd25d52c8160459fb3834ff5855dbf1}} 
+\index{Scene@{Scene}!setSimulationSpeed@{setSimulationSpeed}}
+\index{setSimulationSpeed@{setSimulationSpeed}!Scene@{Scene}}
+\doxysubsubsection{\texorpdfstring{setSimulationSpeed()}{setSimulationSpeed()}}
+{\footnotesize\ttfamily void Scene\+::set\+Simulation\+Speed (\begin{DoxyParamCaption}\item[{int}]{speed }\end{DoxyParamCaption})}
+
+
+
+Sets the simulation speed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em speed} & The simulation speed value. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 542 of file scene.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{543 \{}
+\DoxyCodeLine{544     TIME\_TO\_REFRESH\_TIMER = 50 -\/ speed;}
+\DoxyCodeLine{545     mTimer-\/>setInterval(TIME\_TO\_REFRESH\_TIMER);}
+\DoxyCodeLine{546     timer-\/>setInterval(TIME\_TO\_REFRESH\_TIMER);}
+\DoxyCodeLine{547     timerLeft-\/>setInterval(TIME\_TO\_REFRESH\_TIMER);}
+\DoxyCodeLine{548     timerRight-\/>setInterval(TIME\_TO\_REFRESH\_TIMER);}
+\DoxyCodeLine{549     timerRotation-\/>setInterval(TIME\_TO\_REFRESH\_TIMER);}
+\DoxyCodeLine{550 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classScene_ad3262f0c0dfb7e10e511935dc06d8d13}\label{classScene_ad3262f0c0dfb7e10e511935dc06d8d13}} 
+\index{Scene@{Scene}!spawnObstacle@{spawnObstacle}}
+\index{spawnObstacle@{spawnObstacle}!Scene@{Scene}}
+\doxysubsubsection{\texorpdfstring{spawnObstacle()}{spawnObstacle()}}
+{\footnotesize\ttfamily void Scene\+::spawn\+Obstacle (\begin{DoxyParamCaption}\item[{int}]{width,  }\item[{int}]{height }\end{DoxyParamCaption})}
+
+
+
+Spawns an obstacle on the scene with the specified dimensions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em width} & The width of the obstacle. \\
+\hline
+{\em height} & The height of the obstacle. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 305 of file scene.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{306 \{}
+\DoxyCodeLine{307     \mbox{\hyperlink{classObstacle}{Obstacle}} *obstacle = \textcolor{keyword}{new} \mbox{\hyperlink{classObstacle}{Obstacle}}(\textcolor{keyword}{nullptr}, width, height);}
+\DoxyCodeLine{308     addItem(obstacle);}
+\DoxyCodeLine{309     mObstacles.append(obstacle);}
+\DoxyCodeLine{310 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classScene_acf45f34f108a03a844b30c2681ca704d}\label{classScene_acf45f34f108a03a844b30c2681ca704d}} 
+\index{Scene@{Scene}!spawnObstacleFromLoad@{spawnObstacleFromLoad}}
+\index{spawnObstacleFromLoad@{spawnObstacleFromLoad}!Scene@{Scene}}
+\doxysubsubsection{\texorpdfstring{spawnObstacleFromLoad()}{spawnObstacleFromLoad()}}
+{\footnotesize\ttfamily void Scene\+::spawn\+Obstacle\+From\+Load (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{qreal}]{rotation,  }\item[{qreal}]{scale,  }\item[{int}]{width,  }\item[{int}]{height }\end{DoxyParamCaption})}
+
+
+
+Spawns an obstacle on the scene from loaded data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The x-\/coordinate of the obstacle. \\
+\hline
+{\em y} & The y-\/coordinate of the obstacle. \\
+\hline
+{\em rotation} & The rotation angle of the obstacle. \\
+\hline
+{\em scale} & The scaling factor of the obstacle. \\
+\hline
+{\em width} & The width of the obstacle. \\
+\hline
+{\em height} & The height of the obstacle. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 361 of file scene.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{362 \{}
+\DoxyCodeLine{363     \mbox{\hyperlink{classObstacle}{Obstacle}} *obstacle = \textcolor{keyword}{new} \mbox{\hyperlink{classObstacle}{Obstacle}}(\textcolor{keyword}{nullptr}, width, height);}
+\DoxyCodeLine{364     obstacle-\/>\mbox{\hyperlink{classObstacle_a169d238f64204bac1c877dbb3aaae0a7}{changePosition}}(x, y);}
+\DoxyCodeLine{365     obstacle-\/>\mbox{\hyperlink{classObstacle_aa1e98a297d59173ae9dd705e5ce36f99}{changeRotationAngle}}(rotation);}
+\DoxyCodeLine{366     obstacle-\/>\mbox{\hyperlink{classObstacle_aafc3718e989d8d31089b609e3b01056d}{changeScaleFactor}}(scale);}
+\DoxyCodeLine{367 }
+\DoxyCodeLine{368     addItem(obstacle);}
+\DoxyCodeLine{369     mObstacles.append(obstacle);}
+\DoxyCodeLine{370 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classScene_aec35ad09a9eb0674deb4f27d1eed9be6}\label{classScene_aec35ad09a9eb0674deb4f27d1eed9be6}} 
+\index{Scene@{Scene}!spawnRobotFromLoad@{spawnRobotFromLoad}}
+\index{spawnRobotFromLoad@{spawnRobotFromLoad}!Scene@{Scene}}
+\doxysubsubsection{\texorpdfstring{spawnRobotFromLoad()}{spawnRobotFromLoad()}}
+{\footnotesize\ttfamily void Scene\+::spawn\+Robot\+From\+Load (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{qreal}]{rotation,  }\item[{bool}]{player = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+Spawns a robot on the scene from loaded data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The x-\/coordinate of the robot. \\
+\hline
+{\em y} & The y-\/coordinate of the robot. \\
+\hline
+{\em rotation} & The rotation angle of the robot. \\
+\hline
+{\em player} & Flag indicating whether the robot is a player (true) or not (false). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 391 of file scene.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{392 \{}
+\DoxyCodeLine{393     \textcolor{keywordflow}{if} (player)}
+\DoxyCodeLine{394     \{}
+\DoxyCodeLine{395         \mbox{\hyperlink{classRobot}{Robot}} *player = \textcolor{keyword}{new} \mbox{\hyperlink{classRobot}{Robot}}(-\/1);}
+\DoxyCodeLine{396         player-\/>\mbox{\hyperlink{classRobot_a207038995d29887d9f1a58381fe549d2}{changePosition}}(x, y);}
+\DoxyCodeLine{397         player-\/>\mbox{\hyperlink{classRobot_a6e6a25ade4a48d0ac6969e0206976ca6}{changeRotationAngle}}(rotation);}
+\DoxyCodeLine{398         addItem(player);}
+\DoxyCodeLine{399         mPlayers.append(player);}
+\DoxyCodeLine{400         playerRobot = \textcolor{keyword}{true};}
+\DoxyCodeLine{401     \}}
+\DoxyCodeLine{402     \textcolor{keywordflow}{else}}
+\DoxyCodeLine{403     \{}
+\DoxyCodeLine{404         \mbox{\hyperlink{classRobot}{Robot}} *robot = \textcolor{keyword}{new} \mbox{\hyperlink{classRobot}{Robot}}(robotID++);}
+\DoxyCodeLine{405         robot-\/>\mbox{\hyperlink{classRobot_a207038995d29887d9f1a58381fe549d2}{changePosition}}(x, y);}
+\DoxyCodeLine{406         robot-\/>\mbox{\hyperlink{classRobot_a6e6a25ade4a48d0ac6969e0206976ca6}{changeRotationAngle}}(rotation);}
+\DoxyCodeLine{407         addItem(robot);}
+\DoxyCodeLine{408         mRobots.append(robot);}
+\DoxyCodeLine{409         emit \mbox{\hyperlink{classScene_a2dde14679123a64b9a411bf6cab36812}{addRobotToList}}();}
+\DoxyCodeLine{410     \}}
+\DoxyCodeLine{411 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classScene_a32739730fea338396aa2544acae5d3dd}\label{classScene_a32739730fea338396aa2544acae5d3dd}} 
+\index{Scene@{Scene}!spawnRubbish@{spawnRubbish}}
+\index{spawnRubbish@{spawnRubbish}!Scene@{Scene}}
+\doxysubsubsection{\texorpdfstring{spawnRubbish()}{spawnRubbish()}}
+{\footnotesize\ttfamily void Scene\+::spawn\+Rubbish (\begin{DoxyParamCaption}\item[{bool}]{generate\+Rubbish }\end{DoxyParamCaption})}
+
+
+
+Starts or stops generating rubbish based on the specified flag. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em generate\+Rubbish} & Flag indicating whether to generate rubbish (true) or stop (false). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 338 of file scene.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{339 \{}
+\DoxyCodeLine{340     \textcolor{keywordflow}{if} (generateRubbish)}
+\DoxyCodeLine{341     \{}
+\DoxyCodeLine{342         disconnect(rubbishTimer, \&QTimer::timeout, \textcolor{keyword}{nullptr}, \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{343         connect(rubbishTimer, \&QTimer::timeout, \textcolor{keyword}{this}, \&\mbox{\hyperlink{classScene_a988f70270f7ac3c0550cdd1ed63a7397}{Scene::generateNewRubbish}});}
+\DoxyCodeLine{344         rubbishTimer-\/>start(\mbox{\hyperlink{scene_8h_aef5163ea52f5bdf222c0b361303b3e93}{TIME\_TO\_SPAWN\_RUBBISH}});}
+\DoxyCodeLine{345     \}}
+\DoxyCodeLine{346     \textcolor{keywordflow}{else}}
+\DoxyCodeLine{347     \{}
+\DoxyCodeLine{348         rubbishTimer-\/>stop();}
+\DoxyCodeLine{349     \}}
+\DoxyCodeLine{350 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classScene_ac7a880a68f39d4f853392aa8cbdaee89}\label{classScene_ac7a880a68f39d4f853392aa8cbdaee89}} 
+\index{Scene@{Scene}!toJSON@{toJSON}}
+\index{toJSON@{toJSON}!Scene@{Scene}}
+\doxysubsubsection{\texorpdfstring{toJSON()}{toJSON()}}
+{\footnotesize\ttfamily QString Scene\+::to\+JSON (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Converts the scene to JSON format. 
+
+\begin{DoxyReturn}{Returns}
+The scene data in JSON format. 
+\end{DoxyReturn}
+
+
+Definition at line 57 of file scene.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{58 \{}
+\DoxyCodeLine{59     QJsonArray arr;}
+\DoxyCodeLine{60     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} *obstacle : mObstacles)}
+\DoxyCodeLine{61     \{}
+\DoxyCodeLine{62         \textcolor{comment}{// rotation}}
+\DoxyCodeLine{63         qreal rotationAngle = obstacle-\/>rotationAngle();}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65         \textcolor{comment}{// scale}}
+\DoxyCodeLine{66         qreal scaleFactor = obstacle-\/>scaleFactor();}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68         \textcolor{comment}{// type}}
+\DoxyCodeLine{69         QString type = \textcolor{stringliteral}{"{}Obstacle"{}};}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{71         \textcolor{comment}{// size}}
+\DoxyCodeLine{72         \textcolor{keywordtype}{int} width = obstacle-\/>getWidth();}
+\DoxyCodeLine{73         \textcolor{keywordtype}{int} height = obstacle-\/>getHeight();}
+\DoxyCodeLine{74 }
+\DoxyCodeLine{75         arr.append(QJsonObject(\{}
+\DoxyCodeLine{76             \{\textcolor{stringliteral}{"{}x"{}}, obstacle-\/>x()\},}
+\DoxyCodeLine{77             \{\textcolor{stringliteral}{"{}y"{}}, obstacle-\/>y()\},}
+\DoxyCodeLine{78             \{\textcolor{stringliteral}{"{}object"{}}, type\},}
+\DoxyCodeLine{79             \{\textcolor{stringliteral}{"{}rotation"{}}, rotationAngle\},}
+\DoxyCodeLine{80             \{\textcolor{stringliteral}{"{}scale"{}}, scaleFactor\},}
+\DoxyCodeLine{81             \{\textcolor{stringliteral}{"{}width"{}}, width\},}
+\DoxyCodeLine{82             \{\textcolor{stringliteral}{"{}height"{}}, height\}}
+\DoxyCodeLine{83         \}));}
+\DoxyCodeLine{84     \}}
+\DoxyCodeLine{85     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} *robot : mRobots)}
+\DoxyCodeLine{86     \{}
+\DoxyCodeLine{87         \textcolor{comment}{// rotation}}
+\DoxyCodeLine{88         qreal rotationAngle = robot-\/>rotationAngle();}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90         \textcolor{comment}{// type}}
+\DoxyCodeLine{91         QString type = \textcolor{stringliteral}{"{}Robot"{}};}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93         arr.append(QJsonObject(\{}
+\DoxyCodeLine{94             \{\textcolor{stringliteral}{"{}x"{}}, robot-\/>x()\},}
+\DoxyCodeLine{95             \{\textcolor{stringliteral}{"{}y"{}}, robot-\/>y()\},}
+\DoxyCodeLine{96             \{\textcolor{stringliteral}{"{}object"{}}, type\},}
+\DoxyCodeLine{97             \{\textcolor{stringliteral}{"{}rotation"{}}, rotationAngle\}}
+\DoxyCodeLine{98         \}));}
+\DoxyCodeLine{99     \}}
+\DoxyCodeLine{100     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} *player : mPlayers)}
+\DoxyCodeLine{101     \{}
+\DoxyCodeLine{102         \textcolor{comment}{// rotation}}
+\DoxyCodeLine{103         qreal rotationAngle = player-\/>rotationAngle();}
+\DoxyCodeLine{104 }
+\DoxyCodeLine{105         \textcolor{comment}{// type}}
+\DoxyCodeLine{106         QString type = \textcolor{stringliteral}{"{}Player"{}};}
+\DoxyCodeLine{107 }
+\DoxyCodeLine{108         arr.append(QJsonObject(\{}
+\DoxyCodeLine{109             \{\textcolor{stringliteral}{"{}x"{}}, player-\/>x()\},}
+\DoxyCodeLine{110             \{\textcolor{stringliteral}{"{}y"{}}, player-\/>y()\},}
+\DoxyCodeLine{111             \{\textcolor{stringliteral}{"{}object"{}}, type\},}
+\DoxyCodeLine{112             \{\textcolor{stringliteral}{"{}rotation"{}}, rotationAngle\}}
+\DoxyCodeLine{113         \}));}
+\DoxyCodeLine{114     \}}
+\DoxyCodeLine{115 }
+\DoxyCodeLine{116     QJsonObject obj\{\{\textcolor{stringliteral}{"{}items"{}}, arr\}\};}
+\DoxyCodeLine{117     QJsonDocument doc;}
+\DoxyCodeLine{118     doc.setObject(obj);}
+\DoxyCodeLine{119 }
+\DoxyCodeLine{120     \textcolor{keywordflow}{return} doc.toJson(QJsonDocument::Indented);}
+\DoxyCodeLine{121 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{scene_8h}{scene.\+h}}\item 
+src/\mbox{\hyperlink{scene_8cpp}{scene.\+cpp}}\end{DoxyCompactItemize}

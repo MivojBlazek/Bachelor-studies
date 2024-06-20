@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['resetid_39',['resetID',['../classScene.html#a0be2fe7d1b02acdf597aaef9e892de5b',1,'Scene']]],
+  ['right_40',['right',['../classScene.html#a368e3297c2b67832e4ffe8e138eb9ddf',1,'Scene']]],
+  ['rightend_41',['rightEnd',['../classScene.html#a5544371053bbba4992d1e05ad8a52eaa',1,'Scene']]],
+  ['robot_42',['Robot',['../classRobot.html',1,'Robot'],['../classRobot.html#a262b17265892354db4bc11a7ddb089b1',1,'Robot::Robot()']]],
+  ['robot_2ecpp_43',['robot.cpp',['../robot_8cpp.html',1,'']]],
+  ['robot_2eh_44',['robot.h',['../robot_8h.html',1,'']]],
+  ['robotid_45',['robotID',['../structRobotSettings.html#ae2028209e4710057c9b596ce6022fd2c',1,'RobotSettings']]],
+  ['robotlist_46',['RobotList',['../classRobotList.html',1,'RobotList'],['../classRobotList.html#a527f32fd6e4ee850cd7d92742406755a',1,'RobotList::RobotList()']]],
+  ['robotlist_2ecpp_47',['robotlist.cpp',['../robotlist_8cpp.html',1,'']]],
+  ['robotlist_2eh_48',['robotlist.h',['../robotlist_8h.html',1,'']]],
+  ['robotsettings_49',['RobotSettings',['../structRobotSettings.html',1,'']]],
+  ['rotation_50',['rotation',['../structRobotSettings.html#ac228c554397ce58db0805bbcda150037',1,'RobotSettings']]],
+  ['rotationangle_51',['rotationAngle',['../classObstacle.html#a3e7a4f7e1397374a74740095be690d02',1,'Obstacle::rotationAngle()'],['../classRobot.html#a26eaaffb73d6e366ce7ffddd84f523e2',1,'Robot::rotationAngle()']]],
+  ['rotationdirection_52',['rotationDirection',['../structRobotSettings.html#a3d0e79de416ff1348f01ac7eac9070bb',1,'RobotSettings']]],
+  ['rubbish_53',['Rubbish',['../classRubbish.html',1,'Rubbish'],['../classRubbish.html#ab66d482c10a71564a1f181e5dbe55da3',1,'Rubbish::Rubbish()']]],
+  ['rubbish_2ecpp_54',['rubbish.cpp',['../rubbish_8cpp.html',1,'']]],
+  ['rubbish_2eh_55',['rubbish.h',['../rubbish_8h.html',1,'']]]
+];

@@ -1,0 +1,105 @@
+\hypertarget{classMainWindow}{}\doxysection{Main\+Window Class Reference}
+\label{classMainWindow}\index{MainWindow@{MainWindow}}
+
+
+Class representing the window project.  
+
+
+
+
+{\ttfamily \#include $<$mainwindow.\+h$>$}
+
+Inheritance diagram for Main\+Window\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classMainWindow}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMainWindow_a996c5a2b6f77944776856f08ec30858d}{Main\+Window}} (QWidget $\ast$parent=nullptr)
+\begin{DoxyCompactList}\small\item\em Constructs the \mbox{\hyperlink{classMainWindow}{Main\+Window}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classMainWindow_ae98d00a93bc118200eeef9f9bba1dba7}\label{classMainWindow_ae98d00a93bc118200eeef9f9bba1dba7}} 
+\mbox{\hyperlink{classMainWindow_ae98d00a93bc118200eeef9f9bba1dba7}{$\sim$\+Main\+Window}} ()
+\begin{DoxyCompactList}\small\item\em Destructs the \mbox{\hyperlink{classMainWindow}{Main\+Window}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing the window project. 
+
+Definition at line 30 of file mainwindow.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMainWindow_a996c5a2b6f77944776856f08ec30858d}\label{classMainWindow_a996c5a2b6f77944776856f08ec30858d}} 
+\index{MainWindow@{MainWindow}!MainWindow@{MainWindow}}
+\index{MainWindow@{MainWindow}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{MainWindow()}{MainWindow()}}
+{\footnotesize\ttfamily Main\+Window\+::\+Main\+Window (\begin{DoxyParamCaption}\item[{QWidget $\ast$}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+
+
+Constructs the \mbox{\hyperlink{classMainWindow}{Main\+Window}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & The parent widget. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 32 of file mainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{33     : QMainWindow(parent)}
+\DoxyCodeLine{34     , ui(\textcolor{keyword}{new} Ui::MainWindow)}
+\DoxyCodeLine{35 \{}
+\DoxyCodeLine{36     ui-\/>setupUi(\textcolor{keyword}{this});}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38     resize(1600, 900);}
+\DoxyCodeLine{39     \mbox{\hyperlink{classScene}{Scene}} *scene = initScene();}
+\DoxyCodeLine{40     robotList = initRobotList();}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42     connect(ui-\/>menu, \&Menu::spawnObstacle, \textcolor{keyword}{this}, \&MainWindow::spawnObstacle);}
+\DoxyCodeLine{43     connect(ui-\/>menu, \&Menu::spawnRobot, scene, \&\mbox{\hyperlink{classScene_a1bb3c1385a5a12ebc808702c5921b304}{Scene::spawnRobot}});}
+\DoxyCodeLine{44     connect(scene, \&\mbox{\hyperlink{classScene_a2dde14679123a64b9a411bf6cab36812}{Scene::addRobotToList}}, robotList, \&\mbox{\hyperlink{classRobotList_a62bfb45e587b5b1e90fe19aab8240ec2}{RobotList::spawnRobot}});}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46     connect(ui-\/>menu, \&Menu::spawnPlayer, scene, \&\mbox{\hyperlink{classScene_a704a84fa92d73884558f5dca9345c6a4}{Scene::spawnRobotPlayer}});}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48     connect(ui-\/>menu, \&Menu::spawnRubbish, scene, \&\mbox{\hyperlink{classScene_a32739730fea338396aa2544acae5d3dd}{Scene::spawnRubbish}});}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50     connect(ui-\/>menu, \&Menu::forward, scene, \&\mbox{\hyperlink{classScene_a065868b5be029b3d64fc4caa9c6ac3ef}{Scene::forward}});}
+\DoxyCodeLine{51     connect(ui-\/>menu, \&Menu::stopPlayer, scene, \&\mbox{\hyperlink{classScene_afa4d61f4920044e6b4055161ef59630e}{Scene::stopPlayer}});}
+\DoxyCodeLine{52     connect(ui-\/>menu, \&Menu::left, scene, \&\mbox{\hyperlink{classScene_a1165ab137fa089cfa81e514d0830c106}{Scene::left}});}
+\DoxyCodeLine{53     connect(ui-\/>menu, \&Menu::right, scene, \&\mbox{\hyperlink{classScene_a368e3297c2b67832e4ffe8e138eb9ddf}{Scene::right}});}
+\DoxyCodeLine{54     connect(ui-\/>menu, \&Menu::leftEnd, scene, \&\mbox{\hyperlink{classScene_ac4dbc01c1eb4c50c01121de8e1164193}{Scene::leftEnd}});}
+\DoxyCodeLine{55     connect(ui-\/>menu, \&Menu::rightEnd, scene, \&\mbox{\hyperlink{classScene_a5544371053bbba4992d1e05ad8a52eaa}{Scene::rightEnd}});}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57     connect(ui-\/>menu, \&Menu::save, \textcolor{keyword}{this}, \&MainWindow::save);}
+\DoxyCodeLine{58     connect(ui-\/>menu, \&Menu::load, \textcolor{keyword}{this}, \&MainWindow::load);}
+\DoxyCodeLine{59     connect(ui-\/>menu, \&Menu::save2, \textcolor{keyword}{this}, \&MainWindow::save2);}
+\DoxyCodeLine{60     connect(ui-\/>menu, \&Menu::load2, \textcolor{keyword}{this}, \&MainWindow::load2);}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62     connect(ui-\/>menu, \&Menu::start, scene, \&\mbox{\hyperlink{classScene_af1c55c1cd88c6665609f5cba96dff226}{Scene::start}});}
+\DoxyCodeLine{63     connect(ui-\/>menu, \&Menu::start, \textcolor{keyword}{this}, \&MainWindow::getRobotSettings);}
+\DoxyCodeLine{64     connect(ui-\/>SaveButton, \&QPushButton::clicked, \textcolor{keyword}{this}, \&MainWindow::getRobotSettings);}
+\DoxyCodeLine{65     connect(ui-\/>menu, \&Menu::pause, scene, \&\mbox{\hyperlink{classScene_abb5d29d3af5354bd22b7aaba76459834}{Scene::pause}});}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67     connect(ui-\/>menu, \&Menu::clear, \textcolor{keyword}{this}, \&MainWindow::clear);}
+\DoxyCodeLine{68 }
+\DoxyCodeLine{69     connect(scene, \&\mbox{\hyperlink{classScene_acac933955165045d52983d62b795f0cb}{Scene::isPlayer}}, ui-\/>menu, \&\mbox{\hyperlink{classMenu_ac00e435730ab8881c49e1a7ae34586fb}{Menu::isPlayer}});}
+\DoxyCodeLine{70     connect(ui-\/>menu, \&Menu::simulationSpeed, scene, [=]() \{}
+\DoxyCodeLine{71         scene-\/>setSimulationSpeed(ui-\/>menu-\/>getSimulationSpeed());}
+\DoxyCodeLine{72     \});}
+\DoxyCodeLine{73 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{mainwindow_8h}{mainwindow.\+h}}\item 
+src/\mbox{\hyperlink{mainwindow_8cpp}{mainwindow.\+cpp}}\end{DoxyCompactItemize}

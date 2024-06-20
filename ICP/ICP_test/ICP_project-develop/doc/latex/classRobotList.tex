@@ -1,0 +1,149 @@
+\hypertarget{classRobotList}{}\doxysection{Robot\+List Class Reference}
+\label{classRobotList}\index{RobotList@{RobotList}}
+
+
+Class representing the list of robots and theirs settings.  
+
+
+
+
+{\ttfamily \#include $<$robotlist.\+h$>$}
+
+Inheritance diagram for Robot\+List\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classRobotList}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classRobotList_a62bfb45e587b5b1e90fe19aab8240ec2}\label{classRobotList_a62bfb45e587b5b1e90fe19aab8240ec2}} 
+void \mbox{\hyperlink{classRobotList_a62bfb45e587b5b1e90fe19aab8240ec2}{spawn\+Robot}} ()
+\begin{DoxyCompactList}\small\item\em Spawns a new robot. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classRobotList_ac14c8c2396e8150dbfbbbfe187b78ac2}\label{classRobotList_ac14c8c2396e8150dbfbbbfe187b78ac2}} 
+void \mbox{\hyperlink{classRobotList_ac14c8c2396e8150dbfbbbfe187b78ac2}{update}} ()
+\begin{DoxyCompactList}\small\item\em Updates the robot list. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classRobotList_a31aa3f9fc0d69b51a6520e98c16d6fef}\label{classRobotList_a31aa3f9fc0d69b51a6520e98c16d6fef}} 
+void \mbox{\hyperlink{classRobotList_a31aa3f9fc0d69b51a6520e98c16d6fef}{clear\+Array}} ()
+\begin{DoxyCompactList}\small\item\em Clears the robot list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classRobotList_a6b627021862c4650efb6ff4beaa04349}\label{classRobotList_a6b627021862c4650efb6ff4beaa04349}} 
+void \mbox{\hyperlink{classRobotList_a6b627021862c4650efb6ff4beaa04349}{settings\+Changed}} ()
+\begin{DoxyCompactList}\small\item\em Emits signal when the settings of a robot are changed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRobotList_a527f32fd6e4ee850cd7d92742406755a}{Robot\+List}} (QWidget $\ast$parent=nullptr)
+\begin{DoxyCompactList}\small\item\em Constructs a \mbox{\hyperlink{classRobotList}{Robot\+List}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classRobotList_a05c52a2db68c19df01d019d293232c5c}\label{classRobotList_a05c52a2db68c19df01d019d293232c5c}} 
+\mbox{\hyperlink{classRobotList_a05c52a2db68c19df01d019d293232c5c}{$\sim$\+Robot\+List}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \mbox{\hyperlink{classRobotList}{Robot\+List}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classRobotList_ac5d5a682fcb22138b3e2e05844a4069c}{get\+Robot\+Count}} ()
+\begin{DoxyCompactList}\small\item\em Gets the count of robots in the list. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structRobotSettings}{Robot\+Settings}} \mbox{\hyperlink{classRobotList_a34dfc3f6548388e94a7e5143f106f475}{get\+Robot\+Settings}} (int robot\+Index) const
+\begin{DoxyCompactList}\small\item\em Gets the settings of the robot at the specified index. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing the list of robots and theirs settings. 
+
+Definition at line 37 of file robotlist.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classRobotList_a527f32fd6e4ee850cd7d92742406755a}\label{classRobotList_a527f32fd6e4ee850cd7d92742406755a}} 
+\index{RobotList@{RobotList}!RobotList@{RobotList}}
+\index{RobotList@{RobotList}!RobotList@{RobotList}}
+\doxysubsubsection{\texorpdfstring{RobotList()}{RobotList()}}
+{\footnotesize\ttfamily Robot\+List\+::\+Robot\+List (\begin{DoxyParamCaption}\item[{QWidget $\ast$}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructs a \mbox{\hyperlink{classRobotList}{Robot\+List}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & The parent widget (default is nullptr). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 32 of file robotlist.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{32                                     :}
+\DoxyCodeLine{33     QWidget(parent),}
+\DoxyCodeLine{34     i(0),}
+\DoxyCodeLine{35     ui(\textcolor{keyword}{new} Ui::RobotList)}
+\DoxyCodeLine{36 \{}
+\DoxyCodeLine{37     ui-\/>setupUi(\textcolor{keyword}{this});}
+\DoxyCodeLine{38 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classRobotList_ac5d5a682fcb22138b3e2e05844a4069c}\label{classRobotList_ac5d5a682fcb22138b3e2e05844a4069c}} 
+\index{RobotList@{RobotList}!getRobotCount@{getRobotCount}}
+\index{getRobotCount@{getRobotCount}!RobotList@{RobotList}}
+\doxysubsubsection{\texorpdfstring{getRobotCount()}{getRobotCount()}}
+{\footnotesize\ttfamily int Robot\+List\+::get\+Robot\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the count of robots in the list. 
+
+\begin{DoxyReturn}{Returns}
+The count of robots in the list. 
+\end{DoxyReturn}
+
+
+Definition at line 205 of file robotlist.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{206 \{}
+\DoxyCodeLine{207     \textcolor{keywordflow}{return} settingsList.size();}
+\DoxyCodeLine{208 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobotList_a34dfc3f6548388e94a7e5143f106f475}\label{classRobotList_a34dfc3f6548388e94a7e5143f106f475}} 
+\index{RobotList@{RobotList}!getRobotSettings@{getRobotSettings}}
+\index{getRobotSettings@{getRobotSettings}!RobotList@{RobotList}}
+\doxysubsubsection{\texorpdfstring{getRobotSettings()}{getRobotSettings()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structRobotSettings}{Robot\+Settings}} Robot\+List\+::get\+Robot\+Settings (\begin{DoxyParamCaption}\item[{int}]{robot\+Index }\end{DoxyParamCaption}) const}
+
+
+
+Gets the settings of the robot at the specified index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em robot\+Index} & The index of the robot in the list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The settings of the specified robot. 
+\end{DoxyReturn}
+
+
+Definition at line 172 of file robotlist.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{173 \{}
+\DoxyCodeLine{174    \textcolor{keywordflow}{return} settingsList[robotIndex];}
+\DoxyCodeLine{175 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{robotlist_8h}{robotlist.\+h}}\item 
+src/\mbox{\hyperlink{robotlist_8cpp}{robotlist.\+cpp}}\end{DoxyCompactItemize}

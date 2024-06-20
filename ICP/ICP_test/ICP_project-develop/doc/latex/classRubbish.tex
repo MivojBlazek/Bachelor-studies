@@ -1,0 +1,195 @@
+\hypertarget{classRubbish}{}\doxysection{Rubbish Class Reference}
+\label{classRubbish}\index{Rubbish@{Rubbish}}
+
+
+Class representing the rubbish in the scene.  
+
+
+
+
+{\ttfamily \#include $<$rubbish.\+h$>$}
+
+Inheritance diagram for Rubbish\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classRubbish}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRubbish_ab66d482c10a71564a1f181e5dbe55da3}{Rubbish}} (int id, QGraphics\+Item $\ast$parent=nullptr)
+\begin{DoxyCompactList}\small\item\em Constructs a \mbox{\hyperlink{classRubbish}{Rubbish}} object with the specified ID. \end{DoxyCompactList}\item 
+QRectF \mbox{\hyperlink{classRubbish_a626653bbe7a605f05132b974a1a7c0c5}{bounding\+Rect}} () const override
+\begin{DoxyCompactList}\small\item\em Returns the bounding rectangle of the rubbish item. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classRubbish_a21627979515f7f7882bba32d2edc5d63}{get\+Rubbish\+ID}} ()
+\begin{DoxyCompactList}\small\item\em Gets the ID of the rubbish item. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classRubbish_a464e932eac6d95c0e3a06180bf75b9a8}{paint}} (QPainter $\ast$painter, const QStyle\+Option\+Graphics\+Item $\ast$option, QWidget $\ast$widget) override
+\begin{DoxyCompactList}\small\item\em Paints the rubbish item on the graphics scene. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing the rubbish in the scene. 
+
+Definition at line 24 of file rubbish.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classRubbish_ab66d482c10a71564a1f181e5dbe55da3}\label{classRubbish_ab66d482c10a71564a1f181e5dbe55da3}} 
+\index{Rubbish@{Rubbish}!Rubbish@{Rubbish}}
+\index{Rubbish@{Rubbish}!Rubbish@{Rubbish}}
+\doxysubsubsection{\texorpdfstring{Rubbish()}{Rubbish()}}
+{\footnotesize\ttfamily Rubbish\+::\+Rubbish (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+
+
+Constructs a \mbox{\hyperlink{classRubbish}{Rubbish}} object with the specified ID. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The ID of the rubbish item. \\
+\hline
+{\em parent} & The parent graphics item (default is nullptr). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 24 of file rubbish.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{24                                               :}
+\DoxyCodeLine{25     QGraphicsItem(parent),}
+\DoxyCodeLine{26     rubbishID(\textcolor{keywordtype}{id})}
+\DoxyCodeLine{27 \{}
+\DoxyCodeLine{28     \textcolor{comment}{// Seed}}
+\DoxyCodeLine{29     std::srand(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}\textcolor{keyword}{>}(std::time(\textcolor{keyword}{nullptr})));}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31     \textcolor{comment}{// Generate random coordinates within the scene's dimensions}}
+\DoxyCodeLine{32     qreal x = \textcolor{keyword}{static\_cast<}qreal\textcolor{keyword}{>}(std::rand()) / RAND\_MAX * 950 + 20;}
+\DoxyCodeLine{33     qreal y = \textcolor{keyword}{static\_cast<}qreal\textcolor{keyword}{>}(std::rand()) / RAND\_MAX * 600 + 40;}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{35     \textcolor{comment}{// Set the position of the rubbish item}}
+\DoxyCodeLine{36     setPos(x, y);}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38     \textcolor{comment}{// Generate a random rotation angle between 0 and 360 degrees}}
+\DoxyCodeLine{39     qreal rotationAngle = \textcolor{keyword}{static\_cast<}qreal\textcolor{keyword}{>}(std::rand()) / RAND\_MAX * 360;}
+\DoxyCodeLine{40     setRotation(rotationAngle);}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42     \textcolor{comment}{// Choose shape of rubbish}}
+\DoxyCodeLine{43     QList<int> possibleShapes \{3, 4, 5, 6, 7, 9\};}
+\DoxyCodeLine{44     \textcolor{keywordtype}{int} index = std::rand() \% possibleShapes.size();}
+\DoxyCodeLine{45     shape = possibleShapes[index];}
+\DoxyCodeLine{46 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classRubbish_a626653bbe7a605f05132b974a1a7c0c5}\label{classRubbish_a626653bbe7a605f05132b974a1a7c0c5}} 
+\index{Rubbish@{Rubbish}!boundingRect@{boundingRect}}
+\index{boundingRect@{boundingRect}!Rubbish@{Rubbish}}
+\doxysubsubsection{\texorpdfstring{boundingRect()}{boundingRect()}}
+{\footnotesize\ttfamily QRectF Rubbish\+::bounding\+Rect (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}}
+
+
+
+Returns the bounding rectangle of the rubbish item. 
+
+\begin{DoxyReturn}{Returns}
+The bounding rectangle of the rubbish item. 
+\end{DoxyReturn}
+
+
+Definition at line 52 of file rubbish.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{53 \{}
+\DoxyCodeLine{54     \textcolor{keywordflow}{return} QRectF(0, 0, 20, 20);}
+\DoxyCodeLine{55 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRubbish_a21627979515f7f7882bba32d2edc5d63}\label{classRubbish_a21627979515f7f7882bba32d2edc5d63}} 
+\index{Rubbish@{Rubbish}!getRubbishID@{getRubbishID}}
+\index{getRubbishID@{getRubbishID}!Rubbish@{Rubbish}}
+\doxysubsubsection{\texorpdfstring{getRubbishID()}{getRubbishID()}}
+{\footnotesize\ttfamily int Rubbish\+::get\+Rubbish\+ID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the ID of the rubbish item. 
+
+\begin{DoxyReturn}{Returns}
+The ID of the rubbish item. 
+\end{DoxyReturn}
+
+
+Definition at line 128 of file rubbish.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{129 \{}
+\DoxyCodeLine{130     \textcolor{keywordflow}{return} rubbishID;}
+\DoxyCodeLine{131 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRubbish_a464e932eac6d95c0e3a06180bf75b9a8}\label{classRubbish_a464e932eac6d95c0e3a06180bf75b9a8}} 
+\index{Rubbish@{Rubbish}!paint@{paint}}
+\index{paint@{paint}!Rubbish@{Rubbish}}
+\doxysubsubsection{\texorpdfstring{paint()}{paint()}}
+{\footnotesize\ttfamily void Rubbish\+::paint (\begin{DoxyParamCaption}\item[{QPainter $\ast$}]{painter,  }\item[{const QStyle\+Option\+Graphics\+Item $\ast$}]{option,  }\item[{QWidget $\ast$}]{widget }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+
+
+Paints the rubbish item on the graphics scene. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em painter} & The painter object used for drawing. \\
+\hline
+{\em option} & Style options for the item (not used). \\
+\hline
+{\em widget} & The widget on which the item is drawn (not used). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 63 of file rubbish.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{64 \{}
+\DoxyCodeLine{65     Q\_UNUSED(option);}
+\DoxyCodeLine{66     Q\_UNUSED(widget);}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68     \textcolor{comment}{// Draw a star-\/like shape}}
+\DoxyCodeLine{69     painter-\/>setRenderHint(QPainter::Antialiasing);}
+\DoxyCodeLine{70     painter-\/>setPen(Qt::NoPen);}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72     \textcolor{comment}{// Define the base color for the star}}
+\DoxyCodeLine{73     QColor baseColor = QColor(200, 200, 200);}
+\DoxyCodeLine{74 }
+\DoxyCodeLine{75     \textcolor{comment}{// Create a gradient for shading}}
+\DoxyCodeLine{76     QLinearGradient gradient(\mbox{\hyperlink{classRubbish_a626653bbe7a605f05132b974a1a7c0c5}{boundingRect}}().topLeft(), \mbox{\hyperlink{classRubbish_a626653bbe7a605f05132b974a1a7c0c5}{boundingRect}}().bottomRight());}
+\DoxyCodeLine{77     gradient.setColorAt(0, baseColor.lighter(150));}
+\DoxyCodeLine{78     gradient.setColorAt(1, baseColor);}
+\DoxyCodeLine{79 }
+\DoxyCodeLine{80     \textcolor{comment}{// Draw the base star shape}}
+\DoxyCodeLine{81     QPainterPath starPath;}
+\DoxyCodeLine{82     generateStarPath(starPath);}
+\DoxyCodeLine{83     painter-\/>setBrush(gradient);}
+\DoxyCodeLine{84     painter-\/>drawPath(starPath);}
+\DoxyCodeLine{85 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{rubbish_8h}{rubbish.\+h}}\item 
+src/\mbox{\hyperlink{rubbish_8cpp}{rubbish.\+cpp}}\end{DoxyCompactItemize}

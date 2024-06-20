@@ -1,0 +1,459 @@
+\hypertarget{classRobot}{}\doxysection{Robot Class Reference}
+\label{classRobot}\index{Robot@{Robot}}
+
+
+Class representing the robots in the scene.  
+
+
+
+
+{\ttfamily \#include $<$robot.\+h$>$}
+
+Inheritance diagram for Robot\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classRobot}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classRobot_a02d7d4bba6210687db01a47b7ce06f87}\label{classRobot_a02d7d4bba6210687db01a47b7ce06f87}} 
+void \mbox{\hyperlink{classRobot_a02d7d4bba6210687db01a47b7ce06f87}{move\+Forward}} ()
+\begin{DoxyCompactList}\small\item\em Moves the robot forward. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRobot_a262b17265892354db4bc11a7ddb089b1}{Robot}} (int id, QGraphics\+Item $\ast$parent=nullptr)
+\begin{DoxyCompactList}\small\item\em Constructs a \mbox{\hyperlink{classRobot}{Robot}} object with the specified ID. \end{DoxyCompactList}\item 
+QGraphics\+Ellipse\+Item $\ast$ \mbox{\hyperlink{classRobot_a25363b077d00981f280d94d472776bdb}{get\+Body}} () const
+\begin{DoxyCompactList}\small\item\em Gets the body of the robot. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classRobot_a55fae85c11372334cae7181bbc85a2a9}{get\+Robot\+ID}} () const
+\begin{DoxyCompactList}\small\item\em Gets the ID of the robot. \end{DoxyCompactList}\item 
+qreal \mbox{\hyperlink{classRobot_a26eaaffb73d6e366ce7ffddd84f523e2}{rotation\+Angle}} () const
+\begin{DoxyCompactList}\small\item\em Gets the rotation angle of the robot. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRobot_a6e6a25ade4a48d0ac6969e0206976ca6}{change\+Rotation\+Angle}} (qreal rotation)
+\begin{DoxyCompactList}\small\item\em Changes the rotation angle of the robot. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRobot_ab2130e4d166fa925006ddd9c86b27867}{set\+Movement\+Enable}} (bool enable)
+\begin{DoxyCompactList}\small\item\em Enables or disables movement of the robot. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRobot_a207038995d29887d9f1a58381fe549d2}{change\+Position}} (qreal x, qreal y)
+\begin{DoxyCompactList}\small\item\em Changes the position of the robot. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRobot_a24ba53f1f09dd0c2adc9a8182e41ae28}{set\+Angle}} (int new\+Angle)
+\begin{DoxyCompactList}\small\item\em Sets the angle of the robot. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classRobot_a52f709f71fb9f443fe1db383bbdeb012}{get\+Angle}} ()
+\begin{DoxyCompactList}\small\item\em Gets the angle of the robot. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classRobot_a850744e804a8c2a19a771f122b304894}{get\+Remaining\+Angle}} ()
+\begin{DoxyCompactList}\small\item\em Gets the remaining angle of the robot. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRobot_aa93b3b800b3e95d78f36c5b3df9db625}{set\+Remaining\+Angle}} (int angle)
+\begin{DoxyCompactList}\small\item\em Sets the remaining angle of the robot. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRobot_a921aa019862b9001afba14dcb28fb00d}{set\+Detection\+Distance}} (int length)
+\begin{DoxyCompactList}\small\item\em Sets the detection distance of the robot. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classRobot_ab17270ff69a154ca897d19958212d164}{mouse\+Press\+Event}} (QGraphics\+Scene\+Mouse\+Event $\ast$event) override
+\begin{DoxyCompactList}\small\item\em Overrides mouse press event handling. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classRobot_a032858ae1fe02d2d1170981c2af2d67c}\label{classRobot_a032858ae1fe02d2d1170981c2af2d67c}} 
+class {\bfseries Scene}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing the robots in the scene. 
+
+Definition at line 23 of file robot.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classRobot_a262b17265892354db4bc11a7ddb089b1}\label{classRobot_a262b17265892354db4bc11a7ddb089b1}} 
+\index{Robot@{Robot}!Robot@{Robot}}
+\index{Robot@{Robot}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{Robot()}{Robot()}}
+{\footnotesize\ttfamily Robot\+::\+Robot (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+
+
+Constructs a \mbox{\hyperlink{classRobot}{Robot}} object with the specified ID. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The ID of the robot. \\
+\hline
+{\em parent} & The parent QGraphics\+Item (default is nullptr). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 29 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{29                                           :}
+\DoxyCodeLine{30     QGraphicsItemGroup(parent),}
+\DoxyCodeLine{31     mRotationAngle(0.0),}
+\DoxyCodeLine{32     robotID(\textcolor{keywordtype}{id})}
+\DoxyCodeLine{33 \{}
+\DoxyCodeLine{34     mLine = \textcolor{keyword}{new} QGraphicsLineItem(200, 250, 220, 250, \textcolor{keyword}{this});}
+\DoxyCodeLine{35     mEllipse = \textcolor{keyword}{new} QGraphicsEllipseItem(180, 230, 40, 40, \textcolor{keyword}{this});}
+\DoxyCodeLine{36     mRect = \textcolor{keyword}{new} QGraphicsRectItem(200, 230, 80, 40, \textcolor{keyword}{this});}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38     \textcolor{keywordflow}{if} (\textcolor{keywordtype}{id} < 0)}
+\DoxyCodeLine{39     \{}
+\DoxyCodeLine{40         QPen playerPen(Qt::blue);}
+\DoxyCodeLine{41         mLine-\/>setPen(playerPen);}
+\DoxyCodeLine{42         mEllipse-\/>setPen(playerPen);}
+\DoxyCodeLine{43         mRect-\/>setPen(playerPen);}
+\DoxyCodeLine{44     \}}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46     mRect-\/>setOpacity(0.3);}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48     addToGroup(mLine);}
+\DoxyCodeLine{49     addToGroup(mEllipse);}
+\DoxyCodeLine{50     addToGroup(mRect);}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{52     setFlag(QGraphicsItem::ItemIsMovable);}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54     setTransformOriginPoint(QPointF(200,250));}
+\DoxyCodeLine{55 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classRobot_a207038995d29887d9f1a58381fe549d2}\label{classRobot_a207038995d29887d9f1a58381fe549d2}} 
+\index{Robot@{Robot}!changePosition@{changePosition}}
+\index{changePosition@{changePosition}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{changePosition()}{changePosition()}}
+{\footnotesize\ttfamily void Robot\+::change\+Position (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y }\end{DoxyParamCaption})}
+
+
+
+Changes the position of the robot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The new x-\/coordinate. \\
+\hline
+{\em y} & The new y-\/coordinate. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 194 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{195 \{}
+\DoxyCodeLine{196     setPos(pos() + QPointF(x, y));}
+\DoxyCodeLine{197 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobot_a6e6a25ade4a48d0ac6969e0206976ca6}\label{classRobot_a6e6a25ade4a48d0ac6969e0206976ca6}} 
+\index{Robot@{Robot}!changeRotationAngle@{changeRotationAngle}}
+\index{changeRotationAngle@{changeRotationAngle}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{changeRotationAngle()}{changeRotationAngle()}}
+{\footnotesize\ttfamily void Robot\+::change\+Rotation\+Angle (\begin{DoxyParamCaption}\item[{qreal}]{rotation }\end{DoxyParamCaption})}
+
+
+
+Changes the rotation angle of the robot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rotation} & The new rotation angle to set. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 127 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{128 \{}
+\DoxyCodeLine{129     mRotationAngle = rotation;}
+\DoxyCodeLine{130     rotate(0.0);}
+\DoxyCodeLine{131 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobot_a52f709f71fb9f443fe1db383bbdeb012}\label{classRobot_a52f709f71fb9f443fe1db383bbdeb012}} 
+\index{Robot@{Robot}!getAngle@{getAngle}}
+\index{getAngle@{getAngle}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{getAngle()}{getAngle()}}
+{\footnotesize\ttfamily int Robot\+::get\+Angle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the angle of the robot. 
+
+\begin{DoxyReturn}{Returns}
+The angle of the robot. 
+\end{DoxyReturn}
+
+
+Definition at line 146 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{147 \{}
+\DoxyCodeLine{148     \textcolor{keywordflow}{return} angle;}
+\DoxyCodeLine{149 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobot_a25363b077d00981f280d94d472776bdb}\label{classRobot_a25363b077d00981f280d94d472776bdb}} 
+\index{Robot@{Robot}!getBody@{getBody}}
+\index{getBody@{getBody}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{getBody()}{getBody()}}
+{\footnotesize\ttfamily QGraphics\+Ellipse\+Item $\ast$ Robot\+::get\+Body (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets the body of the robot. 
+
+\begin{DoxyReturn}{Returns}
+The QGraphics\+Ellipse\+Item representing the body of the robot. 
+\end{DoxyReturn}
+
+
+Definition at line 61 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{62 \{}
+\DoxyCodeLine{63     \textcolor{keywordflow}{return} mEllipse;}
+\DoxyCodeLine{64 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobot_a850744e804a8c2a19a771f122b304894}\label{classRobot_a850744e804a8c2a19a771f122b304894}} 
+\index{Robot@{Robot}!getRemainingAngle@{getRemainingAngle}}
+\index{getRemainingAngle@{getRemainingAngle}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{getRemainingAngle()}{getRemainingAngle()}}
+{\footnotesize\ttfamily int Robot\+::get\+Remaining\+Angle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Gets the remaining angle of the robot. 
+
+\begin{DoxyReturn}{Returns}
+The remaining angle of the robot. 
+\end{DoxyReturn}
+
+
+Definition at line 164 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{165 \{}
+\DoxyCodeLine{166     \textcolor{keywordflow}{return} remainingAngle;}
+\DoxyCodeLine{167 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobot_a55fae85c11372334cae7181bbc85a2a9}\label{classRobot_a55fae85c11372334cae7181bbc85a2a9}} 
+\index{Robot@{Robot}!getRobotID@{getRobotID}}
+\index{getRobotID@{getRobotID}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{getRobotID()}{getRobotID()}}
+{\footnotesize\ttfamily int Robot\+::get\+Robot\+ID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets the ID of the robot. 
+
+\begin{DoxyReturn}{Returns}
+The ID of the robot. 
+\end{DoxyReturn}
+
+
+Definition at line 70 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{71 \{}
+\DoxyCodeLine{72     \textcolor{keywordflow}{return} robotID;}
+\DoxyCodeLine{73 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobot_ab17270ff69a154ca897d19958212d164}\label{classRobot_ab17270ff69a154ca897d19958212d164}} 
+\index{Robot@{Robot}!mousePressEvent@{mousePressEvent}}
+\index{mousePressEvent@{mousePressEvent}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{mousePressEvent()}{mousePressEvent()}}
+{\footnotesize\ttfamily void Robot\+::mouse\+Press\+Event (\begin{DoxyParamCaption}\item[{QGraphics\+Scene\+Mouse\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Overrides mouse press event handling. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & The mouse press event. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 79 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{80 \{}
+\DoxyCodeLine{81     \textcolor{keywordflow}{if} (event-\/>button() == Qt::RightButton)}
+\DoxyCodeLine{82     \{}
+\DoxyCodeLine{83         \textcolor{comment}{// rotation menu}}
+\DoxyCodeLine{84         QMenu menu;}
+\DoxyCodeLine{85 }
+\DoxyCodeLine{86         menu.addSection(\textcolor{stringliteral}{"{}RobotID: "{}} + QString::number(robotID));}
+\DoxyCodeLine{87 }
+\DoxyCodeLine{88         QAction *rotateLeftAction = menu.addAction(\textcolor{stringliteral}{"{}Rotate left"{}});}
+\DoxyCodeLine{89         QAction *rotateRightAction = menu.addAction(\textcolor{stringliteral}{"{}Rotate right"{}});}
+\DoxyCodeLine{90 }
+\DoxyCodeLine{91         QAction *selectedAction = menu.exec(event-\/>screenPos());}
+\DoxyCodeLine{92         \textcolor{keywordflow}{if} (selectedAction == rotateLeftAction)}
+\DoxyCodeLine{93         \{}
+\DoxyCodeLine{94             rotate(-\/45.0);}
+\DoxyCodeLine{95         \}}
+\DoxyCodeLine{96         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (selectedAction == rotateRightAction)}
+\DoxyCodeLine{97         \{}
+\DoxyCodeLine{98             rotate(45.0);}
+\DoxyCodeLine{99         \}}
+\DoxyCodeLine{100     \}}
+\DoxyCodeLine{101     QGraphicsItemGroup::mousePressEvent(event);}
+\DoxyCodeLine{102 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobot_a26eaaffb73d6e366ce7ffddd84f523e2}\label{classRobot_a26eaaffb73d6e366ce7ffddd84f523e2}} 
+\index{Robot@{Robot}!rotationAngle@{rotationAngle}}
+\index{rotationAngle@{rotationAngle}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{rotationAngle()}{rotationAngle()}}
+{\footnotesize\ttfamily qreal Robot\+::rotation\+Angle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets the rotation angle of the robot. 
+
+\begin{DoxyReturn}{Returns}
+The rotation angle of the robot. 
+\end{DoxyReturn}
+
+
+Definition at line 118 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{119 \{}
+\DoxyCodeLine{120     \textcolor{keywordflow}{return} mRotationAngle;}
+\DoxyCodeLine{121 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobot_a24ba53f1f09dd0c2adc9a8182e41ae28}\label{classRobot_a24ba53f1f09dd0c2adc9a8182e41ae28}} 
+\index{Robot@{Robot}!setAngle@{setAngle}}
+\index{setAngle@{setAngle}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{setAngle()}{setAngle()}}
+{\footnotesize\ttfamily void Robot\+::set\+Angle (\begin{DoxyParamCaption}\item[{int}]{new\+Angle }\end{DoxyParamCaption})}
+
+
+
+Sets the angle of the robot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Angle} & The new angle to set. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 137 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{138 \{}
+\DoxyCodeLine{139     angle = newAngle;}
+\DoxyCodeLine{140 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobot_a921aa019862b9001afba14dcb28fb00d}\label{classRobot_a921aa019862b9001afba14dcb28fb00d}} 
+\index{Robot@{Robot}!setDetectionDistance@{setDetectionDistance}}
+\index{setDetectionDistance@{setDetectionDistance}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{setDetectionDistance()}{setDetectionDistance()}}
+{\footnotesize\ttfamily void Robot\+::set\+Detection\+Distance (\begin{DoxyParamCaption}\item[{int}]{length }\end{DoxyParamCaption})}
+
+
+
+Sets the detection distance of the robot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em length} & The detection distance to set. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 173 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{174 \{}
+\DoxyCodeLine{175     removeFromGroup(mRect);}
+\DoxyCodeLine{176     mRect-\/>setRect(200, 230, length, 40);}
+\DoxyCodeLine{177     addToGroup(mRect);}
+\DoxyCodeLine{178 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobot_ab2130e4d166fa925006ddd9c86b27867}\label{classRobot_ab2130e4d166fa925006ddd9c86b27867}} 
+\index{Robot@{Robot}!setMovementEnable@{setMovementEnable}}
+\index{setMovementEnable@{setMovementEnable}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{setMovementEnable()}{setMovementEnable()}}
+{\footnotesize\ttfamily void Robot\+::set\+Movement\+Enable (\begin{DoxyParamCaption}\item[{bool}]{enable }\end{DoxyParamCaption})}
+
+
+
+Enables or disables movement of the robot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em enable} & If true, movement is enabled; otherwise, it\textquotesingle{}s disabled. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 184 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{185 \{}
+\DoxyCodeLine{186     setFlag(QGraphicsItem::ItemIsMovable, enable);}
+\DoxyCodeLine{187 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classRobot_aa93b3b800b3e95d78f36c5b3df9db625}\label{classRobot_aa93b3b800b3e95d78f36c5b3df9db625}} 
+\index{Robot@{Robot}!setRemainingAngle@{setRemainingAngle}}
+\index{setRemainingAngle@{setRemainingAngle}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{setRemainingAngle()}{setRemainingAngle()}}
+{\footnotesize\ttfamily void Robot\+::set\+Remaining\+Angle (\begin{DoxyParamCaption}\item[{int}]{angle }\end{DoxyParamCaption})}
+
+
+
+Sets the remaining angle of the robot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em angle} & The remaining angle to set. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 155 of file robot.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{156 \{}
+\DoxyCodeLine{157     remainingAngle = angle;}
+\DoxyCodeLine{158 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{robot_8h}{robot.\+h}}\item 
+src/\mbox{\hyperlink{robot_8cpp}{robot.\+cpp}}\end{DoxyCompactItemize}
