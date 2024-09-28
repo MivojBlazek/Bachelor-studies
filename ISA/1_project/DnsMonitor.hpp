@@ -16,6 +16,7 @@ class DnsMonitor
 public:
     int parseArguments(int argc, char *argv[]);
     void startCapturePackets();
+    bool isVerbose() const;
 
 private:
     std::string interface;

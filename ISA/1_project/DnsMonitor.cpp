@@ -13,6 +13,12 @@
 
 int DnsMonitor::parseArguments(int argc, char *argv[])
 {
+    interface.clear();
+    pcapFile.clear();
+    verbose = false;
+    domainsFile.clear();
+    translationsFile.clear();
+    
     // Process program arguments
     int opt;
     while ((opt = getopt(argc, argv, "i:r:vd:t:")) != -1)
@@ -61,4 +67,9 @@ void DnsMonitor::startCapturePackets()
     {
         capturer.captureFromPcap();
     }
+}
+
+bool DnsMonitor::isVerbose() const
+{
+    return verbose;
 }
