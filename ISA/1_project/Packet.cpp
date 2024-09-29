@@ -15,6 +15,7 @@
 #include <netinet/ether.h>
 #include <arpa/inet.h>   // for inet_ntop
 #include <cstring>
+#include <list>
 #include "DnsHeader.hpp"
 
 Packet::Packet(const pcap_pkthdr *_header, const u_char *_data, int _length)
@@ -56,17 +57,74 @@ void Packet::printPacket(bool verbose) const
  
     if (verbose)
     {
+        // Main information in verbose mode
         std::cout << "Timestamp: " << timeBuffer << std::endl
                   << "SrcIP: " << srcIP << std::endl
                   << "DstIP: " << dstIP << std::endl
                   << "SrcPort: UDP/" << sourcePort << std::endl
                   << "DstPort: UDP/" << destPort << std::endl
                   << "Identifier: 0x" << std::hex << std::uppercase << dnsHeader.getID() << std::dec << std::nouppercase << std::endl
-                  << "Flags: " << dnsHeader.getStringFlags() << std::endl
-                  << std::endl;
+                  << "Flags: " << dnsHeader.getStringFlags() << std::endl;
 
-        //TODO 4 more headers
-        std::cout << "====================" << std::endl << std::endl;
+        // Headers of additional sections
+        std::list<DnsHeader::AdditionalHeaders *> listOfAddHeaders = dnsHeader.getListOfHeaders();
+        for (int i = 0; i < dnsHeader.getCountOf(DnsHeader::Questions); i++)
+        {
+            if (i == 0)
+            {
+                std::cout << std::endl;
+                std::cout << "[Question Section]" << std::endl;
+            }
+            DnsHeader::AdditionalHeaders *header = listOfAddHeaders.front();
+            listOfAddHeaders.pop_front();
+            // std::string classString, typeString; //TODO
+            // if (header->classType == 1)
+            // {
+            //     classString = "IN";
+            // }
+            // if (header->type == 1)
+            // {
+            //     typeString = "A";
+            // }
+
+            std::cout << header->name << ". " << header->classType << " " << header->type << std::endl;
+        }
+        for (int i = 0; i < dnsHeader.getCountOf(DnsHeader::Answers); i++)
+        {
+            if (i == 0)
+            {
+                std::cout << std::endl;
+                std::cout << "[Answer Section]" << std::endl;
+            }
+            DnsHeader::AdditionalHeaders *header = listOfAddHeaders.front();
+            listOfAddHeaders.pop_front();
+            //TODO
+        }
+        for (int i = 0; i < dnsHeader.getCountOf(DnsHeader::AuthorityRecords); i++)
+        {
+            if (i == 0)
+            {
+                std::cout << std::endl;
+                std::cout << "[Authority Section]" << std::endl;
+            }
+            DnsHeader::AdditionalHeaders *header = listOfAddHeaders.front();
+            listOfAddHeaders.pop_front();
+            //TODO
+        }
+        for (int i = 0; i < dnsHeader.getCountOf(DnsHeader::AdditionalRecords); i++)
+        {
+            if (i == 0)
+            {
+                std::cout << std::endl;
+                std::cout << "[Additional Section]" << std::endl;
+            }
+            DnsHeader::AdditionalHeaders *header = listOfAddHeaders.front();
+            listOfAddHeaders.pop_front();
+            //TODO
+        }
+
+        // End of verbose record
+        std::cout << std::endl << "====================" << std::endl << std::endl;
     }
     else
     {
