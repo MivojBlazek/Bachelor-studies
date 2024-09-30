@@ -25,7 +25,7 @@ Packet::Packet(const pcap_pkthdr *_header, const u_char *_data, int _length)
     data = _data + sizeof(struct ether_header);
     dataLength = _length - sizeof(struct ether_header);
 
-    struct ip *IPHeader = (struct ip *)(_header + sizeof(struct ether_header));
+    const struct ip *IPHeader = reinterpret_cast<const struct ip *>(data);
     char srcIPBuf[INET_ADDRSTRLEN];
     char dstIPBuf[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &(IPHeader->ip_src), srcIPBuf, INET_ADDRSTRLEN);
