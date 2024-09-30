@@ -10,6 +10,7 @@
 #include "PacketCapturer.hpp"
 #include <iostream>
 #include <unistd.h>
+#include <filesystem>
 
 int DnsMonitor::parseArguments(int argc, char *argv[])
 {
@@ -52,6 +53,24 @@ int DnsMonitor::parseArguments(int argc, char *argv[])
         std::cerr << "You must specify -i <interface> or -r <pcapfile> but not both.\n";
         return 1;
     }
+
+    // Check if file for domains exists and remove it
+    if (!domainsFile.empty())
+    {
+        if (std::filesystem::exists(domainsFile))
+        {
+            std::filesystem::remove(domainsFile);
+        }
+    }
+
+    // Check if file for translations exists and remove it
+    if (!translationsFile.empty())
+    {
+        if (std::filesystem::exists(translationsFile))
+        {
+            std::filesystem::remove(translationsFile);
+        }
+    }
     return 0;
 }
 
@@ -72,4 +91,22 @@ void DnsMonitor::startCapturePackets()
 bool DnsMonitor::isVerbose() const
 {
     return verbose;
+}
+
+std::string DnsMonitor::getDomainsFile() const
+{
+    if (!domainsFile.empty())
+    {
+        return domainsFile;
+    }
+    return "";
+}
+
+std::string DnsMonitor::getTranslationsFile() const
+{
+    if (!translationsFile.empty())
+    {
+        return translationsFile;
+    }
+    return "";
 }

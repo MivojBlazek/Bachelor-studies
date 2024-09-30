@@ -115,5 +115,5 @@ void PacketCapturer::processPacket(u_char *args, const struct pcap_pkthdr *heade
     DnsMonitor *dnsMonitor = reinterpret_cast<DnsMonitor *>(args);
 
     Packet pkt(header, packet, header->len);
-    pkt.printPacket(dnsMonitor->isVerbose());
+    pkt.printPacket(dnsMonitor->isVerbose(), dnsMonitor->getDomainsFile(), dnsMonitor->getTranslationsFile());
 }

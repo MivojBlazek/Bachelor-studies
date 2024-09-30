@@ -17,6 +17,8 @@ public:
     int parseArguments(int argc, char *argv[]);
     void startCapturePackets();
     bool isVerbose() const;
+    std::string getDomainsFile() const;
+    std::string getTranslationsFile() const;
 
 private:
     std::string interface;

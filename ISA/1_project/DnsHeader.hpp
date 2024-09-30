@@ -12,6 +12,7 @@
 #include <pcap.h>
 #include <string>
 #include <list>
+#include <set>
 #include <cstdint>
 #include <ctime>
 
@@ -48,6 +49,8 @@ public:
     std::string getStringFlags() const;
     static std::string decodeDomainName(const u_char *data, int *offset);
     std::list<AdditionalHeaders *> getListOfHeaders();
+    std::set<std::string> getDomains();
+    std::set<std::string> getTranslations();
 
 private:
     uint16_t id;
@@ -58,6 +61,8 @@ private:
     uint16_t additionalCount;
     bool isQuery;
     std::list<AdditionalHeaders *> listOfAddRecords;
+    std::set<std::string> domainNames;
+    std::set<std::string> translations;
 };
 
 #endif //_DNS_HEADER_

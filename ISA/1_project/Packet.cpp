@@ -17,6 +17,7 @@
 #include <cstring>
 #include <list>
 #include <map>
+#include <fstream>
 
 Packet::Packet(const pcap_pkthdr *_header, const u_char *_data, int _length)
     : header(_data),
@@ -46,7 +47,7 @@ Packet::Packet(const pcap_pkthdr *_header, const u_char *_data, int _length)
     timestamp = _header->ts.tv_sec;
 }
 
-void Packet::printPacket(bool verbose) const
+void Packet::printPacket(bool verbose, std::string domainsFile, std::string translationsFile) const
 {
     DnsHeader dnsHeader(data);
 
@@ -241,5 +242,77 @@ void Packet::printPacket(bool verbose) const
                   << dnsHeader.getCountOf(DnsHeader::Answers) << "/" 
                   << dnsHeader.getCountOf(DnsHeader::AuthorityRecords) << "/" 
                   << dnsHeader.getCountOf(DnsHeader::AdditionalRecords) << ")" << std::endl;
+    }
+
+    // Domains and translations processing
+    if (!domainsFile.empty() || domainsFile != "")
+    {
+        fillDomainsFile(dnsHeader.getDomains(), domainsFile);
+    }
+    if (!translationsFile.empty() || translationsFile != "")
+    {
+        fillTranslationsFile(dnsHeader.getTranslations(), translationsFile);
+    }
+}
+
+void Packet::fillDomainsFile(std::set<std::string> domainNames, std::string domainsFile) const
+{
+    std::set<std::string> allDomains;
+
+    std::ifstream inputFile(domainsFile);
+    if (inputFile.is_open())
+    {
+        std::string line;
+        while (std::getline(inputFile, line))
+        {
+            allDomains.insert(line);
+        }
+        inputFile.close();
+    }
+
+    for (const std::string &domain : domainNames)
+    {
+        allDomains.insert(domain);
+    }
+
+    std::ofstream outputFile(domainsFile);
+    if (outputFile.is_open())
+    {
+        for (const std::string &domain : allDomains)
+        {
+            outputFile << domain << std::endl;
+        }
+        outputFile.close();
+    }
+}
+
+void Packet::fillTranslationsFile(std::set<std::string> translations, std::string translationsFile) const
+{
+    std::set<std::string> allTranslations;
+
+    std::ifstream inputFile(translationsFile);
+    if (inputFile.is_open())
+    {
+        std::string line;
+        while (std::getline(inputFile, line))
+        {
+            allTranslations.insert(line);
+        }
+        inputFile.close();
+    }
+
+    for (const std::string &translation : translations)
+    {
+        allTranslations.insert(translation);
+    }
+
+    std::ofstream outputFile(translationsFile);
+    if (outputFile.is_open())
+    {
+        for (const std::string &translation : allTranslations)
+        {
+            outputFile << translation << std::endl;
+        }
+        outputFile.close();
     }
 }

@@ -48,6 +48,10 @@ DnsHeader::DnsHeader(const u_char *_data)
         qCnt--;
         
         newHeader->name = decodeDomainName(dnsData, &offset);
+        if (!newHeader->name.empty())
+        {
+            domainNames.insert(newHeader->name);
+        }
         newHeader->type = ntohs(*reinterpret_cast<const uint16_t *>(dnsData + offset));
         offset += 2;
         newHeader->classType = ntohs(*reinterpret_cast<const uint16_t *>(dnsData + offset));
@@ -92,6 +96,10 @@ DnsHeader::DnsHeader(const u_char *_data)
         }
         
         newHeader->name = decodeDomainName(dnsData, &offset);
+        if (!newHeader->name.empty())
+        {
+            domainNames.insert(newHeader->name);
+        }
         newHeader->type = ntohs(*reinterpret_cast<const uint16_t *>(dnsData + offset));
         offset += 2;
         newHeader->classType = ntohs(*reinterpret_cast<const uint16_t *>(dnsData + offset));
@@ -106,12 +114,24 @@ DnsHeader::DnsHeader(const u_char *_data)
             char ipv4[INET_ADDRSTRLEN];
             inet_ntop(AF_INET, dnsData + offset, ipv4, INET_ADDRSTRLEN);
             newHeader->rData = std::string(ipv4);
+
+            if (newHeader->part == Answers || newHeader->part == AdditionalRecords)
+            {
+                std::string translation = newHeader->name + " " + newHeader->rData;
+                translations.insert(translation);
+            }
         }
         else if (newHeader->type == AAAA)
         {
             char ipv6[INET6_ADDRSTRLEN];
             inet_ntop(AF_INET6, dnsData + offset, ipv6, INET6_ADDRSTRLEN);
             newHeader->rData = std::string(ipv6);
+
+            if (newHeader->part == Answers || newHeader->part == AdditionalRecords)
+            {
+                std::string translation = newHeader->name + " " + newHeader->rData;
+                translations.insert(translation);
+            }
         }
         else if (newHeader->type == NS ||
                  newHeader->type == MX ||
@@ -121,6 +141,10 @@ DnsHeader::DnsHeader(const u_char *_data)
         {
             int tmpOffset = offset;
             newHeader->rData = decodeDomainName(dnsData, &tmpOffset);
+            if (!newHeader->name.empty())
+            {
+                domainNames.insert(newHeader->name);
+            }
         }
         else
         {
@@ -235,4 +259,14 @@ std::string DnsHeader::decodeDomainName(const u_char *data, int *offset)
 std::list<DnsHeader::AdditionalHeaders *> DnsHeader::getListOfHeaders()
 {
     return listOfAddRecords;
+}
+
+std::set<std::string> DnsHeader::getDomains()
+{
+    return domainNames;
+}
+
+std::set<std::string> DnsHeader::getTranslations()
+{
+    return translations;
 }
