@@ -17,13 +17,13 @@ DnsHeader::DnsHeader(const u_char *_data)
 {
     // Skip IP header
     // Skip UDP header
-
     const struct ip *IPHeader = reinterpret_cast<const struct ip *>(_data);
     size_t IPHeaderLength = IPHeader->ip_hl * 4;
 
     const u_char *dnsData = _data + IPHeaderLength + sizeof(struct udphdr);
     const uint16_t *dnsHeader = reinterpret_cast<const uint16_t *>(dnsData);
 
+    // Load DNS header
     id = ntohs(dnsHeader[0]);
     flags = ntohs(dnsHeader[1]);
     questionCount = ntohs(dnsHeader[2]);
@@ -53,10 +53,22 @@ DnsHeader::DnsHeader(const u_char *_data)
         newHeader->classType = ntohs(*reinterpret_cast<const uint16_t *>(dnsData + offset));
         offset += 2;
 
-        listOfAddRecords.push_back(newHeader);
+        newHeader->TTL = 0;
+        newHeader->rData = "";
 
-        std::cout << "Parsed: " << newHeader->name << ", Type: " << newHeader->type
-                  << ", Class: " << newHeader->classType << std::endl; //! DEBUG
+        // Only supported types
+        if (!(newHeader->type == A) &&
+            !(newHeader->type == AAAA) &&
+            !(newHeader->type == NS) &&
+            !(newHeader->type == MX) &&
+            !(newHeader->type == SOA) &&
+            !(newHeader->type == CNAME) &&
+            !(newHeader->type == SRV))
+        {
+            newHeader->type = NotSupported;
+        }
+
+        listOfAddRecords.push_back(newHeader);
     }
 
     while ((aCnt + auCnt + adCnt) != 0)
@@ -79,29 +91,44 @@ DnsHeader::DnsHeader(const u_char *_data)
             adCnt--;
         }
         
-        if ((dnsData[offset] & 0xC0) == 0xC0)
-        {
-            // Compressed version of name
-            uint16_t pointer = ((dnsData[offset] & 0x3F) << 8) | dnsData[offset + 1]; // Last 14 bits
-            int tmpOffset = pointer;
-            newHeader->name = "hello";//decodeDomainName(dnsData, &tmpOffset); //! DEBUG
-            offset += 2;
-        }
-        else 
-        {
-            // Normal version of name
-            newHeader->name = decodeDomainName(dnsData, &offset);
-        }
+        newHeader->name = decodeDomainName(dnsData, &offset);
         newHeader->type = ntohs(*reinterpret_cast<const uint16_t *>(dnsData + offset));
         offset += 2;
         newHeader->classType = ntohs(*reinterpret_cast<const uint16_t *>(dnsData + offset));
         offset += 2;
-        //TODO offset until next header
+        newHeader->TTL = ntohl(*reinterpret_cast<const uint32_t *>(dnsData + offset));
+        offset += 4;
+
+        uint16_t rDataLength = ntohs(*reinterpret_cast<const uint16_t *>(dnsData + offset));
+        offset += 2;
+        if (newHeader->type == A)
+        {
+            char ipv4[INET_ADDRSTRLEN];
+            inet_ntop(AF_INET, dnsData + offset, ipv4, INET_ADDRSTRLEN);
+            newHeader->rData = std::string(ipv4);
+        }
+        else if (newHeader->type == AAAA)
+        {
+            char ipv6[INET6_ADDRSTRLEN];
+            inet_ntop(AF_INET6, dnsData + offset, ipv6, INET6_ADDRSTRLEN);
+            newHeader->rData = std::string(ipv6);
+        }
+        else if (newHeader->type == NS ||
+                 newHeader->type == MX ||
+                 newHeader->type == SOA ||
+                 newHeader->type == CNAME ||
+                 newHeader->type == SRV)
+        {
+            int tmpOffset = offset;
+            newHeader->rData = decodeDomainName(dnsData, &tmpOffset);
+        }
+        else
+        {
+            newHeader->type = NotSupported;
+        }
+        offset += rDataLength;
 
         listOfAddRecords.push_back(newHeader);
-
-        std::cout << "Parsed: " << newHeader->name << ", Type: " << newHeader->type
-                  << ", Class: " << newHeader->classType << std::endl; //! DEBUG
     }
 }
 
@@ -118,18 +145,18 @@ uint16_t DnsHeader::getCountOf(Parts part) const
     uint16_t count = 0;
     switch (part)
     {
-    case Questions:
-        count = questionCount;
-        break;
-    case Answers:
-        count = answerCount;
-        break;
-    case AuthorityRecords:
-        count = authorityCount;
-        break;
-    case AdditionalRecords:
-        count = additionalCount;
-        break;
+        case Questions:
+            count = questionCount;
+            break;
+        case Answers:
+            count = answerCount;
+            break;
+        case AuthorityRecords:
+            count = authorityCount;
+            break;
+        case AdditionalRecords:
+            count = additionalCount;
+            break;
     }
     return count;
 }
@@ -165,17 +192,42 @@ std::string DnsHeader::getStringFlags() const
 std::string DnsHeader::decodeDomainName(const u_char *data, int *offset)
 {
     std::string name;
-    while (data[*offset] != 0) {
-        int len = data[*offset];
-        (*offset)++;
-        if (!name.empty())
+    bool jumped = false;
+    int offsetBeforeJump = -1;
+
+    while (data[*offset] != 0)
+    {
+        if ((data[*offset] & 0xC0) == 0xC0)
         {
-            name += ".";
+            uint16_t pointer = ((data[*offset] & 0x3F) << 8) | data[*offset + 1]; // Last 14 bits
+            *offset += 2;
+            
+            jumped = true;
+            offsetBeforeJump = *offset;
+            *offset = pointer;
         }
-        name += std::string(reinterpret_cast<const char *>(data + *offset), len);
-        (*offset) = (*offset) + len;
+        else
+        {
+            int len = data[*offset];
+            (*offset)++;
+
+            if (!name.empty()) {
+                name += ".";
+            }
+
+            name += std::string(reinterpret_cast<const char *>(data + *offset), len);
+            (*offset) += len;
+        }
     }
-    (*offset)++;
+
+    if (!jumped)
+    {
+        (*offset)++;
+    }
+    else
+    {
+        *offset = offsetBeforeJump;
+    }
     return name;
 }
 

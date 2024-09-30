@@ -18,6 +18,17 @@
 class DnsHeader
 {
 public:
+    enum SupportedTypes
+    {
+        NotSupported = 65000,
+        A = 1,
+        AAAA = 28,
+        NS = 2,
+        MX = 15,
+        SOA = 6,
+        CNAME = 5,
+        SRV = 33
+    };
     enum Parts {Questions, Answers, AuthorityRecords, AdditionalRecords};
     struct AdditionalHeaders
     {
@@ -25,6 +36,8 @@ public:
         std::string name;
         uint16_t type;
         uint16_t classType;
+        uint32_t TTL;
+        std::string rData;
     };
     
     DnsHeader(const u_char *_data);

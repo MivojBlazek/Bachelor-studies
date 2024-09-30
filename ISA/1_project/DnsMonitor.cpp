@@ -25,24 +25,24 @@ int DnsMonitor::parseArguments(int argc, char *argv[])
     {
         switch (opt)
         {
-        case 'i':
-            interface = optarg;
-            break;
-        case 'r':
-            pcapFile = optarg;
-            break;
-        case 'v':
-            verbose = true;
-            break;
-        case 'd':
-            domainsFile = optarg;
-            break;
-        case 't':
-            translationsFile = optarg;
-            break;
-        default:
-            std::cout << "Usage:\n./dns-monitor (-i <interface> | -r <pcapfile>) [-v] [-d <domainsfile>] [-t <translationsfile>]\n";
-            return 1;
+            case 'i':
+                interface = optarg;
+                break;
+            case 'r':
+                pcapFile = optarg;
+                break;
+            case 'v':
+                verbose = true;
+                break;
+            case 'd':
+                domainsFile = optarg;
+                break;
+            case 't':
+                translationsFile = optarg;
+                break;
+            default:
+                std::cout << "Usage:\n./dns-monitor (-i <interface> | -r <pcapfile>) [-v] [-d <domainsfile>] [-t <translationsfile>]\n";
+                return 1;
         }
     }
 
