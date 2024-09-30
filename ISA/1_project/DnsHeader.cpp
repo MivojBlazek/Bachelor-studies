@@ -193,7 +193,6 @@ std::string DnsHeader::decodeDomainName(const u_char *data, int *offset)
 {
     std::string name;
     bool jumped = false;
-    int offsetBeforeJump = -1;
 
     while (data[*offset] != 0)
     {
@@ -201,10 +200,16 @@ std::string DnsHeader::decodeDomainName(const u_char *data, int *offset)
         {
             uint16_t pointer = ((data[*offset] & 0x3F) << 8) | data[*offset + 1]; // Last 14 bits
             *offset += 2;
-            
+
+            int point = pointer;
+            std::string part = decodeDomainName(data, &point);
+            if (!name.empty() && !part.empty())
+            {
+                name += ".";
+            }
+            name += part;
             jumped = true;
-            offsetBeforeJump = *offset;
-            *offset = pointer;
+            break;
         }
         else
         {
@@ -223,10 +228,6 @@ std::string DnsHeader::decodeDomainName(const u_char *data, int *offset)
     if (!jumped)
     {
         (*offset)++;
-    }
-    else
-    {
-        *offset = offsetBeforeJump;
     }
     return name;
 }

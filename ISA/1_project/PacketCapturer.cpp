@@ -71,9 +71,44 @@ void PacketCapturer::captureFromInterface()
 
 void PacketCapturer::captureFromPcap()
 {
-    //TODO
-}
+    char errbuf[PCAP_ERRBUF_SIZE];
+    pcap_t *handle;
 
+    // Open device for capture from file
+    handle = pcap_open_offline(pcapFile.c_str(), errbuf);
+    if (handle == nullptr)
+    {
+        std::cerr << "Error: Couldn't open device " << pcapFile << ": " << errbuf << std::endl;
+        return;
+    }
+
+    struct bpf_program fp;
+    std::string filter_exp = "udp port 53"; // Filter udp and dns
+    bpf_u_int32 net = 0;
+
+    if (pcap_compile(handle, &fp, filter_exp.c_str(), 0, net) == -1)
+    {
+        std::cerr << "Error: Couldn't parse filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
+        pcap_close(handle);
+        return;
+    }
+
+    if (pcap_setfilter(handle, &fp) == -1)
+    {
+        std::cerr << "Error: Couldn't install filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
+        pcap_freecode(&fp);
+        pcap_close(handle);
+        return;
+    }
+
+    // Start capturing packets
+    std::cout << "Listening for DNS traffic on " << interface << "..." << std::endl;
+    pcap_loop(handle, 0, processPacket, reinterpret_cast<u_char *>(&monitor));
+
+    // Clean up
+    pcap_freecode(&fp);
+    pcap_close(handle);
+}
 
 void PacketCapturer::processPacket(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 {
