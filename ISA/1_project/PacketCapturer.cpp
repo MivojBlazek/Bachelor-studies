@@ -1,12 +1,13 @@
 /**
  * 
- * File: PacketCapturer.cpp
+ * @file: PacketCapturer.cpp
  * 
- * Author: Michal Blažek <xblaze38>
+ * @author: Michal Blažek <xblaze38>
  * 
  */
 
 #include "PacketCapturer.hpp"
+#include "Packet.hpp"
 #include <iostream>
 #include <pcap.h>
 #include <netinet/in.h>
@@ -18,7 +19,6 @@
 #include <arpa/inet.h>
 #include <time.h>
 #include <netdb.h>
-#include "Packet.hpp"
 
 PacketCapturer::PacketCapturer(const std::string &_interface, const std::string &_pcapFile, DnsMonitor &_monitor)
     : interface(_interface),
@@ -60,7 +60,7 @@ void PacketCapturer::captureFromInterface()
         return;
     }
 
-    // Start capturing packets
+    // Capturing
     std::cout << "Listening for DNS traffic on " << interface << "..." << std::endl;
     pcap_loop(handle, 0, processPacket, reinterpret_cast<u_char *>(&monitor));
 
@@ -101,7 +101,7 @@ void PacketCapturer::captureFromPcap()
         return;
     }
 
-    // Start capturing packets
+    // Capturing
     std::cout << "Listening for DNS traffic on " << interface << "..." << std::endl;
     pcap_loop(handle, 0, processPacket, reinterpret_cast<u_char *>(&monitor));
 

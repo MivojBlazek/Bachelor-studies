@@ -1,8 +1,8 @@
 /**
  * 
- * File: Packet.cpp
+ * @file: Packet.cpp
  * 
- * Author: Michal Blažek <xblaze38>
+ * @author: Michal Blažek <xblaze38>
  * 
  */
 
@@ -10,9 +10,9 @@
 #include "DnsHeader.hpp"
 #include <iostream>
 #include <ctime>
+#include <netinet/ether.h>
 #include <netinet/ip.h>
 #include <netinet/udp.h>
-#include <netinet/ether.h>
 #include <arpa/inet.h>
 #include <cstring>
 #include <list>
@@ -26,6 +26,7 @@ Packet::Packet(const pcap_pkthdr *_header, const u_char *_data, int _length)
     data = _data + sizeof(struct ether_header);
     dataLength = _length - sizeof(struct ether_header);
 
+    // IP addresses from IP header
     const struct ip *IPHeader = reinterpret_cast<const struct ip *>(data);
     char srcIPBuf[INET_ADDRSTRLEN];
     char dstIPBuf[INET_ADDRSTRLEN];
@@ -34,11 +35,11 @@ Packet::Packet(const pcap_pkthdr *_header, const u_char *_data, int _length)
     srcIP = srcIPBuf;
     dstIP = dstIPBuf;
 
-
     // IP header size
     const struct ip *IPHeader2 = reinterpret_cast<const struct ip *>(data);
     size_t IPHeaderLength = IPHeader2->ip_hl * 4;
 
+    // Ports from UDP header
     const u_char *UDPData = data + IPHeaderLength;
     const struct udphdr *UDPHeader = reinterpret_cast<const struct udphdr *>(UDPData);
     destPort = ntohs(UDPHeader->dest);
@@ -259,6 +260,7 @@ void Packet::fillDomainsFile(std::set<std::string> domainNames, std::string doma
 {
     std::set<std::string> allDomains;
 
+    // Save file to allDomains set to have unique records
     std::ifstream inputFile(domainsFile);
     if (inputFile.is_open())
     {
@@ -270,11 +272,13 @@ void Packet::fillDomainsFile(std::set<std::string> domainNames, std::string doma
         inputFile.close();
     }
 
+    // Add new records
     for (const std::string &domain : domainNames)
     {
         allDomains.insert(domain);
     }
 
+    // Print all records to file
     std::ofstream outputFile(domainsFile);
     if (outputFile.is_open())
     {
@@ -290,6 +294,7 @@ void Packet::fillTranslationsFile(std::set<std::string> translations, std::strin
 {
     std::set<std::string> allTranslations;
 
+    // Save file to allTranslations set to have unique records
     std::ifstream inputFile(translationsFile);
     if (inputFile.is_open())
     {
@@ -301,11 +306,13 @@ void Packet::fillTranslationsFile(std::set<std::string> translations, std::strin
         inputFile.close();
     }
 
+    // Add new records
     for (const std::string &translation : translations)
     {
         allTranslations.insert(translation);
     }
 
+    // Print all records to file
     std::ofstream outputFile(translationsFile);
     if (outputFile.is_open())
     {

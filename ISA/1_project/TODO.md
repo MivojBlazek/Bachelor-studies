@@ -6,9 +6,9 @@ To submit:
 [ ] headers in source files
 [ ] merlin ready
 
-[ ] IP addresses don't seem well
-[ ] complete verbose mode
-[ ] make B part of task (-d ...)
-[ ] make C part of task (-t ...)
-[ ] only specified types of DNS records are important
-[ ] additional headers should be offset all!!!
+[X] IP addresses don't seem well
+[X] complete verbose mode
+[X] make B part of task (-d ...)
+[X] make C part of task (-t ...)
+[X] only specified types of DNS records are important
+[X] additional headers should be offset all!!!

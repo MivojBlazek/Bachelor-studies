@@ -1,3 +1,11 @@
+/**
+ * 
+ * @file: main.cpp
+ * 
+ * @author: Michal Blažek <xblaze38>
+ * 
+ */
+
 #include "DnsMonitor.hpp"
 
 int main(int argc, char *argv[])

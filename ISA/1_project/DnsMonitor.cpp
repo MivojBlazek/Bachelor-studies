@@ -1,8 +1,8 @@
 /**
  * 
- * File: DnsMonitor.cpp
+ * @file: DnsMonitor.cpp
  * 
- * Author: Michal Blažek <xblaze38>
+ * @author: Michal Blažek <xblaze38>
  * 
  */
 
@@ -42,7 +42,7 @@ int DnsMonitor::parseArguments(int argc, char *argv[])
                 translationsFile = optarg;
                 break;
             default:
-                std::cout << "Usage:\n./dns-monitor (-i <interface> | -r <pcapfile>) [-v] [-d <domainsfile>] [-t <translationsfile>]\n";
+                std::cout << "Usage:\n./dns-monitor (-i <interface> | -r <pcapfile>) [-v] [-d <domainsfile>] [-t <translationsfile>]" << std::endl;
                 return 1;
         }
     }
@@ -50,7 +50,7 @@ int DnsMonitor::parseArguments(int argc, char *argv[])
     // Check if -i or -r was specified but not both
     if ((interface.empty() && pcapFile.empty()) || (!interface.empty() && !pcapFile.empty()))
     {
-        std::cerr << "You must specify -i <interface> or -r <pcapfile> but not both.\n";
+        std::cerr << "You must specify -i <interface> or -r <pcapfile> but not both." << std::endl;
         return 1;
     }
 

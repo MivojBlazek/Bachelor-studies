@@ -1,8 +1,8 @@
 /**
  * 
- * File: Packet.hpp
+ * @file: Packet.hpp
  * 
- * Author: Michal Blažek <xblaze38>
+ * @author: Michal Blažek <xblaze38>
  * 
  */
 

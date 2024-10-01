@@ -1,8 +1,8 @@
 /**
  * 
- * File: PacketCapturer.hpp
+ * @file: PacketCapturer.hpp
  * 
- * Author: Michal Blažek <xblaze38>
+ * @author: Michal Blažek <xblaze38>
  * 
  */
 

@@ -1,8 +1,8 @@
 /**
  * 
- * File: DnsHeader.hpp
+ * @file: DnsHeader.hpp
  * 
- * Author: Michal Blažek <xblaze38>
+ * @author: Michal Blažek <xblaze38>
  * 
  */
 

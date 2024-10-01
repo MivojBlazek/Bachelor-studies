@@ -1,8 +1,8 @@
 /**
  * 
- * File: DnsHeader.cpp
+ * @file: DnsHeader.cpp
  * 
- * Author: Michal Blažek <xblaze38>
+ * @author: Michal Blažek <xblaze38>
  * 
  */
 
@@ -220,6 +220,7 @@ std::string DnsHeader::decodeDomainName(const u_char *data, int *offset)
 
     while (data[*offset] != 0)
     {
+        // Check if there is jump (byte 0xC0, first 2 bits)
         if ((data[*offset] & 0xC0) == 0xC0)
         {
             uint16_t pointer = ((data[*offset] & 0x3F) << 8) | data[*offset + 1]; // Last 14 bits
