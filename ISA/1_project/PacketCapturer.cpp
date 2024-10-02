@@ -61,7 +61,6 @@ void PacketCapturer::captureFromInterface()
     }
 
     // Capturing
-    std::cout << "Listening for DNS traffic on " << interface << "..." << std::endl;
     pcap_loop(handle, 0, processPacket, reinterpret_cast<u_char *>(&monitor));
 
     // Clean up

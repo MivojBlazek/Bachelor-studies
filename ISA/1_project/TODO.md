@@ -1,9 +1,9 @@
 To submit:
-[ ] Fix README
-[ ] Makefile
+[X] Fix README
+[X] Makefile
 [ ] manual.pdf
-[ ] source files
-[ ] headers in source files
+[X] source files
+[X] headers in source files
 [ ] merlin ready
 
 [X] IP addresses don't seem well
@@ -12,3 +12,5 @@ To submit:
 [X] make C part of task (-t ...)
 [X] only specified types of DNS records are important
 [X] additional headers should be offset all!!!
+
+[ ] SIGINT doesn't clear memory well

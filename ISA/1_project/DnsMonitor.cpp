@@ -22,14 +22,14 @@ int DnsMonitor::parseArguments(int argc, char *argv[])
     
     // Process program arguments
     int opt;
-    while ((opt = getopt(argc, argv, "i:r:vd:t:")) != -1)
+    while ((opt = getopt(argc, argv, "i:p:vd:t:")) != -1)
     {
         switch (opt)
         {
             case 'i':
                 interface = optarg;
                 break;
-            case 'r':
+            case 'p':
                 pcapFile = optarg;
                 break;
             case 'v':
@@ -50,7 +50,7 @@ int DnsMonitor::parseArguments(int argc, char *argv[])
     // Check if -i or -r was specified but not both
     if ((interface.empty() && pcapFile.empty()) || (!interface.empty() && !pcapFile.empty()))
     {
-        std::cerr << "You must specify -i <interface> or -r <pcapfile> but not both." << std::endl;
+        std::cerr << "You must specify -i <interface> or -p <pcapfile> but not both." << std::endl;
         return 1;
     }
 
