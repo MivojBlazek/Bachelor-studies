@@ -81,8 +81,10 @@ void Packet::printPacket(bool verbose, std::string domainsFile, std::string tran
         };
         std::map<uint16_t, std::string> dnsClassToString = {
             {1, "IN"},
+            {2, "CS"},
             {3, "CH"},
-            {4, "HS"}
+            {4, "HS"},
+            {255, "*"}
         };
         std::list<DnsHeader::AdditionalHeaders *> listOfAddHeaders = dnsHeader.getListOfHeaders();
         for (int i = 0; i < dnsHeader.getCountOf(DnsHeader::Questions); i++)
@@ -118,7 +120,7 @@ void Packet::printPacket(bool verbose, std::string domainsFile, std::string tran
                     typeString = it2->second;
                 }
 
-                std::cout << header->name << ". " << classString << " " << typeString << std::endl;
+                std::cout << header->name << " " << classString << " " << typeString << std::endl;
             }
         }
         for (int i = 0; i < dnsHeader.getCountOf(DnsHeader::Answers); i++)
@@ -154,7 +156,7 @@ void Packet::printPacket(bool verbose, std::string domainsFile, std::string tran
                     typeString = it2->second;
                 }
 
-                std::cout << header->name << ". " << header->TTL << " " << classString << " " << typeString << " " << header->rData << std::endl;
+                std::cout << header->name << " " << header->TTL << " " << classString << " " << typeString << " " << header->rData << std::endl;
             }
         }
         for (int i = 0; i < dnsHeader.getCountOf(DnsHeader::AuthorityRecords); i++)
@@ -190,7 +192,7 @@ void Packet::printPacket(bool verbose, std::string domainsFile, std::string tran
                     typeString = it2->second;
                 }
 
-                std::cout << header->name << ". " << header->TTL << " " << classString << " " << typeString << " " << header->rData << std::endl;
+                std::cout << header->name << " " << header->TTL << " " << classString << " " << typeString << " " << header->rData << std::endl;
             }
         }
         for (int i = 0; i < dnsHeader.getCountOf(DnsHeader::AdditionalRecords); i++)
@@ -226,7 +228,7 @@ void Packet::printPacket(bool verbose, std::string domainsFile, std::string tran
                     typeString = it2->second;
                 }
 
-                std::cout << header->name << ". " << header->TTL << " " << classString << " " << typeString << " " << header->rData << std::endl;
+                std::cout << header->name << " " << header->TTL << " " << classString << " " << typeString << " " << header->rData << std::endl;
             }
         }
 

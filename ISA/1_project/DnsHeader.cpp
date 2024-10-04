@@ -51,6 +51,7 @@ DnsHeader::DnsHeader(const u_char *_data)
         if (!newHeader->name.empty())
         {
             domainNames.insert(newHeader->name);
+            newHeader->name += ".";
         }
         newHeader->type = ntohs(*reinterpret_cast<const uint16_t *>(dnsData + offset));
         offset += 2;
@@ -99,6 +100,7 @@ DnsHeader::DnsHeader(const u_char *_data)
         if (!newHeader->name.empty())
         {
             domainNames.insert(newHeader->name);
+            newHeader->name += ".";
         }
         newHeader->type = ntohs(*reinterpret_cast<const uint16_t *>(dnsData + offset));
         offset += 2;
@@ -117,7 +119,7 @@ DnsHeader::DnsHeader(const u_char *_data)
 
             if (newHeader->part == Answers || newHeader->part == AdditionalRecords)
             {
-                std::string translation = newHeader->name + " " + newHeader->rData;
+                std::string translation = newHeader->name.substr(0, newHeader->name.size() - 1) + " " + newHeader->rData;
                 translations.insert(translation);
             }
         }
@@ -129,7 +131,7 @@ DnsHeader::DnsHeader(const u_char *_data)
 
             if (newHeader->part == Answers || newHeader->part == AdditionalRecords)
             {
-                std::string translation = newHeader->name + " " + newHeader->rData;
+                std::string translation = newHeader->name.substr(0, newHeader->name.size() - 1) + " " + newHeader->rData;
                 translations.insert(translation);
             }
         }
@@ -141,9 +143,10 @@ DnsHeader::DnsHeader(const u_char *_data)
         {
             int tmpOffset = offset;
             newHeader->rData = decodeDomainName(dnsData, &tmpOffset);
-            if (!newHeader->name.empty())
+            if (!newHeader->rData.empty())
             {
-                domainNames.insert(newHeader->name);
+                domainNames.insert(newHeader->rData);
+                newHeader->rData += ".";
             }
         }
         else

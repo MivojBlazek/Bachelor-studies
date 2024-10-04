@@ -47,14 +47,14 @@ void PacketCapturer::captureFromInterface()
 
     if (pcap_compile(handle, &fp, filter_exp.c_str(), 0, net) == -1)
     {
-        std::cerr << "Error: Couldn't parse filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
+        std::cerr << "Error: Couldn't compile with filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
         pcap_close(handle);
         return;
     }
 
     if (pcap_setfilter(handle, &fp) == -1)
     {
-        std::cerr << "Error: Couldn't install filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
+        std::cerr << "Error: Couldn't use filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
         pcap_freecode(&fp);
         pcap_close(handle);
         return;
@@ -87,21 +87,20 @@ void PacketCapturer::captureFromPcap()
 
     if (pcap_compile(handle, &fp, filter_exp.c_str(), 0, net) == -1)
     {
-        std::cerr << "Error: Couldn't parse filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
+        std::cerr << "Error: Couldn't compile with filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
         pcap_close(handle);
         return;
     }
 
     if (pcap_setfilter(handle, &fp) == -1)
     {
-        std::cerr << "Error: Couldn't install filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
+        std::cerr << "Error: Couldn't use filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
         pcap_freecode(&fp);
         pcap_close(handle);
         return;
     }
 
     // Capturing
-    std::cout << "Listening for DNS traffic on " << interface << "..." << std::endl;
     pcap_loop(handle, 0, processPacket, reinterpret_cast<u_char *>(&monitor));
 
     // Clean up

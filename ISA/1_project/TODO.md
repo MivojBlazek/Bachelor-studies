@@ -1,7 +1,7 @@
 To submit:
 [X] Fix README
 [X] Makefile
-[ ] manual.pdf
+[X] manual.pdf
 [X] source files
 [X] headers in source files
 [ ] merlin ready
@@ -14,3 +14,4 @@ To submit:
 [X] additional headers should be offset all!!!
 
 [ ] SIGINT doesn't clear memory well
+[ ] domains are not stored well in file
