@@ -22,4 +22,7 @@ debug: $(SRC)
 clean:
 	$(RM) $(PRG)
 
-.PHONY: debug release clean
+pack:
+	tar -cvf xblaze38.tar DnsHeader.cpp DnsHeader.hpp DnsMonitor.cpp DnsMonitor.hpp main.cpp Makefile manual.pdf Packet.cpp Packet.hpp PacketCapturer.cpp PacketCapturer.hpp README
+
+.PHONY: debug release clean pack
