@@ -10,9 +10,9 @@
 #include "DnsHeader.hpp"
 #include <iostream>
 #include <ctime>
-#include <netinet/ether.h>
+#include <net/ethernet.h> // netinet/ether.h is not on eva
 #include <netinet/ip.h>
-#include <netinet/udp.h>
+#include <netinet/udp.h> // there is no struct udphdr.dest and .source on eva (used uh_dport and uh_sport)
 #include <arpa/inet.h>
 #include <cstring>
 #include <list>
@@ -42,8 +42,8 @@ Packet::Packet(const pcap_pkthdr *_header, const u_char *_data, int _length)
     // Ports from UDP header
     const u_char *UDPData = data + IPHeaderLength;
     const struct udphdr *UDPHeader = reinterpret_cast<const struct udphdr *>(UDPData);
-    destPort = ntohs(UDPHeader->dest);
-    sourcePort = ntohs(UDPHeader->source);
+    destPort = ntohs(UDPHeader->uh_dport);
+    sourcePort = ntohs(UDPHeader->uh_sport);
     
     timestamp = _header->ts.tv_sec;
 }

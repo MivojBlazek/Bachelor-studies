@@ -11,11 +11,9 @@
 #include <iostream>
 #include <pcap.h>
 #include <netinet/in.h>
-#include <netinet/ether.h>
 #include <netinet/ip.h>
 #include <netinet/ip6.h>
 #include <netinet/udp.h>
-#include <net/ethernet.h>
 #include <arpa/inet.h>
 #include <time.h>
 #include <netdb.h>

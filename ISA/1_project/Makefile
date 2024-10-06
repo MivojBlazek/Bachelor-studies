@@ -13,11 +13,11 @@ CXXFLAGSDEBUG=-Wall -Wextra -pedantic -std=c++17 -g
 SRC=main.cpp DnsMonitor.cpp PacketCapturer.cpp Packet.cpp DnsHeader.cpp
 PRG=dns-monitor
 
-release: $(SRC)
-	$(CXX) $(CXXFLAGS) -o $(PRG) $^ -lpcap
+release:
+	$(CXX) $(CXXFLAGS) -o $(PRG) $(SRC) -lpcap
 
-debug: $(SRC)
-	$(CXX) $(CXXFLAGSDEBUG) -o $(PRG) $^ -lpcap
+debug:
+	$(CXX) $(CXXFLAGSDEBUG) -o $(PRG) $(SRC) -lpcap
 
 clean:
 	$(RM) $(PRG)
