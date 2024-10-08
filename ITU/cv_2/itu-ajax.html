@@ -1,0 +1,144 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+<head>
+  <title> ITU ajax </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
+  <style type="text/css">
+  div, input { margin: 10px; }
+  </style>
+</head>
+<body>
+
+<div id="chatArea" style="height: 300px; border: solid #aaa 1px; overflow:auto;"></div> 
+
+<form onsubmit="return uploadData()">
+  <input type="text" id="newMessageString">
+  <input type="submit" value="send">
+</form>
+
+<div id="status" style="border: solid #aaa 1px; ">&nbsp;</div> 
+<div id="b">&nbsp;</div>
+
+<script type="text/javascript">
+
+/***
+  * XMLHttpRequest object constructor (for compatibility with various browsers)
+  */
+function createXmlHttpRequestObject() 
+{
+    var request;
+  
+    try
+    {
+        request = new XMLHttpRequest(); // should work on all browsers except IE6 or older
+    } 
+    catch (e) 
+    { 
+        try 
+        {
+            request = new ActiveXObject("Microsoft.XMLHttp"); // browser is IE6 or older
+        }
+        catch (e) 
+        {
+            // ignore error
+        }
+    }
+  
+    if (!request) 
+    {
+        alert("Error creating the XMLHttpRequest object.");
+    } 
+    else 
+    {
+        return request;
+    }
+}
+
+function uploadData()
+{
+    document.getElementById("status").innerHTML = "uploadData()";
+
+    try 
+    {
+        var request = createXmlHttpRequestObject(); // stores XMLHttpRequestObject
+        //// put your code here
+        request.open("POST", "https://pckiss.fit.vutbr.cz/itu/api.php", true);
+        request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        var message = document.getElementById("newMessageString").value;
+        request.onreadystatechange = function()
+        {
+            if ((request.readyState == 4) && (request.status == 200))
+            {
+                document.getElementById("newMessageString").value = "";
+                downloadData();
+            }
+        }
+        request.send("data=" + encodeURIComponent(message));
+    } 
+    catch (e)
+    {
+        alert(e.toString());
+    }
+
+    return false; // to avoid default form submit behavior 
+}
+
+function downloadData() 
+{
+    document.getElementById("status").innerHTML = "downloadData()";
+
+    //// put your code here
+    document.getElementById("status").innerHTML = lastId;
+    try 
+    {
+        var request = createXmlHttpRequestObject();
+        request.open("GET", "https://pckiss.fit.vutbr.cz/itu/api.php", true);
+        
+        request.onreadystatechange = function() 
+        {
+            if ((request.readyState == 4) && (request.status == 200)) 
+            {
+
+                // json parsing
+                var messages = JSON.parse(request.responseText);
+
+                var intStatus = parseInt(document.getElementById("status").innerHTML) || 0;
+                if (parseInt(messages[messages.length - 1].id) > lastId)
+                {
+                    for (var i in messages)
+                    {
+                        var message = messages[i];
+                        if (parseInt(message.id) > lastId)
+                        {
+                            var span = document.createElement("span");
+                            span.style.display = "grid";
+                            span.style.gridTemplateColumns = "80px 180px auto";
+
+                            span.innerHTML += `<span>${message.login}</span><span>[${message.dts}]:</span><span>${message.cnt}</span>`;
+                            document.getElementById("chatArea").appendChild(span);
+                            
+                            document.getElementById("status").innerHTML = `${message.id}`;
+                            lastId = parseInt(message.id);
+                        }
+                    }
+                }
+            }
+        };
+        
+        request.send(null);
+    } 
+    catch (e) 
+    {
+        alert(e.toString());
+    }
+}
+
+//// put your code here
+var lastId = 0;
+setInterval(downloadData, 3000);
+
+</script>
+</body>
+</html>
