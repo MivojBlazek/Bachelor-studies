@@ -17,7 +17,10 @@ from typing import List, Callable, Dict, Any
 
 
 def distance(a: np.array, b: np.array) -> np.array:
-    pass
+    arr = np.power((a - b), 2)
+    arr = arr.sum(axis=1)
+    arr = np.sqrt(arr)
+    return arr
 
 
 def generate_graph(a: List[float], show_figure: bool = False, save_path: str | None = None):
