@@ -11,6 +11,18 @@
 #include <iostream>
 #include <unistd.h>
 #include <filesystem>
+#include <csignal>
+
+// Allocate storage for static property
+PacketCapturer *DnsMonitor::capturer = nullptr;
+
+void DnsMonitor::exitProgram(int signal)
+{
+    // Clean up memory
+    delete capturer;
+    capturer = nullptr;
+    std::exit(signal);
+}
 
 int DnsMonitor::parseArguments(int argc, char *argv[])
 {
@@ -76,15 +88,18 @@ int DnsMonitor::parseArguments(int argc, char *argv[])
 
 void DnsMonitor::startCapturePackets()
 {
-    PacketCapturer capturer(interface, pcapFile, *this);
+    capturer = new PacketCapturer(interface, pcapFile, *this);
+    std::signal(SIGINT, DnsMonitor::exitProgram);
+    std::signal(SIGTERM, DnsMonitor::exitProgram);
+    std::signal(SIGQUIT, DnsMonitor::exitProgram);
 
     if (!interface.empty())
     {
-        capturer.captureFromInterface();
+        capturer->captureFromInterface();
     }
     else if (!pcapFile.empty())
     {
-        capturer.captureFromPcap();
+        capturer->captureFromPcap();
     }
 }
 

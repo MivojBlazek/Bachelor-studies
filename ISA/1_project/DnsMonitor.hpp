@@ -9,7 +9,11 @@
 #ifndef _DNS_MONITOR_
 #define _DNS_MONITOR_
 
+#include "PacketCapturer.hpp"
 #include <string>
+
+// Forward declaration
+class PacketCapturer;
 
 class DnsMonitor
 {
@@ -26,6 +30,10 @@ private:
     bool verbose;
     std::string domainsFile;
     std::string translationsFile;
+
+protected:
+    static PacketCapturer *capturer;
+    static void exitProgram(int signal);
 };
 
 #endif //_DNS_MONITOR_

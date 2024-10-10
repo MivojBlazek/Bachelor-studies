@@ -26,10 +26,18 @@ PacketCapturer::PacketCapturer(const std::string &_interface, const std::string 
 
 }
 
+PacketCapturer::~PacketCapturer()
+{
+    if (handle != nullptr)
+    {
+        pcap_freecode(&fp);
+        pcap_close(handle);
+    }
+}
+
 void PacketCapturer::captureFromInterface()
 {
     char errbuf[PCAP_ERRBUF_SIZE];
-    pcap_t *handle;
 
     // Open device for capture
     handle = pcap_open_live(interface.c_str(), BUFSIZ, 1, 1000, errbuf);
@@ -39,7 +47,6 @@ void PacketCapturer::captureFromInterface()
         return;
     }
 
-    struct bpf_program fp;
     std::string filter_exp = "udp port 53"; // Filter udp and dns
     bpf_u_int32 net = 0;
 
@@ -69,7 +76,6 @@ void PacketCapturer::captureFromInterface()
 void PacketCapturer::captureFromPcap()
 {
     char errbuf[PCAP_ERRBUF_SIZE];
-    pcap_t *handle;
 
     // Open device for capture from file
     handle = pcap_open_offline(pcapFile.c_str(), errbuf);
@@ -79,7 +85,6 @@ void PacketCapturer::captureFromPcap()
         return;
     }
 
-    struct bpf_program fp;
     std::string filter_exp = "udp port 53"; // Filter udp and dns
     bpf_u_int32 net = 0;
 
