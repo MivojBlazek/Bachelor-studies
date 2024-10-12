@@ -39,12 +39,13 @@ def format_func(value, tick_number):
         return f"${N // 2}\\pi$"
 
 
-# TODO add broadcasting
 def generate_graph(a: List[float], show_figure: bool = False, save_path: str | None = None):
     # pi = np.pi   # If we use pi more, it is better to save into variable. Now it is faster to use np.pi
     
-    # Set float array of values to display in graph
+    # Set float matrix of values using broadcasting
     x = np.arange(0, 6*np.pi + 0.1, 0.1)
+    x_value = (np.array(a) ** 2) * np.sin(x).reshape(-1, 1)
+    
     fig = plt.figure(figsize=(10, 5))
     ax = fig.add_subplot()
     
@@ -56,11 +57,10 @@ def generate_graph(a: List[float], show_figure: bool = False, save_path: str | N
     ax.xaxis.set_major_locator(plt.MultipleLocator(np.pi / 2))
     ax.xaxis.set_major_formatter(plt.FuncFormatter(format_func))
     
-    # Fill area between sinus and x-axis and set graph for all values in list
-    sin_x = np.sin(x)
-    for a_value in a:
-        ax.fill_between(x, (a_value ** 2) * sin_x, 0, alpha=0.1)
-        ax.plot(x, (a_value ** 2) * sin_x, label=f'$y_{{{a_value}}}(x)$')
+    # Fill area between sinus and x-axis according to each row in transposed matrix (each function)
+    for i, _ in enumerate(a):
+        ax.fill_between(x, x_value.T[i], 0, alpha=0.1)
+    ax.plot(x, x_value, label=[f'$y_{{{a_value}}}(x)$' for a_value in a])
     
     # Set legend to upper center (1.13 to put it above graph)
     ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=len(a))
@@ -135,8 +135,37 @@ def generate_sinus(show_figure: bool = False, save_path: str | None = None):
 
 
 def download_data() -> Dict[str, List[Any]]:
-    pass
-
+    # TODO incorrect data loading (should be from 'https://ehw.fit.vutbr.cz/izv')
+    # Get data from website and find all table rows with class 'nezvyraznit'
+    resp = requests.get('https://ehw.fit.vutbr.cz/izv/st_zemepis_cz.html')
+    resp.encoding = 'utf-8'
+    soup = BeautifulSoup(resp.text, 'html.parser')
+    all_tr = soup.find_all(class_='nezvyraznit')
+    
+    data = {
+        'positions': [],
+        'lats': [],
+        'longs': [],
+        'heights': []
+    }
+    
+    # There are table cells in table rows
+    for tr in all_tr:
+        all_td = tr.find_all('td')
+        data_in_tds = []
+        for td in all_td:
+            # Data formatting
+            data_text = td.get_text(strip=True) \
+                          .replace('°', '') \
+                          .replace(',', '.') \
+                          .strip("'")
+            data_in_tds.append(data_text)
+        # Append data to specific list in dictionary
+        data['positions'].append(data_in_tds[0])
+        data['lats'].append(float(data_in_tds[2]))
+        data['longs'].append(float(data_in_tds[4]))
+        data['heights'].append(float(data_in_tds[6]))
+    return data
 
 if __name__ == "__main__":
     generate_graph([7, 4, 3])
