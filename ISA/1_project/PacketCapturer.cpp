@@ -21,7 +21,8 @@
 PacketCapturer::PacketCapturer(const std::string &_interface, const std::string &_pcapFile, DnsMonitor &_monitor)
     : interface(_interface),
     pcapFile(_pcapFile),
-    monitor(_monitor)
+    monitor(_monitor),
+    handle(nullptr)
 {
 
 }
@@ -32,6 +33,7 @@ PacketCapturer::~PacketCapturer()
     {
         pcap_freecode(&fp);
         pcap_close(handle);
+        handle = nullptr;
     }
 }
 
@@ -54,6 +56,7 @@ void PacketCapturer::captureFromInterface()
     {
         std::cerr << "Error: Couldn't compile with filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
         pcap_close(handle);
+        handle = nullptr;
         return;
     }
 
@@ -62,6 +65,7 @@ void PacketCapturer::captureFromInterface()
         std::cerr << "Error: Couldn't use filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
         pcap_freecode(&fp);
         pcap_close(handle);
+        handle = nullptr;
         return;
     }
 
@@ -71,6 +75,7 @@ void PacketCapturer::captureFromInterface()
     // Clean up
     pcap_freecode(&fp);
     pcap_close(handle);
+    handle = nullptr;
 }
 
 void PacketCapturer::captureFromPcap()
@@ -92,6 +97,7 @@ void PacketCapturer::captureFromPcap()
     {
         std::cerr << "Error: Couldn't compile with filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
         pcap_close(handle);
+        handle = nullptr;
         return;
     }
 
@@ -100,6 +106,7 @@ void PacketCapturer::captureFromPcap()
         std::cerr << "Error: Couldn't use filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
         pcap_freecode(&fp);
         pcap_close(handle);
+        handle = nullptr;
         return;
     }
 
@@ -109,6 +116,7 @@ void PacketCapturer::captureFromPcap()
     // Clean up
     pcap_freecode(&fp);
     pcap_close(handle);
+    handle = nullptr;
 }
 
 void PacketCapturer::processPacket(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)

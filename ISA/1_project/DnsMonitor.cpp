@@ -101,6 +101,8 @@ void DnsMonitor::startCapturePackets()
     {
         capturer->captureFromPcap();
     }
+    delete capturer;
+    capturer = nullptr;
 }
 
 bool DnsMonitor::isVerbose() const
