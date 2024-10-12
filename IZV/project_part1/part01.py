@@ -17,6 +17,16 @@ from typing import List, Callable, Dict, Any
 
 
 def distance(a: np.array, b: np.array) -> np.array:
+    """This function calculate euclidean distance for each list in arrays a and b.
+    Arrays a and b should have same size.
+    
+    Args:
+        a (np.array): Array of A values in euclidean distance.
+        b (np.array): Array of B values in euclidean distance.
+        
+    Returns:
+        np.array: Array of calculated euclidean distance.
+    """
     arr = np.power((a - b), 2)
     arr = arr.sum(axis=1)
     arr = np.sqrt(arr)
@@ -24,6 +34,15 @@ def distance(a: np.array, b: np.array) -> np.array:
 
 
 def format_func(value, tick_number):
+    """This function only format pi labels on a graph to LaTeX format.
+    
+    Args:
+        value (float): A multiple of pi value that represents a point on a graph. 
+        tick_number (int): A tick number on a graph.
+        
+    Returns:
+        str: A LaTeX formatted string representing the value with pi.
+    """
     N = int(np.round(2 * value / np.pi))
     if N == 0:
         # Zero is zero
@@ -40,6 +59,16 @@ def format_func(value, tick_number):
 
 
 def generate_graph(a: List[float], show_figure: bool = False, save_path: str | None = None):
+    """Generates graph of function f(x) = a^2 * sin(x).
+    
+    Args:
+        a (List[float]): A list of float values representing the coefficients in the function.
+        show_figure (bool): Allows plt.show() to display graph. Defaults to False.
+        save_path (str | None): If set, graph is saved as image to file with this name. Defaults to None.
+    
+    Returns:
+        None:
+    """
     # pi = np.pi   # If we use pi more, it is better to save into variable. Now it is faster to use np.pi
     
     # Set float matrix of values using broadcasting
@@ -74,12 +103,33 @@ def generate_graph(a: List[float], show_figure: bool = False, save_path: str | N
 
 # Gaps in sorted array finder
 def find_gaps(arr):
+    """Find gaps in a sorted array of integers.
+    
+    Args:
+        arr (NDarray[int]): A sorted NumPy array of integers.
+    
+    Yields:
+        tuple[int, int]: A tuple contains first integer as last number before gap.
+                         A second integer is a first number in next segment after that gap.
+    """
     for i in range(len(arr) - 1):
         if arr[i] + 1 < arr[i + 1]:
             yield (arr[i], arr[i + 1])
 
 
 def generate_sinus(show_figure: bool = False, save_path: str | None = None):
+    """Generates 3 graphs of functions:
+        f1(x) = 0.5 * cos(1/50 * pi * t),
+        f2(x) = 0.25 * (sin(pi * t) + sin(3/2 * pi * t)),
+        f3(x) = f1(x) + f2(x).
+    
+    Args:
+        show_figure (bool): Allows plt.show() to display graph. Defaults to False.
+        save_path (str | None): If set, graph is saved as image to file with this name. Defaults to None.
+    
+    Returns:
+        None:
+    """
     # Step must be smaller because green graph is not precise at all
     step = 0.01
     half_of_graph = int(100 / step / 2)
@@ -135,6 +185,18 @@ def generate_sinus(show_figure: bool = False, save_path: str | None = None):
 
 
 def download_data() -> Dict[str, List[Any]]:
+    """Function downloads data from website and format them into dictionary.
+    
+    Args:
+        None:
+    
+    Returns:
+        Dict[str, List[Any]]: Returns a dictionary that contains 'position', 'lats', 'longs' and 'heights' keys.
+                              - 'positions' List[str]:   A list of position names.
+                              - 'lats'      List[float]: A list of latitude values.
+                              - 'longs'     List[float]: A list of longitude values.
+                              - 'heights'   List[float]: A list of height values.
+    """
     # TODO incorrect data loading (should be from 'https://ehw.fit.vutbr.cz/izv')
     # Get data from website and find all table rows with class 'nezvyraznit'
     resp = requests.get('https://ehw.fit.vutbr.cz/izv/st_zemepis_cz.html')
@@ -166,6 +228,7 @@ def download_data() -> Dict[str, List[Any]]:
         data['longs'].append(float(data_in_tds[4]))
         data['heights'].append(float(data_in_tds[6]))
     return data
+
 
 if __name__ == "__main__":
     generate_graph([7, 4, 3])
