@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "spi_master.h": "c",
+        "freertos.h": "c",
+        "spi_types.h": "c",
+        "spi_common.h": "c",
+        "soc_caps.h": "c",
+        "sdkconfig.h": "c",
+        "esp_lcd_panel_ssd1306.h": "c"
+    }
+}
