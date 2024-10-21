@@ -6,6 +6,9 @@
         "spi_common.h": "c",
         "soc_caps.h": "c",
         "sdkconfig.h": "c",
-        "esp_lcd_panel_ssd1306.h": "c"
+        "esp_lcd_panel_ssd1306.h": "c",
+        "esp_bt.h": "c",
+        "esp_bt_main.h": "c",
+        "esp_spp_api.h": "c"
     }
 }
