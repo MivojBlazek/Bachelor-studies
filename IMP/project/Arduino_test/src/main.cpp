@@ -8,10 +8,13 @@
 
 // TFT Display Pins
 #define TFT_CS      5   // Chip Select
-#define TFT_RST     17  // Reset
+#define TFT_RST     27  // Reset
 #define TFT_DC      2   // Data/Command
 #define TFT_SDA     23  // MOSI
 #define TFT_SCK     18  // Clock
+
+#define TFT_WIDTH   128
+#define TFT_HEIGHT  128
 
 #define BT_NAME     "ESP32_xblaze38"    // Name of bluetooth device
 
@@ -31,34 +34,67 @@ void setupBluetoothDevice()
                   address[3], address[4], address[5]);
 }
 
+void printText(String text)
+{
+    tft.fillScreen(ST7735_BLACK);
+    tft.setTextSize(2);
+    tft.setCursor(1, 1);
+    tft.setTextColor(ST7735_WHITE);
+    tft.print(text);
+}
+
+void printImage()
+{
+    tft.fillScreen(ST7735_BLACK);
+    tft.setCursor(1, 1);
+
+    for (int y = 0; y < TFT_HEIGHT; y++)
+    {
+        for (int x = 0; x < TFT_WIDTH; x++)
+        {
+            if (SerialBT.available())
+            {
+                uint8_t highByte = SerialBT.read();
+                uint8_t lowByte = SerialBT.read();
+
+                uint16_t color = (highByte << 8) | lowByte;
+
+                tft.drawPixel(x, y, color);
+            }
+        }
+        delay(10);
+    }
+}
+
 void setup(void)
 {
-
     Serial.begin(115200);
     SPI.begin(TFT_SCK, -1, TFT_SDA, TFT_CS);
   
     tft.initR(INITR_144GREENTAB);
+    tft.setRotation(2);
+    tft.fillScreen(ST7735_BLACK);
 
     setupBluetoothDevice();
-
-    // Draws a square //! DEBUG
-    for (int x = 40; x < 54; x++)
-    {
-        for (int y = 40; y < 54; y++)
-        {
-            tft.drawPixel(x, y, ST7735_RED);
-        }
-    }
 }
 
 void loop()
 {
     if (SerialBT.available())
     {
-        //! DEBUG
-        String receivedData = SerialBT.readStringUntil('\n');
-        Serial.print("Received: ");
-        Serial.println(receivedData);
+        uint8_t type = SerialBT.read();
+        
+        if (type == 0x00)
+        {
+            // Image
+            printImage();
+        }
+        else
+        {
+            // Text
+            String receivedData = SerialBT.readStringUntil('\n');
+            printText(receivedData);
+        }
     }
     delay(100);
 }
