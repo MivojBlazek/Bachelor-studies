@@ -4,8 +4,6 @@
 #include <Adafruit_ST7735.h>
 #include <BluetoothSerial.h>
 
-#include <stdio.h>
-
 // TFT Display Pins
 #define TFT_CS      5   // Chip Select
 #define TFT_RST     27  // Reset
@@ -20,6 +18,8 @@
 
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 BluetoothSerial SerialBT;
+int currentRow = 0;
+int currentColumn = 0;
 
 void setupBluetoothDevice()
 {
@@ -38,31 +38,43 @@ void printText(String text)
 {
     tft.fillScreen(ST7735_BLACK);
     tft.setTextSize(2);
-    tft.setCursor(1, 1);
+    tft.setCursor(0, 0);
     tft.setTextColor(ST7735_WHITE);
     tft.print(text);
 }
 
-void printImage()
+void printRowOfImage()
 {
-    tft.fillScreen(ST7735_BLACK);
-    tft.setCursor(1, 1);
-
-    for (int y = 0; y < TFT_HEIGHT; y++)
+    while (currentRow < TFT_HEIGHT && SerialBT.available())
     {
-        for (int x = 0; x < TFT_WIDTH; x++)
+        if (currentColumn == TFT_WIDTH)
         {
-            if (SerialBT.available())
+            currentColumn = 0;
+            currentRow++;
+            if (currentRow == TFT_HEIGHT)
             {
-                uint8_t highByte = SerialBT.read();
-                uint8_t lowByte = SerialBT.read();
-
-                uint16_t color = (highByte << 8) | lowByte;
-
-                tft.drawPixel(x, y, color);
+                return;
             }
         }
-        delay(10);
+
+        if (SerialBT.available() >= 2)
+        {
+            uint8_t highByte = SerialBT.read();
+            uint8_t lowByte = SerialBT.read();
+
+            uint16_t color = (highByte << 8) | lowByte;
+
+            tft.drawPixel(currentColumn, currentRow, color);
+            currentColumn++;
+        }
+    }
+}
+
+void emptySerial()
+{
+    while (SerialBT.available())
+    {
+        SerialBT.read();
     }
 }
 
@@ -83,18 +95,30 @@ void loop()
     if (SerialBT.available())
     {
         uint8_t type = SerialBT.read();
-        
+
         if (type == 0x00)
         {
-            // Image
-            printImage();
+            // First image chunk
+            currentRow = 0;
+            currentColumn = 0;
+            tft.fillScreen(ST7735_BLACK);
+            tft.setCursor(0, 0);
+            printRowOfImage();
+            emptySerial();
         }
-        else
+        else if (type == 0x01)
+        {
+            // Next image chunks
+            printRowOfImage();
+            emptySerial();
+        }
+        else if (type == 0x02)
         {
             // Text
             String receivedData = SerialBT.readStringUntil('\n');
             printText(receivedData);
+            emptySerial();
         }
     }
-    delay(100);
+    delay(10);
 }
