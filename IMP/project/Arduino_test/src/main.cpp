@@ -4,6 +4,8 @@
 #include <Adafruit_ST7735.h>
 #include <BluetoothSerial.h>
 
+#include "tetris.hpp"
+
 // TFT Display Pins
 #define TFT_CS      5   // Chip Select
 #define TFT_RST     27  // Reset
@@ -20,6 +22,9 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 BluetoothSerial SerialBT;
 int currentRow = 0;
 int currentColumn = 0;
+bool tetrisStarted = false;
+Tetris tetris(tft);
+unsigned long lastTimePieceDropped = 0;
 
 void setupBluetoothDevice()
 {
@@ -99,6 +104,7 @@ void loop()
         if (type == 0x00)
         {
             // First image chunk
+            tetrisStarted = false;
             currentRow = 0;
             currentColumn = 0;
             tft.fillScreen(ST7735_BLACK);
@@ -109,15 +115,59 @@ void loop()
         else if (type == 0x01)
         {
             // Next image chunks
+            tetrisStarted = false;
             printRowOfImage();
             emptySerial();
         }
         else if (type == 0x02)
         {
             // Text
+            tetrisStarted = false;
             String receivedData = SerialBT.readStringUntil('\n');
             printText(receivedData);
             emptySerial();
+        }
+        else if (type == 0x03)
+        {
+            // Left arrow
+            if (!tetrisStarted)
+            {
+                tetris.startTetris();
+                tetrisStarted = true;
+            }
+            else
+            {
+                tetris.moveLeft();
+            }
+        }
+        else if (type == 0x04)
+        {
+            // Right arrow
+            if (!tetrisStarted)
+            {
+                tetris.startTetris();
+                tetrisStarted = true;
+            }
+            else
+            {
+                tetris.moveRight();
+            }
+        }
+    }
+
+    // Calculating time to drop a piece down after 0.5 second
+    unsigned long currentTime = millis();
+    if (currentTime - lastTimePieceDropped >= 500)
+    {
+        lastTimePieceDropped = currentTime;
+        if (tetrisStarted)
+        {
+            if (tetris.moveDown() == 1)
+            {
+                tetrisStarted = false;
+                tft.drawRect(0, 0, TFT_WIDTH, TFT_HEIGHT, ST7735_RED);
+                tft.drawRect(1, 1, TFT_WIDTH - 2, TFT_HEIGHT - 2, ST7735_RED);
+            }
         }
     }
     delay(10);
