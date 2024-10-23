@@ -1,0 +1,90 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="clr-namespace:WPFWeather.App.Converters"
+    xmlns:viewModels="clr-namespace:WPFWeather.App.ViewModels"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    x:Class="WPFWeather.App.Windows.MainWindow"
+    mc:Ignorable="d"
+    Title="WPF Weather Demo" Height="312" Width="500"
+    d:DataContext="{d:DesignInstance {x:Type viewModels:WeatherViewModel}}">
+
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="17*"/>
+            <RowDefinition Height="12*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+            
+            <RowDefinition Height="60px"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Background -->
+        <Rectangle Fill="Black" VerticalAlignment="Stretch" Grid.RowSpan="5">
+            <Rectangle.OpacityMask>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStop Color="Transparent" Offset="1" />
+                    <GradientStop Color="Black" Offset="0.65" />
+                    <GradientStop Color="Black" Offset="0.2" />
+                    <GradientStop Color="Transparent" Offset="0" />
+                </LinearGradientBrush>
+            </Rectangle.OpacityMask>
+        </Rectangle>
+
+        <!-- Icon -->
+        <Image Source="{Binding Weather.Icon}" Height="100" Width="100" 
+               HorizontalAlignment="Center" VerticalAlignment="Center"
+               Grid.Row="0" />
+
+        <!-- City -->
+        <ComboBox x:Name="CityComboBox"
+                  SelectionChanged="CityChanged"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                  FontSize="30" FontWeight="Bold"
+                  Grid.Row="1" Margin="15,0,15,0" Padding="0,5,0,5" />
+
+        <!-- Temperature -->
+        <TextBlock Text="{Binding Weather.Temperature, StringFormat={}{0:0}°}"
+                   Foreground="White"
+                   HorizontalAlignment="Stretch" TextAlignment="Center" VerticalAlignment="Center"
+                   FontSize="50" FontWeight="Bold"
+                   Grid.Row="2" />
+
+        <!-- Wind -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
+            <Polygon Width="30" Height="30" Fill="White">
+                <Polygon.LayoutTransform>
+                    <RotateTransform Angle="{Binding Weather.WindDirection}" />
+                </Polygon.LayoutTransform>
+                <Polygon.Points>
+                    <Point X="15" Y="0" />
+                    <Point X="10" Y="30" />
+                    <Point X="20" Y="30" />
+                </Polygon.Points>
+            </Polygon>
+            <TextBlock Text="{Binding Weather.WindSpeed, StringFormat={}{0:0.00} m/s}"
+                       Foreground="White" FontSize="20" Height="30" />
+        </StackPanel>
+
+        <!-- TODO Description -->
+        <!-- TODO Humidity -->
+        <!-- TODO Sunrise -->
+        <!-- TODO Sunset -->
+        
+        <!-- Downloading data -->
+        <TextBlock Text="Downloading data..."
+                   Foreground="Black"
+                   HorizontalAlignment="Stretch" TextAlignment="Center" VerticalAlignment="Center"
+                   FontSize="20" FontWeight="Bold"
+                   Grid.Row="5"
+                   Visibility="{Binding DownloadingWeather, Converter={StaticResource boolToVisibilityConverter}}" />
+    </Grid>
+</Window>
