@@ -43,6 +43,12 @@ void Block::moveUp()
     positionY -= BLOCK_SIZE;
 }
 
+void Block::setPosition(int x, int y)
+{
+    positionX = x;
+    positionY = y;
+}
+
 void Block::setPosition(int x, int y, uint16_t newColor)
 {
     positionX = x;

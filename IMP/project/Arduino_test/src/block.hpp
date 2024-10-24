@@ -16,6 +16,7 @@ public:
     int moveRight(std::vector<Block *> &fallenBlocks);
     int moveDown(std::vector<Block *> &fallenBlocks);
     void moveUp();
+    void setPosition(int x, int y);
     void setPosition(int x, int y, uint16_t newColor);
     void show();
     void hide();

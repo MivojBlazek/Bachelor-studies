@@ -42,30 +42,12 @@ int Tetris::moveDown()
 
 void Tetris::clearFullLines()
 {
-    // Save block positions
-    bool blockPositions[16][16] = {false};
+    int rows[16]{0};
     for (Block *block : fallenBlocks)
     {
-        int x = block->getPositionX() / BLOCK_SIZE;
         int y = block->getPositionY() / BLOCK_SIZE;
-        blockPositions[x][y] = true;
-    }
-
-    // Check full rows
-    for (int y = 0; y < 16; y++)
-    {
-        bool isFull = true;
-
-        for (int x = 0; x < 16; x++)
-        {
-            if (!blockPositions[x][y])
-            {
-                isFull = false;
-                break;
-            }
-        }
-
-        if (isFull)
+        rows[y]++;
+        if (rows[y] == 16)
         {
             clearRow(y);
         }
@@ -74,7 +56,22 @@ void Tetris::clearFullLines()
 
 void Tetris::clearRow(int row)
 {
-    //TODO
+    for (Block *block : fallenBlocks)
+    {
+        block->hide();
+        int y = block->getPositionY() / BLOCK_SIZE;
+        if (y == row)
+        {
+            fallenBlocks.erase(std::remove(fallenBlocks.begin(), fallenBlocks.end(), block), fallenBlocks.end());
+            delete block;
+            continue;
+        }
+        else if (y < row)
+        {
+            block->setPosition(block->getPositionX(), y + BLOCK_SIZE);
+        }
+        block->show();
+    }
 }
 
 void Tetris::clearScene()
