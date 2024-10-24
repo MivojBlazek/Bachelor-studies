@@ -9,6 +9,9 @@
 #include "shape.hpp"
 #include "block.hpp"
 
+#define TFT_WIDTH   128
+#define TFT_HEIGHT  128
+
 class Tetris
 {
 public:
@@ -23,7 +26,8 @@ private:
     Shape *currentShape;
     std::vector<Block *> fallenBlocks;
     
-
+    void clearFullLines();
+    void clearRow(int row);
     void clearScene();
 };
 

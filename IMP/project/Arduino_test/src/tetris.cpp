@@ -34,9 +34,47 @@ int Tetris::moveDown()
                 return 1;
             }
         }
+        clearFullLines();
         currentShape = new Shape(tft, fallenBlocks);
     }
     return 0;
+}
+
+void Tetris::clearFullLines()
+{
+    // Save block positions
+    bool blockPositions[16][16] = {false};
+    for (Block *block : fallenBlocks)
+    {
+        int x = block->getPositionX() / BLOCK_SIZE;
+        int y = block->getPositionY() / BLOCK_SIZE;
+        blockPositions[x][y] = true;
+    }
+
+    // Check full rows
+    for (int y = 0; y < 16; y++)
+    {
+        bool isFull = true;
+
+        for (int x = 0; x < 16; x++)
+        {
+            if (!blockPositions[x][y])
+            {
+                isFull = false;
+                break;
+            }
+        }
+
+        if (isFull)
+        {
+            clearRow(y);
+        }
+    }
+}
+
+void Tetris::clearRow(int row)
+{
+    //TODO
 }
 
 void Tetris::clearScene()

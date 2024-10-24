@@ -13,9 +13,6 @@
 #define TFT_SDA     23  // MOSI
 #define TFT_SCK     18  // Clock
 
-#define TFT_WIDTH   128
-#define TFT_HEIGHT  128
-
 #define BT_NAME     "ESP32_xblaze38"    // Name of bluetooth device
 
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
