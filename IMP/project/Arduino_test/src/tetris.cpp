@@ -56,21 +56,32 @@ void Tetris::clearFullLines()
 
 void Tetris::clearRow(int row)
 {
+    std::vector<Block *> blocksToRemove;
     for (Block *block : fallenBlocks)
     {
-        block->hide();
         int y = block->getPositionY() / BLOCK_SIZE;
         if (y == row)
         {
-            fallenBlocks.erase(std::remove(fallenBlocks.begin(), fallenBlocks.end(), block), fallenBlocks.end());
-            delete block;
-            continue;
+            blocksToRemove.push_back(block);
         }
-        else if (y < row)
+    }
+
+    for (Block *block : blocksToRemove)
+    {
+        block->hide();
+        fallenBlocks.erase(std::remove(fallenBlocks.begin(), fallenBlocks.end(), block), fallenBlocks.end());
+        delete block;
+    }
+
+    for (Block *block : fallenBlocks)
+    {
+        int y = block->getPositionY() / BLOCK_SIZE;
+        if (y < row)
         {
-            block->setPosition(block->getPositionX(), y + BLOCK_SIZE);
+            block->hide();
+            block->setPosition(block->getPositionX(), block->getPositionY() + BLOCK_SIZE);
+            block->show();
         }
-        block->show();
     }
 }
 
