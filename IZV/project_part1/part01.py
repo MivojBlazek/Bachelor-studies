@@ -197,7 +197,6 @@ def download_data() -> Dict[str, List[Any]]:
                               - 'longs'     List[float]: A list of longitude values.
                               - 'heights'   List[float]: A list of height values.
     """
-    # TODO incorrect data loading (should be from 'https://ehw.fit.vutbr.cz/izv')
     # Get data from website and find all table rows with class 'nezvyraznit'
     resp = requests.get('https://ehw.fit.vutbr.cz/izv/st_zemepis_cz.html')
     resp.encoding = 'utf-8'
