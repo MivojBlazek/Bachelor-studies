@@ -54,7 +54,7 @@ int DnsMonitor::parseArguments(int argc, char *argv[])
                 translationsFile = optarg;
                 break;
             default:
-                std::cout << "Usage:\n./dns-monitor (-i <interface> | -r <pcapfile>) [-v] [-d <domainsfile>] [-t <translationsfile>]" << std::endl;
+                std::cout << "Usage:" << std::endl << "./dns-monitor (-i <interface> | -r <pcapfile>) [-v] [-d <domainsfile>] [-t <translationsfile>]" << std::endl;
                 return 1;
         }
     }

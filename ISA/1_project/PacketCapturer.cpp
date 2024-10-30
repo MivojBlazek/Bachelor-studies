@@ -45,7 +45,7 @@ void PacketCapturer::captureFromInterface()
     handle = pcap_open_live(interface.c_str(), BUFSIZ, 1, 1000, errbuf);
     if (handle == nullptr)
     {
-        std::cerr << "Error: Couldn't open device " << interface << ": " << errbuf << std::endl;
+        std::cerr << "Error: Cannot open device for capture!" << std::endl;
         return;
     }
 
@@ -54,7 +54,7 @@ void PacketCapturer::captureFromInterface()
 
     if (pcap_compile(handle, &fp, filter_exp.c_str(), 0, net) == -1)
     {
-        std::cerr << "Error: Couldn't compile with filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
+        std::cerr << "Error: Cannot compile with added filter!" << std::endl;
         pcap_close(handle);
         handle = nullptr;
         return;
@@ -62,7 +62,7 @@ void PacketCapturer::captureFromInterface()
 
     if (pcap_setfilter(handle, &fp) == -1)
     {
-        std::cerr << "Error: Couldn't use filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
+        std::cerr << "Error: Cannot use filter!" << std::endl;
         pcap_freecode(&fp);
         pcap_close(handle);
         handle = nullptr;
@@ -86,7 +86,7 @@ void PacketCapturer::captureFromPcap()
     handle = pcap_open_offline(pcapFile.c_str(), errbuf);
     if (handle == nullptr)
     {
-        std::cerr << "Error: Couldn't open device " << pcapFile << ": " << errbuf << std::endl;
+        std::cerr << "Error: Cannot open device for capture from file!" << std::endl;
         return;
     }
 
@@ -95,7 +95,7 @@ void PacketCapturer::captureFromPcap()
 
     if (pcap_compile(handle, &fp, filter_exp.c_str(), 0, net) == -1)
     {
-        std::cerr << "Error: Couldn't compile with filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
+        std::cerr << "Error: Cannot compile with added filter!" << std::endl;
         pcap_close(handle);
         handle = nullptr;
         return;
@@ -103,7 +103,7 @@ void PacketCapturer::captureFromPcap()
 
     if (pcap_setfilter(handle, &fp) == -1)
     {
-        std::cerr << "Error: Couldn't use filter " << filter_exp << ": " << pcap_geterr(handle) << std::endl;
+        std::cerr << "Error: Cannot use filter!" << std::endl;
         pcap_freecode(&fp);
         pcap_close(handle);
         handle = nullptr;
