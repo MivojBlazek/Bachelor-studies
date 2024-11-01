@@ -7,6 +7,10 @@ import DelegateLayout from './Layouts/DelegateLayout.jsx';
 import RefereeLayout from './Layouts/RefereeLayout.jsx';
 import { useStateContext } from "./contexts/contextprovider";
 
+import Dashboard from './views/delegate/dashboard.jsx';
+import GameList from './views/delegate/game_list.jsx';
+import Profile from './views/delegate/profile.jsx';
+
 function RoleBasedLayout()
 {
     const { role } = useStateContext();
@@ -25,6 +29,18 @@ const router = createBrowserRouter ([
         path: '/',
         element: <RoleBasedLayout />,
         children: [
+            {
+                path: '/delegate/dashboard',
+                element: <Dashboard />,
+            },
+            {
+                path: '/delegate/game_list',
+                element: <GameList />,
+            },
+            {
+                path: '/delegate/profile',
+                element: <Profile />,
+            },
         ]
     },
 
