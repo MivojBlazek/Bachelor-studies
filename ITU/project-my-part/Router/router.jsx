@@ -10,6 +10,7 @@ import { useStateContext } from "./contexts/contextprovider";
 import Dashboard from './views/delegate/dashboard.jsx';
 import GameList from './views/delegate/game_list.jsx';
 import Profile from './views/delegate/profile.jsx';
+import GameDetail from './views/delegate/game_detail.jsx';
 
 function RoleBasedLayout()
 {
@@ -24,22 +25,27 @@ function RoleBasedLayout()
         </>
     );
 }
+
 const router = createBrowserRouter ([
     {
         path: '/',
         element: <RoleBasedLayout />,
         children: [
             {
-                path: '/delegate/dashboard',
+                path: 'delegate/dashboard',
                 element: <Dashboard />,
             },
             {
-                path: '/delegate/game_list',
+                path: 'delegate/game_list',
                 element: <GameList />,
             },
             {
-                path: '/delegate/profile',
+                path: 'delegate/profile',
                 element: <Profile />,
+            },
+            {
+                path: 'delegate/game_detail/:id',
+                element: <GameDetail />,
             },
         ]
     },

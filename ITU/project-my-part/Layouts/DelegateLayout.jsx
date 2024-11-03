@@ -1,10 +1,13 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useStateContext } from "../contexts/contextprovider";
 import axiosClient from "../axiosClient";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Navigation from "../Components/delegate/Navigation";
+import color from "../colors.jsx"
 
 export default function DelegateLayout() {
-    const { user, token, setUser, setToken } = useStateContext();
+    const { user, token, role, setUser, setToken, setRole } = useStateContext();
+    const navigate = useNavigate();
 
     if (!token)
     {
@@ -12,11 +15,13 @@ export default function DelegateLayout() {
     }
 
     const onLogout = (ev) => {
-        ev.preventDefault();
         axiosClient.get('/logout')
             .then(() => {
                 setUser(null);
                 setToken(null);
+                setRole(null);
+                localStorage.removeItem('role');
+                navigate('/login');
             });
     };
 
@@ -24,15 +29,26 @@ export default function DelegateLayout() {
         axiosClient.get('/user').then(({ data }) => {
             setUser(data);
         });
+
+        return () => {
+            document.body.style.margin = '0';
+            document.body.style.backgroundColor = color.background;
+        };
     }, []);
+
+
+    const navigation = (path) => {
+        navigate(path);
+    };
 
     return (
         <div id="delegateLayout">
             <header>
-                <div>Delegate Header</div>
-                <div>
-                    {user.name} <a href="#" onClick={onLogout}>Logout</a>
-                </div>
+                <Navigation
+                    currentPath={window.location.pathname}
+                    onNavigate={navigation}
+                    onLogout={onLogout}
+                />
             </header>
             <main>
                 <Outlet />

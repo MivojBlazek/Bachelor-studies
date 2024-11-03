@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import color from '../../colors.jsx'
 
-export default function Button({ label, onClick}) {
+export default function Button({ label, onClick, isActive = false }) {
+    const [isHovered, setIsHovered] = useState(false);
+
     return (
         <button
             onClick={onClick}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             style={{
-                padding: '10px',
-                backgroundColor: color.primary,
-                color: 'white',
+                backgroundColor: isHovered ? color.hover : 
+                    isActive ? color.secondary : color.primary,
+                padding: '10px 20px',
                 border: 'none',
-                cursor: 'pointer',
-                width: '100%',
-                marginTop: '10px',
+                borderRadius: '20px',
+                margin: '10px',
+                boxShadow: '2px 4px 5px rgba(0, 0, 0, 0.3)',
+                transition: 'background-color 0.3s ease',
             }}
         >
             {label}
