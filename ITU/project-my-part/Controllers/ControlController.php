@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\delegate;
 
-use App\Http\Requests\FeedbackRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\delegate\FeedbackRequest;
 use App\Models\Control;
 use Illuminate\Http\Request;
 

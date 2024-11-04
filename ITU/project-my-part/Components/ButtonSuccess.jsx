@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import color from '../../colors.jsx'
 
-export default function Button({ label, onClick, isActive = false, style }) {
+export default function ButtonSuccess({ label, onClick, style }) {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -10,8 +10,7 @@ export default function Button({ label, onClick, isActive = false, style }) {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             style={{
-                backgroundColor: isHovered ? color.hover : 
-                    isActive ? color.secondary : color.primary,
+                backgroundColor: isHovered ? color.success_hover : color.success,
                 padding: '10px 20px',
                 border: 'none',
                 borderRadius: '20px',

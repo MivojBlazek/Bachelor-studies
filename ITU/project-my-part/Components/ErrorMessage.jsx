@@ -6,9 +6,10 @@ export default function ErrorMessage({ message }) {
             <div
                 style={{
                     color: 'red',
-                    backgroundColor: '#ffe6e6',
+                    backgroundColor: '#FFE6E6',
                     padding: '10px',
                     marginTop: '10px',
+                    marginBottom: '10px',
                     borderRadius: '5px',
                 }}
             >

@@ -3,18 +3,14 @@ import color from '../../colors.jsx'
 import InputWithLabel from './InputWithLabel.jsx';
 import Button from './Button.jsx';
 
-export default function FilterSort({ onFilter, onSort }) {
+export default function FilterPayments({ onFilter }) {
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
-    const [location, setLocation] = useState('');
-    const [league, setLeague] = useState('');
+    const [referee, setReferee] = useState('');
+    const [notApproved, setNotApproved] = useState(false);
 
     const filter = () => {
-        onFilter({ dateFrom, dateTo, location, league });
-    };
-
-    const sort = () => {
-        onSort();
+        onFilter({ dateFrom, dateTo, referee, notApproved });
     };
 
     return (
@@ -42,24 +38,20 @@ export default function FilterSort({ onFilter, onSort }) {
                 onChange={(e) => setDateTo(e.target.value)}
             />
             <InputWithLabel
-                label='Location:'
+                label='Referee:'
                 type='text'
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                value={referee}
+                onChange={(e) => setReferee(e.target.value)}
             />
             <InputWithLabel
-                label='League:'
-                type='text'
-                value={league}
-                onChange={(e) => setLeague(e.target.value)}
+                label='Not approved:'
+                type='checkbox'
+                checked={notApproved}
+                onChange={(e) => setNotApproved(e.target.checked)}
             />
             <Button
                 label='Filter'
                 onClick={filter}
-            />
-            <Button
-                label='Sort'
-                onClick={sort}
             />
         </div>
     );

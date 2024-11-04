@@ -5,7 +5,7 @@ namespace App\Http\Requests\delegate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-class FeedbackRequest extends FormRequest
+class VideoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,9 @@ class FeedbackRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'controlId' => 'required|exists:controls,id',
-            'feedback' => 'string|nullable',
+            'url' => 'required|unique:videos',
+            'description' => 'string|nullable',
+            'id' => 'required|exists:games,id',
         ];
     }
 }

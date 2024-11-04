@@ -1,6 +1,14 @@
 import React from 'react';
 
-export default function InputWithLabel({ label, type='text', value, onChange }) {
+export default function TextareaWithLabel({ label, value, onChange }) {
+    const resizeTextarea = (textarea) => {
+        if (textarea)
+        {
+            textarea.style.height = 'auto';
+            textarea.style.height = `${textarea.scrollHeight}px`;
+        }
+    };
+
     return (
         <div>
             <label
@@ -12,14 +20,17 @@ export default function InputWithLabel({ label, type='text', value, onChange }) 
             >
                 {label}
             </label>
-            <input
+            <textarea
                 placeholder={label}
-                type={type}
                 value={value}
                 onChange={onChange}
+                onInput={(e) => resizeTextarea(e.target)}
                 style={{
                     padding: '5px',
-                    maxWidth: '150px',
+                    width: '100%',
+                    minHeight: '15px',
+                    resize: 'none',
+                    overflow: 'hidden',
                 }}
             />
         </div>

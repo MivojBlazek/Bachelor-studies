@@ -14,7 +14,7 @@ export default function RefereeList({ game, feedbacks, setFeedbacks, error, setE
         try
         {
             const feedbackToSubmit = feedbacks[controlId] || '';
-            await axiosClient.post(`/controls`, { feedback: feedbackToSubmit, controlId });
+            await axiosClient.post(`/delegate/controls`, { feedback: feedbackToSubmit, controlId });
         }
         catch (error)
         {
@@ -61,7 +61,11 @@ export default function RefereeList({ game, feedbacks, setFeedbacks, error, setE
                                         alignItems: 'center',
                                     }}
                                 >•</span>
-                                <P label={`${control.referee.name}`} href='/delegate/dashboard' style={{ padding: '8px 0px' }} />{/*//TODO*/}
+                                <P
+                                    label={`${control.referee.name}`}
+                                    href={`/delegate/referee_profile/${control.referee.id}`}
+                                    style={{ padding: '8px 0px' }}
+                                />
                                 <span style={{ padding: '8px 0px' }}>{control.refereeRole}</span>
                                 <textarea
                                     placeholder='Feedback'

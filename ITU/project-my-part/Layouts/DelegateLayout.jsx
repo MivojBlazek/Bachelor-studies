@@ -50,7 +50,7 @@ export default function DelegateLayout() {
                     onLogout={onLogout}
                 />
             </header>
-            <main>
+            <main style={{ paddingTop: '100px' }}>
                 <Outlet />
             </main>
         </div>

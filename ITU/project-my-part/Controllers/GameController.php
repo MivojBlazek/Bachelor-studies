@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\delegate;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Game;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 
 class GameController extends Controller
@@ -14,30 +17,22 @@ class GameController extends Controller
         $query = Game::with(['club1', 'club2', 'delegate', 'controls', 'videos']);
 
         // Filters
-        if ($request->has('dateFrom'))
+        if ($request->has('dateFrom') && !empty($request->input('dateFrom')))
         {
-            $query->where('date', '>=', $request->input('dateFrom')); //TODO server error fix
+            $query->where('date', '>=', Carbon::parse($request->input('dateFrom')));
         }
-        if ($request->has('dateTo'))
+        if ($request->has('dateTo') && !empty($request->input('dateTo')))
         {   
-            $query->where('date', '<=', $request->input('dateTo')); //TODO server error fix
+            $query->where('date', '<=', Carbon::parse($request->input('dateTo')));
         }
-        if ($request->has('location'))
+        if ($request->has('location') && !empty($request->input('location')))
         {
             $query->where('location', 'like', '%' . $request->input('location') . '%');
         }
-        if ($request->has('league'))
+        if ($request->has('league') && !empty($request->input('league')))
         {
             $query->where('league', 'like', '%' . $request->input('league') . '%');
         }
-
-        // Sorts
-        if ($request->has('sort'))
-        {
-            $sort = $request->input('sort');
-            $query->orderBy($sort, 'asc');
-        }
-
 
         $games = $query->get();
         return response()->json($games);
@@ -90,5 +85,31 @@ class GameController extends Controller
         }
 
         return response()->json($game);
+    }
+
+    public function signInToGame($id)
+    {
+        $delegate = Auth::user();
+
+        $game = Game::find($id);
+        if (!$game)
+        {
+            return response()->json(['message' => 'Game not found'], 404);
+        }
+
+        $game->delegate_id = $delegate->id;
+        $game->save();
+    }
+
+    public function signOutOfGame($id)
+    {
+        $game = Game::find($id);
+        if (!$game)
+        {
+            return response()->json(['message' => 'Game not found'], 404);
+        }
+
+        $game->delegate_id = null;
+        $game->save();
     }
 }

@@ -7,7 +7,7 @@ export default function PaymentCard({ payment }) {
 
     const goToDetail = (ev) => {
         ev.preventDefault();
-        navigate(`/delegate/dashboard`); //TODO
+        navigate(`/delegate/payment/${payment.id}`);
     };
 
     const cardContent = (

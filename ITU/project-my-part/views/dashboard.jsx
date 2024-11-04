@@ -13,7 +13,7 @@ export default function Dashboard() {
         const fetchGames = async () => {
             try
             {
-                const response = await axiosClient.get('/upcomingGames');
+                const response = await axiosClient.get('/delegate/upcomingGames');
                 if (Array.isArray(response.data))
                 {
                     setGames(response.data);
@@ -36,7 +36,7 @@ export default function Dashboard() {
         const fetchFeedbackGames = async () => {
             try
             {
-                const response = await axiosClient.get('/feedbackGames');
+                const response = await axiosClient.get('/delegate/feedbackGames');
                 if (Array.isArray(response.data))
                 {
                     setFeedbackGames(response.data);
@@ -59,7 +59,7 @@ export default function Dashboard() {
         const fetchPayments = async () => {
             try
             {
-                const response = await axiosClient.get('/payments');
+                const response = await axiosClient.get('/delegate/payments');
                 if (Array.isArray(response.data))
                 {
                     setPayments(response.data);
