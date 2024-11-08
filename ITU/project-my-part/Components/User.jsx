@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function User({ user }) {
+export default function User({ user, isMe = false }) {
     return (
         <div>
             <img
@@ -17,9 +17,14 @@ export default function User({ user }) {
             <h2 style={{ marginBottom: '50px' }}>
                 {user.name}
             </h2>
-            <p style={{ fontWeight: 'bold' }}>Address: {user.address}</p>
             <p style={{ fontWeight: 'bold' }}>License: {user.license}</p>
-            <p style={{ fontWeight: 'bold' }}>Bank account: {user.bank_account}</p>
+            <p style={{ fontWeight: 'bold' }}>Date of birth: {user.birth_date}</p>
+            <p style={{ fontWeight: 'bold' }}>Phone: {user.phone}</p>
+            <p style={{ fontWeight: 'bold' }}>Email: {user.email}</p>
+            <p style={{ fontWeight: 'bold' }}>Address: {user.address}</p>
+            {isMe && (
+                <p style={{ fontWeight: 'bold' }}>Bank account: {user.bank_account}</p>
+            )}
         </div>
     );
 }

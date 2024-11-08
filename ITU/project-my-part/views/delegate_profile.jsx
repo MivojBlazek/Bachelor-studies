@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import User from '../../Components/delegate/User';
 import axiosClient from '../../axiosClient';
+import { useStateContext } from '../../contexts/contextprovider';
 
 export default function DelegateProfile() {
     const { delegateId } = useParams();
     const [delegateUser, setDelegateUser] = useState(null);
     const [error, setError] = useState(null);
+    const { user } = useStateContext();
 
     useEffect(() => {
         const fetchDelegate = async () => {
@@ -31,7 +33,7 @@ export default function DelegateProfile() {
 
     return (
         <div style={{ padding: '20px', textAlign: 'center' }}>
-            <User user={delegateUser} />
+            <User user={delegateUser} isMe={user.id === Number(delegateId)} />
         </div>
     );
 }

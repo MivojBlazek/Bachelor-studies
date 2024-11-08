@@ -7,7 +7,7 @@ export default function Profile() {
     
     return (
         <div style={{ padding: '20px', textAlign: 'center' }}>
-            <User user={user} />
+            <User user={user} isMe={true} />
         </div>
     );
 }

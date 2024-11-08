@@ -23,7 +23,7 @@ class ProfileController extends Controller
 
     public function getClub($clubId)
     {
-        $club = Club::find($clubId);
+        $club = Club::with('players')->find($clubId);
         if (!$club)
         {
             return response()->json(['message' => 'Club not found'], 404);

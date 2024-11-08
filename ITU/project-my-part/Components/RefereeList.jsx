@@ -2,7 +2,7 @@ import React from 'react';
 import axiosClient from '../../axiosClient';
 import P from './P';
 
-export default function RefereeList({ game, feedbacks, setFeedbacks, error, setError }) {
+export default function RefereeList({ game, feedbacks, setFeedbacks, error, setError, isMe = true }) {
     const feedbackChange = (controlId, newFeedback) => {
         setFeedbacks((prevFeedbacks) => ({
             ...prevFeedbacks,
@@ -68,12 +68,12 @@ export default function RefereeList({ game, feedbacks, setFeedbacks, error, setE
                                 />
                                 <span style={{ padding: '8px 0px' }}>{control.refereeRole}</span>
                                 <textarea
-                                    placeholder='Feedback'
                                     value={feedbacks[control.id]}
                                     onChange={(e) => feedbackChange(control.id, e.target.value)}
                                     onBlur={() => losingFocus(control.id)}
                                     onFocus={(e) => resizeTextarea(e.target)}
                                     onInput={(e) => resizeTextarea(e.target)}
+                                    readOnly={!isMe}
                                     style={{
                                         padding: '8px',
                                         minWidth: '250px',

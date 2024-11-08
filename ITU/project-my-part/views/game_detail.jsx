@@ -119,12 +119,11 @@ export default function GameDetail() {
 
     return (
         <div style={{ textAlign: 'center' }}>
-            <h1>Game Details</h1>
-            <h2>
+            <h1>
                 <P label={`${game.club1.name}`} href={`/delegate/club_profile/${game.club1.id}`} />
                 &nbsp;vs&nbsp;
                 <P label={`${game.club2.name}`} href={`/delegate/club_profile/${game.club2.id}`} />
-            </h2>
+            </h1>
             <p>League: {game.league}</p>
             <p>Location: {game.location}</p>
             <p>Date: {game.date}</p>
@@ -172,12 +171,13 @@ export default function GameDetail() {
                     ) : (<p style={{ margin: '5px' }}>---</p>)
                 )}
             </div>
-            <RefereeList    
+            <RefereeList
                 game={game}
                 feedbacks={feedbacks}
                 setFeedbacks={setFeedbacks}
                 error={error}
                 setError={setError}
+                isMe={(game.delegate_id === user.id) && (new Date(game.date) < new Date())}
             />
             <ErrorMessage message={error}/>
             <Button
@@ -214,10 +214,12 @@ export default function GameDetail() {
                     </div>
                 </form>
             )}
-            <Button
-                label='Add video'
-                onClick={addVideo}
-            />
+            {(new Date(game.date) < new Date()) && (
+                <Button
+                    label='Add video'
+                    onClick={addVideo}
+                />
+            )}
         </div>
     );
 }

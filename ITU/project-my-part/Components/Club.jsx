@@ -17,9 +17,37 @@ export default function Club({ user }) {
             <h2 style={{ marginBottom: '50px' }}>
                 {user.name}
             </h2>
+            <p style={{ fontWeight: 'bold' }}>Phone: {user.phone}</p>
+            <p style={{ fontWeight: 'bold' }}>Email: {user.email}</p>
             <p style={{ fontWeight: 'bold' }}>City: {user.city}</p>
             <p style={{ fontWeight: 'bold' }}>Address: {user.address}</p>
-            <p style={{ fontWeight: 'bold' }}>Bank account: {user.bank_account}</p>
+            <div style={{
+                alignSelf: 'center',
+                justifyContent: 'center',
+                margin: '0px auto',
+                maxWidth: '800px',
+                display: 'grid',
+                gridTemplateColumns: 'auto auto auto',
+                gridAutoFlow: 'row',
+                gap: '20px',
+                textAlign: 'left',
+            }}>
+                <h3 style={{ marginBottom: '0px' }}>Players:</h3>
+                <span></span>
+                <span></span>
+
+                <span style={{ fontWeight: 'bold' }}>Name</span>
+                <span style={{ fontWeight: 'bold' }}>Dress number</span>
+                <span style={{ fontWeight: 'bold' }}>Role</span>
+                
+                {user.players.map(player => (
+                    <>
+                        <span>{player.name}</span>
+                        <span>{player.dress_number}</span>
+                        <span>{player.role}</span>
+                    </>
+                ))}
+            </div>
         </div>
     );
 }
