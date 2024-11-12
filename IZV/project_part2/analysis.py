@@ -124,12 +124,8 @@ def plot_state(df: pd.DataFrame, fig_location: str = None,
     for i, state_name in enumerate(df['state'].dropna().unique()):
         ax = axes[i // 2, i % 2]
 
-        # Group by regions and count records in them
-        state_data = df[df['state'] == state_name]
-        state_counts = state_data.groupby('region')['region'].agg('count')
-
-        # Graph displays that count in each region
-        ax.bar(state_counts.index, state_counts.values, width=0.8, zorder=3, color=colors[i])
+        # Countplot creates a bar graph with number of each state in regions.
+        sns.countplot(data=df[df['state'] == state_name], x='region', ax=ax, zorder=3, color=colors[i])
 
         # Graphical improvement and titles
         ax.set_title(f'Stav povrchu vozovky: {state_name}')
@@ -137,6 +133,8 @@ def plot_state(df: pd.DataFrame, fig_location: str = None,
             ax.set_xlabel('Kraj')
         if i % 2 == 0:
             ax.set_ylabel('Počet nehod')
+        else:
+            ax.set_ylabel('')
         ax.set_facecolor('#CCFFFF')
         ax.grid(axis='y', color='red', linewidth=1, zorder=0)
 
@@ -183,30 +181,14 @@ def plot_alcohol(df: pd.DataFrame, df_consequences : pd.DataFrame,
     for i, injury_name in enumerate(df_new['injury'].dropna().unique()):
         ax = axes[i // 2, i % 2]
 
-        # Filter data for driver and passenger and group by regions
-        injury_driver_data = df_new[
+        # Filter data for driver and passenger
+        injury_data = df_new[
             (df_new['alcohol'] == 'Ano')
-            & (df_new['injured_person'] == 'Řidič')
             & (df_new['injury'] == injury_name)
         ]
-        injury_passenger_data = df_new[
-            (df_new['alcohol'] == 'Ano')
-            & (df_new['injured_person'] == 'Spolujezdec')
-            & (df_new['injury'] == injury_name)
-        ]
-        injury_driver_counts = injury_driver_data.groupby('region')['region'].agg('count')
-        injury_passenger_counts = injury_passenger_data.groupby('region')['region'].agg('count')
 
-        # Reindex them to include empty regions (without specific injury)
-        injury_driver_counts = injury_driver_counts.reindex(df_new['region'].unique(), fill_value=0)
-        injury_passenger_counts = injury_passenger_counts.reindex(df_new['region'].unique(), fill_value=0)
-
-        # Calculate positions in graph (need 2 bars next to each other)
-        positions = np.arange(len(injury_driver_counts.index))
-
-        # Graph displays that count of injured person type in each region
-        ax.bar(positions - 0.17, injury_driver_counts.values, width=0.3, bottom=0, color='blue', label='Řidič', zorder=3)
-        ax.bar(positions + 0.17, injury_passenger_counts.values, width=0.3, bottom=0, color='orange', label='Spolujezdec', zorder=3)
+        # Graph displays a count of injured person type in each region
+        sns.countplot(data=injury_data, x='region', hue='injured_person', ax=ax, zorder=3, legend=False)
 
         # Graphical improvement and titles
         ax.set_title(f'Následky nehody: {injury_name}')
@@ -215,8 +197,6 @@ def plot_alcohol(df: pd.DataFrame, df_consequences : pd.DataFrame,
         ax.set_ylabel('Počet nehod pod vlivem')
         ax.set_facecolor('#CCFFFF')
         ax.grid(axis='y', color='white', linewidth=1, zorder=0)
-        ax.set_xticks(positions)
-        ax.set_xticklabels(injury_driver_counts.index)
 
     plt.legend(['Řidič', 'Spolujezdec'], loc='center left', bbox_to_anchor=(1.0, 1.05))
     fig.tight_layout()
@@ -274,23 +254,29 @@ def plot_type(df: pd.DataFrame, fig_location: str = None,
         & (df['date'] <= '2024-10-01')
     ]
 
+    colors = sns.color_palette('bright', len(collision))
+
     # Create 4 sublots according to 4 random regions
     for i, region_name in enumerate(chosen_regions):
         ax = axes[i // 2, i % 2]
 
         region_data = df[df['region'] == region_name]
-        for collision_type in collision.values():
+        for j, collision_type in enumerate(collision.values()):
             # Check all collisions and create plot graph for each
-            collision_data = region_data[region_data['collision'] == collision_type]
-            ax.plot(collision_data['date'], collision_data[0])
+            sns.lineplot(data=region_data[region_data['collision'] == collision_type],
+                         x='date', y=0, ax=ax, legend=False, color=colors[j])
 
         # Graphical improvement and titles
         ax.set_title(f'Kraj: {region_name}')
         if i % 2 == 0:
             ax.set_ylabel('Počet nehod')
-        plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha="right")
+        else:
+            ax.set_ylabel('')
+        ax.set_xlabel('')
+        plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right', x=5)
 
-    plt.legend(collision.values(), loc='lower left', bbox_to_anchor=(1.0, 0.75), title='Druh nehody')
+    handles = [plt.Line2D([0], [0], color=colors[i]) for i in range(len(collision))]
+    plt.legend(handles=handles, labels=collision.values(), loc='lower left', bbox_to_anchor=(1.0, 0.75), title='Druh nehody')
     fig.tight_layout()
     fig.subplots_adjust(hspace=0.4, wspace=0.15)
 
