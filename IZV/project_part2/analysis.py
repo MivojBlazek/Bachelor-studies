@@ -264,7 +264,7 @@ def plot_type(df: pd.DataFrame, fig_location: str = None,
         for j, collision_type in enumerate(collision.values()):
             # Check all collisions and create plot graph for each
             sns.lineplot(data=region_data[region_data['collision'] == collision_type],
-                         x='date', y=0, ax=ax, legend=False, color=colors[j])
+                         x='date', y=0, ax=ax, legend=False, color=colors[j], label=collision_type)
 
         # Graphical improvement and titles
         ax.set_title(f'Kraj: {region_name}')
@@ -273,10 +273,9 @@ def plot_type(df: pd.DataFrame, fig_location: str = None,
         else:
             ax.set_ylabel('')
         ax.set_xlabel('')
-        plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right', x=5)
+        plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right', rotation_mode='anchor')
 
-    handles = [plt.Line2D([0], [0], color=colors[i]) for i in range(len(collision))]
-    plt.legend(handles=handles, labels=collision.values(), loc='lower left', bbox_to_anchor=(1.0, 0.75), title='Druh nehody')
+    plt.legend(loc='lower left', bbox_to_anchor=(1.0, 0.75), title='Druh nehody')
     fig.tight_layout()
     fig.subplots_adjust(hspace=0.4, wspace=0.15)
 
