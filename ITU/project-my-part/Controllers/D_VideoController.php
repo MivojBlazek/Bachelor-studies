@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
-class VideoController extends Controller
+class D_VideoController extends Controller
 {
     public function addVideo(VideoRequest $request)
     {

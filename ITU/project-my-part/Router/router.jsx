@@ -7,16 +7,16 @@ import DelegateLayout from './Layouts/DelegateLayout.jsx';
 import RefereeLayout from './Layouts/RefereeLayout.jsx';
 import { useStateContext } from "./contexts/contextprovider";
 
-import Dashboard from './views/delegate/dashboard.jsx';
-import GameList from './views/delegate/game_list.jsx';
-import Profile from './views/delegate/profile.jsx';
-import GameDetail from './views/delegate/game_detail.jsx';
-import DelegateProfile from './views/delegate/delegate_profile.jsx';
-import ClubProfile from './views/delegate/club_profile.jsx';
-import RefereeProfile from './views/delegate/referee_profile.jsx';
-import GameVideos from './views/delegate/game_videos.jsx';
-import PaymentDetail from './views/delegate/payment_detail.jsx';
-import Payments from './views/delegate/payments.jsx';
+import D_Dashboard from './views/delegate/dashboard.jsx';
+import D_GameList from './views/delegate/game_list.jsx';
+import D_Profile from './views/delegate/profile.jsx';
+import D_GameDetail from './views/delegate/game_detail.jsx';
+import D_DelegateProfile from './views/delegate/delegate_profile.jsx';
+import D_ClubProfile from './views/delegate/club_profile.jsx';
+import D_RefereeProfile from './views/delegate/referee_profile.jsx';
+import D_GameVideos from './views/delegate/game_videos.jsx';
+import D_PaymentDetail from './views/delegate/payment_detail.jsx';
+import D_Payments from './views/delegate/payments.jsx';
 
 function RoleBasedLayout()
 {
@@ -39,43 +39,43 @@ const router = createBrowserRouter ([
         children: [
             {
                 path: 'delegate/dashboard',
-                element: <Dashboard />,
+                element: <D_Dashboard />,
             },
             {
                 path: 'delegate/game_list',
-                element: <GameList />,
+                element: <D_GameList />,
             },
             {
                 path: 'delegate/profile',
-                element: <Profile />,
+                element: <D_Profile />,
             },
             {
                 path: 'delegate/allPayments',
-                element: <Payments />,
+                element: <D_Payments />,
             },
             {
                 path: 'delegate/game_detail/:id',
-                element: <GameDetail />,
+                element: <D_GameDetail />,
             },
             {
                 path: 'delegate/delegate_profile/:delegateId',
-                element: <DelegateProfile />,
+                element: <D_DelegateProfile />,
             },
             {
                 path: 'delegate/club_profile/:clubId',
-                element: <ClubProfile />,
+                element: <D_ClubProfile />,
             },
             {
                 path: 'delegate/referee_profile/:refereeId',
-                element: <RefereeProfile />,
+                element: <D_RefereeProfile />,
             },
             {
                 path: 'delegate/game/:id/videos',
-                element: <GameVideos />,
+                element: <D_GameVideos />,
             },
             {
                 path: 'delegate/payment/:paymentId',
-                element: <PaymentDetail />,
+                element: <D_PaymentDetail />,
             },
         ]
     },

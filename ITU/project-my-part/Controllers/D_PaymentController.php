@@ -8,7 +8,7 @@ use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
-class PaymentController extends Controller
+class D_PaymentController extends Controller
 {
     public function notApprovedPayments()
     {

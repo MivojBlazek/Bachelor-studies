@@ -29,6 +29,12 @@ export default function PaymentDetail() {
     }, [paymentId]);
 
     const approve = async () => {
+        const confirmed = window.confirm('Are you sure you want to approve this payment?');
+        if (!confirmed)
+        {
+            return;
+        }
+
         try
         {
             await axiosClient.post(`/delegate/payments/${paymentId}/approve`);
@@ -41,6 +47,12 @@ export default function PaymentDetail() {
     }
 
     const decline = async () => {
+        const confirmed = window.confirm('Are you sure you want to decline this payment?');
+        if (!confirmed)
+        {
+            return;
+        }
+
         try
         {
             await axiosClient.post(`/delegate/payments/${paymentId}/decline`);

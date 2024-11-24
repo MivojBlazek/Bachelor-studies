@@ -8,7 +8,7 @@ use App\Models\Club;
 use App\Models\Referee;
 use Illuminate\Http\Request;
 
-class ProfileController extends Controller
+class D_ProfileController extends Controller
 {
     public function getDelegate($delegateId)
     {

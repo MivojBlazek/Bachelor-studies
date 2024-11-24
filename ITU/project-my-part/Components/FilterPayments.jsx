@@ -48,6 +48,10 @@ export default function FilterPayments({ onFilter }) {
                 type='checkbox'
                 checked={notApproved}
                 onChange={(e) => setNotApproved(e.target.checked)}
+                inputStyle={{
+                    width: '25px',
+                    height: '25px',
+                }}
             />
             <Button
                 label='Filter'

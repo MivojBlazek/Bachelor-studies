@@ -7,7 +7,7 @@ use App\Http\Requests\delegate\FeedbackRequest;
 use App\Models\Control;
 use Illuminate\Http\Request;
 
-class ControlController extends Controller
+class D_ControlController extends Controller
 {
     public function updateFeedback(FeedbackRequest $request)
     {

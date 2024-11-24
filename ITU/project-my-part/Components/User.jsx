@@ -17,14 +17,25 @@ export default function User({ user, isMe = false }) {
             <h2 style={{ marginBottom: '50px' }}>
                 {user.name}
             </h2>
-            <p style={{ fontWeight: 'bold' }}>License: {user.license}</p>
-            <p style={{ fontWeight: 'bold' }}>Date of birth: {user.birth_date}</p>
-            <p style={{ fontWeight: 'bold' }}>Phone: {user.phone}</p>
-            <p style={{ fontWeight: 'bold' }}>Email: {user.email}</p>
-            <p style={{ fontWeight: 'bold' }}>Address: {user.address}</p>
-            {isMe && (
-                <p style={{ fontWeight: 'bold' }}>Bank account: {user.bank_account}</p>
-            )}
+            <div
+                style={{
+                    margin: '0 auto',
+                    backgroundColor: 'white',
+                    width: 'fit-content',
+                    padding: '15px 30px',
+                    borderRadius: '15px',
+                    border: '1px solid lightgray'
+                }}
+            >
+                <p style={{ fontWeight: 'bold' }}>License: {user.license}</p>
+                <p style={{ fontWeight: 'bold' }}>Date of birth: {user.birth_date}</p>
+                <p style={{ fontWeight: 'bold' }}>Phone: {user.phone}</p>
+                <p style={{ fontWeight: 'bold' }}>Email: {user.email}</p>
+                <p style={{ fontWeight: 'bold' }}>Address: {user.address}</p>
+                {isMe && (
+                    <p style={{ fontWeight: 'bold' }}>Bank account: {user.bank_account}</p>
+                )}
+            </div>
         </div>
     );
 }

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 
-class GameController extends Controller
+class D_GameController extends Controller
 {
     public function games(Request $request)
     {
