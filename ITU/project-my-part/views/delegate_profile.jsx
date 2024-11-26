@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import User from '../../Components/delegate/User';
 import axiosClient from '../../axiosClient';
 import { useStateContext } from '../../contexts/contextprovider';
+import ErrorMessage from '../../Components/delegate/ErrorMessage';
 
 export default function DelegateProfile() {
     const { delegateId } = useParams();
@@ -16,24 +17,34 @@ export default function DelegateProfile() {
             {
                 const response = await axiosClient.get(`/delegate/delegate_profile/${delegateId}`);
                 setDelegateUser(response.data);
+
+                setError(null);
             }
             catch (error)
             {
-                setError(error.message);
+                if (error.response)
+                {
+                    setError(error.response.data.error);
+                }
+                else
+                {
+                    setError(error.message);
+                }
             }
         };
 
         fetchDelegate();
     }, [delegateId]);
 
-    if (!delegateUser)
+    if (!delegateUser && !error)
     {
         return null;
     }
 
     return (
         <div style={{ padding: '20px', textAlign: 'center' }}>
-            <User user={delegateUser} isMe={user.id === Number(delegateId)} />
+            <ErrorMessage message={error} />
+            {delegateUser && <User user={delegateUser} isMe={user.id === Number(delegateId)} />}
         </div>
     );
 }

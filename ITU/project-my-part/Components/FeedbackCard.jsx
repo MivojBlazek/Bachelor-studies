@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MdSportsHockey } from "react-icons/md";
 import Card from './Card.jsx';
 
 export default function GameCard({ game }) {
@@ -12,10 +13,33 @@ export default function GameCard({ game }) {
 
     const cardContent = (
         <>
-            <h2>{game.club1.name} vs {game.club2.name}</h2>
-            <p>Game date: {game.date}</p>
-            <p>Game location: {game.location}</p>
-            <p>Referees: {game.refereesWithoutFeedback.join(', ')}</p>
+            <h2
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr auto 1fr',
+                    gap: '10px',
+                    margin: '0 auto',
+                }}
+            >
+                <span style={{ textAlign: 'right' }}>{game.club1.name}</span>
+                <MdSportsHockey style={{ fontSize: '30px' }} />
+                <span style={{ textAlign: 'left' }}>{game.club2.name}</span>
+            </h2>
+            <div
+                style={{
+                    margin: '0 auto',
+                    width: 'fit-content',
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: '13px',
+                    textAlign: 'left',
+                    padding: '15px',
+                }}
+            >
+                <span style={{ textAlign: 'right' }}>Game date:</span><span>{(new Date(game.date)).toLocaleDateString()}</span>
+                <span style={{ textAlign: 'right' }}>Game location:</span><span>{game.location}</span>
+            </div>
+            <p style={{ marginTop: '0px' }}>Referees: {game.refereesWithoutFeedback.join(', ')}</p>
         </>
     );
 

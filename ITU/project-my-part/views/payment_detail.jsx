@@ -5,11 +5,13 @@ import GameCard from '../../Components/delegate/GameCard';
 import ButtonSuccess from '../../Components/delegate/ButtonSuccess';
 import ButtonFailure from '../../Components/delegate/ButtonFailure';
 import P from '../../Components/delegate/P';
+import ErrorMessage from '../../Components/delegate/ErrorMessage';
 
 export default function PaymentDetail() {
     const { paymentId } = useParams();
     const [payment, setPayment] = useState(null);
     const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,10 +20,20 @@ export default function PaymentDetail() {
             {
                 const response = await axiosClient.get(`/delegate/payments/${paymentId}`);
                 setPayment(response.data);
+                setError(null);
+                setSuccess(null);
             }
             catch (error)
             {
-                setError(error.message);
+                if (error.response)
+                {
+                    setError(error.response.data.error);
+                }
+                else
+                {
+                    setError(error.message);
+                }
+                setSuccess(null);
             }
         };
 
@@ -37,12 +49,13 @@ export default function PaymentDetail() {
 
         try
         {
-            await axiosClient.post(`/delegate/payments/${paymentId}/approve`);
-            navigate(`/delegate/dashboard`);
+            const response = await axiosClient.post(`/delegate/payments/${paymentId}/approve`);
+            navigate(`/delegate/dashboard`, { state: { success: response.data.success } });
         }
         catch (error)
         {
-            setError(error.response.data.error || 'An error occurred while approving the payment');
+            setError(error.response?.data?.error || 'An error occurred while approving the payment');
+            setSuccess(null);
         }
     }
 
@@ -55,40 +68,56 @@ export default function PaymentDetail() {
 
         try
         {
-            await axiosClient.post(`/delegate/payments/${paymentId}/decline`);
-            navigate(`/delegate/dashboard`);
+            const response = await axiosClient.post(`/delegate/payments/${paymentId}/decline`);
+            navigate(`/delegate/dashboard`, { state: { success: response.data.success } });
         }
         catch (error)
         {
-            setError(error.response.data.error || 'An error occurred while declining the payment');
+            setError(error.response?.data?.error || 'An error occurred while declining the payment');
+            setSuccess(null);
         }
     }
 
-    if (!payment)
+    if (!payment && !error)
     {
         return null;
     }
 
     return (
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-            <h1>
-                <P label={`Referee: ${payment.control.referee.name}`} href={`/delegate/referee_profile/${payment.control.referee.id}`} />
-            </h1>
-            <p style={{ fontWeight: 'bold' }}>Date created: {payment.createdAt}</p>
-            <p style={{ fontWeight: 'bold' }}>Amount: {payment.amount}czk</p>
-            <GameCard game={payment.control.game} />
-            {payment.approved_by === null && (
-                <>
-                    <ButtonSuccess
-                        label='Approve'
-                        onClick={approve}
-                    />
-                    <ButtonFailure
-                        label='Decline'
-                        onClick={decline}
-                    />
-                </>
+        <>
+            {!payment && <ErrorMessage message={error} />}
+            {payment && (
+                <div style={{ padding: '20px', textAlign: 'center' }}>
+                    <div
+                        style={{
+                            margin: '0 auto',
+                            width: 'fit-content',
+                            fontWeight: 'bold',
+                            display: 'grid',
+                            gridTemplateColumns: 'auto auto',
+                            gap: '13px',
+                            textAlign: 'left',
+                        }}
+                    >
+                        <h1 style={{ textAlign: 'right', margin: '0px 0px 15px 0px' }}>Referee:</h1><h1 style={{ margin: '0px 0px 15px 0px' }}><P label={`${payment.control.referee.name}`} href={`/delegate/referee_profile/${payment.control.referee.id}`}/></h1>
+                        <p style={{ textAlign: 'right', margin: '0px' }}>Date created:</p><p style={{ margin: '0px' }}>{(new Date(payment.created_at)).toLocaleDateString()} {(new Date(payment.created_at)).toLocaleTimeString()}</p>
+                        <p style={{ textAlign: 'right', margin: '0px' }}>Amount:</p><p style={{ margin: '0px' }}>{payment.amount}czk</p>
+                    </div>
+                    <GameCard game={payment.control.game} />
+                    {payment.approved_by === null && (
+                        <>
+                            <ButtonSuccess
+                                label='Approve'
+                                onClick={approve}
+                            />
+                            <ButtonFailure
+                                label='Decline'
+                                onClick={decline}
+                            />
+                        </>
+                    )}
+                </div>
             )}
-        </div>
+        </>
     );
 }

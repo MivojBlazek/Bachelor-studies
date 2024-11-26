@@ -18,6 +18,7 @@ export default function FilterGames({ onFilter }) {
             style={{
                 display: 'flex',
                 flexDirection: 'row',
+                flexWrap: 'wrap',
                 gap: '5px',
                 justifyContent: 'center',
                 alignItems: 'center',

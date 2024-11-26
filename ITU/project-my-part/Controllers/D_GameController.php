@@ -81,7 +81,7 @@ class D_GameController extends Controller
         $game = Game::with(['club1', 'club2', 'delegate', 'controls.referee', 'videos'])->find($id);
         if (!$game)
         {
-            return response()->json(['message' => 'Game not found'], 404);
+            return response()->json(['error' => 'Game not found.'], 404);
         }
 
         return response()->json($game);
@@ -94,11 +94,12 @@ class D_GameController extends Controller
         $game = Game::find($id);
         if (!$game)
         {
-            return response()->json(['message' => 'Game not found'], 404);
+            return response()->json(['error' => 'Game not found.'], 404);
         }
 
         $game->delegate_id = $delegate->id;
         $game->save();
+        return response()->json(['success' => 'Signed in to game successfully.'], 200);
     }
 
     public function signOutOfGame($id)
@@ -106,10 +107,11 @@ class D_GameController extends Controller
         $game = Game::find($id);
         if (!$game)
         {
-            return response()->json(['message' => 'Game not found'], 404);
+            return response()->json(['error' => 'Game not found.'], 404);
         }
 
         $game->delegate_id = null;
         $game->save();
+        return response()->json(['success' => 'Signed out from game successfully.'], 200);
     }
 }

@@ -16,10 +16,11 @@ class D_ControlController extends Controller
         $control = Control::find($data['controlId']);
         if (!$control)
         {
-            return response()->json(['message' => 'Control not found'], 404);
+            return response()->json(['error' => 'Control not found.'], 404);
         }
 
         $control->feedback = $data['feedback'];
         $control->save();
+        return response()->json(['success' => 'Feedback updated successfully.'], 200);
     }
 }

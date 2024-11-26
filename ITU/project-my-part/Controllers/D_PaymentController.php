@@ -52,7 +52,7 @@ class D_PaymentController extends Controller
         $payment = Payment::with(['control.referee', 'control.game', 'control.game.club1', 'control.game.club2', 'delegate'])->find($paymentId);
         if (!$payment)
         {
-            return response()->json(['error' => 'Payment not found'], 404);
+            return response()->json(['error' => 'Payment not found.'], 404);
         }
         return response()->json($payment);
     }
@@ -64,12 +64,13 @@ class D_PaymentController extends Controller
         $payment = Payment::find($paymentId);
         if (!$payment)
         {
-            return response()->json(['error' => 'Payment not found'], 404);
+            return response()->json(['error' => 'Payment not found.'], 404);
         }
 
         $payment->approvalDate = now();
         $payment->approved_by = $delegate->id;
         $payment->save();
+        return response()->json(['success' => 'Payment approved successfully.'], 200);
     }
 
     public function declinePayment($paymentId)
@@ -77,9 +78,10 @@ class D_PaymentController extends Controller
         $payment = Payment::find($paymentId);
         if (!$payment)
         {
-            return response()->json(['error' => 'Payment not found'], 404);
+            return response()->json(['error' => 'Payment not found.'], 404);
         }
         
         $payment->delete();
+        return response()->json(['success' => 'Payment declined successfully.'], 200);
     }
 }

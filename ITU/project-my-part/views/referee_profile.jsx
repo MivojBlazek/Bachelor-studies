@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import User from '../../Components/delegate/User';
 import axiosClient from '../../axiosClient';
+import ErrorMessage from '../../Components/delegate/ErrorMessage';
 
 export default function RefereeProfile() {
     const { refereeId } = useParams();
@@ -14,24 +15,34 @@ export default function RefereeProfile() {
             {
                 const response = await axiosClient.get(`/delegate/referee_profile/${refereeId}`);
                 setRefereeUser(response.data);
+
+                setError(null);
             }
             catch (error)
             {
-                setError(error.message);
+                if (error.response)
+                {
+                    setError(error.response.data.error);
+                }
+                else
+                {
+                    setError(error.message);
+                }
             }
         };
 
         fetchReferee();
     }, [refereeId]);
 
-    if (!refereeUser)
+    if (!refereeUser && !error)
     {
         return null;
     }
 
     return (
         <div style={{ padding: '20px', textAlign: 'center' }}>
-            <User user={refereeUser} />
+            <ErrorMessage message={error}/>
+            {refereeUser && <User user={refereeUser} />}
         </div>
     );
 }

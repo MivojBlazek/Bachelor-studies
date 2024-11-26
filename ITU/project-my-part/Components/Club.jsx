@@ -25,31 +25,39 @@ export default function Club({ user }) {
                     width: 'fit-content',
                     padding: '15px 30px',
                     borderRadius: '15px',
-                    border: '1px solid lightgray'
+                    border: '1px solid lightgray',
+                    fontWeight: 'bold',
+                    display: 'grid',
+                    gridTemplateColumns: 'auto auto',
+                    gap: '13px',
+                    textAlign: 'left',
                 }}
             >
-                <p style={{ fontWeight: 'bold' }}>Phone: {user.phone}</p>
-                <p style={{ fontWeight: 'bold' }}>Email: {user.email}</p>
-                <p style={{ fontWeight: 'bold' }}>City: {user.city}</p>
-                <p style={{ fontWeight: 'bold' }}>Address: {user.address}</p>
+                <span style={{ textAlign: 'right' }}>Phone:</span><span>{user.phone}</span>
+                <span style={{ textAlign: 'right' }}>Email:</span><span>{user.email}</span>
+                <span style={{ textAlign: 'right' }}>City:</span><span>{user.city}</span>
+                <span style={{ textAlign: 'right' }}>Address:</span><span>{user.address}</span>
+
                 <div style={{
+                    borderTop: '1px solid lightgray',
+                    gridColumn: '1 / -1',
                     alignSelf: 'center',
                     justifyContent: 'center',
-                    margin: '0px auto',
+                    margin: '10px auto 0px auto',
                     maxWidth: '800px',
                     display: 'grid',
                     gridTemplateColumns: 'auto auto auto',
                     gridAutoFlow: 'row',
-                    gap: '20px',
+                    gap: '17px',
                     textAlign: 'left',
                 }}>
                     <h3 style={{ marginBottom: '0px' }}>Players:</h3>
                     <span></span>
                     <span></span>
 
-                    <span style={{ fontWeight: 'bold' }}>Name</span>
-                    <span style={{ fontWeight: 'bold' }}>Dress number</span>
-                    <span style={{ fontWeight: 'bold' }}>Role</span>
+                    <span>Name</span>
+                    <span>Dress number</span>
+                    <span>Role</span>
                     
                     {user.players.map(player => (
                         <>

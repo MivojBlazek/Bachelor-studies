@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function TextareaWithLabel({ label, value, onChange }) {
+export default function TextareaWithLabel({ label, value, onChange, placeholder = null}) {
     const resizeTextarea = (textarea) => {
         if (textarea)
         {
@@ -21,7 +21,7 @@ export default function TextareaWithLabel({ label, value, onChange }) {
                 {label}
             </label>
             <textarea
-                placeholder={label}
+                placeholder={placeholder ? placeholder : label}
                 value={value}
                 onChange={onChange}
                 onInput={(e) => resizeTextarea(e.target)}
@@ -29,6 +29,7 @@ export default function TextareaWithLabel({ label, value, onChange }) {
                     padding: '5px',
                     width: '100%',
                     minHeight: '15px',
+                    fontSize: '14px',
                     resize: 'none',
                     overflow: 'hidden',
                 }}

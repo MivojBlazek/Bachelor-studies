@@ -23,5 +23,7 @@ class D_VideoController extends Controller
             'game_id' => $data['id'],
             'uploaded_by' => $delegate->id,
         ]);
+
+        return response()->json(['success' => 'Video created successfully.'], 200);
     }
 }

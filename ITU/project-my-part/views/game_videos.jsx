@@ -77,7 +77,6 @@ export default function GameVideos() {
                         maxHeight: '550px',
                     },
                 }}
-                ariaHideApp={false}
             >
                 <div style={{ position: 'relative', height: '100%' }}>
                     <Button

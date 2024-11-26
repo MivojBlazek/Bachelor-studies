@@ -11,11 +11,21 @@ export default function PaymentCard({ payment }) {
     };
 
     const cardContent = (
-        <>
-            <h2>Referee: {payment.control.referee.name}</h2>
-            <p>Date created: {payment.createdAt}</p>
-            <p>Amount: {payment.amount}czk</p>
-        </>
+        <div
+            style={{
+                margin: '0 auto',
+                width: 'fit-content',
+                display: 'grid',
+                gridTemplateColumns: 'auto auto',
+                gap: '13px',
+                textAlign: 'left',
+                padding: '15px',
+            }}
+        >
+            <h2 style={{ textAlign: 'right', margin: '0px' }}>Referee:</h2><h2 style={{ margin: '0px' }}>{payment.control.referee.name}</h2>
+            <p style={{ textAlign: 'right', margin: '0px' }}>Date created:</p><p style={{ margin: '0px' }}>{(new Date(payment.created_at)).toLocaleDateString()} {(new Date(payment.created_at)).toLocaleTimeString()}</p>
+            <p style={{ textAlign: 'right', margin: '0px' }}>Amount:</p><p style={{ margin: '0px' }}>{payment.amount}czk</p>
+        </div>
     );
 
     return (

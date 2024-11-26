@@ -31,21 +31,25 @@ export default function RefereeList({ game, feedbacks, setFeedbacks, error, setE
     };
 
     return (
-        <div style={{ marginBottom: '20px' }}>
-            <h3>Referees:</h3>
+        <div style={{ margin: '0px 10px 20px 10px' }}>
             {game.controls.length > 0 ? (
                 <>
                     <div style={{
                         alignSelf: 'center',
                         justifyContent: 'center',
                         margin: '0px auto',
-                        maxWidth: '800px',
+                        maxWidth: '500px',
                         display: 'grid',
-                        gridTemplateColumns: '12px auto auto auto',
+                        gridTemplateColumns: '12px 3fr 1fr 8fr',
                         gridAutoFlow: 'row',
                         gap: '20px',
                         textAlign: 'left',
                     }}>
+                        <span></span>
+                        <h3 style={{ marginBottom: '0px' }}>Referees:</h3>
+                        <span></span>
+                        <span></span>
+
                         <span></span>
                         <span style={{ fontWeight: 'bold' }}>Name</span>
                         <span style={{ fontWeight: 'bold' }}>Role</span>
@@ -68,6 +72,7 @@ export default function RefereeList({ game, feedbacks, setFeedbacks, error, setE
                                 />
                                 <span style={{ padding: '8px 0px' }}>{control.refereeRole}</span>
                                 <textarea
+                                    placeholder={isMe && 'Insert feedback... '}
                                     value={feedbacks[control.id]}
                                     onChange={(e) => feedbackChange(control.id, e.target.value)}
                                     onBlur={() => losingFocus(control.id)}
@@ -76,11 +81,11 @@ export default function RefereeList({ game, feedbacks, setFeedbacks, error, setE
                                     readOnly={!isMe}
                                     style={{
                                         padding: '8px',
-                                        minWidth: '250px',
-                                        maxWidth: '250px',
                                         minHeight: '15px',
                                         resize: 'none',
                                         overflow: 'hidden',
+                                        width: '100%',
+                                        boxSizing: 'border-box',
                                     }}
                                 />
                             </React.Fragment>

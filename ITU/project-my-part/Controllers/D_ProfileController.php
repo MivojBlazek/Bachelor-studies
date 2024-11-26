@@ -15,7 +15,7 @@ class D_ProfileController extends Controller
         $delegate = Delegate::find($delegateId);
         if (!$delegate)
         {
-            return response()->json(['message' => 'Delegate not found'], 404);
+            return response()->json(['error' => 'Delegate not found.'], 404);
         }
 
         return response()->json($delegate);
@@ -26,7 +26,7 @@ class D_ProfileController extends Controller
         $club = Club::with('players')->find($clubId);
         if (!$club)
         {
-            return response()->json(['message' => 'Club not found'], 404);
+            return response()->json(['error' => 'Club not found.'], 404);
         }
 
         return response()->json($club);
@@ -37,7 +37,7 @@ class D_ProfileController extends Controller
         $referee = Referee::find($refereeId);
         if (!$referee)
         {
-            return response()->json(['message' => 'Referee not found'], 404);
+            return response()->json(['error' => 'Referee not found.'], 404);
         }
 
         return response()->json($referee);

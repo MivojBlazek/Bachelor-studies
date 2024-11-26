@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function InputWithLabel({ label, type='text', value, onChange, inputStyle}) {
+export default function InputWithLabel({ label, type='text', value, onChange, inputStyle, placeholder = null}) {
     return (
         <div>
             <label
@@ -13,12 +13,13 @@ export default function InputWithLabel({ label, type='text', value, onChange, in
                 {label}
             </label>
             <input
-                placeholder={label}
+                placeholder={placeholder ? placeholder : label}
                 type={type}
                 value={value}
                 onChange={onChange}
                 style={{
                     padding: '5px',
+                    fontSize: '14px',
                     maxWidth: '150px',  
                     ...inputStyle
                 }}

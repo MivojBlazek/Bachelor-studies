@@ -24,16 +24,23 @@ export default function User({ user, isMe = false }) {
                     width: 'fit-content',
                     padding: '15px 30px',
                     borderRadius: '15px',
-                    border: '1px solid lightgray'
+                    border: '1px solid lightgray',
+                    fontWeight: 'bold',
+                    display: 'grid',
+                    gridTemplateColumns: 'auto auto',
+                    gap: '13px',
+                    textAlign: 'left',
                 }}
             >
-                <p style={{ fontWeight: 'bold' }}>License: {user.license}</p>
-                <p style={{ fontWeight: 'bold' }}>Date of birth: {user.birth_date}</p>
-                <p style={{ fontWeight: 'bold' }}>Phone: {user.phone}</p>
-                <p style={{ fontWeight: 'bold' }}>Email: {user.email}</p>
-                <p style={{ fontWeight: 'bold' }}>Address: {user.address}</p>
+                <span style={{ textAlign: 'right' }}>License:</span><span>{user.license}</span>
+                <span style={{ textAlign: 'right' }}>Date of birth:</span><span>{(new Date(user.birth_date)).toLocaleDateString()}</span>
+                <span style={{ textAlign: 'right' }}>Phone:</span><span>{user.phone}</span>
+                <span style={{ textAlign: 'right' }}>Email:</span><span>{user.email}</span>
+                <span style={{ textAlign: 'right' }}>Address:</span><span>{user.address}</span>
                 {isMe && (
-                    <p style={{ fontWeight: 'bold' }}>Bank account: {user.bank_account}</p>
+                    <>
+                        <span style={{ textAlign: 'right' }}>Bank account:</span><span>{user.bank_account}</span>
+                    </>
                 )}
             </div>
         </div>
