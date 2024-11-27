@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -g -O2
 LDFLAGS = -lsimlib -lm
 BIN = model
-SRC = main.cpp
+SRC = main.cpp navstevnik.cpp prijmyZeStanku.cpp prijmyZeVstupu.cpp
 
 all: compile
 
