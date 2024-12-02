@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: Club.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 
 export default function Club({ user }) {

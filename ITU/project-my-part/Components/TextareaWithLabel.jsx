@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: TextareaWithLabel.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 
 export default function TextareaWithLabel({ label, value, onChange, placeholder = null}) {

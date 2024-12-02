@@ -1,4 +1,11 @@
 <?php
+/**
+ * ITU project
+ * 
+ * File: FeedbackRequest.php
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
 
 namespace App\Http\Requests\delegate;
 

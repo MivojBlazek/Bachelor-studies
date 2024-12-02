@@ -1,6 +1,14 @@
+/**
+ * ITU project
+ * 
+ * File: LoginForm.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TextInput from './TextInput.jsx';
+import TextInput from '../TextInput.jsx';
 import Button from './Button.jsx';
 import ErrorMessage from './ErrorMessage.jsx';
 import axiosClient from '../axiosClient';

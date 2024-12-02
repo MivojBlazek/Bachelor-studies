@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: Button.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React, { useState } from 'react';
 import color from '../../colors.jsx'
 

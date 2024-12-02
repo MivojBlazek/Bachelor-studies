@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: User.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 
 export default function User({ user, isMe = false }) {

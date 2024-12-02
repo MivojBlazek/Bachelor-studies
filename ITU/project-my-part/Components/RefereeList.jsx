@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: RefereeList.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 import axiosClient from '../../axiosClient';
 import P from './P';

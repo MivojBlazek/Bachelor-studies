@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: club_profile.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Club from '../../Components/delegate/Club';

@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: profile.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 import User from '../../Components/delegate/User';
 import { useStateContext } from '../../contexts/contextprovider';

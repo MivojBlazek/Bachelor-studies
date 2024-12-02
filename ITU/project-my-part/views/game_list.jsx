@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: game_list.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React, { useEffect, useState } from 'react';
 import GameCard from '../../Components/delegate/GameCard.jsx';
 import axiosClient from '../../axiosClient.js';

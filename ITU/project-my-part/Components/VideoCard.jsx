@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: VideoCard.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 import Card from './Card.jsx';
 

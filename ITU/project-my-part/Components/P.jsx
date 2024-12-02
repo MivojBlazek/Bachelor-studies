@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: P.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 
 export default function P({ label, href, style }) {

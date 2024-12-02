@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: InputWithLabel.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 
 export default function InputWithLabel({ label, type='text', value, onChange, inputStyle, placeholder = null}) {

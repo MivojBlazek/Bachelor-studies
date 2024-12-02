@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: Navigation.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React, { useState, useEffect } from 'react';
 import { FaBars, FaLongArrowAltLeft, FaSignOutAlt, FaHome, FaUser, FaMoneyBillWave} from 'react-icons/fa';
 import { MdSportsHockey } from "react-icons/md";

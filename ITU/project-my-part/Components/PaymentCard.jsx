@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: PaymentCard.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from './Card.jsx';

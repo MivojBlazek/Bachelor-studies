@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: game_videos.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axiosClient from '../../axiosClient';

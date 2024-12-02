@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: dashboard.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import GameCard from '../../Components/delegate/GameCard.jsx';

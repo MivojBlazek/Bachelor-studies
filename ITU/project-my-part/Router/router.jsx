@@ -1,3 +1,13 @@
+/**
+ * ITU project
+ * 
+ * File: router.jsx
+ * 
+ * Authors: Michal Blažek <xblaze38>
+ *          Matěj Lepeška <xlepes00>
+ *          Matyáš Sapík  <xsapik02>
+ */
+
 import {createBrowserRouter} from 'react-router-dom';
 import Login from './views/login.jsx';
 import DefaultLayout from './Layouts/DefaultLayout.jsx';
@@ -37,6 +47,7 @@ const router = createBrowserRouter ([
         path: '/',
         element: <RoleBasedLayout />,
         children: [
+            /** Delegate routes (Michal Blažek) */
             {
                 path: 'delegate/dashboard',
                 element: <D_Dashboard />,
@@ -77,6 +88,12 @@ const router = createBrowserRouter ([
                 path: 'delegate/payment/:paymentId',
                 element: <D_PaymentDetail />,
             },
+
+            /** Referee routes (Matěj Lepeška) */
+            //TODO
+
+            /** Club routes (Matyáš Sapík) */
+            //TODO
         ]
     },
 

@@ -1,4 +1,11 @@
 <?php
+/**
+ * ITU project
+ * 
+ * File: D_VideoController.php
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
 
 namespace App\Http\Controllers\delegate;
 

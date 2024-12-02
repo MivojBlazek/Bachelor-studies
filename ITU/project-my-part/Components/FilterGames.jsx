@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: FilterGames.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React, { useState } from 'react';
 import color from '../../colors.jsx'
 import InputWithLabel from './InputWithLabel.jsx';

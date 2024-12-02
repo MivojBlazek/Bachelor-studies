@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: payments.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React, { useEffect, useState } from 'react';
 import PaymentCard from '../../Components/delegate/PaymentCard.jsx';
 import axiosClient from '../../axiosClient.js';

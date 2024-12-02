@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: ErrorMessage.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 
 export default function ErrorMessage({ message }) {

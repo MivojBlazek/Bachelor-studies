@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: DelegateLayout.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useStateContext } from "../contexts/contextprovider";
 import axiosClient from "../axiosClient";

@@ -1,9 +1,17 @@
+/**
+ * ITU project
+ * 
+ * File: FeedbackCard.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdSportsHockey } from "react-icons/md";
 import Card from './Card.jsx';
 
-export default function GameCard({ game }) {
+export default function FeedbackCard({ game }) {
     const navigate = useNavigate();
 
     const goToDetail = (ev) => {

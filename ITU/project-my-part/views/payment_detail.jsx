@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: payment_detail.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosClient from '../../axiosClient';

@@ -1,3 +1,11 @@
+/**
+ * ITU project
+ * 
+ * File: GameCard.jsx
+ * 
+ * Author: Michal Blažek <xblaze38>
+ */
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdSportsHockey } from "react-icons/md";

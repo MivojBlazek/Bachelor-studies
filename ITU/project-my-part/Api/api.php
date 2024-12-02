@@ -1,4 +1,13 @@
 <?php
+/**
+ * ITU project
+ * 
+ * File: api.php
+ * 
+ * Authors: Michal Blažek <xblaze38>
+ *          Matěj Lepeška <xlepes00>
+ *          Matyáš Sapík  <xsapik02>
+ */
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\delegate\D_GameController;
@@ -10,17 +19,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('/logout', [AuthController::class, 'logout']);
 
@@ -28,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function() {
         return $request->user();
     });
 
+    /** Delegate routes (Michal Blažek) */
     Route::get('/delegate/games', [D_GameController::class, 'games']);
     Route::get('/delegate/upcomingGames', [D_GameController::class, 'upcomingGames']);
     Route::get('/delegate/feedbackGames', [D_GameController::class, 'feedbackGames']);
@@ -49,6 +48,14 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/delegate/game/{id}/signUp', [D_GameController::class, 'signInToGame']);
     Route::post('/delegate/game/{id}/signOut', [D_GameController::class, 'signOutOfGame']);
+
+
+    /** Referee routes (Matěj Lepeška) */
+    //TODO
+
+
+    /** Club routes (Matyáš Sapík) */
+    //TODO
 });
 
 Route::post('/login', [AuthController::class, 'login']);
