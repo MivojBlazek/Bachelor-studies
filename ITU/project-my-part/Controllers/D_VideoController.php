@@ -23,6 +23,7 @@ class D_VideoController extends Controller
         $delegate = Auth::user();
         $data = $request->validated();
 
+        // Create a new record of Video and assign current user as uploader
         Video::create([
             'url' => $data['url'],
             'description' => $data['description'],

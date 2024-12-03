@@ -60,6 +60,7 @@ class D_GameController extends Controller
     {
         $delegateId = $request->user()->id;
 
+        // Find games in past with empty feedback
         $games = Game::with(['club1', 'club2', 'delegate', 'controls.referee', 'videos'])
                      ->where('delegate_id', $delegateId)
                      ->where('date', '<', now())
@@ -85,6 +86,7 @@ class D_GameController extends Controller
 
     public function show($id)
     {
+        // Find game according to ID
         $game = Game::with(['club1', 'club2', 'delegate', 'controls.referee', 'videos'])->find($id);
         if (!$game)
         {
@@ -98,12 +100,14 @@ class D_GameController extends Controller
     {
         $delegate = Auth::user();
 
+        // Find game
         $game = Game::find($id);
         if (!$game)
         {
             return response()->json(['error' => 'Game not found.'], 404);
         }
 
+        // Save current user as delegate to the found game
         $game->delegate_id = $delegate->id;
         $game->save();
         return response()->json(['success' => 'Signed in to game successfully.'], 200);
@@ -117,6 +121,7 @@ class D_GameController extends Controller
             return response()->json(['error' => 'Game not found.'], 404);
         }
 
+        // Remove current user from found game
         $game->delegate_id = null;
         $game->save();
         return response()->json(['success' => 'Signed out from game successfully.'], 200);

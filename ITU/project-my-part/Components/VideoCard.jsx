@@ -10,6 +10,7 @@ import React from 'react';
 import Card from './Card.jsx';
 
 export default function VideoCard({ video, onClick }) {
+    // Exports thumbnail from youtube link
     const getThumbnailUrl = (url) => {
         const youtubeRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=([a-zA-Z0-9_]+)|youtu\.be\/([a-zA-Z\d_]+))(?:&.*)?$/;
         const match = url.match(youtubeRegex);
@@ -22,6 +23,7 @@ export default function VideoCard({ video, onClick }) {
 
     const thumbnailUrl = getThumbnailUrl(video.url);
 
+    // Entire card content
     const cardContent = (
         <div
             style={{
@@ -37,6 +39,7 @@ export default function VideoCard({ video, onClick }) {
                     flex: '2',
                 }}
             >
+                {/* Displays thumbnail if its possible or just url */}
                 {(thumbnailUrl && (
                     <img
                         src={thumbnailUrl} 

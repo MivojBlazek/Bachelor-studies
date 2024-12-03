@@ -11,6 +11,7 @@ import axiosClient from '../../axiosClient';
 import P from './P';
 
 export default function RefereeList({ game, feedbacks, setFeedbacks, error, setError, isMe = true }) {
+    // Updates feedback after change
     const feedbackChange = (controlId, newFeedback) => {
         setFeedbacks((prevFeedbacks) => ({
             ...prevFeedbacks,
@@ -18,6 +19,7 @@ export default function RefereeList({ game, feedbacks, setFeedbacks, error, setE
         }));
     };
 
+    // Losing focus saves feedback
     const losingFocus = async (controlId) => {
         try
         {
@@ -30,6 +32,7 @@ export default function RefereeList({ game, feedbacks, setFeedbacks, error, setE
         }
     };
 
+    // Resizes textarea due entire text visibility (scrolling is not user friendly)
     const resizeTextarea = (textarea) => {
         if (textarea)
         {
@@ -53,6 +56,7 @@ export default function RefereeList({ game, feedbacks, setFeedbacks, error, setE
                         gap: '20px',
                         textAlign: 'left',
                     }}>
+                        {/* Referees table */}
                         <span></span>
                         <h3 style={{ marginBottom: '0px' }}>Referees:</h3>
                         <span></span>
@@ -64,6 +68,7 @@ export default function RefereeList({ game, feedbacks, setFeedbacks, error, setE
                         <span style={{ fontWeight: 'bold' }}>Feedback</span>
 
                         {game.controls.map(control => (
+                            // Each referee line
                             <React.Fragment key={control.id}>
                                 <span
                                     style={{

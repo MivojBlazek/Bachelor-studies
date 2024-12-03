@@ -20,6 +20,7 @@ export default function GameVideos() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedVideo, setSelectedVideo] = useState(null);
     
+    // Fetch specific game given by url and fetch its videos
     useEffect(() => {
         const fetchGame = async () => {
             try
@@ -37,17 +38,20 @@ export default function GameVideos() {
         fetchGame();
     }, [id]);
 
+    // Opens modal with playable video
     const openModal = (video) => {
         setModalIsOpen(true);
         setSelectedVideo(video);
     };
 
+    // Closes modal
     const closeModal = () => {
         setModalIsOpen(false);
         setSelectedVideo(null);
         window.history.back();
     };
 
+    // Checks if url can b open as youtube video
     const isValidUrl = (url) => {
         const youtubeRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=([a-zA-Z0-9_]+)|youtu\.be\/([a-zA-Z\d_]+))(?:&.*)?$/;
         return youtubeRegex.test(url);
@@ -69,6 +73,7 @@ export default function GameVideos() {
                 />
             ))}
 
+            {/* Modal with 1 displayed video */}
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
@@ -95,6 +100,7 @@ export default function GameVideos() {
                             float: 'right',
                         }}
                     />
+
                     {selectedVideo && isValidUrl(selectedVideo.url) ? (
                         <iframe
                             style={{
@@ -106,6 +112,7 @@ export default function GameVideos() {
                             allowFullScreen
                         />
                     ) : (
+                        // If url is not valid, print text
                         <div style={{ textAlign: 'center', padding: '20%' }}>
                             <p style={{ fontSize: '25px' }}>Video not available.</p>
                         </div>

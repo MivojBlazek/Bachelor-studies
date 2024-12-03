@@ -17,11 +17,13 @@ export default function DelegateLayout() {
     const { user, token, role, setUser, setToken, setRole } = useStateContext();
     const navigate = useNavigate();
 
+    /** If user is not sign in */
     if (!token)
     {
         return <Navigate to="/login" />;
     }
 
+    /** Logout user */
     const onLogout = (ev) => {
         axiosClient.get('/logout')
             .then(() => {
@@ -38,6 +40,7 @@ export default function DelegateLayout() {
             setUser(data);
         });
 
+        // Setting default document style
         return () => {
             document.body.style.margin = '0';
             document.body.style.backgroundColor = color.background;
@@ -59,6 +62,7 @@ export default function DelegateLayout() {
                 />
             </header>
             <main style={{ paddingTop: '100px' }}>
+                {/* Rest of the website based on current view */}
                 <Outlet />
             </main>
         </div>

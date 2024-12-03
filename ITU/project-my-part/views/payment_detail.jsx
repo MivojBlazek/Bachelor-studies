@@ -22,6 +22,7 @@ export default function PaymentDetail() {
     const [success, setSuccess] = useState(null);
     const navigate = useNavigate();
 
+    // Fetch payment detail from url
     useEffect(() => {
         const fetchPayment = async () => {
             try
@@ -48,6 +49,7 @@ export default function PaymentDetail() {
         fetchPayment();
     }, [paymentId]);
 
+    // If approve button was clicked, show confirming alert window, approve and redirect to dashboard
     const approve = async () => {
         const confirmed = window.confirm('Are you sure you want to approve this payment?');
         if (!confirmed)
@@ -67,6 +69,7 @@ export default function PaymentDetail() {
         }
     }
 
+    // If decline button was clicked, show confirming alert window, decline and redirect to dashboard
     const decline = async () => {
         const confirmed = window.confirm('Are you sure you want to decline this payment?');
         if (!confirmed)
@@ -107,11 +110,13 @@ export default function PaymentDetail() {
                             textAlign: 'left',
                         }}
                     >
+                        {/* Payment information */}
                         <h1 style={{ textAlign: 'right', margin: '0px 0px 15px 0px' }}>Referee:</h1><h1 style={{ margin: '0px 0px 15px 0px' }}><P label={`${payment.control.referee.name}`} href={`/delegate/referee_profile/${payment.control.referee.id}`}/></h1>
                         <p style={{ textAlign: 'right', margin: '0px' }}>Date created:</p><p style={{ margin: '0px' }}>{(new Date(payment.created_at)).toLocaleDateString()} {(new Date(payment.created_at)).toLocaleTimeString()}</p>
                         <p style={{ textAlign: 'right', margin: '0px' }}>Amount:</p><p style={{ margin: '0px' }}>{payment.amount}czk</p>
                     </div>
                     <GameCard game={payment.control.game} />
+                    
                     {payment.approved_by === null && (
                         <>
                             <ButtonSuccess

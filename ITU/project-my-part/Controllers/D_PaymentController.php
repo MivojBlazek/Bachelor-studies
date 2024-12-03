@@ -19,6 +19,7 @@ class D_PaymentController extends Controller
 {
     public function notApprovedPayments()
     {
+        // Find payments that are not approved
         $unapprovedPayments = Payment::with(['control.referee', 'delegate'])->where('approvalDate', null)->get();
         return response()->json($unapprovedPayments);
     }
@@ -74,6 +75,7 @@ class D_PaymentController extends Controller
             return response()->json(['error' => 'Payment not found.'], 404);
         }
 
+        // Set approvalDate to current time and assign current user as approving delegate
         $payment->approvalDate = now();
         $payment->approved_by = $delegate->id;
         $payment->save();
@@ -88,6 +90,7 @@ class D_PaymentController extends Controller
             return response()->json(['error' => 'Payment not found.'], 404);
         }
         
+        // Remove payment
         $payment->delete();
         return response()->json(['success' => 'Payment declined successfully.'], 200);
     }

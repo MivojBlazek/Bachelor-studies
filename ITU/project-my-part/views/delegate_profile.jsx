@@ -19,6 +19,7 @@ export default function DelegateProfile() {
     const [error, setError] = useState(null);
     const { user } = useStateContext();
 
+    // Fetch delegate according to ID from url
     useEffect(() => {
         const fetchDelegate = async () => {
             try

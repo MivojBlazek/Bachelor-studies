@@ -8,6 +8,7 @@
 
 import React from 'react';
 
+// Contains user photo, name and additional information (bank account is private)
 export default function User({ user, isMe = false }) {
     return (
         <div>

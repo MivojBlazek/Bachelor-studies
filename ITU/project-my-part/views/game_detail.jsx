@@ -33,6 +33,7 @@ export default function GameDetail() {
     const { user } = useStateContext();
     const [success, setSuccess] = useState(null);
 
+    // Fetch game according to ID from url
     useEffect(() => {
         const fetchGame = async () => {
             try
@@ -40,6 +41,7 @@ export default function GameDetail() {
                 const response = await axiosClient.get(`/delegate/games/${id}`);
                 setGame(response.data);
 
+                // Save feedbacks in this game
                 const initialFeedbacks = {};
                 response.data.controls.forEach(control => {
                     initialFeedbacks[control.id] = control.feedback || '';
@@ -73,11 +75,14 @@ export default function GameDetail() {
         navigate(`/delegate/game/${id}/videos`);
     }
 
+    // Opens form for adding video or save video
     const addVideo = async () => {
         if (showVideoForm)
         {
+            // Form is showed, save video
             if (url)
             {
+                // Check mandatory url input and save new video
                 try
                 {
                     const response = await axiosClient.post(`/delegate/videos`, { url, description, id });
@@ -108,10 +113,12 @@ export default function GameDetail() {
         }
         else
         {
+            // Show video
             setShowVideoForm(true);
         }
     }
 
+    // Sign up to game as delegate
     const signUp = async (id) => {
         try
         {
@@ -120,6 +127,7 @@ export default function GameDetail() {
             if (response.data.success)
             {
                 setSuccess(response.data.success);
+                // Display new information because there is no need to reload site
                 setGame((prev) => ({
                     ...prev,
                     delegate: { id: user.id, name: user.name },
@@ -135,6 +143,7 @@ export default function GameDetail() {
         }
     }
 
+    // Sign out from game as delegate
     const signOut = async (id) => {
         try
         {
@@ -143,6 +152,7 @@ export default function GameDetail() {
             if (response.data.success)
             {
                 setSuccess(response.data.success);
+                // Display new information because there is no need to reload site
                 setGame((prev) => ({
                     ...prev,
                     delegate: null,
@@ -163,6 +173,7 @@ export default function GameDetail() {
             {!game && <ErrorMessage message={error} />}
             {game && (
                 <div style={{ textAlign: 'center' }}>
+                    {/* Game information */}
                     <h1
                         style={{
                             display: 'grid',
@@ -190,6 +201,8 @@ export default function GameDetail() {
                         <p style={{ margin: '0px', textAlign: 'right' }}>Date:</p><p style={{ margin: '0px' }}>{(new Date(game.date)).toLocaleDateString()}</p>
                         <p style={{ margin: '0px', textAlign: 'right' }}>Time:</p><p style={{ margin: '0px' }}>{game.time}</p>
                         <p style={{ margin: '0px', textAlign: 'right', padding: '6px 0px' }}>Delegate:</p>
+                        
+                        {/* Delegate name and buttons to sign in and sign out */}
                         {game.delegate !== null ? (
                             ((game.delegate_id === user.id) && (new Date(game.date) > new Date())) ? (
                                 <span style={{ padding: '3px 0px' }}>
@@ -229,6 +242,8 @@ export default function GameDetail() {
                             ) : (<p style={{ margin: '5px 0px' }}>---</p>)
                         )}
                     </div>
+                    
+                    {/* List of referees */}
                     <RefereeList
                         game={game}
                         feedbacks={feedbacks}
@@ -239,6 +254,8 @@ export default function GameDetail() {
                     />
                     <SuccessMessage message={success}/>
                     <ErrorMessage message={error}/>
+
+                    {/* Videos */}
                     <Button
                         style={{
                             marginBottom: '30px'

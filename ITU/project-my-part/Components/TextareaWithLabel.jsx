@@ -9,6 +9,7 @@
 import React from 'react';
 
 export default function TextareaWithLabel({ label, value, onChange, placeholder = null}) {
+    // Resizing textarea to make text visible (scrolling is not user friendly)
     const resizeTextarea = (textarea) => {
         if (textarea)
         {

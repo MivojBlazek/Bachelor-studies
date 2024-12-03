@@ -19,8 +19,10 @@ export default function FeedbackCard({ game }) {
         navigate(`/delegate/game_detail/${game.id}`);
     };
 
+    // Entire content of card
     const cardContent = (
         <>
+            {/* Playing clubs */}
             <h2
                 style={{
                     display: 'grid',
@@ -33,6 +35,8 @@ export default function FeedbackCard({ game }) {
                 <MdSportsHockey style={{ fontSize: '30px' }} />
                 <span style={{ textAlign: 'left' }}>{game.club2.name}</span>
             </h2>
+
+            {/* Additional information */}
             <div
                 style={{
                     margin: '0 auto',

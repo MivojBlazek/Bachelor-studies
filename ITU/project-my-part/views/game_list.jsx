@@ -16,6 +16,7 @@ export default function GameList() {
     const [upcomingGames, setGames] = useState([]);
     const [error, setError] = useState(null);
 
+    // Fetch all games
     useEffect(() => {
         const fetchGames = async () => {
             try
@@ -42,6 +43,7 @@ export default function GameList() {
         fetchGames();
     }, []);
     
+    // Fetch games according to filters
     const onFilter = async (params) => {
         try
         {

@@ -8,6 +8,7 @@
 
 import React from 'react';
 
+// Club profile (club photo, name, information and players)
 export default function Club({ user }) {
     return (
         <div>
@@ -41,6 +42,7 @@ export default function Club({ user }) {
                     textAlign: 'left',
                 }}
             >
+                {/* Other information */}
                 <span style={{ textAlign: 'right' }}>Phone:</span><span>{user.phone}</span>
                 <span style={{ textAlign: 'right' }}>Email:</span><span>{user.email}</span>
                 <span style={{ textAlign: 'right' }}>City:</span><span>{user.city}</span>
@@ -59,6 +61,7 @@ export default function Club({ user }) {
                     gap: '17px',
                     textAlign: 'left',
                 }}>
+                    {/* Players */}
                     <h3 style={{ marginBottom: '0px' }}>Players:</h3>
                     <span></span>
                     <span></span>

@@ -16,6 +16,7 @@ export default function Navigation({ currentPath, onNavigate, onLogout }) {
     const [mobileView, setMobileView] = useState(false);
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
 
+    // Navigation buttons
     const buttons = [
         { label: 'Dashboard', path: '/delegate/dashboard', icon: <FaHome style={{ fontSize: '17px' }} /> },
         { label: 'Games', path: '/delegate/game_list', icon: <MdSportsHockey style={{ fontSize: '17px' }} /> },
@@ -23,6 +24,7 @@ export default function Navigation({ currentPath, onNavigate, onLogout }) {
         { label: 'Payments', path: '/delegate/allPayments', icon: <FaMoneyBillWave style={{ fontSize: '17px' }} /> },
     ];
 
+    // Views that will not have back button
     const noBackButton = [
         '/delegate/dashboard',
         '/delegate/game_list',
@@ -30,6 +32,7 @@ export default function Navigation({ currentPath, onNavigate, onLogout }) {
         '/delegate/allPayments',
     ];
 
+    // Resize navigation for mobile devices
     const handleResize = () => {
         if (window.innerWidth <= 768) {
             setMobileView(true);
@@ -44,6 +47,7 @@ export default function Navigation({ currentPath, onNavigate, onLogout }) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // Hamburger menu for mobile devices
     const toggleMobileMenu = () => {
         setMobileMenuActive((prev) => !prev);
     };
@@ -67,6 +71,7 @@ export default function Navigation({ currentPath, onNavigate, onLogout }) {
             }}
         >
 
+            {/* Hamburger menu for mobile devices */}
             {mobileView && (
                 <button
                     onClick={toggleMobileMenu}
@@ -93,6 +98,7 @@ export default function Navigation({ currentPath, onNavigate, onLogout }) {
                     borderRadius: mobileView ? '0px 0px 25px 0px' : '',
                 }}
             >
+                {/* Navigation buttons: Desktop - row / mobile - column */}
                 {buttons.map(({ label, path, icon }) => (
                     <Button
                         key={path}
@@ -109,6 +115,7 @@ export default function Navigation({ currentPath, onNavigate, onLogout }) {
                     width: mobileView ? '100%' : 'auto',
                 }}
             >
+                {/* Back button */}
                 {!noBackButton.includes(currentPath) && (
                     (!mobileView) ? (
                         <Button
@@ -131,6 +138,7 @@ export default function Navigation({ currentPath, onNavigate, onLogout }) {
                         </button>
                     )
                 )}
+                {/* Logout button */}
                 {(!mobileView) ? (
                     <Button
                         label='Logout'

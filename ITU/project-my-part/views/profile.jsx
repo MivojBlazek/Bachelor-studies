@@ -10,6 +10,7 @@ import React from 'react';
 import User from '../../Components/delegate/User';
 import { useStateContext } from '../../contexts/contextprovider';
 
+// Opens profile of current user
 export default function Profile() {
     const { user } = useStateContext();
     

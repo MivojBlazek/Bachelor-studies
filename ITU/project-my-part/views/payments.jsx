@@ -16,6 +16,7 @@ export default function Payments() {
     const [payments, setPayments] = useState([]);
     const [error, setError] = useState(null);
 
+    // Fetch all payments
     useEffect(() => {
         const fetchPayments = async () => {
             try
@@ -42,6 +43,7 @@ export default function Payments() {
         fetchPayments();
     }, []);
 
+    // Fetch payments according to filters
     const onFilter = async (params) => {
         try
         {

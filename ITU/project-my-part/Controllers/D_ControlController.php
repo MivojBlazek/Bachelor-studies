@@ -20,12 +20,14 @@ class D_ControlController extends Controller
     {
         $data = $request->validated();
 
+        // Find control according to ID
         $control = Control::find($data['controlId']);
         if (!$control)
         {
             return response()->json(['error' => 'Control not found.'], 404);
         }
 
+        // Update feedback and save
         $control->feedback = $data['feedback'];
         $control->save();
         return response()->json(['success' => 'Feedback updated successfully.'], 200);

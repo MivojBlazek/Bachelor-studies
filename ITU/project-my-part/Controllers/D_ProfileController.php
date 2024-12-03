@@ -19,6 +19,7 @@ class D_ProfileController extends Controller
 {
     public function getDelegate($delegateId)
     {
+        // Find delegate according to ID
         $delegate = Delegate::find($delegateId);
         if (!$delegate)
         {
@@ -30,6 +31,7 @@ class D_ProfileController extends Controller
 
     public function getClub($clubId)
     {
+        // Find club according to ID
         $club = Club::with('players')->find($clubId);
         if (!$club)
         {
@@ -41,6 +43,7 @@ class D_ProfileController extends Controller
 
     public function getReferee($refereeId)
     {
+        // Find referee according to ID
         $referee = Referee::find($refereeId);
         if (!$referee)
         {

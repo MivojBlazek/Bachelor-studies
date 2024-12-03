@@ -17,6 +17,7 @@ export default function RefereeProfile() {
     const [refereeUser, setRefereeUser] = useState(null);
     const [error, setError] = useState(null);
 
+    // Fetch referee according to ID from url
     useEffect(() => {
         const fetchReferee = async () => {
             try

@@ -33,6 +33,7 @@ export default function LoginForm() {
             .post('/login', payload)
             .then(({ data }) => {
                 setUser(data.user);
+                // Set token to determine that user is sign in
                 setToken(data.token);
                 setRole(data.role);
                 localStorage.setItem('role', data.role);

@@ -19,6 +19,7 @@ export default function GameCard({ game }) {
         navigate(`/delegate/game_detail/${game.id}`);
     };
 
+    // Entire cad content
     const cardContent = (
         <>
             <h2
@@ -29,6 +30,7 @@ export default function GameCard({ game }) {
                     margin: '0 auto',
                 }}
             >
+                {/* Playing clubs */}
                 <span style={{ textAlign: 'right' }}>{game.club1.name}</span>
                 <MdSportsHockey style={{ fontSize: '30px' }} />
                 <span style={{ textAlign: 'left' }}>{game.club2.name}</span>
@@ -44,6 +46,7 @@ export default function GameCard({ game }) {
                     padding: '15px',
                 }}
             >
+                {/* Additional information */}
                 <span style={{ textAlign: 'right' }}>League:</span><span>{game.league}</span>
                 <span style={{ textAlign: 'right' }}>Location:</span><span>{game.location}</span>
                 <span style={{ textAlign: 'right' }}>Date:</span><span>{(new Date(game.date)).toLocaleDateString()}</span>

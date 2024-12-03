@@ -17,6 +17,7 @@ export default function ClubProfile() {
     const [clubUser, setClubUser] = useState(null);
     const [error, setError] = useState(null);
 
+    // Fetch club according to ID from url
     useEffect(() => {
         const fetchClub = async () => {
             try

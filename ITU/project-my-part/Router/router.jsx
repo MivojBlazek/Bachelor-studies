@@ -28,6 +28,7 @@ import D_GameVideos from './views/delegate/game_videos.jsx';
 import D_PaymentDetail from './views/delegate/payment_detail.jsx';
 import D_Payments from './views/delegate/payments.jsx';
 
+/** Function uses layout according to user role */
 function RoleBasedLayout()
 {
     const { role } = useStateContext();
@@ -42,6 +43,7 @@ function RoleBasedLayout()
     );
 }
 
+/** Accessible routes for each role */
 const router = createBrowserRouter ([
     {
         path: '/',

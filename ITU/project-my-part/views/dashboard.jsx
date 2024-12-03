@@ -21,6 +21,7 @@ export default function Dashboard() {
     const [success, setSuccess] = useState(null);
     const location = useLocation();
 
+    // If there is success message from other views that were redirected
     useEffect(() => {
         if (location.state?.success)
         {
@@ -28,6 +29,7 @@ export default function Dashboard() {
         }
     }, [location.state]);
 
+    // Fetch upcoming games
     useEffect(() => {
         const fetchGames = async () => {
             try
@@ -51,6 +53,7 @@ export default function Dashboard() {
         fetchGames();
     }, []);
     
+    // Fetch past games without feedback
     useEffect(() => {
         const fetchFeedbackGames = async () => {
             try
@@ -74,6 +77,7 @@ export default function Dashboard() {
         fetchFeedbackGames();
     }, []);
 
+    // Fetch pending payments
     useEffect(() => {
         const fetchPayments = async () => {
             try
@@ -103,6 +107,7 @@ export default function Dashboard() {
                 <SuccessMessage message='No future events.' />
             )}
             <SuccessMessage message={success} />
+
             {upcomingGames.length > 0 && <h1>Upcoming games:</h1>}
             <div>
                 {upcomingGames.map(game => (
@@ -112,6 +117,7 @@ export default function Dashboard() {
                     />
                 ))}
             </div>
+
             {feedbackGames.length > 0 && <h1>Required feedbacks:</h1>}
             <div>
                 {feedbackGames.map(game => (
@@ -121,6 +127,7 @@ export default function Dashboard() {
                     />
                 ))}
             </div>
+            
             {payments.length > 0 && <h1>Pending payment approvals:</h1>}
             <div>
                 {payments.map(payment => (
