@@ -1,0 +1,23 @@
+Vlastní zadání:
+
+p29a - Chodec má reflexní prvky
+    1 - Ano
+    2 - Ne
+
+p6 - druh nehody
+    4 - srážka s chodcem
+
+p33g - následky na životech a zdraví chodce
+    1 - usmrcení
+    2 - těžké zranění
+    3 - lehké zranění
+    4 - bez zranění
+
+p19	- viditelnost	
+    1 - ve dne viditelnost nezhoršená vlivem povětrnostních podmínek
+    2 - ve dne zhoršená viditelnost (svítání, soumrak)
+    3 - ve dne zhoršená viditelnost vlivem povětrnostních podmínek (mlha, sněžení, déšť apod.)
+    4 - v noci s veřejným osvětlením, viditelnost nezhoršená vlivem povětrnostních podmínek
+    5 - v noci s veřejným osvětlením, zhoršená viditelnost vlivem povětrnostních podmínek (mlha, déšť, sněžení apod.)
+    6 - v noci bez veřejného osvětlení, viditelnost nezhoršená vlivem povětrnostních podmínek
+    7 - v noci bez veřejného osvětlení, viditelnost zhoršená vlivem povětrnostních podmínek (mlha, déšť, sněžení apod.)
