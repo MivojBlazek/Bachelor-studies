@@ -19,6 +19,7 @@ void Shape::arrangeBlocks()
     int y = 0;
     uint16_t color = ST7735_WHITE;
 
+    // Generate shape according to random number
     switch(shapeType)
     {
         case ShapeType::I:
@@ -84,6 +85,7 @@ void Shape::arrangeBlocks()
 
 void Shape::moveLeft()
 {
+    // Hide shape, move all blocks in direction, check collisions and show back entire shape
     bool collision = false;
     hide();
     for (Block *block : blocks)
@@ -105,6 +107,7 @@ void Shape::moveLeft()
 
 void Shape::moveRight()
 {
+    // Hide shape, move all blocks in direction, check collisions and show back entire shape
     bool collision = false;
     hide();
     for (Block *block : blocks)
@@ -126,6 +129,7 @@ void Shape::moveRight()
 
 int Shape::moveDown()
 {
+    // Hide shape, move all blocks in direction, check collisions and show back entire shape
     bool collision = false;
     hide();
     for (Block *block : blocks)
@@ -137,7 +141,7 @@ int Shape::moveDown()
     }
     if (collision)
     {
-        // Shape touched of the bottom or other shape
+        // Shape touched the bottom or other shape
         for (Block *block : blocks)
         {
             block->moveUp();

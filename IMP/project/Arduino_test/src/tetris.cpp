@@ -25,7 +25,7 @@ int Tetris::moveDown()
 {
     if (currentShape->moveDown() == 1)
     {
-        // Shape dropped
+        // Shape dropped -> save fallen blocks
         for (Block *block : currentShape->getNewBlocks())
         {
             fallenBlocks.push_back(block);
@@ -56,6 +56,7 @@ void Tetris::clearFullLines()
 
 void Tetris::clearRow(int row)
 {
+    // Find blocks that will be removed
     std::vector<Block *> blocksToRemove;
     for (Block *block : fallenBlocks)
     {
@@ -66,6 +67,7 @@ void Tetris::clearRow(int row)
         }
     }
 
+    // Remove blocks
     for (Block *block : blocksToRemove)
     {
         block->hide();
@@ -73,6 +75,7 @@ void Tetris::clearRow(int row)
         delete block;
     }
 
+    // Move blocks above cleared row
     for (Block *block : fallenBlocks)
     {
         int y = block->getPositionY() / BLOCK_SIZE;

@@ -38,6 +38,7 @@ void setupBluetoothDevice()
 
 void printText(String text)
 {
+    // Clear screen and print text
     tft.fillScreen(ST7735_BLACK);
     tft.setTextSize(2);
     tft.setCursor(0, 0);
@@ -51,6 +52,7 @@ void printRowOfImage()
     {
         if (currentColumn == TFT_WIDTH)
         {
+            // Move to another row
             currentColumn = 0;
             currentRow++;
             if (currentRow == TFT_HEIGHT)
@@ -61,6 +63,7 @@ void printRowOfImage()
 
         if (SerialBT.available() >= 2)
         {
+            // Read 2 bytes and draw pixel from them
             uint8_t highByte = SerialBT.read();
             uint8_t lowByte = SerialBT.read();
 
