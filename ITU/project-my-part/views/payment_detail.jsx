@@ -114,6 +114,13 @@ export default function PaymentDetail() {
                         <h1 style={{ textAlign: 'right', margin: '0px 0px 15px 0px' }}>Referee:</h1><h1 style={{ margin: '0px 0px 15px 0px' }}><P label={`${payment.control.referee.name}`} href={`/delegate/referee_profile/${payment.control.referee.id}`}/></h1>
                         <p style={{ textAlign: 'right', margin: '0px' }}>Date created:</p><p style={{ margin: '0px' }}>{(new Date(payment.created_at)).toLocaleDateString()} {(new Date(payment.created_at)).toLocaleTimeString()}</p>
                         <p style={{ textAlign: 'right', margin: '0px' }}>Amount:</p><p style={{ margin: '0px' }}>{payment.amount}czk</p>
+                        {/* If payment is already approved, show delegate, who approved it, and date */}
+                        {payment.approved_by !== null &&
+                            <>
+                                <p style={{ textAlign: 'right', margin: '0px' }}>Approved by:</p><P label={`${payment.delegate.name}`} href={`/delegate/delegate_profile/${payment.delegate.id}`} />
+                                <p style={{ textAlign: 'right', margin: '0px' }}>Date of approvement:</p><p style={{ margin: '0px' }}>{(new Date(payment.approvalDate)).toLocaleDateString()}</p>
+                            </>
+                        }
                     </div>
                     <GameCard game={payment.control.game} />
                     
