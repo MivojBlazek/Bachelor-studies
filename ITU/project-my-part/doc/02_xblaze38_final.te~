@@ -47,13 +47,13 @@ podle těchto uživatelů následovně:
 
 \subsection{Report z~testování (Michal Blažek)}
 
-Uživatel z~testování byl hokejový rozhodčí ve věku 21 let. Byl to muž a jeho technická zdatnost je na rozumné úrovni. Není pro něj problém hledat informace na webu a proklikávat se jednotlivými stránkami. Určitě mu také nedělalo problém, že je celá aplikace v~angličtině.
+Uživatel z testování byl hokejový rozhodčí ve věku 21 let. Byl to muž a jeho technická zdatnost je na rozumné úrovni. Není pro něj problém hledat informace na webu a proklikávat se jednotlivými stránkami. Určitě mu také nedělalo problém, že je celá aplikace v angličtině.
 
-Test probíhal celkem plynule, i přestože je to rozhodčí, který viděl aktuální systém pro delegáty jen okrajově, dokázal se vžít do jejich role a postupně projít všechny důležité případy užití, které ho napadly a očekával je od aplikace. Aplikaci ohodnotil jako mnohem lepší než jeho aktuální s~tím, že je uživatelsky přívětivá.
+Test probíhal celkem plynule, i přestože je to rozhodčí, který viděl aktuální systém pro delegáty jen okrajově, dokázal se vžít do jejich role a postupně projít všechny důležité případy užití, které ho napadly a očekával je od aplikace. Aplikaci ohodnotil jako mnohem lepší než jeho aktuální s tím, že je uživatelsky přívětivá.
 
-Také ale měl při testování i potíže. Konkrétně se uživatel snažil filtrovat hry pouze pomocí zadávání do vstupních polí a chvilku trvalo, než si všiml, že filtry musí potvrdit tlačítkem \uv{Filter}. Na další problém narazil, když chtěl zadat zprávu ze zápasu pro rozhodčí a nenašel tlačítko na uložení zprávy. Po chvilce to pochopil a dokonce pochválil toto řešení. Uživatel celou dobu testoval pouze na desktopovém zařízení, tudíž asi ze zvyku používal v~prohlížeči šipku zpět namísto implementovaného tlačítka \uv{Back}. Poslední potíže měl uživatel na stránce s~výpisem všech vyúčtování. Zde nevěděl, které již byly potvrzené a které ne, ale hlavně po rozkliknutí jednotlivých vyúčtování neviděl tlačítka na potvrzení a zamítnutí a ani podle ničeho jiného nedokázal říct, jestli je aktuální vyúčtování již potvrzené, či proč vypadá přesně takhle.
+Také ale měl při testování i potíže. Konkrétně se uživatel snažil filtrovat hry pouze pomocí zadávání do vstupních polí a chvilku trvalo, než si všiml, že filtry musí potvrdit tlačítkem \uv{Filter}. Na další problém narazil, když chtěl zadat zprávu ze zápasu pro rozhodčí a nenašel tlačítko na uložení zprávy. Po chvilce to pochopil a dokonce pochválil toto řešení. Uživatel celou dobu testoval pouze na desktopovém zařízení, tudíž asi ze zvyku používal v prohlížeči šipku zpět namísto implementovaného tlačítka \uv{Back}. Poslední potíže měl uživatel na stránce s výpisem všech vyúčtování. Zde nevěděl, které již byly potvrzené a které ne, ale hlavně po rozkliknutí jednotlivých vyúčtování neviděl tlačítka na potvrzení a zamítnutí a ani podle ničeho jiného nedokázal říct, jestli je aktuální vyúčtování již potvrzené, či proč vypadá přesně takhle.
 
-Z~testování byl velmi patrný problém ve vyúčtování. Tento problém byl vyřešen přidáním informace kdy a kdo z~delegátů potvrdil aktuálně otevřené vyúčtování, což jednoznačně ukazuje, že dané vyúčtování je již potvrzené.
+Z testování byl velmi patrný problém ve vyúčtování. Tento problém byl vyřešen přidáním informace kdy a kdo z delegátů potvrdil aktuálně otevřené vyúčtování, což jednoznačně ukazuje, že dané vyúčtování je již potvrzené.
 
 \subsection{Report z~testování (Matěj Lepeška)}
 
