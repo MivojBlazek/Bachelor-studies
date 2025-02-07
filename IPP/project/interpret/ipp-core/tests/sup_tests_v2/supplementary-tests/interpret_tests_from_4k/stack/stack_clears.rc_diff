@@ -1,6 +1,0 @@
---- stack_clears.rc	2024-03-06 12:43:12.851336808 +0100
-+++ stack_clears.your_rc	2024-03-06 13:25:40.557163218 +0100
-@@ -1 +1 @@
--56
-\ Chybí znak konce řádku na konci souboru
-+0

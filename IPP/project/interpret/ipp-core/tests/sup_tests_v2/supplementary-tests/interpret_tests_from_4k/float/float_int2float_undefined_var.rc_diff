@@ -1,6 +1,0 @@
---- float_int2float_undefined_var.rc	2024-03-06 12:43:12.827336922 +0100
-+++ float_int2float_undefined_var.your_rc	2024-03-06 13:13:34.770620774 +0100
-@@ -1 +1 @@
--54
-\ Chybí znak konce řádku na konci souboru
-+56

@@ -1,7 +1,0 @@
---- float_tf_lf.out	2024-03-06 12:43:12.843336845 +0100
-+++ float_tf_lf.your_out	2024-03-06 13:13:35.090618990 +0100
-@@ -1 +1 @@
--0x1.2000000000000p+00x1.2000000000000p+0
-\ Chybí znak konce řádku na konci souboru
-+0x1.200p+00x1.200p+0
-\ Chybí znak konce řádku na konci souboru

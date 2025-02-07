@@ -1,7 +1,0 @@
---- ./tests/sup_tests_v2/supplementary-tests/interpret_tests_from_4k/secondLF.out	2024-03-07 11:59:33.597028000 +0100
-+++ ./tests/sup_tests_v2/supplementary-tests/interpret_tests_from_4k/secondLF.your_out	2024-04-05 12:58:32.907345000 +0200
-@@ -1 +1 @@
--510510
-\ Chybí znak konce řádku na konci souboru
-+5101010
-\ Chybí znak konce řádku na konci souboru

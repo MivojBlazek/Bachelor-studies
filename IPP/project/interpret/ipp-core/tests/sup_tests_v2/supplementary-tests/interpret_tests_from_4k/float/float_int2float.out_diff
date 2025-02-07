@@ -1,5 +1,0 @@
---- float_int2float.out	2024-03-06 12:43:12.823336941 +0100
-+++ float_int2float.your_out	2024-03-06 13:13:34.690621220 +0100
-@@ -1 +0,0 @@
--0x1.0000000000000p+1
-\ Chybí znak konce řádku na konci souboru

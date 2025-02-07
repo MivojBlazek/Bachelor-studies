@@ -1,0 +1,201 @@
+DROP TABLE IF EXISTS postVisibility;
+DROP TABLE IF EXISTS tagsInPost;
+DROP TABLE IF EXISTS tags;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS likes;
+DROP TABLE IF EXISTS postWall;
+DROP TABLE IF EXISTS walls;
+DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS userInGroup;
+DROP TABLE IF EXISTS groups;
+DROP TABLE IF EXISTS jobs;
+DROP TABLE IF EXISTS job_batches;
+DROP TABLE IF EXISTS failed_jobs;
+DROP TABLE IF EXISTS cache;
+DROP TABLE IF EXISTS cache_locks;
+DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS password_reset_tokens;
+DROP TABLE IF EXISTS users;
+
+
+CREATE TABLE users (
+    userId BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    age INT NULL,
+    rights VARCHAR(255) NOT NULL,
+    profile_photo VARCHAR(255) NOT NULL,
+    remember_token VARCHAR(100) NULL,
+    banned_until TIMESTAMP NULL,
+    bio VARCHAR(255) NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
+
+CREATE TABLE password_reset_tokens (
+    email VARCHAR(255) PRIMARY KEY,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NULL
+);
+
+CREATE TABLE sessions (
+    id VARCHAR(255) PRIMARY KEY,
+    user_id BIGINT UNSIGNED NULL,
+    ip_address VARCHAR(45) NULL,
+    user_agent TEXT NULL,
+    payload LONGTEXT NOT NULL,
+    last_activity INT NOT NULL,
+    INDEX (user_id),
+    INDEX (last_activity)
+);
+
+CREATE TABLE cache (
+    `key` VARCHAR(255) PRIMARY KEY,
+    value MEDIUMTEXT NOT NULL,
+    expiration INT NOT NULL
+);
+
+CREATE TABLE cache_locks (
+    `key` VARCHAR(255) PRIMARY KEY,
+    owner VARCHAR(255) NOT NULL,
+    expiration INT NOT NULL
+);
+
+CREATE TABLE jobs (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    queue VARCHAR(255) NOT NULL,
+    payload LONGTEXT NOT NULL,
+    attempts TINYINT UNSIGNED NOT NULL,
+    reserved_at INT UNSIGNED NULL,
+    available_at INT UNSIGNED NOT NULL,
+    created_at INT UNSIGNED NOT NULL,
+    INDEX (queue)
+);
+
+CREATE TABLE job_batches (
+    id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    total_jobs INT NOT NULL,
+    pending_jobs INT NOT NULL,
+    failed_jobs INT NOT NULL,
+    failed_job_ids LONGTEXT NOT NULL,
+    options MEDIUMTEXT NULL,
+    cancelled_at INT NULL,
+    created_at INT NOT NULL,
+    finished_at INT NULL
+);
+
+CREATE TABLE failed_jobs (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    uuid VARCHAR(255) UNIQUE NOT NULL,
+    connection TEXT NOT NULL,
+    queue TEXT NOT NULL,
+    payload LONGTEXT NOT NULL,
+    exception LONGTEXT NOT NULL,
+    failed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE groups (
+    groupId BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    adminUserId BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (adminUserId) REFERENCES users(userId) ON DELETE CASCADE,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
+
+CREATE TABLE userInGroup (
+    userInGroupId BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    userId BIGINT UNSIGNED NOT NULL,
+    groupId BIGINT UNSIGNED NOT NULL,
+    approved VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
+    FOREIGN KEY (groupId) REFERENCES groups(groupId) ON DELETE CASCADE
+);
+
+CREATE TABLE posts (
+    postId BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    photo VARCHAR(255) NOT NULL,
+    description TEXT NULL,
+    place VARCHAR(255) NULL,
+    visibility VARCHAR(255) NOT NULL,
+    date TIMESTAMP NOT NULL,
+    postCreatorId BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (postCreatorId) REFERENCES users(userId) ON DELETE CASCADE
+);
+
+CREATE TABLE walls (
+    wallId BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    userId BIGINT UNSIGNED NULL,
+    groupId BIGINT UNSIGNED NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
+    FOREIGN KEY (groupId) REFERENCES groups(groupId) ON DELETE CASCADE,
+    UNIQUE (userId, groupId)
+);
+
+CREATE TABLE postWall (
+    postWallId BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    postId BIGINT UNSIGNED NOT NULL,
+    wallId BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (postId) REFERENCES posts(postId) ON DELETE CASCADE,
+    FOREIGN KEY (wallId) REFERENCES walls(wallId) ON DELETE CASCADE
+);
+
+CREATE TABLE likes (
+    likeId BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    userId BIGINT UNSIGNED NOT NULL,
+    postId BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
+    FOREIGN KEY (postId) REFERENCES posts(postId) ON DELETE CASCADE,
+    UNIQUE (userId, postId)
+);
+
+CREATE TABLE comments (
+    commentId BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    content TEXT NOT NULL,
+    userId BIGINT UNSIGNED NOT NULL,
+    postId BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
+    FOREIGN KEY (postId) REFERENCES posts(postId) ON DELETE CASCADE
+);
+
+CREATE TABLE tags (
+    tagId BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
+
+CREATE TABLE tagsInPost (
+    tagsInPostId BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    tagId BIGINT UNSIGNED NOT NULL,
+    postId BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (tagId) REFERENCES tags(tagId) ON DELETE CASCADE,
+    FOREIGN KEY (postId) REFERENCES posts(postId) ON DELETE CASCADE
+);
+
+CREATE TABLE postVisibility (
+    postVisibilityId BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    userId BIGINT UNSIGNED NOT NULL,
+    postId BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
+    FOREIGN KEY (postId) REFERENCES posts(postId) ON DELETE CASCADE
+);

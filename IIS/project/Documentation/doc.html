@@ -1,0 +1,143 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-2"/>
+    <title>Projekt IIS</title>
+    <style type="text/css">
+    	table { border-collapse: collapse; }
+    	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
+    	dt { font-weight: bold; margin-top: 0.5em; }
+    </style>
+</head>
+<body>
+
+<!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu 
+     podle použitého editoru -->
+
+<h1>FITstagram</h1>
+
+<dl>
+	<dt>Autoři</dt>
+	<dd>Michal Blažek
+	    <a href="mailto:xblaze38@stud.fit.vutbr.cz">xblaze38@stud.fit.vutbr.cz</a> - 
+        návrh apliakce, implementace backendu (připojení na databázi a její vytvoření, models, controllers, definice api)
+	</dd>
+	<dd>Tomáš Řezníček
+	    <a href="mailto:xrezni33@stud.fit.vutbr.cz">xrezni33@stud.fit.vutbr.cz</a> - 
+        návrh aplikace, implementace frontendu (views)
+	</dd>
+  	<dd>Matyáš Sapík
+	    <a href="mailto:xsapik02@stud.fit.vutbr.cz">xsapik02@stud.fit.vutbr.cz</a> - 
+        návrh aplikace, žádná implementace
+	</dd>
+	<dt>URL aplikace</dt>
+	<dd><a href="http://www.stud.fit.vutbr.cz/~xblaze38/IIS">http://www.stud.fit.vutbr.cz/~xblaze38/IIS</a></dd>
+</dl>
+
+<h2>Uživatelé systému pro testování</h2>
+<p>Zástupci <strong>všech rolí uživatelů</strong>.</p>
+<table>
+<tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
+<tr><td>admin</td><td>password</td><td>Administrátor</td></tr>
+<tr><td>moderator</td><td>password</td><td>Moderátor</td></tr>
+<tr><td>testUser</td><td>password</td><td>Přihlášený uživatel</td></tr>
+<tr><td>---</td><td>---</td><td>Host</td></tr>
+</table>
+<p>Host se nijak nepřihlašuje a má přístup jen na omezenou část aplikace.</p>
+
+<h3>Video</h3>
+
+<!-- TODO -->
+<p>Přiložte odkaz na komentované video demostrující použití informačního systému. Zaměřte se na případy užití definované zadáním (např. registrace uživatele, správa uživatelů a činnosti jednotlivých rolí). Video nahrajte například na VUT Google Drive, kde ho bude možné přímo spustit z odkazu.</p> 
+
+<h2>Implementace</h2>
+
+<h4>Struktura projektu</h4>
+<p>Projekt je vytvořen v jazyce PHP s rámcovým řešením Laravel. Struktura projektu využívá návrhového vzory MVC, který Laravel doporučuje při vytváření nového projektu přímo v něm. Modely, reprezentující databázovou vrstvu, jsou definované v souborech app/Models/* a každý soubor reprezentuje 1 tabulku z relační databáze. Kontroléry lze nalézt v app/Http/Controllers/* a pohledy v resources/views/*.</p>
+<p>Pro komunikaci mezi frontendem a backendem se využívá předpřipravené API v routes/web.php. Toto API definuje cesty, se kterými pracuje frontend a jeho pohledy, a metody v daných kontrolérech, jenž zpracovávají požadavky frontendu. V souboru web.php s definicemi API je možné některé cesty vypnout pomocí Middleware (lze nalézt v app/Http/Middleware), jehož se například využívá pro zabezpečení aplikace před přístupem uživatelů, kteří nejsou přihlášení, nebo pro povolení pouze některých pohledů pro nepřihlášeného uživatele (hosta). Další důležitá část projektu je složka database, ve které se nachází soubory factories/* (slouží pro vytvoření objektů s předvyplněnými data), migrations/* (definují strukturu těchto objektů, tudíž kopírují strukturu tabulek z ER diagramu) a seeders/* (vyplní databázi předpřipravenými daty).</p>
+
+<h4>Popis jednotlivých metod definujících případy užití aplikace</h4>
+<p>V CommentController.php jsou metody pro operace s komentáři u příspěvků (přidání a odebrání komentáře).</p>
+<p>GroupController.php obsahuje operace se skupinami. Pro správce skupiny nalezneme metody pro výpis požadavků na přijetí do skupiny a jejich možnost potvrzení. Samozřejmě metody na možnost přidání skupiny, zobrazení všech skupin, ve kterých se uživatel nachází, a zobrazení všech skupin podle filtru. Další metody implementují uživateli možnost se přihlásit do skupiny a opustit ji, nebo pro správce skupiny i možnost smazat skupinu.</p>
+<p>LikeController.php má metodu toggleLike(), jenž pouze přepíná mezi oblíbením a neoblíbením příspěvku uživatelem.</p>
+<p>LoginController.php slouží pro přihlášení a odhlášení uživatele a stejně tak RegisterController.php pouze registruje nové uživatele do systému.</p>
+<p>V PostController.php lze nalézt metody pro přidání a smazaní příspěvku a pro aktualizaci jeho popisku, ze kterého se vytváří jednotlivé značky (tags) podle znaku ‘#’ a sekvencí alfanumerických znaků včetně podtržítka a pomlčky.</p>
+<p>ProfileController.php implementuje profil uživatele a jeho editaci.</p>
+<p>V SearchController.php je pouze zobrazení pohledu s vyhledáváním uživatelů, skupin a příspěvků.</p>
+<p>TagController.php obsahuje metodu pro zobrazení příspěvků na základě filtrování podle celého názvu značky, která se u příspěvku v popisku nachází.</p>
+<p>UserController.php specifikuje operace nad uživateli. Mezi takové operace slouží jejich smazání, zablokování přístupu do aplikace a nějakou dobu a výpis uživatelů na základě filtru jména.</p>
+<p>Posledním souborem je WallController.php, ve kterém se nachází zobrazení zdi uživatele, skupiny a detailu příspěvku na profilu uživatelů.</p>
+
+<h3>Databáze</h3>
+
+<img src="./ER.svg" alt="ER Diagram" style="width: 85%; display: block; margin: 0 auto;">
+
+<h2>Instalace</h2>
+
+<h4>Softwarové požadavky</h4>
+<p>Produkční závislosti:</p>
+<ul>
+	<li>PHP: Verze ^8.2 (vyžaduje PHP 8.2 nebo vyšší).</li>
+	<li>Laravel Framework: Verze ^11.9.</li>
+	<li>Laravel Tinker: Verze ^2.9.</li>
+</ul>
+
+<p>Vývojové závislosti:</p>
+<ul>
+	<li>FakerPHP/Faker: Verze ^1.23.</li>
+	<li>Laravel Pint: Verze ^1.13.</li>
+	<li>Laravel Sail: Verze ^1.26.</li>
+	<li>Mockery/Mockery: Verze ^1.6.</li>
+	<li>NunoMaduro/Collision: Verze ^8.1.</li>
+	<li>PHPUnit/PHPUnit: Verze ^11.0.1.</li>
+</ul>
+
+<h4>Postup instalace na lokální server</h4>
+<p>Postup instalace se skládá z několika příkazů v terminálu po stažení .zip souboru.</p>
+<ol>
+	<li><code>unzip xblaze38.zip</code></li>
+	<li><code>composer install</code></li>
+	<li>Upravte připojení k databázi v .env souboru.</li>
+	<li><code>php artisan key:generate</code></li>
+	<li><code>./vendor/bin/sail up</code> (případně na pozadí pomocí <code>./vendor/bin/sail up -d</code>)</li>
+	<li><code>./vendor/bin/sail artisan migrate --seed</code></li>
+	<li>Pokud se migrace nepovedly, bude nejspíš potřeba vymazat načtenou konfiguraci pomocí <code>./vendor/bin/sail artisan config:clear</code> a restartovat server pomocí Ctrl-C (nebo pokud server běží na pozadí <code>./vendor/bin/sail down</code>) pro vypnutí a následném spuštění podle bodu 5.</li>
+	<li>Ve webovém prohlížeči otevřete <a href="http://localhost/">localhost</a>.</li>
+</ol>
+
+<h4>Postup instalace na server Eva</h4>
+<p>Pro instalaci na serveru Eva je nejjednoduší provést lokální instalaci a přesunout soubory na server Eva.</p>
+<ol>
+	<li>Vložte celou aplikaci na server Eva do složky ~/WWW/.</li>
+	<li>Pomocí následujících příkazů změňte práva pro přístup k aplikaci.
+		<ul>
+			<li><code>find ~/WWW/IIS-project -type f -exec chmod 644 {} \;</code></li>
+			<li><code>find ~/WWW/IIS-project -type d -exec chmod 755 {} \;</code></li>
+		</ul>
+	</li>
+	<li>Přesuňte soubor index.php ze složky ~/WWW/IIS-project/public/ do složky ~/WWW/.</li>
+	<li>Zkopírujte soubor .htaccess ze složky ~/WWW/IIS-project/public/ do složky ~/WWW/.</li>
+	<li>Upravte připojení k databázi v .env souboru podle požadavků serveru. Příklad je zobrazen níže.
+		<pre>
+	<code>DB_CONNECTION=mysql</code>
+	<code>DB_HOST=localhost</code>
+	<code>DB_PORT=/var/run/mysql/mysql.sock</code>
+	<code>DB_DATABASE=xblaze38</code>
+	<code>DB_USERNAME=xblaze38</code>
+	<code>DB_PASSWORD=PA$$WORD</code>
+		</pre>
+	</li>
+	<li>Otevřete <a href="https://www.stud.fit.vutbr.cz/phpmyadmin/">phpmyadmin</a> pomocí FIT VPN a spusťte přiložený skript <code>database.sql</code> na vytvoření databáze, a poté skript <code>seeds.sql</code> na vytvoření základních dat v databázi.</li>
+	<li>Otevřete v prohlížeči <a href="https://www.stud.fit.vutbr.cz/~xblaze38/IIS">vaše webové stránky</a> na serveru Eva.</li>
+</ol>
+
+<h2>Známé problémy</h2>
+
+<!-- TODO -->
+<p>Zde popište, které body zadání nejsou implementovány a z jakého důvodu. Např. &bdquo;Z časových důvodů nebyla implementována správa uživatelů.&rdquo; Pomůžete tím zrychlit hodnocení, když neimplementované funkce nebudeme muset dlouze hledat.</p>
+
+</body>
+</html>
+

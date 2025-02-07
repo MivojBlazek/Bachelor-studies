@@ -1,5 +1,0 @@
---- stack_eqs_differenttype_nil.out	2024-03-06 12:43:12.855336789 +0100
-+++ stack_eqs_differenttype_nil.your_out	2024-03-06 13:25:40.561163159 +0100
-@@ -1 +0,0 @@
--false
-\ Chybí znak konce řádku na konci souboru

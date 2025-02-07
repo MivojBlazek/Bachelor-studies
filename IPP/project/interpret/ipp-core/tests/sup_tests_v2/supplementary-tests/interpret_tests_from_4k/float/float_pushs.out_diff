@@ -1,7 +1,0 @@
---- float_pushs.out	2024-03-06 12:43:12.835336884 +0100
-+++ float_pushs.your_out	2024-03-06 13:13:34.978619614 +0100
-@@ -1 +1 @@
--0x1.2000000000000p+0
-\ Chybí znak konce řádku na konci souboru
-+0x1.200p+0
-\ Chybí znak konce řádku na konci souboru
