@@ -1,0 +1,31 @@
+Autor: Michal Blažek
+Login: xblaze38
+Datum vytvoření: 2.10.2024
+
+Popis programu:
+Program zachycuje veškerou DNS komunikaci na daném rozhraní přes protokol UDP, nebo může program hledat tuto komunikaci v .pcap souboru.
+Pro uložení nalezených doménových jmen slouží parametr -d, který teda nejdříve smaže obsah souboru a poté do něj uloží nalezená domenová jména.
+Překlady doménových jmen na IP adresy se ukládají do souboru za parametrem -t a stejně jako u parametru -d se nejdříve smaže obsah zadaného souboru.
+Pokud bychom chtěli důkladný popis každého DNS záznamu, zvolíme parametr -v.
+
+Příklady spuštění:
+./dns-monitor (-i <interface> | -p <pcapfile>) [-v] [-d <domainsfile>] [-t <translationsfile>]
+./dns-monitor -i enp8s0
+./dns-monitor -i wlp9s0 -v
+./dns-monitor -i enp8s0 -v -d domains.txt -t translations.txt
+./dns-monitor -p capturedCommunication.pcap -v -d domains.txt
+
+Odevzdané soubory:
+xblaze38.tar
+  |-- DnsHeader.cpp
+  |-- DnsHeader.hpp
+  |-- DnsMonitor.cpp
+  |-- DnsMonitor.hpp
+  |-- main.cpp
+  |-- Makefile
+  |-- manual.pdf
+  |-- Packet.cpp
+  |-- Packet.hpp
+  |-- PacketCapturer.cpp
+  |-- PacketCapturer.hpp
+  \-- README
