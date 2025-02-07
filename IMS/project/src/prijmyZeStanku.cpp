@@ -1,20 +1,20 @@
+#include "config.hpp"
 #include "prijmyZeStanku.hpp"
-
-double prijmy = 0;
+#include "otevreno.hpp"
 
 void PrijmyZeStanku::Behavior()
 {
-    double choice = Uniform(0, 1);
-    if (choice <= 0.35) // 35 %
+    double choice = Random();
+    if (choice <= 0.2) // 20 %
     {
-        prijmy += 20;
+        prijmyVDen += PRIJMY_Z_NAPOJU;
     }
-    else if (choice <= 0.75) // 40 %
+    else if (choice <= 0.6) // 40 %
     {
-        prijmy += 80;
+        prijmyVDen += PRIJMY_Z_JIDLA;
     }
-    else // 25 %
+    else // 40 %
     {
-        prijmy += 150;
+        prijmyVDen += PRIJMY_Z_SUVENYRU;
     }
 }

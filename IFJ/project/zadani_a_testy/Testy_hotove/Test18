@@ -1,0 +1,8 @@
+.IFJcode23
+
+DEFVAR GF@i
+WRITE string@dostal\032jsi\032vetsi\032jak\0320\010
+JUMP END1
+LABEL ELSE1:
+WRITE string@dostal\032jsi\032mensi\032jak\0320\032nebo\0320\010
+LABEL END1:

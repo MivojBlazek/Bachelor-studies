@@ -3,8 +3,6 @@
 
 #include <simlib.h>
 
-extern double prijmy;
-
 class PrijmyZeStanku : public Process
 {
     void Behavior();

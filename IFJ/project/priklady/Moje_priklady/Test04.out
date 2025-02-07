@@ -1,0 +1,7 @@
+.IFJcode23
+
+DEFVAR GF@priklad
+MOVE GF@priklad string@IFJ
+
+WRITE string@Vitej\032v\032
+WRITE GF@priklad

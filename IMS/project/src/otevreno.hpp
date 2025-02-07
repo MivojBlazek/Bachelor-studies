@@ -2,41 +2,88 @@
 #define OTEVRENO_HPP
 
 #include <simlib.h>
+#include <cmath>
 
-#include "generatory.hpp"
+#include "config.hpp"
+#include "generator.hpp"
 #include "navstevnik.hpp"
 
 extern bool jeOtevreno;
+extern bool jeDest;
 extern double vydaje;
+extern double prijmy;
+extern double prijmyVDen;
+extern Histogram navstevnost;
 
 class Otevreno : public Process
 {
     void Behavior()
     {
-        while (true)
+        for (int i = 1; true; i++)
         {
-            Wait(6 * 60);
+            double vydajeVDen = 0;
+            prijmyVDen = 0;
+
+            navstevnost.Clear();
+
+            Wait(CAS_OTEVRENI * 60);
+
             jeOtevreno = true;
-            double choice = Uniform(0, 1);
-            Event *generator = nullptr;
+            jeDest = false;
+            double choice = Random();
+            Generator *generator = nullptr;
+
+            double stredniHodnotaPrichodu;
             if (choice <= 0.3) // 30 %
             {
-                generator = new Generator60();
+                Print("DEN %d: Dest\n", i);
+                jeDest = true;
+                stredniHodnotaPrichodu = 7 * std::max((1.0 / 7.0), std::pow(1.00 - VLIV_REKALMY, POCET_MARKETINGU));
             }
             else // 70 %
             {
-                generator = new Generator5();
+                Print("DEN %d: Sucho\n", i);
+                stredniHodnotaPrichodu = 2.5 * std::max((1.0 / 2.5), std::pow(1.00 - VLIV_REKALMY, POCET_MARKETINGU));
             }
+            Print("Stredni hodnota prichodu navstevniku: %.2f\n", stredniHodnotaPrichodu);
+            generator = new Generator(stredniHodnotaPrichodu);
             generator->Activate();
 
-            Wait(16 * 60);
+            Wait((CAS_UZAVRENI - CAS_OTEVRENI) * 60);
 
+            generator->Cancel();
             jeOtevreno = false;
             Navstevnik::vyprazdneniPoUzavreni();
-            vydaje += 500 * 16 * 9 + 100000;
 
-            generator->Passivate();
-            Wait(2 * 60);
+            double marketing = std::pow((POCET_MARKETINGU) * 30, 2.3) + VYDAJE_NA_PRVNI_MARKETING * POCET_MARKETINGU;
+            marketing = marketing < 0.0 ? 0.0 : marketing;
+            Print("\n---%.2f---\n", marketing);
+            #ifdef UBRAT_ZAMESTNANCE_BEHEM_DESTE
+                if (jeDest)
+                {
+                    vydajeVDen += PLAT * (CAS_UZAVRENI - CAS_OTEVRENI) * POCET_ZAMESTNANCU_V_DESTI + PROVOZNI_VYDAJE + marketing;
+                }
+                else
+                {
+                    vydajeVDen += PLAT * (CAS_UZAVRENI - CAS_OTEVRENI) * POCET_ZAMESTNANCU + PROVOZNI_VYDAJE + marketing;
+                }
+            #else
+                vydajeVDen += PLAT * (CAS_UZAVRENI - CAS_OTEVRENI) * POCET_ZAMESTNANCU + PROVOZNI_VYDAJE + marketing;
+            #endif
+
+            vydaje += vydajeVDen;
+            prijmy += prijmyVDen;
+
+            Wait((24 - CAS_UZAVRENI) * 60);
+
+            Navstevnik::vyprazdneniPoUzavreni();
+            
+            #ifdef DEBUG
+                navstevnost.Output();
+            #endif
+            
+            Print("Vydeje tento den: %.2f\n", vydajeVDen);
+            Print("Prijmy tento den: %.2f\n\n", prijmyVDen);
         }
     }
 };

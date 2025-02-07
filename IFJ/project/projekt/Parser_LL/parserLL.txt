@@ -1,0 +1,49 @@
+<PROG>              ->  <BLOCK> <PROG>
+<PROG>              ->  EOF
+<BLOCK>             ->  EOL
+<BLOCK>             ->  func IDENTIFIER ( <PARAM> ) <RETURN> <EOL> { <ST_LIST> }
+<BLOCK>             ->  let IDENTIFIER <WITH_TYPE> <ASSIGN_MARK>
+<BLOCK>             ->  var IDENTIFIER <WITH_TYPE> <ASSIGN_MARK>
+<BLOCK>             ->  IDENTIFIER <VOID_OR_ASSIGN>
+<BLOCK>             ->  while <EXPRESSION> <EOL> { <ST_LIST> }
+<BLOCK>             ->  if <EXPRESSION> <EOL> { <ST_LIST> } <EOL> <ELSE>
+<VOID_OR_ASSIGN>    ->  ( <CALLING_PARAM> )
+<VOID_OR_ASSIGN>    ->  = <EOL> <ASSIGNMENT>
+<ELSE>              ->  else <EOL> { <ST_LIST> }
+<EOL>               ->  EOL
+<EOL>               ->  epsilon
+<PARAM>             ->  IDENTIFIER IDENTIFIER_OR_UNDERLINE : <DATA_TYPE> <NEXT_PARAM>
+<PARAM>             ->  _ IDENTIFIER : <DATA_TYPE> <NEXT_PARAM>
+<PARAM>             ->  epsilon
+<NEXT_PARAM>        ->  , <PARAM>
+<NEXT_PARAM>        ->  epsilon
+<RETURN>            ->  -> <DATA_TYPE>
+<RETURN>            ->  epsilon
+<ST_LIST>           ->  <STATEMENT> <ST_LIST>
+<ST_LIST>           ->  epsilon
+<STATEMENT>         ->  return <VALUE>
+<STATEMENT>         ->  if <EXPRESSION> <EOL> { <ST_LIST> } <EOL> <ELSE>
+<STATEMENT>         ->  let IDENTIFIER <WITH_TYPE> <ASSIGN_MARK>
+<STATEMENT>         ->  var IDENTIFIER <WITH_TYPE> <ASSIGN_MARK>
+<STATEMENT>         ->  IDENTIFIER <VOID_OR_ASSIGN>
+<STATEMENT>         ->  while <EXPRESSION> <EOL> { <ST_LIST> }
+<STATEMENT>         ->  EOL
+<DATA_TYPE>         ->  INT
+<DATA_TYPE>         ->  DOUBLE
+<DATA_TYPE>         ->  STRING
+<ASSIGN_MARK>       ->  = <EOL> <ASSIGNMENT>
+<ASSIGN_MARK>       ->  epsilon
+<ASSIGNMENT>        ->  IDENTIFIER ( <CALLING_PARAM> )
+<ASSIGNMENT>        ->  <VALUE>
+<CALLING_PARAM>     ->  <VALUE>
+<CALLING_PARAM>     ->  IDENTIFIER <WITH_VALUE> <NEXT_CALLING>
+<CALLING_PARAM>     ->  epsilon
+<WITH_VALUE>        ->  : <VALUE>
+<WITH_VALUE>        ->  epsilon
+<NEXT_CALLING>      ->  , <CALLING_PARAM>
+<NEXT_CALLING>      ->  epsilon
+<VALUE>             ->  INT_VALUE
+<VALUE>             ->  DOUBLE_VALUE
+<VALUE>             ->  STRING_VALUE
+<WITH_TYPE>         ->  : <DATA_TYPE>
+<WITH_TYPE>         ->  epsilon

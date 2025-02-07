@@ -1,0 +1,13 @@
+.IFJcode23
+
+DEFVAR GF@a
+MOVE GF@a int@1
+JUMPIFEQ ano GF@a int@1
+JUMPIFNEQ ne GF@a int@1
+LABEL ano
+WRITE string@ja\032jsem\0321\010
+JUMP end_if
+LABEL ne
+WRITE string@ja\032jsem\032neco\032jineho\010
+JUMP end_if
+LABEL end_if

@@ -1,0 +1,15 @@
+.IFJcode23
+
+DEFVAR GF@pi
+MOVE GF@pi float@0x1.921f9f01b866ep+1
+WRITE GF@pi
+WRITE string@\010
+DEFVAR GF@pi1
+MOVE GF@pi1 float@0x1.8p+1
+ADD GF@pi1 GF@pi1 float@0x1.21f9f01b866e4p-3
+WRITE GF@pi1
+WRITE string@\010
+DEFVAR GF@intpi
+GF@pi1
+WRITE GF@intpi
+WRITE string@\010

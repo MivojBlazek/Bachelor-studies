@@ -1,0 +1,25 @@
+{
+    "items": [
+        {
+            "object": "Robot",
+            "rotation": 0,
+            "scale": 1,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "object": "Robot",
+            "rotation": 0,
+            "scale": 1,
+            "x": 139,
+            "y": 2
+        },
+        {
+            "object": "Player",
+            "rotation": 0,
+            "scale": 1,
+            "x": 142,
+            "y": 86
+        }
+    ]
+}

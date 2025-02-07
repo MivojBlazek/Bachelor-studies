@@ -1,0 +1,10 @@
+.IFJcode23
+
+DEFVAR GF@x
+MOVE GF@x float@0x1.38p+4
+DEFVAR GF@y
+MOVE GF@y float@0x1.2666666666666p+2
+LABEL while0:
+WRITE string@more\010
+MOVE GF@y GF@y
+ADD GF@y GF@y float@0x1p+0

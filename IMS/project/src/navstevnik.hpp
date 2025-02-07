@@ -2,6 +2,7 @@
 #define NAVSTEVNIK_HPP
 
 #include <simlib.h>
+#include <string>
 
 extern Queue TurniketyQueue;
 extern Store Turnikety;
@@ -14,10 +15,14 @@ extern Facility Atrakce1;
 extern Queue Atrakce2Queue;
 extern Facility Atrakce2;
 extern Queue Atrakce3Queue;
-extern Facility Atrakce3;
+extern Store Atrakce3;
 
 class Navstevnik : public Process
 {
+public:
+    double prichod;
+    std::string misto;
+
     void Behavior();
     void vDisneyLandu();
     void toaleta();

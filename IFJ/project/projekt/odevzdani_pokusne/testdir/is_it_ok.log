@@ -1,0 +1,17 @@
+Archive:  xblaze38.zip
+  inflating: code_generator.c        
+  inflating: expression.c            
+  inflating: main.c                  
+  inflating: parser.c                
+  inflating: rozdeleni               
+  inflating: scanner.h               
+  inflating: stack.h                 
+  inflating: symtable.h              
+  inflating: code_generator.h        
+  inflating: expression.h            
+  inflating: Makefile                
+  inflating: parser.h                
+  inflating: scanner.c               
+  inflating: stack.c                 
+  inflating: symtable.c              
+gcc -std=c99 -pedantic -Wall -Wextra -Werror main.c parser.c scanner.c stack.c symtable.c code_generator.c expression.c -o ifj2023

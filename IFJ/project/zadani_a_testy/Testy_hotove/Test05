@@ -1,0 +1,6 @@
+.IFJcode23
+
+DEFVAR GF@priklad
+MOVE GF@priklad string@IFJ
+MOVE GF@priklad string@IFJ23
+WRITE GF@priklad

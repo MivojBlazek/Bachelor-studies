@@ -1,0 +1,11 @@
+.IFJcode23
+
+DEFVAR GF@x
+MOVE GF@x int@5
+DEFVAR GF@y
+MOVE GF@y float@0x1.5333333333333p+2
+LT bool@true 0 0
+LT bool@false 0
+JUMP END1
+LABEL ELSE1:
+LABEL END1:

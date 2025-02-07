@@ -1,7 +1,8 @@
+#include "config.hpp"
+#include "otevreno.hpp"
 #include "prijmyZeVstupu.hpp"
-#include "prijmyZeStanku.hpp"
 
 void PrijmyZeVstupu::Behavior()
 {
-    prijmy += 2000;
+    prijmyVDen += PRIJMY_ZE_VSTUPU;
 }

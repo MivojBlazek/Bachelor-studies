@@ -1,7 +1,12 @@
+#include <vector>
+#include <iostream>
+
+#include "config.hpp"
 #include "navstevnik.hpp"
 #include "otevreno.hpp"
 #include "prijmyZeStanku.hpp"
 #include "prijmyZeVstupu.hpp"
+#include "atrakce3Operator.hpp"
 
 Queue TurniketyQueue("Rada na turnikety");
 Store Turnikety("Turnikety", 5);
@@ -19,27 +24,56 @@ Queue Atrakce2Queue("Rada pred atrakci2");
 Facility Atrakce2("Atrakce2 pro 1");
 
 Queue Atrakce3Queue("Rada pred atrakci3");
-Facility Atrakce3("Atrakce3 pro 10");
+Store Atrakce3("Atrakce3 pro " + ATRAKCE3_KAPACITA, ATRAKCE3_KAPACITA);
 
 void Navstevnik::Behavior()
 {
+    misto = "Pred turnikety";
+    prichod = Time;
     if (Turnikety.Full())
     {
         TurniketyQueue.Insert(this);
+        this->Passivate();
         if (!jeOtevreno)
         {
-            this->Activate();
+            opousti();
             return;
-        }
-        else
-        {
-            this->Passivate();
         }
     }
 
-    Enter(Turnikety, 1);
+    #ifdef UBRAT_ZAMESTNANCE_BEHEM_DESTE
+        if (jeDest)
+        {
+            Enter(Turnikety, 5);
+        }
+        else
+        {
+            Enter(Turnikety, 1);
+        }
+    #else
+        Enter(Turnikety, 1);
+    #endif
+
     Wait(Exponential(5));
-    Leave(Turnikety, 1);
+
+    #ifdef UBRAT_ZAMESTNANCE_BEHEM_DESTE
+        if (jeDest)
+        {
+            Leave(Turnikety, 5);
+        }
+        else
+        {
+            Leave(Turnikety, 1);
+        }
+    #else
+        Leave(Turnikety, 1);
+    #endif
+
+    if (!jeOtevreno)
+    {
+        opousti();
+        return;
+    }
 
     if (!TurniketyQueue.Empty())
     {
@@ -55,16 +89,17 @@ void Navstevnik::Behavior()
 
 void Navstevnik::vDisneyLandu()
 {
-    double choice = Uniform(0, 1);
+    misto = "DisneyLand";
+    double choice = Random();
     if (choice <= 0.05) // 5 %
     {
         toaleta();
     }
-    else if (choice <= 0.20) // 15 %
+    else if (choice <= 0.6) // 55 %
     {
         stanky();
     }
-    else // 80 %
+    else // 40 %
     {
         vyberAtrakce();
     }
@@ -72,22 +107,23 @@ void Navstevnik::vDisneyLandu()
 
 void Navstevnik::toaleta()
 {
+    misto = "Toaleta";
     if (Toalety.Full())
     {
         ToaletyQueue.Insert(this);
+        this->Passivate();
         if (!jeOtevreno)
         {
-            this->Activate();
+            opousti();
             return;
-        }
-        else
-        {
-            this->Passivate();
         }
     }
 
     Enter(Toalety, 1);
-    Wait(Exponential(5));
+    double casNaToalete = Normal(5, 1);
+    casNaToalete = casNaToalete < 0 ? 0 : casNaToalete;
+    casNaToalete = casNaToalete > 20 ? 20 : casNaToalete;
+    Wait(casNaToalete);
     Leave(Toalety, 1);
 
     if (!ToaletyQueue.Empty())
@@ -100,22 +136,23 @@ void Navstevnik::toaleta()
 
 void Navstevnik::stanky()
 {
+    misto = "Stanky";
     if (Stanky.Full())
     {
         StankyQueue.Insert(this);
+        this->Passivate();
         if (!jeOtevreno)
         {
-            this->Activate();
+            opousti();
             return;
-        }
-        else
-        {
-            this->Passivate();
         }
     }
 
     Enter(Stanky, 1);
-    Wait(Exponential(5));
+    double casUStanku = Normal(5, 1);
+    casUStanku = casUStanku < 0 ? 0 : casUStanku;
+    casUStanku = casUStanku > 20 ? 20 : casUStanku;
+    Wait(casUStanku);
     Leave(Stanky, 1);
 
     if (!StankyQueue.Empty())
@@ -129,7 +166,7 @@ void Navstevnik::stanky()
 
 void Navstevnik::vyberAtrakce()
 {
-    double choice = Uniform(0, 1);
+    double choice = Random();
     if (choice <= 0.33) // 33 %
     {
         predAtrakci1();
@@ -146,17 +183,15 @@ void Navstevnik::vyberAtrakce()
 
 void Navstevnik::predAtrakci1()
 {
+    misto = "Atrakce1";
     if (Atrakce1.Busy())
     {
         Atrakce1Queue.Insert(this);
+        this->Passivate();
         if (!jeOtevreno)
         {
-            this->Activate();
+            opousti();
             return;
-        }
-        else
-        {
-            this->Passivate();
         }
     }
 
@@ -174,17 +209,16 @@ void Navstevnik::predAtrakci1()
 
 void Navstevnik::predAtrakci2()
 {
+    misto = "Atrakce2";
+    Wait(0.01);
     if (Atrakce2.Busy())
     {
         Atrakce2Queue.Insert(this);
+        this->Passivate();
         if (!jeOtevreno)
         {
-            this->Activate();
+            opousti();
             return;
-        }
-        else
-        {
-            this->Passivate();
         }
     }
 
@@ -202,31 +236,22 @@ void Navstevnik::predAtrakci2()
 
 void Navstevnik::predAtrakci3()
 {
-    if (Atrakce3Queue.Length() < 10)
+    misto = "Atrakce3";
+    Atrakce3Queue.Insert(this);
+    if (Atrakce3Queue.Length() == ATRAKCE3_KAPACITA)
     {
-        Atrakce3Queue.Insert(this);
-        if (!jeOtevreno)
-        {
-            this->Activate();
-            return;
-        }
-        else
-        {
-            this->Passivate();
-        }
+        (new Atrakce3Operator)->Activate();
     }
-    else
+    this->Passivate();
+    if (!jeOtevreno)
     {
-        for (int i = 0; i < 10; i++)
-        {
-            (Atrakce3Queue.GetFirst())->Activate();
-        }
+        opousti();
+        return;
     }
+    Enter(Atrakce3, 1);
+    Wait(10);
+    Leave(Atrakce3, 1);
 
-    Atrakce3.Seize(this);
-    Wait(30);
-    Atrakce3.Release(this);
-    
     jeStaleOtevreno();
 }
 
@@ -244,7 +269,7 @@ void Navstevnik::jeStaleOtevreno()
 
 void Navstevnik::muzeOdejit()
 {
-    double choice = Uniform(0, 1);
+    double choice = Random();
     if (choice <= 0.1) // 10 %
     {
         opousti();
@@ -257,7 +282,12 @@ void Navstevnik::muzeOdejit()
 
 void Navstevnik::opousti()
 {
-    //
+    #ifdef DEBUG
+        // std::cerr << "\nMISTO: " << misto << std::endl;
+        // Print("TIME: %.2f, %.2f, %.2f\n", prichod, Time, Time - prichod);
+        navstevnost(Time - prichod);
+    #endif
+    this->Cancel();
 }
 
 void Navstevnik::vyprazdneniPoUzavreni()
@@ -266,32 +296,27 @@ void Navstevnik::vyprazdneniPoUzavreni()
     {
         while (!TurniketyQueue.Empty())
         {
-            TurniketyQueue.Clear();
+            (TurniketyQueue.GetFirst())->Activate();
         }
-        
         while (!ToaletyQueue.Empty())
         {
-            ToaletyQueue.Clear();
+            (ToaletyQueue.GetFirst())->Activate();
         }
-
         while (!StankyQueue.Empty())
         {
-            StankyQueue.Clear();
+            (StankyQueue.GetFirst())->Activate();
         }
-
         while (!Atrakce1Queue.Empty())
         {
-            Atrakce1Queue.Clear();
+            (Atrakce1Queue.GetFirst())->Activate();
         }
-
         while (!Atrakce2Queue.Empty())
         {
-            Atrakce2Queue.Clear();
+            (Atrakce2Queue.GetFirst())->Activate();
         }
-
         while (!Atrakce3Queue.Empty())
         {
-            Atrakce3Queue.Clear();
+            (Atrakce3Queue.GetFirst())->Activate();
         }
     }
 }

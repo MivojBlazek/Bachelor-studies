@@ -1,0 +1,26 @@
+.IFJcode23
+
+DEFVAR GF@a
+MOVE GF@a int@5
+DEFVAR GF@b
+MOVE GF@b int@10
+
+add GF@b GF@a GF@b
+
+WRITE GF@b 
+WRITE string@\010
+
+mul GF@b GF@a GF@a
+
+WRITE GF@b
+WRITE string@\010
+
+idiv GF@b GF@b GF@a
+
+WRITE GF@b
+WRITE string@\010
+
+sub GF@b GF@b GF@a
+
+WRITE GF@b
+WRITE string@\010
