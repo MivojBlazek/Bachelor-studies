@@ -1,0 +1,4 @@
+echo -ne "\x00\x30\x30" | nc -4 -u -l -v 127.0.0.1 4567
+
+echo -ne "\x01\x30\x32\x01\x00\x00replyMessageContent\x00" | nc -4 -u -v 127.0.0.1 4567
+
