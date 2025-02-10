@@ -1,4 +1,4 @@
-# VUT FIT Bachelor studies
+# Bachelor studies
 
 This repository contains my collage projects and exercises.
 
